@@ -1,0 +1,11 @@
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    position: relative;
+    background-color: #ffffff;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    padding:0;
+}
+
+.selected-tab-container{
+    border: 2px solid blue;
+}

@@ -83,7 +83,7 @@ const AddDetails = () => {
         style={{ background: "gainsboro", height: "100vh" }}
       >
         <div
-          className="container main-container px-5 col-8 "
+          className="container main-container px-5 col-12 col-lg-8 "
           style={{
             background: "white",
             height: "100vh",
@@ -101,7 +101,7 @@ const AddDetails = () => {
             className="mt-5 text-start"
             style={{ display: "grid", placeItems: "center" }}
           >
-            <div className="mb-3 col-7">
+            <div className="mb-3 col-12 col-lg-7">
               <label>
                 Years of experience typical for someone at full proficiency for
                 this role
@@ -114,7 +114,7 @@ const AddDetails = () => {
               />
             </div>
 
-            <div className="mb-3 col-7">
+            <div className="mb-3 col-12 col-lg-7">
               <label>
                 Minimum years of experience to be fully proficient for this role
               </label>
@@ -125,7 +125,7 @@ const AddDetails = () => {
               />
             </div>
 
-            <div className="mb-3 col-7">
+            <div className="mb-3 col-12 col-lg-7">
               <label>Education</label>
               <br />
               <div className=" form-control px-0 py-1">
@@ -144,14 +144,14 @@ const AddDetails = () => {
               </div>
             </div>
 
-            <div className="mb-3 col-7">
+            <div className="mb-3 col-12 col-lg-7">
               <label>
                 Choose the most important skills and specialties for this job
               </label>
               <TagInput />
             </div>
 
-            <div className="mb-3 col-7">
+            <div className="mb-3 col-12 col-lg-7">
               <label>Will this job supervise employees?</label>
               <br />
               <Radio.Group>
@@ -327,7 +327,7 @@ const AddDetails = () => {
 
           <button
             onClick={() => navigate("/reports")}
-            className="btn btn-primary mb-3 w-25"
+            className="btn btn-primary mb-3 w-75 w-lg-25"
           >
             Next
           </button>

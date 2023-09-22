@@ -3,7 +3,7 @@ import NavBar from "../../components/nav-bar";
 import axios from "axios";
 import { Carousel } from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
-import "./style.css";
+import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
@@ -104,14 +104,14 @@ const HomePage = () => {
               className="w-100"
               style={{ display: "grid", placeItems: "center" }}
             >
-              <div className="col-7">
+              <div className="col-12 col-lg-7">
                 <input
                   className="form-control form-control-lg mb-3"
                   placeholder="Job Title"
                   onChange={(e) => setJobTitle(e.target.value)}
                 />
               </div>
-              <div className="mb-3 col-7">
+              <div className="mb-3 col-12 col-lg-7">
                 {/* <Select
                     size={"large"}
                     style={{
@@ -150,7 +150,7 @@ const HomePage = () => {
             <>
               <p className="fs-2">Suggested Titles</p>
               <p>Select the closest match to the job you want to benchmark.</p>
-              <div className="container mt-3 col-4 d-flex align-items-center">
+              <div className="container mt-3 col-12 col-lg-4 d-flex align-items-center">
                 {currentSlide > 0 && (
                   <div onClick={handlePrev}>
                     <LeftOutlined />
@@ -223,24 +223,6 @@ const HomePage = () => {
                                       ></div>
                                     </div>
                                   </div>
-                                  <svg
-                                    class="jobcard__checkmark"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 52 52"
-                                  >
-                                    <circle
-                                      class="jobcard__checkmark__circle"
-                                      cx="26"
-                                      cy="26"
-                                      r="25"
-                                      fill="none"
-                                    ></circle>
-                                    <path
-                                      class="jobcard__checkmark__check"
-                                      fill="none"
-                                      d="M14.1 27.2l7.1 7.2 16.7-16.8"
-                                    ></path>
-                                  </svg>
                                 </div>
                               </>
                             );
@@ -279,6 +261,24 @@ const HomePage = () => {
             </button>
           )}
         </div>
+        <svg
+          class="jobcard__checkmark"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 52 52"
+        >
+          <circle
+            class="jobcard__checkmark__circle"
+            cx="26"
+            cy="26"
+            r="25"
+            fill="none"
+          ></circle>
+          <path
+            class="jobcard__checkmark__check"
+            fill="none"
+            d="M14.1 27.2l7.1 7.2 16.7-16.8"
+          ></path>
+        </svg>
       </div>
     </>
   );
