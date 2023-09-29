@@ -4,10 +4,9 @@ import React, { useEffect, useState } from "react";
 import "react-tagsinput/react-tagsinput.css";
 import "../../pages/add-details/style.css";
 import { Select } from "antd";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const TagInput = () => {
-  const [salaryData, setSalaryData] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [value, setValue] = useState();
   const [data, setData] = useState([]);
@@ -16,26 +15,23 @@ const TagInput = () => {
 
   const selectedJob = sessionStorage.getItem("job_title");
 
+  const salaryData = JSON.parse(sessionStorage.getItem("salary_data"));
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    axios
-      .get("https://salaryappbackend-renjithcmrenju.b4a.run/api/salary/data")
-      .then(async (response) => {
-        const result = await response.data;
-        console.log("🚀 ~ file: index.js:23 ~ .then ~ result:", result);
-        setSalaryData(result);
-      })
-      .catch((err) => console.log(err));
+    if (!salaryData) {
+      navigate("/");
+    }
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (!salaryData) return;
+
     // Find the job data that matches the selected job title
     const selectedJobData = salaryData.find((job) =>
-      job.job_title.toLowerCase().includes(selectedJob.toLowerCase())
-    );
-    console.log(
-      "🚀 ~ file: index.js:36 ~ useEffect ~ selectedJobData:",
-      selectedJobData
+      job.mapped_job_title?.toLowerCase().includes(selectedJob.toLowerCase())
     );
 
     if (selectedJobData) {
@@ -49,34 +45,39 @@ const TagInput = () => {
       setFilteredSkills([]);
     }
     // eslint-disable-next-line
-  }, [salaryData]);
+  }, []);
 
   useEffect(() => {
     // Initialize a Set to collect distinct skills
+    console.log("1");
     const uniqueSkills = new Set();
 
-    // Iterate through jobData and collect distinct skills
-    salaryData.forEach((job) => {
-      for (let i = 1; i <= 8; i++) {
-        const skillKey = `skill${i}`;
-        const skillValue = job[skillKey].trim();
-
-        // Check if the skillValue is not empty and add it to the Set
-        if (skillValue !== "") {
-          uniqueSkills.add(skillValue);
+    if (salaryData) {
+      // Iterate through jobData and collect distinct skills
+      salaryData.forEach((job) => {
+        for (let i = 1; i <= 8; i++) {
+          const skillKey = `skill${i}`;
+          if (job[skillKey]) {
+            const skillValue = job[skillKey].trim();
+            // Check if the skillValue is not empty and add it to the Set
+            if (skillValue !== "") {
+              uniqueSkills.add(skillValue);
+            }
+          }
         }
-      }
-    });
+      });
 
-    // Convert the Set to an array if needed
-    const allSkills = Array.from(uniqueSkills);
-    // Filter the skills to remove those present in filteredSkills
-    const finalSkills = allSkills.filter(
-      (skill) => !filteredSkills.includes(skill)
-    );
+      // Convert the Set to an array if needed
+      const allSkills = Array.from(uniqueSkills);
+      // Filter the skills to remove those present in filteredSkills
+      const finalSkills = allSkills.filter(
+        (skill) => !filteredSkills.includes(skill)
+      );
 
-    setAllSkillData(finalSkills);
-  }, [salaryData, filteredSkills]);
+      setAllSkillData(finalSkills);
+    }
+    //eslint-disable-next-line
+  }, [filteredSkills]);
 
   // Function to handle tag removal
   const handleRemoveTag = (removedTag) => {
@@ -189,7 +190,7 @@ const TagInput = () => {
             }}
             className="TagsInput-tag border text-center"
           >
-            {skill}
+            {skill && skill}
           </div>
         ))}
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import axios from "axios";
-import { Carousel } from "antd";
+import { Carousel, Spin } from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +15,12 @@ const HomePage = () => {
   const [displayData, setDisplayData] = useState(null);
   const [selectedTab, setSelectedTab] = useState(null);
   const navigate = useNavigate();
-  const [location, setLocation] = useState("");
 
-  const showActive = (currentTab) => {
+  const showActive = (currentTab, salary) => {
     setSelectedTab(currentTab);
     console.log(currentTab);
     sessionStorage.setItem("job_title", currentTab);
+    sessionStorage.setItem("salary", salary);
   };
   // eslint-disable-next-line
   const handlePositionChange = ({ target: { value } }) => {
@@ -42,36 +42,45 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    console.log("🚀 ~ file: index.js:49 ~ .then ~ result:");
+
+    // .get("https://salaryappbackend-renjithcmrenju.b4a.run/api/salary/data")
     axios
-      .get("https://salaryappbackend-renjithcmrenju.b4a.run/api/salary/data")
+      .get("https://salaryappbackend1-9l1j9rp2.b4a.run/api/salary/data")
       .then(async (response) => {
         const result = await response.data;
+
         setSalaryData(result);
-        console.log(JSON.stringify(result));
+        sessionStorage.setItem("salary_data", JSON.stringify(result));
       })
       .catch((err) => console.log(err));
   }, []);
 
-  const filterJobs = (data) => {
-    return data.map((job) => {
-      // Use regex to split the job title based on '/' or '||' characters
-      const jobTitleParts = job.job_title.split(/\/|\|\|/);
+  // const filterJobs = (data) => {
+  //   return data.map((job) => {
+  //     // Use regex to split the job title based on '/' or '||' characters
+  //     const jobTitleParts = job.job_title.split(/\/|\|\|/);
 
-      // Take the first part (before the '/' or '||' character)
-      const filteredTitle = jobTitleParts[0].trim();
+  //     // Take the first part (before the '/' or '||' character)
+  //     const filteredTitle = jobTitleParts[0].trim();
 
-      return { ...job, job_title: filteredTitle };
-    });
-  };
+  //     return { ...job, job_title: filteredTitle };
+  //   });
+  // };
 
+  function fuzzyMatch(input, jobTitle) {
+    const inputWords = input.toLowerCase().split(" ");
+    return inputWords.every((word) => jobTitle?.toLowerCase().includes(word));
+  }
   useEffect(() => {
     if (jobTitle) {
-      const filteredData = filterJobs(salaryData);
+      // const filteredData = filterJobs(salaryData);
 
-      const inputFilteredData = filteredData.filter((data) =>
-        data.job_title.toLowerCase().includes(jobTitle.toLowerCase())
+      const filteredJobTitles = salaryData.filter((data) =>
+        fuzzyMatch(jobTitle, data.mapped_job_title)
       );
-      setDisplayData(inputFilteredData);
+
+      setDisplayData(filteredJobTitles);
     }
   }, [jobTitle, salaryData]);
 
@@ -85,6 +94,18 @@ const HomePage = () => {
   //   );
   //   setData(filter);
   // };
+
+  const CapitalizeFirstLetter = (data) => {
+    // Split the string into words
+    const words = data.split(" ");
+    // Capitalize the first letter of each word and make the rest lowercase
+    const capitalizedWords = words.map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    );
+
+    // Join the words back together with spaces
+    return capitalizedWords.join(" ");
+  };
 
   return (
     <>
@@ -108,7 +129,7 @@ const HomePage = () => {
                 <input
                   className="form-control form-control-lg mb-3"
                   placeholder="Job Title"
-                  onChange={(e) => setJobTitle(e.target.value)}
+                  onBlur={(e) => setJobTitle(e.target.value)}
                 />
               </div>
               <div className="mb-3 col-12 col-lg-7">
@@ -138,9 +159,7 @@ const HomePage = () => {
                   required
                   className="form-control"
                   onChange={(e) => {
-                    setLocation(e.target.value);
                     sessionStorage.setItem("location", e.target.value);
-                    console.log(location);
                   }}
                 />
               </div>
@@ -164,70 +183,77 @@ const HomePage = () => {
                       ref={setCarouselRef}
                       style={{ height: "250px" }}
                     >
-                      {displayData
-                        ? displayData.map((job, index) => {
-                            return (
-                              <>
-                                <div
-                                  style={{ padding: "0" }}
-                                  className={
-                                    selectedTab === job.job_title
-                                      ? "Btn-container selected-tab-container"
-                                      : "Btn-container"
-                                  }
-                                  onClick={() => showActive(job.job_title)}
-                                >
-                                  <div className="container-fluid p-2 ">
-                                    <p
-                                      key={index}
-                                      style={{
-                                        fontWeight: "bold",
-                                        color: "#1a6cb6",
-                                      }}
-                                    >
-                                      {job.job_title}
-                                    </p>
-                                  </div>
-                                  <div
-                                    className="container-fluid d-grid justify-items-center p-2"
+                      {displayData ? (
+                        displayData.map((job, index) => {
+                          return (
+                            <>
+                              <div
+                                style={{ padding: "0" }}
+                                className={
+                                  selectedTab === job.mapped_job_title
+                                    ? "Btn-container selected-tab-container"
+                                    : "Btn-container"
+                                }
+                                onClick={() =>
+                                  showActive(job.mapped_job_title, job.salary)
+                                }
+                              >
+                                <div className="container-fluid p-2 ">
+                                  <p
+                                    key={index}
                                     style={{
-                                      background: "rgba(0, 0, 0, 0.02)",
+                                      fontWeight: "bold",
+                                      color: "#1a6cb6",
                                     }}
                                   >
-                                    <p
-                                      className="m-0"
-                                      style={{
-                                        fontSize: "14px",
-                                        fontWeight: "bolder",
-                                      }}
-                                    >
-                                      {job.salary}
-                                    </p>
+                                    {job.mapped_job_title &&
+                                      CapitalizeFirstLetter(
+                                        job.mapped_job_title
+                                      )}
+                                  </p>
+                                </div>
+                                <div
+                                  className="container-fluid d-grid justify-items-center p-2"
+                                  style={{
+                                    background: "rgba(0, 0, 0, 0.02)",
+                                  }}
+                                >
+                                  <p
+                                    className="m-0"
+                                    style={{
+                                      fontSize: "14px",
+                                      fontWeight: "bolder",
+                                    }}
+                                  >
+                                    {job.salary}
+                                  </p>
+                                  <div
+                                    style={{ height: "60px", width: "100%" }}
+                                    className="d-flex align-items-center justify-content-center"
+                                  >
                                     <div
-                                      style={{ height: "60px", width: "100%" }}
-                                      className="d-flex align-items-center justify-content-center"
-                                    >
-                                      <div
-                                        style={{
-                                          height: "30px",
-                                          width: "25%",
-                                          background: "#235090",
-                                        }}
-                                      ></div>
-                                      <div
-                                        style={{
-                                          height: "30px",
-                                          width: "25%",
-                                          background: "#5389d5",
-                                        }}
-                                      ></div>
-                                    </div>
+                                      style={{
+                                        height: "30px",
+                                        width: "25%",
+                                        background: "#235090",
+                                      }}
+                                    ></div>
+                                    <div
+                                      style={{
+                                        height: "30px",
+                                        width: "25%",
+                                        background: "#5389d5",
+                                      }}
+                                    ></div>
                                   </div>
                                 </div>
-                              </>
-                            );
-                          })
-                        : ""}
+                              </div>
+                            </>
+                          );
+                        })
+                      ) : (
+                        <Spin tip="Loading" size="large"></Spin>
+                      )}
                     </Carousel>
                   </div>
                 </div>
@@ -261,24 +287,6 @@ const HomePage = () => {
             </button>
           )}
         </div>
-        <svg
-          class="jobcard__checkmark"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 52 52"
-        >
-          <circle
-            class="jobcard__checkmark__circle"
-            cx="26"
-            cy="26"
-            r="25"
-            fill="none"
-          ></circle>
-          <path
-            class="jobcard__checkmark__check"
-            fill="none"
-            d="M14.1 27.2l7.1 7.2 16.7-16.8"
-          ></path>
-        </svg>
       </div>
     </>
   );

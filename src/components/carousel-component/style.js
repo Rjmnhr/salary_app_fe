@@ -27,4 +27,17 @@ export const CarouselComponentStyled = styled.div`
 
     background-color: white;
   }
+
+  .selected-tab-container {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .tick-mark {
+    /* Tick mark styles */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #007bff;
+  }
 `;

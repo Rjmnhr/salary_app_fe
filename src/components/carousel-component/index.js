@@ -1,36 +1,38 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CarouselComponentStyled } from "./style";
+import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 const CarouseItem = ({ item }) => {
-  console.log("🚀 ~ file: index.js:5 ~ CarouseItem ~ item:", item.job_title);
-
   const [selectedTab, setSelectedTab] = useState(null);
 
   const showActive = (currentTab) => {
     setSelectedTab(currentTab);
+
     console.log(currentTab);
     sessionStorage.setItem("job_title", currentTab);
   };
   return (
     <div className="item-carousel">
+      {/* {isSelected && <div className="tick-mark">✓</div>} */}
       <div
         style={{ width: "300px", border: "1px solid " }}
         className={
-          selectedTab === item.job_title
+          selectedTab === item.mapped_job_title
             ? "Btn-container selected-tab-container"
             : "Btn-container"
         }
-        onClick={() => showActive(item.job_title)}
+        onClick={() => showActive(item.mapped_job_title)}
       >
         <div className="container-fluid p-2 ">
           <p
             style={{
               fontWeight: "bold",
               color: "#1a6cb6",
+              width: "280px",
             }}
           >
-            {item.job_title}
+            {item.mapped_job_title}
           </p>
         </div>
         <div
@@ -80,7 +82,7 @@ const CarouselComponent = ({ jobTitle }) => {
 
   useEffect(() => {
     axios
-      .get("https://salaryappbackend-renjithcmrenju.b4a.run/api/salary/data")
+      .get("http://localhost:8003/api/salary/data")
       .then(async (response) => {
         const result = await response.data;
         setSalaryData(result);
@@ -89,32 +91,22 @@ const CarouselComponent = ({ jobTitle }) => {
       .catch((err) => console.log(err));
   }, []);
 
-  const filterJobs = (data) => {
-    return data.map((job) => {
-      // Use regex to split the job title based on '/' or '||' characters
-      const jobTitleParts = job.job_title.split(/\/|\|\|/);
-
-      // Take the first part (before the '/' or '||' character)
-      const filteredTitle = jobTitleParts[0].trim();
-
-      return { ...job, job_title: filteredTitle };
-    });
-  };
+  function fuzzyMatch(input, jobTitle) {
+    const inputWords = input.toLowerCase().split(" ");
+    return inputWords.every((word) => jobTitle?.toLowerCase().includes(word));
+  }
 
   useEffect(() => {
     if (jobTitle) {
-      const filteredData = filterJobs(salaryData);
+      // const filteredData = filterJobs(salaryData);
 
-      const inputFilteredData = filteredData.filter((data) =>
-        data.job_title.toLowerCase().includes(jobTitle.toLowerCase())
+      const filteredJobTitles = salaryData.filter((data) =>
+        fuzzyMatch(jobTitle, data.mapped_job_title)
       );
-      setFilteredItems(inputFilteredData);
+
+      setFilteredItems(filteredJobTitles);
     }
   }, [jobTitle, salaryData]);
-  console.log(
-    "🚀 ~ file: index.js:109 ~ useEffect ~ setFilteredItems:",
-    filteredItems
-  );
 
   const updateIndex = (newIndex) => {
     if (newIndex < 0) {
@@ -129,25 +121,39 @@ const CarouselComponent = ({ jobTitle }) => {
   return (
     <>
       <CarouselComponentStyled>
-        <div
-          className="carousel"
-          style={{ width: "300px", overflow: "hidden" }}
-        >
+        <div className="d-flex align-items-center">
+          <div className="carousel-buttons">
+            {activeIndex > 0 && (
+              <div onClick={() => updateIndex(activeIndex - 1)}>
+                <LeftOutlined />
+              </div>
+            )}
+          </div>
           <div
-            className="inner"
-            style={{ transform: `translate(-${activeIndex * 100}%)` }}
+            className="carousel"
+            style={{ width: "300px", overflow: "hidden", margin: "10px" }}
           >
-            {filteredItems.map((job) => {
-              return <CarouseItem item={job} />;
-            })}
+            <div
+              className="inner"
+              style={{ transform: `translate(-${activeIndex * 100}%)` }}
+            >
+              {filteredItems.map((job) => {
+                return <CarouseItem item={job} />;
+              })}
+            </div>
           </div>
           <div className="carousel-buttons">
-            <button onClick={() => updateIndex(activeIndex - 1)}>
-              arrow_left
-            </button>
-            <button onClick={() => updateIndex(activeIndex + 1)}>
-              arrow_right
-            </button>
+            {filteredItems ? (
+              activeIndex < filteredItems.length - 1 ? (
+                <div onClick={() => updateIndex(activeIndex + 1)}>
+                  <RightOutlined />
+                </div>
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </CarouselComponentStyled>
