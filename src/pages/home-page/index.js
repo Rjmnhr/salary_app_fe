@@ -46,7 +46,15 @@ const HomePage = () => {
 
     // .get("https://salaryappbackend-renjithcmrenju.b4a.run/api/salary/data")
     axios
-      .get("https://salaryappbackend1-9l1j9rp2.b4a.run/api/salary/data")
+      .post(
+        "https://salaryappbackend1-9l1j9rp2.b4a.run/api/salary/data",
+        { sample: "sample" },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then(async (response) => {
         const result = await response.data;
 
