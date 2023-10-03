@@ -6,7 +6,7 @@ const ParallaxComponent = ({ img, content }) => {
   return (
     <div>
       <ParallaxComponentStyled>
-        <Parallax className="cover-img" bgImage={img} strength={500}>
+        <Parallax className="cover-img" bgImage={img} strength={400}>
           <div className="misty-overlay container-fluid">{content}</div>
         </Parallax>
       </ParallaxComponentStyled>
