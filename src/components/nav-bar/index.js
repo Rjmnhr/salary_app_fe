@@ -1,21 +1,93 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { NavBarStyled } from "./style";
 
 const NavBar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Add a scroll event listener to the window
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        // If the user has scrolled more than 50 pixels, set scrolled to true
+        setScrolled(true);
+      } else {
+        // If the user has scrolled back to the top, set scrolled to false
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <>
-      <div
-        className="container-fluid p-3 px-lg-8 "
-        style={{ borderBottom: "1px solid" }}
-      >
-        <a
-          style={{ fontSize: "25px" }}
-          className="navbar-brand fw-bold"
-          href="/"
+    <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
+      <NavBarStyled>
+        <button
+          type="button"
+          class="mobile-nav-toggle d-lg-none"
+          onClick={handleMenuToggle}
         >
-          SALARY APP
-        </a>
-      </div>
-    </>
+          <i class="icofont-navigation-menu"></i>
+        </button>
+        <header
+          id="header"
+          className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
+          style={{
+            background: ` ${scrolled ? "#fff" : "transparent"}`,
+          }}
+        >
+          <div class="container d-flex align-items-center">
+            <h1 class="logo me-auto">
+              <a href="/">Equipay Partners</a>
+            </h1>
+
+            <nav
+              class={`${
+                menuOpen
+                  ? "mobile-nav d-lg-none"
+                  : " nav-menu d-none d-lg-block"
+              } `}
+            >
+              <ul>
+                <li class="active">
+                  <a href="/">Home</a>
+                </li>
+                <li>
+                  <a href="/price-a-job">Price a Job</a>
+                </li>
+                <li>
+                  <a href="#reports">Executive Compensation Reports</a>
+                </li>
+
+                <li>
+                  <a href="#training">Training</a>
+                </li>
+                <li>
+                  <a href="#sales">Sales Incentive</a>
+                </li>
+
+                <li>
+                  <a href="#contact">Contact</a>
+                </li>
+                <li>
+                  <a href="/login">Login</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+      </NavBarStyled>
+    </body>
   );
 };
 

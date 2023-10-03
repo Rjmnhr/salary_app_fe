@@ -13,28 +13,119 @@
 
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <!-- CSS Implementing Plugins -->
+    <!-- Google Fonts -->
     <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
       rel="stylesheet"
-      href="./assets/vendor/bootstrap-icons/font/bootstrap-icons.css"
-    />
-    <link
-      rel="stylesheet"
-      href="../assets/vendor/hs-mega-menu/dist/hs-mega-menu.min.css"
     />
 
-    <!-- CSS Unify Template -->
-    <link rel="stylesheet" href="./assets/css/theme.min.css" />
-    <link rel="stylesheet" href="./assets/css/snippets.min.css" />
-    <script src="./assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Vendor CSS Files -->
+    <link
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet" />
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
+    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet" />
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
 
-    <!-- JS Unify -->
-    <script src="./assets/js/theme.min.js"></script>
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet" />
 
     <title>Salary App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+    <!-- Unify scripts-->
+    <!--     
+    <script src="./assets/vendor/hs-header/dist/hs-header.min.js"></script>
+    <script src="./assets/vendor/hs-mega-menu/dist/hs-mega-menu.min.js"></script>
+    <script src="./assets/vendor/hs-go-to/dist/hs-go-to.min.js"></script>
+    <script src="./assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+    <script src="./assets/vendor/hs-video-bg/dist/hs-video-bg.min.js"></script>
+    <script src="./assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="./assets/js/theme.min.js"></script> -->
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+    <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+    <script src="assets/vendor/counterup/counterup.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/venobox/venobox.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+    <!-- <script>
+      (function () {
+        // INITIALIZATION OF NAVBAR
+        // =======================================================
+        new HSHeader("#header").init();
+
+        // INITIALIZATION OF MEGA MENU
+        // =======================================================
+        const megaMenu = new HSMegaMenu(".js-mega-menu", {
+          desktop: {
+            position: "left",
+          },
+        });
+
+        // INITIALIZATION OF GO TO
+        // =======================================================
+        new HSGoTo(".js-go-to");
+
+        // INITIALIZATION OF TOGGLE PASSWORD
+        // =======================================================
+        new HSTogglePassword(".js-toggle-password");
+
+        // INITIALIZATION OF VIDEO BG
+        // =======================================================
+        document.querySelectorAll(".js-video-bg").forEach((item) => {
+          new HSVideoBg(item).init();
+        });
+
+        // INITIALIZATION OF SWIPER
+        // =======================================================
+        var swiper = new Swiper(".js-swiper-card-grid", {
+          navigation: {
+            nextEl: ".js-swiper-card-grid-button-next",
+            prevEl: ".js-swiper-card-grid-button-prev",
+          },
+          slidesPerView: 1,
+          spaceBetween: 30,
+          loop: 1,
+          breakpoints: {
+            480: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          },
+          on: {
+            imagesReady: function (swiper) {
+              const preloader = swiper.el.querySelector(".js-swiper-preloader");
+              preloader.parentNode.removeChild(preloader);
+            },
+          },
+        });
+      })();
+    </script> -->
   </body>
 </html>
