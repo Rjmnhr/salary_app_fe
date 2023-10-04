@@ -4,83 +4,49 @@ import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
 import { NavBarStyled } from "../../components/nav-bar/style";
+import { cities } from "../../components/cities-name-list";
 const items = [
-  {
-    value: "Customer Support",
-    label: "Customer Support",
-  },
-  {
-    value: "Voice Process",
-    label: "Voice Process",
-  },
-  {
-    value: "Software Development",
-    label: "Software Development",
-  },
-  {
-    value: "Sales",
-    label: "Sales",
-  },
-  {
-    value: "Business Development",
-    label: "Business Development",
-  },
-  {
-    value: "Counsellor",
-    label: "Counsellor",
-  },
-  {
-    value: "Lead/Management",
-    label: "Lead/Management",
-  },
-  {
-    value: "Recruiter",
-    label: "Recruiter",
-  },
-  {
-    value: "Devops",
-    label: "Devops",
-  },
-  {
-    value: "Product management",
-    label: "Product management",
-  },
-  {
-    value: "Engineer",
-    label: "Engineer",
-  },
-  {
-    value: "Business Analyst",
-    label: "Business Analyst",
-  },
-  {
-    value: "Data Engineer",
-    label: "Data Engineer",
-  },
-  {
-    value: "Data Scientist",
-    label: "Data Scientist",
-  },
-  {
-    value: "Project Management",
-    label: "Project Management",
-  },
-  {
-    value: "Digital Marketing",
-    label: "Digital Marketing",
-  },
+  "Customer Support",
+
+  "Voice Process",
+
+  "Software Development",
+
+  "Sales",
+
+  "Business Development",
+
+  "Counsellor",
+
+  "Lead/Management",
+
+  "Recruiter",
+
+  "Devops",
+
+  "Product management",
+
+  "Engineer",
+
+  "Business Analyst",
+
+  "Data Engineer",
+
+  "Data Scientist",
+
+  "Project Management",
+
+  "Digital Marketing",
 ];
 
 const PriceAJob = () => {
-  const [jobTitle, setJobTitle] = useState(null);
+  const [selectedJobTitles, setSelectedJobTitles] = useState([]);
+  const [data, setData] = useState([]);
+  const [location, setLocation] = useState("");
 
   const navigate = useNavigate();
 
-  // Filter `option.label` match the user type `input`
-  const filterOption = (input, option) => {
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-    setJobTitle(input);
-  };
+  const filteredOptions = items.filter((o) => !selectedJobTitles.includes(o));
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,6 +73,24 @@ const PriceAJob = () => {
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleSearch = (newValue) => {
+    if (newValue) {
+      if (newValue.length > 1) {
+        const filter = cities.filter((data) =>
+          data.toLowerCase().includes(newValue.toLowerCase())
+        );
+        setData(filter);
+      } else {
+        setData([]);
+      }
+    } else {
+      setData([]);
+    }
+  };
+  const handleSelectChange = (value) => {
+    setLocation(value);
   };
 
   return (
@@ -202,35 +186,53 @@ const PriceAJob = () => {
             >
               <div className="mb-3 col-12 col-lg-7">
                 <Select
+                  mode="multiple"
                   size={"large"}
                   showSearch
-                  placeholder="Select education"
+                  placeholder="Job Title"
                   optionFilterProp="children"
-                  filterOption={filterOption}
+                  value={selectedJobTitles}
+                  onChange={setSelectedJobTitles}
                   style={{
                     width: "100%",
                     borderRadius: "3px",
                     textAlign: "start",
                   }}
-                  options={items}
+                  options={filteredOptions.map((item) => ({
+                    value: item,
+                    label: item,
+                  }))}
                   className="border text-start"
                 />
               </div>
 
               <div className="mb-3 col-12 col-lg-7">
-                <input
-                  placeholder="City"
-                  required
-                  className="form-control"
-                  onChange={(e) => {
-                    sessionStorage.setItem("location", e.target.value);
+                <Select
+                  size={"large"}
+                  style={{
+                    width: "100%",
+                    borderRadius: "0",
+                    textAlign: "start",
                   }}
+                  className="input border"
+                  showSearch
+                  placeholder="City"
+                  defaultActiveFirstOption={false}
+                  suffixIcon={null}
+                  filterOption={false}
+                  onSearch={handleSearch}
+                  onChange={handleSelectChange}
+                  notFoundContent={null}
+                  options={(data || []).map((d) => ({
+                    value: d,
+                    label: d,
+                  }))}
                 />
               </div>
             </form>
           </div>
 
-          {jobTitle ? (
+          {selectedJobTitles ? (
             <button
               onClick={() => navigate("/add-details")}
               className="btn btn-primary mt-3 w-25"
