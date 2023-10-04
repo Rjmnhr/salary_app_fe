@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 
-const NavBar = () => {
+const NavBar = ({ scrollToContact }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -66,7 +66,9 @@ const NavBar = () => {
                   <a href="/price-a-job">Price a Job</a>
                 </li>
                 <li>
-                  <a href="#reports">Executive Compensation Reports</a>
+                  <a href="/executive-reports">
+                    Executive Compensation Reports
+                  </a>
                 </li>
 
                 <li>
@@ -77,7 +79,9 @@ const NavBar = () => {
                 </li>
 
                 <li>
-                  <a href="#contact">Contact</a>
+                  <a href="#contact" onClick={scrollToContact}>
+                    Contact
+                  </a>
                 </li>
                 <li>
                   <a href="/login">Login</a>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import coverImg from "../../cover.jpg";
 import secondCoverImg from "../../cover-2.jpg";
@@ -9,10 +9,15 @@ import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 
-const index = () => {
+const HomePage = () => {
+  const contactRef = useRef(null);
+
+  const scrollToContact = () => {
+    contactRef.current.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <>
-      <NavBar background={"inherit"} />
+      <NavBar scrollToContact={scrollToContact} />
       <ParallaxComponent
         img={coverImg}
         content={
@@ -278,7 +283,7 @@ const index = () => {
         <UnifyComponent />
       </section>
 
-      <section id="contact" class="contact">
+      <section ref={contactRef} id="contact" class="contact">
         <div class="container" data-aos="fade-up">
           <div class="section-title">
             <h2>Contact</h2>
@@ -385,4 +390,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default HomePage;

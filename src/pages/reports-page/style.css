@@ -16,4 +16,9 @@ display: block;
 }
 
 
+.scrollable-container::-webkit-scrollbar{
+    display: none;
+}
+
+
 

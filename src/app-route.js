@@ -3,8 +3,10 @@ import HomePage from "./pages/home-page/index";
 
 import AddDetails from "./pages/add-details";
 import ReportsPage from "./pages/reports-page";
-import CarouselComponent from "./components/carousel-component";
+
 import PriceAJob from "./pages/price-a-job";
+import ExecutiveReports from "./pages/executive-reports";
+import JobReport from "./components/sample";
 
 const AppRoute = () => {
   return (
@@ -44,10 +46,18 @@ const AppRoute = () => {
           }
         />
         <Route
+          path="/executive-reports"
+          element={
+            <>
+              <ExecutiveReports />
+            </>
+          }
+        />
+        <Route
           path="/test"
           element={
             <>
-              <CarouselComponent jobTitle={"devops"} />
+              <JobReport />
             </>
           }
         />
