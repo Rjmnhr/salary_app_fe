@@ -42,6 +42,7 @@ const items = [
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
   const [data, setData] = useState([]);
+  // eslint-disable-next-line
   const [location, setLocation] = useState("");
 
   const navigate = useNavigate();
