@@ -112,7 +112,7 @@ const GeneratedReport = ({ jobsData }) => {
           overflowY: "scroll",
         }}
       >
-        <h3>{CapitalizeFirstLetter(jobsData[0].mapped_job_title)} Report</h3>
+        <h3>{CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Report</h3>
         <div className="d-flex justify-content-start align-items-center">
           <p
             className=" border-right px-2"
