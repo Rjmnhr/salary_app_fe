@@ -25,14 +25,14 @@ import AxiosInstance from "../../components/axios";
 
 const CapitalizeFirstLetter = (data) => {
   // Split the string into words
-  const words = data.split(" ");
+  const words = data?.split(" ");
   // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words.map(
+  const capitalizedWords = words?.map(
     (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
   );
 
   // Join the words back together with spaces
-  return capitalizedWords.join(" ");
+  return capitalizedWords?.join(" ");
 };
 
 // Helper function to calculate average salary
