@@ -5,43 +5,75 @@ import { useNavigate } from "react-router-dom";
 import { Select } from "antd";
 import { NavBarStyled } from "../../components/nav-bar/style";
 import { cities } from "../../components/cities-name-list";
+
+// const items = [
+//   "Customer Support",
+
+//   "Voice Process",
+
+//   "Software Development",
+
+//   "Sales",
+
+//   "Business Development",
+
+//   "Counsellor",
+
+//   "Lead/Management",
+
+//   "Recruiter",
+
+//   "Devops",
+
+//   "Product management",
+
+//   "Engineer",
+
+//   "Business Analyst",
+
+//   "Data Engineer",
+
+//   "Data Scientist",
+
+//   "Project Management",
+
+//   "Digital Marketing",
+// ];
+
 const items = [
   "Customer Support",
-
-  "Voice Process",
-
-  "Software Development",
-
-  "Sales",
-
-  "Business Development",
-
-  "Counsellor",
-
-  "Lead/Management",
-
+  "Sales and Business Development",
+  "Tech Support",
+  "Java Developer",
+  "Tech Sales",
+  "Fullstack Developer",
+  "Medical Coder",
   "Recruiter",
-
-  "Devops",
-
-  "Product management",
-
-  "Engineer",
-
-  "Business Analyst",
-
-  "Data Engineer",
-
-  "Data Scientist",
-
-  "Project Management",
-
+  "Counsellor",
+  "Project Manager",
+  "IT Recruiter",
+  "Dotnet Developer",
   "Digital Marketing",
+  "Inside Sales and Business Development",
+  "Business Analyst",
+  "Data Engineer",
+  "Software Developer",
+  "DevOps Engineer",
+  "Content Writer",
+  "Accounts Manager",
+  "Solution Architect",
+  "Graphic Designer",
+  "MIS Management",
+  "Fullstack Dotnet Developer",
+  "UI/UX Designer",
+  "Medical Billing",
+  "Data Science",
+  "ML Engineer",
+  "Unclassified",
 ];
-
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(cities);
   // eslint-disable-next-line
   const [location, setLocation] = useState("");
 
@@ -77,21 +109,23 @@ const PriceAJob = () => {
   };
 
   const handleSearch = (newValue) => {
-    if (newValue) {
-      if (newValue.length > 1) {
-        const filter = cities.filter((data) =>
-          data.toLowerCase().includes(newValue.toLowerCase())
-        );
-        setData(filter);
-      } else {
-        setData([]);
-      }
-    } else {
-      setData([]);
-    }
+    const filter = cities.filter((data) =>
+      data.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setData(filter);
   };
   const handleSelectChange = (value) => {
     setLocation(value);
+  };
+
+  const handleSubmit = () => {
+    sessionStorage.setItem(
+      "selectedJobTitles",
+      JSON.stringify(selectedJobTitles)
+    );
+    sessionStorage.setItem("location", location);
+
+    navigate("/add-details");
   };
 
   return (
@@ -184,6 +218,7 @@ const PriceAJob = () => {
             <form
               className="w-100 mt-5"
               style={{ display: "grid", placeItems: "center" }}
+              onSubmit={handleSubmit}
             >
               <div className="mb-3 col-12 col-lg-7">
                 <Select
@@ -204,6 +239,7 @@ const PriceAJob = () => {
                     label: item,
                   }))}
                   className="border text-start"
+                  required
                 />
               </div>
 
@@ -228,23 +264,20 @@ const PriceAJob = () => {
                     value: d,
                     label: d,
                   }))}
+                  required
                 />
               </div>
+              {selectedJobTitles ? (
+                <button type="submit" className="btn btn-primary mt-3 w-25">
+                  Next
+                </button>
+              ) : (
+                <button disabled className="btn btn-primary mt-3 w-25">
+                  Next
+                </button>
+              )}
             </form>
           </div>
-
-          {selectedJobTitles ? (
-            <button
-              onClick={() => navigate("/add-details")}
-              className="btn btn-primary mt-3 w-25"
-            >
-              Next
-            </button>
-          ) : (
-            <button disabled className="btn btn-primary mt-3 w-25">
-              Next
-            </button>
-          )}
 
           <button
             onClick={() => navigate("/reports")}

@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import { Select } from "antd";
-import TagInput from "../../components/skill-input";
+// import TagInput from "../../components/skill-input";
 import { Radio } from "antd";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Filter `option.label` match the user type `input`
 const filterOption = (input, option) =>
   (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-const items = [
+const educationItems = [
   {
     value: "No degree",
     label: "No degree",
@@ -54,6 +55,9 @@ const items = [
 
 const AddDetails = () => {
   const [isSupervise, setIsSupervise] = useState(false);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [data, setData] = useState([]);
+  const [skillSet, setSkillSet] = useState([]);
   const navigate = useNavigate();
 
   const [checkboxes, setCheckboxes] = useState({
@@ -75,12 +79,72 @@ const AddDetails = () => {
     });
   };
 
+  // const filteredOptions = skillSet.filter(
+  //   (o) => !selectedJobTitles.includes(o)
+  // );
+
+  const handleSearch = (newValue) => {
+    const filter = skillSet.filter((data) =>
+      data.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setData(filter);
+  };
+  const handleSelectChange = (value) => {
+    setSelectedSkills(value);
+  };
+
+  useEffect(() => {
+    axios
+      .post(
+        "https://auth.emsicloud.com/connect/token",
+        {
+          client_id: "bdqzoc3y3d36h59j",
+          client_secret: "W4KYdc2L",
+          grant_type: "client_credentials",
+          scope: "emsi_open",
+        },
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+          },
+        }
+      )
+      .then((response) => {
+        getSkills(response.data.access_token);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  console.log(selectedSkills);
+
+  const getSkills = (accessToken) => {
+    axios
+      .get("https://emsiservices.com/skills/versions/latest/skills", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        console.log("🚀 ~ file: index.js:117 ~ response:", response.data.data);
+
+        const skillArr = response.data.data;
+        const skillNamesArr = skillArr.map((item) => item.name);
+        setSkillSet(skillNamesArr);
+        setData(skillNamesArr);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <>
       <NavBar />
       <div
         className="container-fluid  "
-        style={{ background: "gainsboro", height: "100vh" }}
+        style={{ background: "gainsboro", height: "100vh", marginTop: "80px" }}
       >
         <div
           className="container main-container px-5 col-12 col-lg-8 "
@@ -98,10 +162,10 @@ const AddDetails = () => {
           </p>
 
           <form
-            className="mt-5 text-start"
+            className="mt-5 text-left col-12"
             style={{ display: "grid", placeItems: "center" }}
           >
-            <div className="mb-3 col-12 col-lg-7">
+            <div className="mb-3 col-12 col-lg-12">
               <label>
                 Years of experience typical for someone at full proficiency for
                 this role
@@ -114,7 +178,7 @@ const AddDetails = () => {
               />
             </div>
 
-            <div className="mb-3 col-12 col-lg-7">
+            <div className="mb-3 col-12 col-lg-12">
               <label>
                 Minimum years of experience to be fully proficient for this role
               </label>
@@ -125,33 +189,54 @@ const AddDetails = () => {
               />
             </div>
 
-            <div className="mb-3 col-12 col-lg-7">
+            <div className="mb-3 col-12 col-lg-12">
               <label>Education</label>
               <br />
-              <div className=" form-control px-0 py-1">
-                <Select
-                  size={"large"}
-                  showSearch
-                  placeholder="Select education"
-                  optionFilterProp="children"
-                  filterOption={filterOption}
-                  style={{
-                    width: "100%",
-                    borderRadius: "3px",
-                  }}
-                  options={items}
-                />
-              </div>
+
+              <Select
+                size={"large"}
+                showSearch
+                placeholder="Select education"
+                optionFilterProp="children"
+                filterOption={filterOption}
+                style={{
+                  width: "100%",
+                  borderRadius: "3px",
+                }}
+                options={educationItems}
+                className="input border"
+              />
             </div>
 
-            <div className="mb-3 col-12 col-lg-7">
+            <div className="mb-3 col-12 col-lg-12">
               <label>
                 Choose the most important skills and specialties for this job
               </label>
-              <TagInput />
+              <Select
+                mode="multiple"
+                size={"large"}
+                style={{
+                  width: "100%",
+                  borderRadius: "0",
+                  textAlign: "start",
+                }}
+                className="input border"
+                showSearch
+                placeholder="Skills"
+                defaultActiveFirstOption={false}
+                suffixIcon={null}
+                filterOption={false}
+                onSearch={handleSearch}
+                onChange={handleSelectChange}
+                notFoundContent={null}
+                options={(data || []).map((d) => ({
+                  value: d,
+                  label: d,
+                }))}
+              />
             </div>
 
-            <div className="mb-3 col-12 col-lg-7">
+            <div className="mb-3 col-12 col-lg-12">
               <label>Will this job supervise employees?</label>
               <br />
               <Radio.Group>
@@ -172,10 +257,7 @@ const AddDetails = () => {
 
             {isSupervise ? (
               <>
-                <div
-                  className=" text-start"
-                  // style={{ display: "grid", placeItems: "center" }}
-                >
+                <div className=" text-left">
                   <div className="mb-3 col-12">
                     <label>
                       Number of people this job will manage both directly and
@@ -327,7 +409,7 @@ const AddDetails = () => {
 
           <button
             onClick={() => navigate("/reports")}
-            className="btn btn-primary mb-3 w-75 w-lg-25"
+            className="btn btn-primary mb-3 w-75 w-lg-10"
           >
             Next
           </button>

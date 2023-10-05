@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.9.2",
     "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
     "pspdfkit": "^2023.4.4",
     "react": "^18.2.0",
     "react-doc-viewer": "^0.1.5",

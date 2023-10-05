@@ -299,20 +299,20 @@ const HomePage = () => {
                     <p>Bangalore India</p>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="info-box mt-4">
                     <i class="bx bx-envelope"></i>
                     <h3>Email Us</h3>
-                    <p>indradeep.mazumdar@gmail.com</p>
+                    <p>info@equipaypartners.com</p>
                   </div>
                 </div>
-                <div class="col-md-6">
+                {/* <div class="col-md-6">
                   <div class="info-box mt-4">
                     <i class="bx bx-phone-call"></i>
                     <h3>Call Us</h3>
                     <p>+61 424 853 384</p>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 
