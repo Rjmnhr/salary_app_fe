@@ -278,14 +278,6 @@ const PriceAJob = () => {
               )}
             </form>
           </div>
-
-          <button
-            onClick={() => navigate("/reports")}
-            className="btn  mt-3 w-25"
-            style={{ background: "black", color: "white" }}
-          >
-            Final Report Sample
-          </button>
         </div>
       </div>
     </>

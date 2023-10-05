@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
-import { CalendarOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  EnvironmentOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import NavBar from "../../components/nav-bar/index";
 import "./style.css";
 import {
@@ -16,7 +20,20 @@ import {
   Line,
 } from "recharts";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+import AxiosInstance from "../../components/axios";
+
+const CapitalizeFirstLetter = (data) => {
+  // Split the string into words
+  const words = data.split(" ");
+  // Capitalize the first letter of each word and make the rest lowercase
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  );
+
+  // Join the words back together with spaces
+  return capitalizedWords.join(" ");
+};
 
 // Helper function to calculate average salary
 function calculateAverageSalary(data) {
@@ -26,13 +43,14 @@ function calculateAverageSalary(data) {
 }
 
 const GeneratedReport = ({ jobsData }) => {
+  const storedLocation = sessionStorage.getItem("location");
   // Group job data by experience levels
   const experienceGroups = {
-    Junior: jobsData.filter((job) => job["avg experience"] <= 2),
-    MidLevel: jobsData.filter(
-      (job) => job["avg experience"] > 2 && job["avg experience"] <= 5
+    Junior: jobsData?.filter((job) => job.avg_experience <= 2),
+    MidLevel: jobsData?.filter(
+      (job) => job.avg_experience > 2 && job.avg_experience <= 5
     ),
-    Senior: jobsData.filter((job) => job["avg experience"] > 5),
+    Senior: jobsData?.filter((job) => job.avg_experience > 5),
   };
 
   // Calculate average salary for each experience level
@@ -68,7 +86,7 @@ const GeneratedReport = ({ jobsData }) => {
   const maxSalary = Math.max(...salaries);
 
   // Calculate average experience
-  const experiences = jobsData.map((job) => job["avg experience"]);
+  const experiences = jobsData.map((job) => job.avg_experience);
   const totalExperience = experiences.reduce((acc, val) => acc + val, 0);
   const averageExperience = totalExperience / experiences.length;
 
@@ -80,7 +98,7 @@ const GeneratedReport = ({ jobsData }) => {
 
   // Create data for the line chart (salary vs. experience)
   const lineChartData = jobsData.map((job) => ({
-    experience: job["avg experience"],
+    experience: job.avg_experience,
     salary: job.mapped_average_sal,
   }));
 
@@ -94,24 +112,25 @@ const GeneratedReport = ({ jobsData }) => {
           overflowY: "scroll",
         }}
       >
-        <h3>Software Development Report</h3>
+        <h3>{CapitalizeFirstLetter(jobsData[0].mapped_job_title)} Report</h3>
         <div className="d-flex justify-content-start align-items-center">
           <p
             className=" border-right px-2"
             style={{ borderRight: "1px solid" }}
           >
-            <CalendarOutlined /> Average Experience - {averageExperience}
+            <CalendarOutlined /> Average Experience :{" "}
+            {averageExperience.toFixed(2)}
           </p>
 
           <p className=" border-right px-2">
             {" "}
-            <EnvironmentOutlined /> Bangalore
+            <EnvironmentOutlined /> {storedLocation}
           </p>
         </div>
         <div>{/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}</div>
         <div className="mt-3">
           <h5>Average Salary </h5>
-          <p className="fs-3">₹ {averageSalary} Lakhs Per Annum</p>
+          <p className="fs-3">₹ {averageSalary.toFixed(2)} Lakhs Per Annum</p>
           <div className="d-flex mb-3 mt-3">
             <div style={{ height: "100px", width: "10%" }}>
               <svg height="30" width="100%">
@@ -211,7 +230,7 @@ const GeneratedReport = ({ jobsData }) => {
                   background: "#00aaa4",
                 }}
               ></div>
-              <div className="w-100 text-end mt-2">
+              <div className="w-100 text-right mt-2">
                 <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
                   90%
                 </p>
@@ -346,6 +365,12 @@ const GeneratedReport = ({ jobsData }) => {
 const ReportsPage = () => {
   const navigate = useNavigate();
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
+  const storedLocation = sessionStorage.getItem("location");
+  const storedJobTitles = JSON.parse(
+    sessionStorage.getItem("selectedJobTitles")
+  );
+  const storedExperience = sessionStorage.getItem("experience");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     // Retrieve selected job titles and location from session storage
@@ -356,30 +381,27 @@ const ReportsPage = () => {
 
     if (storedJobTitles && storedJobTitles.length > 0) {
       const fetchResponses = async () => {
-        const jobTitleResponses = [];
-
-        for (const jobTitle of storedJobTitles) {
-          axios
-            .post(
-              "http://localhost:8003/api/salary/data",
+        const jobTitleResponses = await Promise.all(
+          storedJobTitles.map(async (jobTitle) => {
+            const response = await AxiosInstance.post(
+              "/api/salary/data",
               { location: storedLocation, job_title: jobTitle },
               {
                 headers: {
                   "content-type": "application/json",
                 },
               }
-            )
-            .then(async (response) => {
-              const data = await response.data;
-              jobTitleResponses.push(data);
-              console.log(data);
-            });
-        }
+            );
+            return response.data;
+          })
+        );
 
         setSalaryData(jobTitleResponses);
       };
 
       fetchResponses();
+    } else {
+      navigate("/price-a-job");
     }
 
     //eslint-disable-next-line
@@ -431,26 +453,39 @@ const ReportsPage = () => {
             Get More Reports
           </button>
           <div>
-            <div className="card p-2 px-3 text-left">
-              <p className="fw-b text-primary">Software Development</p>
-              <div className="d-flex justify-content-start align-items-center">
-                <p
-                  className=" border-right px-2"
-                  style={{ borderRight: "1px solid" }}
-                >
-                  <CalendarOutlined /> 1 year
-                </p>
-                <p className=" border-right px-2">
-                  {" "}
-                  <EnvironmentOutlined /> Bangalore
-                </p>
-              </div>
-              <p
-                style={{ fontSize: "10px", color: "gray", fontWeight: "bold" }}
-              >
-                BENCHMARKED JOB
-              </p>
-            </div>
+            {storedJobTitles &&
+              storedJobTitles.map((data, index) => {
+                return (
+                  <div
+                    className="card p-2 px-3 text-left mb-3"
+                    key={data}
+                    onClick={() => setActiveIndex(index)}
+                  >
+                    <p className="fw-b text-primary">{data}</p>
+                    <div className="d-flex justify-content-start align-items-center">
+                      <p
+                        className=" border-right px-2"
+                        style={{ borderRight: "1px solid" }}
+                      >
+                        <CalendarOutlined /> {storedExperience} year
+                      </p>
+                      <p className=" border-right px-2">
+                        {" "}
+                        <EnvironmentOutlined /> {storedLocation}
+                      </p>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: "10px",
+                        color: "gray",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      BENCHMARKED JOB
+                    </p>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div
@@ -461,7 +496,17 @@ const ReportsPage = () => {
             justifyItems: "center",
           }}
         >
-          <GeneratedReport jobsData={salaryData} />
+          {salaryData.length > 0 ? (
+            <GeneratedReport jobsData={salaryData[activeIndex]} />
+          ) : (
+            <div
+              style={{ height: "80vh", display: "grid", placeItems: "center" }}
+            >
+              <h3>
+                Your report is getting ready... <LoadingOutlined />{" "}
+              </h3>
+            </div>
+          )}
         </div>
       </div>
     </>

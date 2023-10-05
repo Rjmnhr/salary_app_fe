@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
-import { Select } from "antd";
+import { InputNumber, Select } from "antd";
 // import TagInput from "../../components/skill-input";
 import { Radio } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -55,9 +55,11 @@ const educationItems = [
 
 const AddDetails = () => {
   const [isSupervise, setIsSupervise] = useState(false);
+  //eslint-disable-next-line
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [data, setData] = useState([]);
   const [skillSet, setSkillSet] = useState([]);
+  const [experience, setExperience] = useState("");
   const navigate = useNavigate();
 
   const [checkboxes, setCheckboxes] = useState({
@@ -117,8 +119,6 @@ const AddDetails = () => {
       });
   }, []);
 
-  console.log(selectedSkills);
-
   const getSkills = (accessToken) => {
     axios
       .get("https://emsiservices.com/skills/versions/latest/skills", {
@@ -127,8 +127,6 @@ const AddDetails = () => {
         },
       })
       .then(function (response) {
-        console.log("🚀 ~ file: index.js:117 ~ response:", response.data.data);
-
         const skillArr = response.data.data;
         const skillNamesArr = skillArr.map((item) => item.name);
         setSkillSet(skillNamesArr);
@@ -137,6 +135,12 @@ const AddDetails = () => {
       .catch(function (error) {
         console.error(error);
       });
+  };
+
+  const handleSubmit = () => {
+    sessionStorage.setItem("experience", experience);
+
+    navigate("/reports");
   };
 
   return (
@@ -164,6 +168,7 @@ const AddDetails = () => {
           <form
             className="mt-5 text-left col-12"
             style={{ display: "grid", placeItems: "center" }}
+            onSubmit={handleSubmit}
           >
             <div className="mb-3 col-12 col-lg-12">
               <label>
@@ -171,10 +176,14 @@ const AddDetails = () => {
                 this role
               </label>
 
-              <input
-                type="number"
-                className="form-control form-control-lg "
+              <InputNumber
+                size={"large"}
                 placeholder="Enter"
+                style={{ width: "100%" }}
+                min={0} // Optional: Set a minimum value
+                max={100} // Optional: Set a maximum value
+                step={1} // Optional: Set the step increment/decrement
+                required
               />
             </div>
 
@@ -182,10 +191,16 @@ const AddDetails = () => {
               <label>
                 Minimum years of experience to be fully proficient for this role
               </label>
-              <input
-                type="number"
-                className="form-control form-control-lg  "
+
+              <InputNumber
+                size={"large"}
                 placeholder="Enter"
+                style={{ width: "100%" }}
+                min={0} // Optional: Set a minimum value
+                max={100} // Optional: Set a maximum value
+                step={1} // Optional: Set the step increment/
+                onClick={(e) => setExperience(e.target.value)}
+                required
               />
             </div>
 
@@ -205,6 +220,7 @@ const AddDetails = () => {
                 }}
                 options={educationItems}
                 className="input border"
+                required
               />
             </div>
 
@@ -213,6 +229,7 @@ const AddDetails = () => {
                 Choose the most important skills and specialties for this job
               </label>
               <Select
+                required
                 mode="multiple"
                 size={"large"}
                 style={{
@@ -405,14 +422,11 @@ const AddDetails = () => {
             ) : (
               ""
             )}
-          </form>
 
-          <button
-            onClick={() => navigate("/reports")}
-            className="btn btn-primary mb-3 w-75 w-lg-10"
-          >
-            Next
-          </button>
+            <button type="submit" className="btn btn-primary mb-3 w-75 w-lg-10">
+              Next
+            </button>
+          </form>
         </div>
       </div>
     </>
