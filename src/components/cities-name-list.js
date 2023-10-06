@@ -20,7 +20,7 @@ export const cities = [
   "Akot",
   "Alappuzha",
   "Aligarh",
-  "AlipurdUrban Agglomerationr",
+
   "Alirajpur",
   "Allahabad",
   "Alwar",
@@ -53,7 +53,7 @@ export const cities = [
   "Athni",
   "Attingal",
   "Aurangabad",
-  "Aurangabad",
+
   "Azamgarh",
   "Bagaha",
   "Bageshwar",
@@ -122,7 +122,7 @@ export const cities = [
   "Chennai",
   "Cherthala",
   "Chhapra",
-  "Chhapra",
+
   "Chikkamagaluru",
   "Chilakaluripet",
   "Chirala",
@@ -308,7 +308,7 @@ export const cities = [
   "Lakshmeshwar",
   "Lal Gopalganj Nindaura",
   "Lalganj",
-  "Lalganj",
+
   "Lalgudi",
   "Lalitpur",
   "Lalsot",

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Select } from "antd";
+import { InputNumber, Select } from "antd";
 import { NavBarStyled } from "../../components/nav-bar/style";
 import { cities } from "../../components/cities-name-list";
+import { DistinctSkills } from "../../components/list-of-distinct-skills";
 
 // const items = [
 //   "Customer Support",
@@ -41,40 +42,50 @@ import { cities } from "../../components/cities-name-list";
 // ];
 
 const items = [
-  "Customer Support",
-  "Sales and Business Development",
+  "Management",
+  "Consultant",
   "Tech Support",
-  "Java Developer",
-  "Tech Sales",
-  "Fullstack Developer",
-  "Medical Coder",
-  "Recruiter",
-  "Counsellor",
-  "Project Manager",
-  "IT Recruiter",
-  "Dotnet Developer",
-  "Digital Marketing",
-  "Inside Sales and Business Development",
-  "Business Analyst",
-  "Data Engineer",
+  "Customer Support",
   "Software Developer",
-  "DevOps Engineer",
-  "Content Writer",
-  "Accounts Manager",
-  "Solution Architect",
-  "Graphic Designer",
-  "MIS Management",
-  "Fullstack Dotnet Developer",
-  "UI/UX Designer",
+  "Medical Coder",
   "Medical Billing",
-  "Data Science",
-  "ML Engineer",
-  "Unclassified",
+  "Sales and Business Development",
+  "Data Science/Engineer",
+  "DevOps Engineer",
+  "Project Manager",
+  "Digital Marketing",
+  "Counsellor",
+  "Content/Copy Writer",
+  "Graphic Designer",
+  "Architect",
+  "Business Analyst",
+  "UI/UX Designer",
+  "Accounts Manager",
+  "Software Engineer",
+  "Operations",
+  "Engineer",
+  "Human Resource",
+  "Product Manager",
+  "Equity Advisor",
+  "Accountant",
 ];
+
+const CapitalizeFirstLetter = (data) => {
+  // Split the string into words
+  const words = data?.split(" ");
+  // Capitalize the first letter of each word and make the rest lowercase
+  const capitalizedWords = words?.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  );
+
+  // Join the words back together with spaces
+  return capitalizedWords?.join(" ");
+};
+
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
   const [data, setData] = useState(cities);
-  // eslint-disable-next-line
+
   const [location, setLocation] = useState("");
 
   const navigate = useNavigate();
@@ -83,6 +94,57 @@ const PriceAJob = () => {
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // eslint-disable-next-line
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [skillData, setSkillData] = useState(DistinctSkills);
+  // const [skillSet, setSkillSet] = useState([]);
+  const [experience, setExperience] = useState("");
+
+  const skillSet = [...DistinctSkills];
+
+  console.log("🚀 ~ file: index.js:95 ~ PriceAJob ~ skillSet:", skillSet);
+
+  // useEffect(() => {
+  //   axios
+  //     .post(
+  //       "https://auth.emsicloud.com/connect/token",
+  //       {
+  //         client_id: "bdqzoc3y3d36h59j",
+  //         client_secret: "W4KYdc2L",
+  //         grant_type: "client_credentials",
+  //         scope: "emsi_open",
+  //       },
+  //       {
+  //         headers: {
+  //           "content-type": "application/x-www-form-urlencoded",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       getSkills(response.data.access_token);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+  // const getSkills = (accessToken) => {
+  //   axios
+  //     .get("https://emsiservices.com/skills/versions/latest/skills", {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       const skillArr = response.data.data;
+  //       const skillNamesArr = skillArr.map((item) => item.name);
+  //       setSkillSet(skillNamesArr);
+  //       setSkillData(skillNamesArr);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // };
 
   // Add a scroll event listener to the window
   useEffect(() => {
@@ -108,6 +170,16 @@ const PriceAJob = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const handleSkillSearch = (newValue) => {
+    const filter = skillSet.filter((data) =>
+      data.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setSkillData(filter);
+  };
+  const handleSkillSelectChange = (value) => {
+    setSelectedSkills(value);
+  };
+
   const handleSearch = (newValue) => {
     const filter = cities.filter((data) =>
       data.toLowerCase().includes(newValue.toLowerCase())
@@ -124,8 +196,14 @@ const PriceAJob = () => {
       JSON.stringify(selectedJobTitles)
     );
     sessionStorage.setItem("location", location);
+    sessionStorage.setItem("experience", experience);
+    sessionStorage.setItem("selected_skills", JSON.stringify(selectedSkills));
 
-    navigate("/add-details");
+    navigate("/reports");
+  };
+
+  const handleExperience = (value) => {
+    setExperience(value);
   };
 
   return (
@@ -213,8 +291,10 @@ const PriceAJob = () => {
           <div className="container p-3 mt-5">
             <h2 className="fs-2">Price a Job</h2>
             <h5 className="mt-3">
-              Let's start building a profile with a job title and location.
+              Let's start building a profile with compensable factors to
+              benchmark jobs.
             </h5>
+
             <form
               className="w-100 mt-5"
               style={{ display: "grid", placeItems: "center" }}
@@ -267,7 +347,69 @@ const PriceAJob = () => {
                   required
                 />
               </div>
-              {selectedJobTitles ? (
+
+              <div className="mb-3 col-12 col-lg-7">
+                <InputNumber
+                  size={"large"}
+                  placeholder="Years of experience"
+                  style={{ width: "100%" }}
+                  min={0} // Optional: Set a minimum value
+                  max={100} // Optional: Set a maximum value
+                  step={1} // Optional: Set the step increment/
+                  value={experience}
+                  onChange={handleExperience}
+                  required
+                />
+              </div>
+
+              {/* <div className="mb-3 col-12 col-lg-7">
+              <label>Education</label>
+              <br />
+
+              <Select
+                size={"large"}
+                showSearch
+                placeholder="Select education"
+                optionFilterProp="children"
+                filterOption={filterOption}
+                style={{
+                  width: "100%",
+                  borderRadius: "3px",
+                }}
+                options={educationItems}
+                className="input border"
+                required
+              />
+            </div> */}
+
+              <div className="mb-3 col-12 col-lg-7">
+                <Select
+                  required
+                  mode="multiple"
+                  size={"large"}
+                  style={{
+                    width: "100%",
+                    borderRadius: "0",
+                    textAlign: "start",
+                  }}
+                  className="input border"
+                  showSearch
+                  placeholder=" Important skills"
+                  defaultActiveFirstOption={false}
+                  suffixIcon={null}
+                  filterOption={false}
+                  onSearch={handleSkillSearch}
+                  onChange={handleSkillSelectChange}
+                  notFoundContent={null}
+                  options={(skillData || []).map((d) => ({
+                    value: d,
+                    label: CapitalizeFirstLetter(d),
+                  }))}
+                />
+              </div>
+              {selectedJobTitles.length > 0 &&
+              selectedSkills.length > 0 &&
+              location ? (
                 <button type="submit" className="btn btn-primary mt-3 w-25">
                   Next
                 </button>

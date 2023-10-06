@@ -20,5 +20,14 @@ display: block;
     display: none;
 }
 
+.selected-tab{
+    border: 2px solid blue;
+}
+
+
+.selectable-tab:hover{
+    transform: scale3d(2);
+}
+
 
 

@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home-page/index";
 
-import AddDetails from "./pages/add-details";
 import ReportsPage from "./pages/reports-page";
 
 import PriceAJob from "./pages/price-a-job";
@@ -29,14 +28,6 @@ const AppRoute = () => {
           }
         />
 
-        <Route
-          path="/add-details"
-          element={
-            <>
-              <AddDetails />
-            </>
-          }
-        />
         <Route
           path="/reports"
           element={

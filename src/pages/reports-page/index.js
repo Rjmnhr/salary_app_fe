@@ -22,6 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import AxiosInstance from "../../components/axios";
+// import { format } from "date-fns"; // Import date-fns for date formatting
 
 const CapitalizeFirstLetter = (data) => {
   // Split the string into words
@@ -52,6 +53,9 @@ const GeneratedReport = ({ jobsData }) => {
     ),
     Senior: jobsData?.filter((job) => job.avg_experience > 5),
   };
+
+  const [chartWidth, setChartWidth] = useState(600);
+  const [chartHeight, setChartHeight] = useState(300);
 
   // Calculate average salary for each experience level
   const averageSalaries = {
@@ -102,38 +106,206 @@ const GeneratedReport = ({ jobsData }) => {
     salary: job.mapped_average_sal,
   }));
 
+  useEffect(() => {
+    const updateChartSize = () => {
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth < 912) {
+        setChartWidth(300);
+        setChartHeight(200);
+      }
+      if (screenWidth < 600) {
+        setChartWidth(300);
+        setChartHeight(150);
+      } else {
+        setChartWidth(600);
+        setChartHeight(300);
+      }
+    };
+
+    // Call the function to set initial size
+    updateChartSize();
+
+    // Add an event listener to check for window size changes
+    window.addEventListener("resize", updateChartSize);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", updateChartSize);
+    };
+  }, []);
+  // // Group data by 'date' and calculate average salary
+  // const groupedDataByDate = jobsData?.reduce((groups, item) => {
+  //   const date = item.current_date;
+  //   const salary = parseFloat(item.mapped_average_sal);
+
+  //   if (!groups[date]) {
+  //     groups[date] = [];
+  //   }
+
+  //   groups[date].push(salary);
+  //   return groups;
+  // }, {});
+
+  // // Calculate average salary for each date
+  // const trendDataByDate = Object.keys(groupedDataByDate).map(
+  //   (formattedDate) => {
+  //     const salaries = groupedDataByDate[formattedDate];
+  //     const averageSalary =
+  //       salaries.reduce((sum, salary) => sum + salary, 0) / salaries.length;
+
+  //     return {
+  //       formattedDate: format(new Date(formattedDate), "MM/dd/yyyy"), // Format the date here
+  //       averageSalary,
+  //     };
+  //   }
+  // );
+
   return (
     <>
-      <div
-        className="container col-11 m-3 p-3 text-left scrollable-container"
-        style={{
-          background: "white",
-          height: "100vh",
-          overflowY: "scroll",
-        }}
-      >
-        <h3>{CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Report</h3>
-        <div className="d-flex justify-content-start align-items-center">
-          <p
-            className=" border-right px-2"
-            style={{ borderRight: "1px solid" }}
-          >
-            <CalendarOutlined /> Average Experience :{" "}
-            {averageExperience.toFixed(2)}
-          </p>
+      {jobsData.length > 0 ? (
+        <div
+          className="container  col-lg-11 col-12 m-lg-3 m-2 p-lg-3 p-1 text-left scrollable-container"
+          style={{
+            background: "white",
+            height: "100vh",
+            overflowY: "scroll",
+          }}
+        >
+          <h3>{CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Report</h3>
+          <div className="d-lg-flex justify-content-start align-items-center">
+            <p
+              className=" border-right px-2"
+              style={{ borderRight: "1px solid" }}
+            >
+              <CalendarOutlined /> Average Experience :{" "}
+              {Math.round(averageExperience)} years
+            </p>
 
-          <p className=" border-right px-2">
-            {" "}
-            <EnvironmentOutlined /> {storedLocation}
-          </p>
-        </div>
-        <div>{/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}</div>
-        <div className="mt-3">
-          <h5>Average Salary </h5>
-          <p className="fs-3">₹ {averageSalary.toFixed(2)} Lakhs Per Annum</p>
-          <div className="d-flex mb-3 mt-3">
-            <div style={{ height: "100px", width: "10%" }}>
-              <svg height="30" width="100%">
+            <p className=" border-right px-2">
+              {" "}
+              <EnvironmentOutlined /> {storedLocation}
+            </p>
+          </div>
+          <div>
+            {/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}
+          </div>
+          <div className="mt-3">
+            <h5>Average Salary </h5>
+            <p className="fs-3">₹ {averageSalary.toFixed(2)} Lakhs Per Annum</p>
+            <div className="d-flex mb-3 mt-3">
+              <div style={{ height: "100px", width: "10%" }}>
+                <svg height="30" width="100%">
+                  <defs>
+                    <linearGradient
+                      id="default-bar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop style={{ stopColor: "#fff" }} />
+                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-bar')"
+                  ></rect>
+                  Sorry, your browser does not support inline SVG.
+                </svg>
+              </div>
+              <div style={{ height: "100px", width: "15%" }}>
+                <div
+                  style={{
+                    height: "30px",
+                    width: "100%",
+                    background: "#f8a66e",
+                  }}
+                ></div>
+                <div className="w-100 text-start mt-2">
+                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
+                    10%
+                  </p>
+                  <p style={{ fontWeight: "bold", color: "gray" }}>
+                    {minSalary} LPA
+                  </p>
+                </div>
+              </div>
+              ​{" "}
+              <div style={{ height: "100px", width: "50%" }}>
+                <svg height="30" width="100%">
+                  <defs>
+                    <linearGradient
+                      id="default-middleBar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop
+                        offset="0%"
+                        style={{ stopColor: "#18969b", stopOpacity: 1 }}
+                      />
+                      <stop
+                        offset="100%"
+                        style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-middleBar')"
+                  />
+                  {/* Vertical dotted line in the middle */}
+                  <line
+                    x1="50%"
+                    y1="0"
+                    x2="50%"
+                    y2="100%"
+                    stroke="#fff"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                  />
+                  Sorry, your browser does not support inline SVG.
+                </svg>
+                <div className="w-100 text-center mt-2">
+                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
+                    MEDIAN
+                  </p>
+                  <p style={{ fontWeight: "bold", color: "gray" }}>
+                    {medianSalary} LPA
+                  </p>
+                </div>
+              </div>
+              <div style={{ height: "100px", width: "15%" }}>
+                <div
+                  style={{
+                    height: "30px",
+                    width: "100%",
+                    background: "#00aaa4",
+                  }}
+                ></div>
+                <div className="w-100 text-right mt-2">
+                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
+                    90%
+                  </p>
+                  <p style={{ fontWeight: "bold", color: "gray" }}>
+                    {maxSalary} LPA
+                  </p>
+                </div>
+              </div>
+              <svg
+                height="30"
+                width="10%"
+                style={{ transform: "rotate(180deg)" }}
+              >
                 <defs>
                   <linearGradient
                     id="default-bar"
@@ -156,208 +328,167 @@ const GeneratedReport = ({ jobsData }) => {
                 Sorry, your browser does not support inline SVG.
               </svg>
             </div>
-            <div style={{ height: "100px", width: "15%" }}>
-              <div
-                style={{
-                  height: "30px",
-                  width: "100%",
-                  background: "#f8a66e",
-                }}
-              ></div>
-              <div className="w-100 text-start mt-2">
-                <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                  10%
-                </p>
-                <p style={{ fontWeight: "bold", color: "gray" }}>
-                  {minSalary} LPA
-                </p>
-              </div>
-            </div>
-            ​{" "}
-            <div style={{ height: "100px", width: "50%" }}>
-              <svg height="30" width="100%">
-                <defs>
-                  <linearGradient
-                    id="default-middleBar"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop
-                      offset="0%"
-                      style={{ stopColor: "#18969b", stopOpacity: 1 }}
-                    />
-                    <stop
-                      offset="100%"
-                      style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
-                    />
-                  </linearGradient>
-                </defs>
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  fill="url('#default-middleBar')"
-                />
-                {/* Vertical dotted line in the middle */}
-                <line
-                  x1="50%"
-                  y1="0"
-                  x2="50%"
-                  y2="100%"
-                  stroke="#fff"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                />
-                Sorry, your browser does not support inline SVG.
-              </svg>
-              <div className="w-100 text-center mt-2">
-                <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                  MEDIAN
-                </p>
-                <p style={{ fontWeight: "bold", color: "gray" }}>
-                  {medianSalary} LPA
-                </p>
-              </div>
-            </div>
-            <div style={{ height: "100px", width: "15%" }}>
-              <div
-                style={{
-                  height: "30px",
-                  width: "100%",
-                  background: "#00aaa4",
-                }}
-              ></div>
-              <div className="w-100 text-right mt-2">
-                <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                  90%
-                </p>
-                <p style={{ fontWeight: "bold", color: "gray" }}>
-                  {maxSalary} LPA
-                </p>
-              </div>
-            </div>
-            <svg
-              height="30"
-              width="10%"
-              style={{ transform: "rotate(180deg)" }}
-            >
-              <defs>
-                <linearGradient
-                  id="default-bar"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
-                >
-                  <stop style={{ stopColor: "#fff" }} />
-                  <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                </linearGradient>
-              </defs>
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                fill="url('#default-bar')"
-              ></rect>
-              Sorry, your browser does not support inline SVG.
-            </svg>
-          </div>
 
-          <div className="text-center mt-3">
-            <h4>Salary Chart</h4>
-            <BarChart width={600} height={300} data={jobsData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="mapped_job_title" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="mapped_average_sal" fill="#8884d8" />
-              {/* Add reference lines for minimum, median, and maximum salaries */}
-              <ReferenceLine
-                y={averageSalary}
-                stroke="green"
-                strokeDasharray="3 3"
-                label="Average"
-              />
-              <ReferenceLine
-                y={medianSalary}
-                stroke="blue"
-                strokeDasharray="3 3"
-                label="Median"
-              />
-              <ReferenceLine
-                y={minSalary}
-                stroke="red"
-                strokeDasharray="3 3"
-                label="Minimum"
-              />
-              <ReferenceLine
-                y={maxSalary}
-                stroke="orange"
-                strokeDasharray="3 3"
-                label="Maximum"
-              />
-            </BarChart>
-            {/* Render other report components */}
-          </div>
-          <div className="text-center mt-3">
-            <h4>Line Chart (Salary vs. Experience)</h4>
-            <LineChart width={600} height={300} data={lineChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="experience"
-                type="number"
-                label="Experience (Years)"
-              />
-              <YAxis dataKey="salary" type="number" label="Salary ($)" />
-              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="salary"
-                stroke="#8884d8"
-                name="Salary"
-              />
-            </LineChart>
-          </div>
+            <div className="text-center mt-3">
+              <h5 className="">Salary Chart</h5>
+              <BarChart width={chartWidth} height={chartHeight} data={jobsData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis tick={null} dataKey="mapped_job_title_1" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey="mapped_average_sal"
+                  label="Average Salary"
+                  fill="#8884d8"
+                  name="Average Salary"
+                />
+                {/* Add reference lines for minimum, median, and maximum salaries */}
+                <ReferenceLine
+                  y={averageSalary}
+                  stroke="green"
+                  strokeDasharray="3 3"
+                  label="Average"
+                />
+                <ReferenceLine
+                  y={medianSalary}
+                  stroke="blue"
+                  strokeDasharray="3 3"
+                  label="Median"
+                />
+                <ReferenceLine
+                  y={minSalary}
+                  stroke="red"
+                  strokeDasharray="3 3"
+                  label="Minimum"
+                />
+                <ReferenceLine
+                  y={maxSalary}
+                  stroke="orange"
+                  strokeDasharray="3 3"
+                  label="Maximum"
+                />
+              </BarChart>
+              {/* Render other report components */}
+            </div>
+            <div className="text-center mt-3">
+              <h4>Line Chart (Salary vs. Experience)</h4>
+              <LineChart
+                width={chartWidth}
+                height={chartHeight}
+                data={lineChartData}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="experience"
+                  type="number"
+                  label="Experience (Years)"
+                />
+                <YAxis dataKey="salary" type="number" label="Salary ($)" />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="salary"
+                  stroke="#8884d8"
+                  name="Salary"
+                />
+              </LineChart>
+              {/* <LineChart
+                width={600}
+                height={300}
+                data={trendDataByDate}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <XAxis dataKey="formattedDate" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="averageSalary"
+                  stroke="#8884d8"
+                  activeDot={{ r: 8 }}
+                />
+              </LineChart> */}
+            </div>
 
-          <div className="text-center mt-3">
-            <h4>Grouped Bar Chart (Salary vs. Experience Level)</h4>
-            <BarChart width={600} height={300} data={groupedBarChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="experienceLevel" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="averageSalary" fill="#8884d8" />
-            </BarChart>
-          </div>
-          <div className="text-center mt-3">
-            <h4>Grouped Line Chart (Salary vs. Experience Level)</h4>
-            <LineChart width={600} height={300} data={groupedBarChartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="experienceLevel" />
-              <YAxis
-                dataKey="averageSalary"
-                type="number"
-                label="averageSalary  "
-              />
-              <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="averageSalary"
-                stroke="#8884d8"
-                name="averageSalary"
-              />
-            </LineChart>
+            <div className="text-center mt-3">
+              <h4>Grouped Bar Chart (Salary vs. Experience Level)</h4>
+              <BarChart
+                width={chartWidth}
+                height={chartHeight}
+                data={groupedBarChartData}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="experienceLevel" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey="averageSalary"
+                  name="Average Salary"
+                  fill="#8884d8"
+                />
+              </BarChart>
+            </div>
+            <div className="text-center mt-3">
+              <h4>Grouped Line Chart (Salary vs. Experience Level)</h4>
+              <LineChart
+                width={chartWidth}
+                height={chartHeight}
+                data={groupedBarChartData}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="experienceLevel" />
+                <YAxis
+                  dataKey="averageSalary"
+                  type="number"
+                  label="Average Salary  "
+                />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="averageSalary"
+                  stroke="#8884d8"
+                  name="Average Salary"
+                />
+              </LineChart>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            justifyItems: "start",
+            textAlign: "start",
+          }}
+          className="mt-1 mt-lg-3"
+        >
+          <div
+            className="d-lg-flex justify-content-lg-start align-items-center p-3"
+            style={{ background: "#fff" }}
+          >
+            <div>
+              <h2>Your report was unsuccessful</h2>
+              <p>
+                Sorry! We haven't collected enough data yet to generate this
+                report. Check back soon
+              </p>
+            </div>
+
+            <img
+              src="https://www.payscale.com/content/market-worth-promo@2x.png"
+              alt=""
+              height={200}
+              width={300}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
@@ -378,6 +509,7 @@ const ReportsPage = () => {
       sessionStorage.getItem("selectedJobTitles")
     );
     const storedLocation = sessionStorage.getItem("location");
+    const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
 
     if (storedJobTitles && storedJobTitles.length > 0) {
       const fetchResponses = async () => {
@@ -385,7 +517,11 @@ const ReportsPage = () => {
           storedJobTitles.map(async (jobTitle) => {
             const response = await AxiosInstance.post(
               "/api/salary/data",
-              { location: storedLocation, job_title: jobTitle },
+              {
+                location: storedLocation,
+                job_title: jobTitle,
+                skills: storedSkills,
+              },
               {
                 headers: {
                   "content-type": "application/json",
@@ -457,11 +593,19 @@ const ReportsPage = () => {
               storedJobTitles.map((data, index) => {
                 return (
                   <div
-                    className="card p-2 px-3 text-left mb-3"
+                    className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                      activeIndex === index ? "selected-tab" : ""
+                    }`}
                     key={data}
                     onClick={() => setActiveIndex(index)}
+                    style={{ cursor: "pointer" }}
                   >
-                    <p className="fw-b text-primary">{data}</p>
+                    <p
+                      style={{ fontWeight: "500" }}
+                      className="fw-b text-primary"
+                    >
+                      {data}
+                    </p>
                     <div className="d-flex justify-content-start align-items-center">
                       <p
                         className=" border-right px-2"
