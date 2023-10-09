@@ -2,44 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { InputNumber, Select } from "antd";
+import { Input, InputNumber, Select } from "antd";
 import { NavBarStyled } from "../../components/nav-bar/style";
 import { cities } from "../../components/cities-name-list";
 import { DistinctSkills } from "../../components/list-of-distinct-skills";
-
-// const items = [
-//   "Customer Support",
-
-//   "Voice Process",
-
-//   "Software Development",
-
-//   "Sales",
-
-//   "Business Development",
-
-//   "Counsellor",
-
-//   "Lead/Management",
-
-//   "Recruiter",
-
-//   "Devops",
-
-//   "Product management",
-
-//   "Engineer",
-
-//   "Business Analyst",
-
-//   "Data Engineer",
-
-//   "Data Scientist",
-
-//   "Project Management",
-
-//   "Digital Marketing",
-// ];
 
 const items = [
   "Management",
@@ -70,6 +36,8 @@ const items = [
   "Accountant",
 ];
 
+items.sort();
+
 const CapitalizeFirstLetter = (data) => {
   // Split the string into words
   const words = data?.split(" ");
@@ -90,19 +58,18 @@ const PriceAJob = () => {
 
   const navigate = useNavigate();
 
-  const filteredOptions = items.filter((o) => !selectedJobTitles.includes(o));
-
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // eslint-disable-next-line
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [skillData, setSkillData] = useState(DistinctSkills);
+  const [jobsData, setJobsData] = useState(items);
   // const [skillSet, setSkillSet] = useState([]);
   const [experience, setExperience] = useState("");
+  const [isSupervise, setIsSupervise] = useState("");
+  const [isManage, setIsManage] = useState("");
 
   const skillSet = [...DistinctSkills];
-
-  console.log("🚀 ~ file: index.js:95 ~ PriceAJob ~ skillSet:", skillSet);
 
   // useEffect(() => {
   //   axios
@@ -186,6 +153,14 @@ const PriceAJob = () => {
     );
     setData(filter);
   };
+
+  const handleJobSearch = (newValue) => {
+    const filter = items.filter((data) =>
+      data.toLowerCase().includes(newValue.toLowerCase())
+    );
+
+    setJobsData(filter);
+  };
   const handleSelectChange = (value) => {
     setLocation(value);
   };
@@ -198,12 +173,22 @@ const PriceAJob = () => {
     sessionStorage.setItem("location", location);
     sessionStorage.setItem("experience", experience);
     sessionStorage.setItem("selected_skills", JSON.stringify(selectedSkills));
+    sessionStorage.setItem("isSupervise", isSupervise);
+    sessionStorage.setItem("isManage", isManage);
 
     navigate("/reports");
   };
 
   const handleExperience = (value) => {
     setExperience(value);
+  };
+
+  const handleManageSelect = (value) => {
+    setIsManage(value);
+  };
+
+  const handleSuperviseSelect = (value) => {
+    setIsSupervise(value);
   };
 
   return (
@@ -269,7 +254,7 @@ const PriceAJob = () => {
       </body>
 
       <div
-        className="container-fluid  "
+        className="container-fluid mt-3 "
         style={{
           background: "gainsboro",
           height: "100vh",
@@ -306,15 +291,15 @@ const PriceAJob = () => {
                   size={"large"}
                   showSearch
                   placeholder="Job Title"
-                  optionFilterProp="children"
                   value={selectedJobTitles}
                   onChange={setSelectedJobTitles}
+                  onSearch={handleJobSearch}
                   style={{
                     width: "100%",
                     borderRadius: "3px",
                     textAlign: "start",
                   }}
-                  options={filteredOptions.map((item) => ({
+                  options={(jobsData || []).map((item) => ({
                     value: item,
                     label: item,
                   }))}
@@ -382,7 +367,7 @@ const PriceAJob = () => {
               />
             </div> */}
 
-              <div className="mb-3 col-12 col-lg-7">
+              <div className="mb-3 col-12 col-lg-7 ">
                 <Select
                   required
                   mode="multiple"
@@ -407,9 +392,66 @@ const PriceAJob = () => {
                   }))}
                 />
               </div>
+              <div className="mb-3 col-12 col-lg-7 ">
+                <Input placeholder="Any other description" allowClear />
+              </div>
+              <div className="mb-3 col-12 col-lg-7">
+                <Select
+                  size={"large"}
+                  placeholder="Does this role supervise employees?"
+                  optionFilterProp="children"
+                  style={{
+                    width: "100%",
+                    borderRadius: "3px",
+                    textAlign: "start",
+                  }}
+                  options={[
+                    {
+                      value: "Yes",
+                      label: "Yes",
+                    },
+                    {
+                      value: "No",
+                      label: "No",
+                    },
+                  ]}
+                  className="border text-start"
+                  required
+                  onChange={handleSuperviseSelect}
+                />
+              </div>
+
+              <div className="mb-3 col-12 col-lg-7">
+                <Select
+                  size={"large"}
+                  placeholder="Does this role manage or lead projects?"
+                  optionFilterProp="children"
+                  style={{
+                    width: "100%",
+                    borderRadius: "3px",
+                    textAlign: "start",
+                  }}
+                  options={[
+                    {
+                      value: "Yes",
+                      label: "Yes",
+                    },
+                    {
+                      value: "No",
+                      label: "No",
+                    },
+                  ]}
+                  className="border text-start"
+                  required
+                  onChange={handleManageSelect}
+                />
+              </div>
+
               {selectedJobTitles.length > 0 &&
               selectedSkills.length > 0 &&
-              location ? (
+              location &&
+              isSupervise &&
+              isManage ? (
                 <button type="submit" className="btn btn-primary mt-3 w-25">
                   Next
                 </button>

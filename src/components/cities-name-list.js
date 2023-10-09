@@ -1,5 +1,4 @@
 export const cities = [
-  "Bangalore",
   "Achalpur",
   "Achhnera",
   "Adalaj",
@@ -82,6 +81,7 @@ export const cities = [
   "Bellampalle",
   "Belonia",
   "Bengaluru",
+  "Bangalore",
   "Bettiah",
   "BhabUrban Agglomeration",
   "Bhadrachalam",
