@@ -113,7 +113,7 @@ const SignIn = () => {
   return (
     <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
       {contextHolder}
-      <div class="container card col-4 p-3" data-aos="fade-up">
+      <div class="container card col-12 col-lg-4 p-3" data-aos="fade-up">
         <div class="section-title">
           <h2>Login to Equipay Partners</h2>
         </div>

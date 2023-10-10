@@ -91,7 +91,7 @@ const SignUp = () => {
         }}
       >
         {contextHolder}
-        <div class="container card col-4 p-3" data-aos="fade-up">
+        <div class="container card col-12 col-lg-4 p-3" data-aos="fade-up">
           <div class="section-title">
             <h2>Create your account</h2>
           </div>
