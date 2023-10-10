@@ -1,9 +1,9 @@
 import SignIn from "../../components/sign-in/sign-in";
 
-import { LoginPagestyled } from "./style";
+import NavBar from "../../components/nav-bar/index";
 import SignUp from "../../components/sign-up/sign-up";
 import { useApplicationContext } from "../../context/app-context";
-import NavBar from "../../components/nav-bar/nav-bar";
+
 import AxiosInstance from "../../components/axios";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -35,11 +35,10 @@ const LoginPage = () => {
   return (
     <>
       <NavBar />
-      <LoginPagestyled>
-        <div style={{ height: "100vh" }} className={`main-container `}>
-          {isSignIn ? <SignIn /> : <SignUp />}
-        </div>
-      </LoginPagestyled>
+
+      <div style={{ height: "100vh" }} className={`main-container `}>
+        {isSignIn ? <SignIn /> : <SignUp />}
+      </div>
     </>
   );
 };

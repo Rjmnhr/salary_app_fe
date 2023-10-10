@@ -97,6 +97,14 @@ const PriceAJob = () => {
   const [isSupervise, setIsSupervise] = useState("");
   const [isManage, setIsManage] = useState("");
 
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  useEffect(() => {
+    if (isLoggedIn !== "true") {
+      navigate("/login-app");
+    }
+    // eslint-disable-next-line
+  }, [isLoggedIn]);
+
   useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       const fetchResponses = async () => {

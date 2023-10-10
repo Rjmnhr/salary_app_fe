@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-export const LoginPagestyled = styled.div`
+export const OtpVerificationPageStyled = styled.div`
   .main-container {
     display: flex;
     align-items: center;
@@ -28,11 +28,23 @@ export const LoginPagestyled = styled.div`
     padding: 20px;
     background: rgb(248, 248, 248);
   }
+  .right-sub-container {
+    text-align: start;
+  }
 
   [id^="otp"] {
     margin: 5px;
   }
 
+  button {
+    padding: 12px;
+    background: #333333;
+    color: white;
+
+    border: none;
+
+    width: 150px;
+  }
   .img_container {
     position: relative;
   }
@@ -47,6 +59,18 @@ export const LoginPagestyled = styled.div`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
+  }
+
+  input[type="number"] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
   }
 
   @media (max-width: 912px) {

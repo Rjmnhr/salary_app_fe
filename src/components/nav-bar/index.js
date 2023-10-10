@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ scrollToContact }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Add a scroll event listener to the window
   useEffect(() => {
@@ -27,6 +29,14 @@ const NavBar = ({ scrollToContact }) => {
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  const handleLogOut = () => {
+    navigate("/");
+    localStorage.setItem("accessToken", "");
+    localStorage.setItem("isLoggedIn", false);
   };
 
   return (
@@ -84,7 +94,11 @@ const NavBar = ({ scrollToContact }) => {
                   </a>
                 </li>
                 <li>
-                  <a href="/login">Login</a>
+                  {isLoggedIn === "true" ? (
+                    <p onClick={handleLogOut}>Log out</p>
+                  ) : (
+                    <a href="/login">Log in</a>
+                  )}
                 </li>
               </ul>
             </nav>

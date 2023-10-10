@@ -6,6 +6,8 @@ import ReportsPage from "./pages/reports-page";
 import PriceAJob from "./pages/price-a-job";
 import ExecutiveReports from "./pages/executive-reports";
 import JobReport from "./components/sample";
+import LoginPage from "./pages/login-page";
+import OtpVerification from "./pages/otp-verification";
 
 const AppRoute = () => {
   return (
@@ -49,6 +51,30 @@ const AppRoute = () => {
           element={
             <>
               <JobReport />
+            </>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <>
+              <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path="/otp-validation"
+          element={
+            <>
+              <OtpVerification />
+            </>
+          }
+        />
+        <Route
+          path="/login-app"
+          element={
+            <>
+              <LoginPage />
             </>
           }
         />
