@@ -4,8 +4,9 @@ import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 import { Input, InputNumber, Select } from "antd";
 import { NavBarStyled } from "../../components/nav-bar/style";
-import { cities } from "../../components/cities-name-list";
-import { DistinctSkills } from "../../components/list-of-distinct-skills";
+
+// import { DistinctSkills } from "../../components/list-of-distinct-skills";
+import AxiosInstance from "../../components/axios";
 
 const items = [
   "Management",
@@ -35,8 +36,34 @@ const items = [
   "Equity Advisor",
   "Accountant",
 ];
+const cities = [
+  "Chandigarh",
+  "New Delhi",
+  "Hyderabad/Secunderabad",
+  "Ahmedabad",
+  "Surat",
+  "Vadodara/Baroda",
+  "Gurgaon/Gurugram",
+  "Bangalore/Bengaluru",
+  "Kochi/Cochin",
+  "Indore",
+  "Mumbai",
+  "Mumbai Suburban",
+  "Navi Mumbai",
+  "Pune",
+  "Jaipur",
+  "Chennai",
+  "Coimbatore",
+  "Lucknow",
+  "Noida",
+  "Kolkata",
+  "Thane",
+  "Delhi/NCR",
+  "Mumbai (All Areas)",
+];
 
 items.sort();
+cities.sort();
 
 const CapitalizeFirstLetter = (data) => {
   // Split the string into words
@@ -50,26 +77,69 @@ const CapitalizeFirstLetter = (data) => {
   return capitalizedWords?.join(" ");
 };
 
+function formatColumnName(columnName) {
+  return columnName?.replace(/\s+/g, "_").toLowerCase();
+}
+
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
   const [data, setData] = useState(cities);
-
   const [location, setLocation] = useState("");
-
   const navigate = useNavigate();
-
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // eslint-disable-next-line
   const [selectedSkills, setSelectedSkills] = useState([]);
-  const [skillData, setSkillData] = useState(DistinctSkills);
+  const [skillData, setSkillData] = useState([]);
   const [jobsData, setJobsData] = useState(items);
-  // const [skillSet, setSkillSet] = useState([]);
+  const [skillSet, setSkillSet] = useState([]);
   const [experience, setExperience] = useState("");
   const [isSupervise, setIsSupervise] = useState("");
   const [isManage, setIsManage] = useState("");
 
-  const skillSet = [...DistinctSkills];
+  useEffect(() => {
+    if (selectedJobTitles && selectedJobTitles.length > 0) {
+      const fetchResponses = async () => {
+        const retrievedSkillsData = await Promise.all(
+          selectedJobTitles.map(async (jobTitle) => {
+            const response = await AxiosInstance.post(
+              "/api/skills/data",
+              {
+                job_title: formatColumnName(jobTitle),
+              },
+              {
+                headers: {
+                  "content-type": "application/json",
+                },
+              }
+            );
+            return response.data;
+          })
+        );
+        const uniqueValues = new Set();
+
+        retrievedSkillsData.forEach((innerArray) => {
+          innerArray.forEach((obj) => {
+            const value = Object.values(obj)[0];
+            if (value !== null && value.trim() !== "" && value.length > 1) {
+              uniqueValues.add(value);
+            }
+          });
+        });
+
+        const flattenedUniqueValues = [...uniqueValues];
+
+        flattenedUniqueValues.sort();
+        setSkillSet(flattenedUniqueValues);
+
+        setSkillData(flattenedUniqueValues);
+      };
+
+      fetchResponses();
+    }
+  }, [selectedJobTitles]);
+
+  // const skillSet = [...DistinctSkills];
 
   // useEffect(() => {
   //   axios
@@ -139,7 +209,7 @@ const PriceAJob = () => {
 
   const handleSkillSearch = (newValue) => {
     const filter = skillSet.filter((data) =>
-      data.toLowerCase().includes(newValue.toLowerCase())
+      data?.toLowerCase().includes(newValue.toLowerCase())
     );
     setSkillData(filter);
   };
@@ -149,14 +219,14 @@ const PriceAJob = () => {
 
   const handleSearch = (newValue) => {
     const filter = cities.filter((data) =>
-      data.toLowerCase().includes(newValue.toLowerCase())
+      data?.toLowerCase().includes(newValue.toLowerCase())
     );
     setData(filter);
   };
 
   const handleJobSearch = (newValue) => {
     const filter = items.filter((data) =>
-      data.toLowerCase().includes(newValue.toLowerCase())
+      data?.toLowerCase().includes(newValue.toLowerCase())
     );
 
     setJobsData(filter);
