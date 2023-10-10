@@ -39,13 +39,13 @@ const items = [
 const cities = [
   "Chandigarh",
   "New Delhi",
-  "Hyderabad/Secunderabad",
+  "Hyderabad",
   "Ahmedabad",
   "Surat",
-  "Vadodara/Baroda",
-  "Gurgaon/Gurugram",
-  "Bangalore/Bengaluru",
-  "Kochi/Cochin",
+  "Vadodara",
+  "Gurgaon",
+  "Bangalore",
+  "Kochi",
   "Indore",
   "Mumbai",
   "Mumbai Suburban",
@@ -58,8 +58,8 @@ const cities = [
   "Noida",
   "Kolkata",
   "Thane",
-  "Delhi/NCR",
-  "Mumbai (All Areas)",
+  "Delhi",
+  "Mumbai ",
 ];
 
 items.sort();
@@ -138,6 +138,7 @@ const PriceAJob = () => {
         const flattenedUniqueValues = [...uniqueValues];
 
         flattenedUniqueValues.sort();
+
         setSkillSet(flattenedUniqueValues);
 
         setSkillData(flattenedUniqueValues);
