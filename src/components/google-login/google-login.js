@@ -41,7 +41,9 @@ const GoogleLoginComponent = ({ element }) => {
         if (!response.status === 200) return alert("Something ids wrong");
 
         const userType = data.user_type;
+        const user_id = data.id;
         localStorage.setItem("userType", userType);
+        localStorage.setItem("user_id", user_id);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("isLoggedIn", true);
         sessionStorage.setItem("info", "");

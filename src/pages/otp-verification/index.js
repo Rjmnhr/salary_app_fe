@@ -137,8 +137,10 @@ const OtpVerification = () => {
         }
 
         const userType = data.user_type;
+        const user_id = data.id;
 
         localStorage.setItem("userType", userType);
+        localStorage.setItem("user_id", user_id);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("user_id", id);
