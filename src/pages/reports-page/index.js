@@ -19,7 +19,16 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { useNavigate } from "react-router-dom";
+
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+
+import IconButton from "@mui/material/IconButton";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import AxiosInstance from "../../components/axios";
 // import { format } from "date-fns"; // Import date-fns for date formatting
@@ -529,9 +538,22 @@ const GeneratedReport = ({ jobsData }) => {
   );
 };
 
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 const ReportsPage = () => {
-  const navigate = useNavigate();
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
+  const [dataArray, setDataArray] = useState([]);
+  const [expanded, setExpanded] = React.useState(false);
+
   const storedLocation = sessionStorage.getItem("location");
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
@@ -540,28 +562,120 @@ const ReportsPage = () => {
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
   const storedManage = sessionStorage.getItem("isManage");
+  const storedUserID = localStorage.getItem("user_id");
 
+  let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    // Retrieve selected job titles and location from session storage
-    const storedJobTitles = JSON.parse(
-      sessionStorage.getItem("selectedJobTitles")
-    );
-    const storedLocation = sessionStorage.getItem("location");
-    const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
+  const handleExpandClick = (index) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [index]: !prevExpanded[index],
+    }));
+  };
 
+  // Create a new array by mapping the jobTitles array
+  const CreateArr = () => {
+    const newArr = storedJobTitles.map((jobTitle) => ({
+      job_titles: jobTitle,
+      location: storedLocation,
+      experience: storedExperience,
+      skills: sessionStorage.getItem("selected_skills"),
+      manage: storedManage,
+      supervise: storedSupervise,
+    }));
+
+    return newArr;
+  };
+
+  useEffect(() => {
+    const createdArray = CreateArr();
+    console.log(
+      "🚀 ~ file: index.js:566 ~ useEffect ~ createdArray:",
+      createdArray
+    );
+
+    AxiosInstance.post(
+      "/api/report/get",
+      { user_id: storedUserID },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(async (response) => {
+        const data = await response.data;
+
+        setDataArray([...createdArray, ...data]);
+      })
+      .catch((err) => console.log(err));
+    //eslint-disable-next-line
+  }, []);
+
+  console.log("🚀 ~ file: index.js:594 ~ ReportsPage ~ dataArray:", dataArray);
+
+  useEffect(() => {
+    if (saveTheReport === "true") {
+      if (
+        storedJobTitles &&
+        storedUserID &&
+        storedExperience &&
+        storedSkills &&
+        storedLocation &&
+        storedSupervise &&
+        storedManage
+      ) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        saveTheReport = "false";
+        saveReport();
+      }
+    }
+    //eslint-disable-next-line
+  }, []);
+
+  const saveReport = async () => {
     if (storedJobTitles && storedJobTitles.length > 0) {
+      await Promise.all(
+        storedJobTitles.map(async (jobTitle) => {
+          const formData = new FormData();
+          formData.append("user_id", storedUserID);
+          formData.append("job_titles", jobTitle);
+          formData.append("experience", storedExperience);
+          formData.append("skills", JSON.stringify(storedSkills));
+          formData.append("location ", storedLocation);
+          formData.append("manage", storedManage);
+          formData.append("supervise", storedSupervise);
+
+          const response = await AxiosInstance.post(
+            "/api/report/save",
+            formData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log(response.data);
+        })
+      );
+
+      sessionStorage.setItem("saveTheReport", "false"); // Mark report as saved in localStorage
+    }
+  };
+
+  useEffect(() => {
+    if (dataArray && dataArray.length > 0) {
       const fetchResponses = async () => {
         const jobTitleResponses = await Promise.all(
-          storedJobTitles.map(async (jobTitle) => {
+          dataArray.map(async (data) => {
             const response = await AxiosInstance.post(
               "/api/salary/data",
               {
-                location: storedLocation,
-                job_title: jobTitle,
-                skills: storedSkills,
-                experience: storedExperience,
+                location: data.location,
+                job_title: data.job_titles,
+                skills: JSON.parse(data.skills),
+                experience: data.experience,
               },
               {
                 headers: {
@@ -577,12 +691,10 @@ const ReportsPage = () => {
       };
 
       fetchResponses();
-    } else {
-      navigate("/price-a-job");
     }
 
     //eslint-disable-next-line
-  }, []);
+  }, [dataArray]);
 
   function SkillsList({ skills }) {
     return (
@@ -647,8 +759,8 @@ const ReportsPage = () => {
           </div>
         </div> */}
         <div
-          className="container-fluid p-3 col-12 col-lg-3 vh-lg-80 reports-list scrollable-container"
-          style={{ overflowY: "scroll" }}
+          className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
+          style={{ overflowY: "scroll", maxHeight: "100vh" }}
         >
           {/* <input className="form-control mb-3" placeholder="search" />
           <button
@@ -659,14 +771,14 @@ const ReportsPage = () => {
           </button> */}
 
           <div>
-            {storedJobTitles &&
-              storedJobTitles.map((data, index) => {
+            {dataArray &&
+              dataArray.map((data, index) => {
                 return (
-                  <div
+                  <Card
                     className={`card selectable-tab p-2 px-3 text-left mb-3 ${
                       activeIndex === index ? "selected-tab" : ""
                     }`}
-                    key={data}
+                    key={data.report_id}
                     onClick={() => setActiveIndex(index)}
                     style={{ cursor: "pointer" }}
                   >
@@ -674,7 +786,7 @@ const ReportsPage = () => {
                       style={{ fontWeight: "500" }}
                       className="fw-b text-primary"
                     >
-                      {data}
+                      {data.job_titles}
                     </p>
                     <div className="d-flex justify-content-start align-items-center">
                       <p
@@ -686,7 +798,7 @@ const ReportsPage = () => {
                           gap: "3px",
                         }}
                       >
-                        <CalendarOutlined /> {storedExperience} years
+                        <CalendarOutlined /> {data.experience} years
                       </p>
                       <p
                         className=" border-right px-2"
@@ -697,34 +809,54 @@ const ReportsPage = () => {
                         }}
                       >
                         {" "}
-                        <EnvironmentOutlined /> {storedLocation}
+                        <EnvironmentOutlined /> {data.location}
                       </p>
                     </div>
-                    <div>
-                      <SkillsList skills={storedSkills} />
-                    </div>
-                    <div>
-                      <p>
-                        Supervise employees :{" "}
-                        <span style={{ fontSize: "14px" }}>
-                          {storedSupervise}
-                        </span>{" "}
-                      </p>
-                      <p>
-                        Manage projects :{" "}
-                        <span style={{ fontSize: "14px" }}>{storedManage}</span>{" "}
-                      </p>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: "10px",
-                        color: "gray",
-                        fontWeight: "bold",
-                      }}
+
+                    <CardActions disableSpacing>
+                      <p>See More</p>
+                      <ExpandMore
+                        expand={expanded[index] || false}
+                        onClick={() => handleExpandClick(index)}
+                        aria-expanded={expanded[index] || false}
+                        aria-label="show more"
+                      >
+                        <ExpandMoreIcon />
+                      </ExpandMore>
+                    </CardActions>
+                    <Collapse
+                      in={expanded[index] || false}
+                      timeout="auto"
+                      unmountOnExit
                     >
-                      BENCHMARKED JOB
-                    </p>
-                  </div>
+                      <div>
+                        <SkillsList skills={JSON.parse(data.skills)} />
+                      </div>
+                      <div>
+                        <p>
+                          Supervise employees :{" "}
+                          <span style={{ fontSize: "14px" }}>
+                            {data.supervise}
+                          </span>{" "}
+                        </p>
+                        <p>
+                          Manage projects :{" "}
+                          <span style={{ fontSize: "14px" }}>
+                            {data.manage}
+                          </span>{" "}
+                        </p>
+                      </div>
+                      <p
+                        style={{
+                          fontSize: "10px",
+                          color: "gray",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        BENCHMARKED JOB
+                      </p>
+                    </Collapse>
+                  </Card>
                 );
               })}
           </div>

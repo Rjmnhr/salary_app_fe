@@ -9,33 +9,32 @@ import { NavBarStyled } from "../../components/nav-bar/style";
 import AxiosInstance from "../../components/axios";
 
 const items = [
-  "Management",
-  "Consultant",
+  "Engineer",
   "Tech Support",
   "Customer Support",
-  "Software Developer",
-  "Medical Coder",
-  "Medical Billing",
-  "Sales and Business Development",
-  "Data Science/Engineer",
-  "DevOps Engineer",
-  "Project Manager",
+  "Consultant",
+  "Unclassified",
   "Digital Marketing",
+  "Sales and Business Development",
+  "Medical Coder",
+  "Accountant",
+  "Business Analyst",
+  "Software Developer",
+  "Architect",
+  "Human Resource",
+  "Management",
+  "Project Manager",
+  "Data Science/Engineer",
+  "Operations",
+  "Product Manager",
+  "UI/UX Designer",
+  "Graphic Designer",
   "Counsellor",
   "Content/Copy Writer",
-  "Graphic Designer",
-  "Architect",
-  "Business Analyst",
-  "UI/UX Designer",
-  "Accounts Manager",
-  "Software Engineer",
-  "Operations",
-  "Engineer",
-  "Human Resource",
-  "Product Manager",
   "Equity Advisor",
-  "Accountant",
+  "Medical Billing",
 ];
+
 const cities = [
   "Chandigarh",
   "New Delhi",
@@ -78,7 +77,7 @@ const CapitalizeFirstLetter = (data) => {
 };
 
 function formatColumnName(columnName) {
-  return columnName?.replace(/\s+/g, "_").toLowerCase();
+  return columnName?.replace(/[\s/]+/g, "_").toLowerCase();
 }
 
 const PriceAJob = () => {
@@ -96,6 +95,8 @@ const PriceAJob = () => {
   const [experience, setExperience] = useState("");
   const [isSupervise, setIsSupervise] = useState("");
   const [isManage, setIsManage] = useState("");
+
+  sessionStorage.removeItem("saveTheReport");
 
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   useEffect(() => {
@@ -137,11 +138,22 @@ const PriceAJob = () => {
 
         const flattenedUniqueValues = [...uniqueValues];
 
-        flattenedUniqueValues.sort();
+        const sortedArr = flattenedUniqueValues.sort((a, b) => {
+          const isSpecialA = /[^a-zA-Z]/.test(a[0]); // Check if a starts with a special character
+          const isSpecialB = /[^a-zA-Z]/.test(b[0]); // Check if b starts with a special character
 
-        setSkillSet(flattenedUniqueValues);
+          if (isSpecialA && !isSpecialB) {
+            return 1; // Move a to the end
+          } else if (!isSpecialA && isSpecialB) {
+            return -1; // Move b to the end
+          } else {
+            return a.localeCompare(b); // Sort alphabetically
+          }
+        });
 
-        setSkillData(flattenedUniqueValues);
+        setSkillSet(sortedArr);
+
+        setSkillData(sortedArr);
       };
 
       fetchResponses();
@@ -309,7 +321,9 @@ const PriceAJob = () => {
                     <a href="/price-a-job">Price a Job</a>
                   </li>
                   <li>
-                    <a href="#reports">Executive Compensation Reports</a>
+                    <a href="/executive-reports">
+                      Executive Compensation Reports
+                    </a>
                   </li>
 
                   <li>
@@ -319,9 +333,9 @@ const PriceAJob = () => {
                     <a href="#sales">Sales Incentive</a>
                   </li>
 
-                  <li>
+                  {/* <li>
                     <a href="#contact">Contact</a>
-                  </li>
+                  </li> */}
                   <li>
                     <a href="/login">Login</a>
                   </li>
@@ -341,7 +355,7 @@ const PriceAJob = () => {
         }}
       >
         <div
-          className="container main-container "
+          className="container container-fluid main-container "
           style={{
             background: "white",
             height: "100vh",

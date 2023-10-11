@@ -7,11 +7,11 @@ export const LoginPagestyled = styled.div`
   }
 
   .left-container {
-    width: 50%;
+    width: 55%;
     display: grid;
     place-items: center;
     height: 100vh;
-    background: black;
+
     color: white;
     padding: 20px;
   }
@@ -21,12 +21,11 @@ export const LoginPagestyled = styled.div`
   }
 
   .right-container {
-    width: 60%;
+    width: 45%;
     display: grid;
     place-items: center;
     height: 100vh;
     padding: 20px;
-    background: rgb(248, 248, 248);
   }
 
   [id^="otp"] {
@@ -45,7 +44,7 @@ export const LoginPagestyled = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+
     z-index: -1;
   }
 

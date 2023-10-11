@@ -7,6 +7,7 @@ import { useApplicationContext } from "../../context/app-context";
 import AxiosInstance from "../../components/axios";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { LoginPagestyled } from "./style";
 
 const LoginPage = () => {
   const { isSignIn } = useApplicationContext();
@@ -34,11 +35,28 @@ const LoginPage = () => {
 
   return (
     <>
-      <NavBar />
+      <LoginPagestyled>
+        <NavBar />
 
-      <div style={{ height: "100vh" }} className={`main-container `}>
-        {isSignIn ? <SignIn /> : <SignUp />}
-      </div>
+        <div className="main-container" style={{ height: "100vh" }}>
+          <div
+            className="left-container img_container"
+            style={{
+              backgroundImage:
+                "url(https://res.cloudinary.com/dsw1ubwyh/image/upload/v1697028167/nfettkwdlclbz0viva6h.png)",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              height: "100vh",
+              transform: "translate3d(0px, 0px, 0px)",
+            }}
+          ></div>
+          <div className="right-container">
+            <div className="right-sub-container">
+              <div>{isSignIn ? <SignIn /> : <SignUp />}</div>
+            </div>
+          </div>
+        </div>
+      </LoginPagestyled>
     </>
   );
 };

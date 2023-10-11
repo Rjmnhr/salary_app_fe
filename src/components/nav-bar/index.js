@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NavBar = ({ scrollToContact }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const Location = useLocation();
 
+  const getActiveLink = (path) => {
+    switch (path) {
+      case "/":
+        return "home";
+      case "/price-a-job":
+        return "price-a-job";
+      case "/reports":
+        return "price-a-job";
+      case "/executive-reports":
+        return "executive-reports";
+      // Add more cases for other routes
+      default:
+        return "";
+    }
+  };
+
+  const activeLink = getActiveLink(Location.pathname);
   // Add a scroll event listener to the window
   useEffect(() => {
     const handleScroll = () => {
@@ -69,13 +87,15 @@ const NavBar = ({ scrollToContact }) => {
               } `}
             >
               <ul>
-                <li class="active">
+                <li className={activeLink === "home" ? "active" : ""}>
                   <a href="/">Home</a>
                 </li>
-                <li>
+                <li className={activeLink === "price-a-job" ? "active" : ""}>
                   <a href="/price-a-job">Price a Job</a>
                 </li>
-                <li>
+                <li
+                  className={activeLink === "executive-reports" ? "active" : ""}
+                >
                   <a href="/executive-reports">
                     Executive Compensation Reports
                   </a>
@@ -87,15 +107,17 @@ const NavBar = ({ scrollToContact }) => {
                 <li>
                   <a href="#sales">Sales Incentive</a>
                 </li>
-
+                {/* 
                 <li>
                   <a href="#contact" onClick={scrollToContact}>
                     Contact
                   </a>
-                </li>
+                </li> */}
                 <li>
                   {isLoggedIn === "true" ? (
-                    <p onClick={handleLogOut}>Log out</p>
+                    <a href="#eq" onClick={handleLogOut}>
+                      Log out
+                    </a>
                   ) : (
                     <a href="/login">Log in</a>
                   )}

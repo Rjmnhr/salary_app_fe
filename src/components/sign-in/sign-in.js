@@ -74,7 +74,7 @@ const SignIn = () => {
         setEmail("");
         setPassword("");
         if (Location.pathname === "/login-app") {
-          navigate("/application");
+          navigate("/price-a-job");
         } else {
           navigate("/");
         }
@@ -113,7 +113,7 @@ const SignIn = () => {
   return (
     <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
       {contextHolder}
-      <div class="container card col-12 col-lg-4 p-3" data-aos="fade-up">
+      <div class="container card col-12  p-3" data-aos="fade-up">
         <div class="section-title">
           <h2>Login to Equipay Partners</h2>
         </div>
@@ -127,7 +127,7 @@ const SignIn = () => {
                   class="form-control"
                   name="email"
                   id="email"
-                  placeholder="Your Email"
+                  placeholder="Email"
                   data-rule="email"
                   data-msg="Please enter a valid email"
                   onChange={(e) => setEmail(e.target.value)}
@@ -136,7 +136,7 @@ const SignIn = () => {
               </div>
               <div className="mb-3 col-12 col-lg-12">
                 <Input.Password
-                  placeholder=" password"
+                  placeholder="Password"
                   iconRender={(visible) =>
                     visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                   }
@@ -152,13 +152,14 @@ const SignIn = () => {
                 <GoogleLoginComponent element={"Log in with Google"} />
                 <p class="card-text text-muted">
                   Don't have an account yet?
-                  <p
-                    class="link"
+                  <span
+                    class="text-primary"
                     style={{ cursor: "pointer" }}
                     onClick={handleSwitch}
                   >
+                    {" "}
                     Sign up here
-                  </p>
+                  </span>
                 </p>
               </div>
             </form>

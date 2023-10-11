@@ -8,9 +8,11 @@ import ParallaxComponent from "../../components/react-parallax";
 import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const contactRef = useRef(null);
+  const navigate = useNavigate();
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
@@ -35,6 +37,15 @@ const HomePage = () => {
                     YOUR PARTNERS IN ALL
                     <span className="text-primary"> MATTERS</span> PAY
                   </h1>
+                  <div style={{ width: "100%", textAlign: "start" }}>
+                    <button
+                      onClick={() => navigate("/price-a-job")}
+                      style={{ fontSize: "20px", marginTop: "10px" }}
+                      className="btn btn-primary"
+                    >
+                      Salary market data
+                    </button>
+                  </div>
 
                   {/* <a href="#contact" class="btn-get-started scrollto">
                     Use Free Profile Evaluator

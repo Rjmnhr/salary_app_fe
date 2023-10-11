@@ -64,9 +64,10 @@ const GoogleLoginComponent = ({ element }) => {
   };
   return (
     <div>
-      <p
+      <button
         className="btn border w-75 btn-white btn-lg d-grid mb-4"
         onClick={googleLogin}
+        style={{ padding: "5px", fontSize: "16px" }}
       >
         <span className="d-flex justify-content-center gap-3 align-items-center">
           <img
@@ -79,7 +80,7 @@ const GoogleLoginComponent = ({ element }) => {
           />
           {element}
         </span>
-      </p>
+      </button>
     </div>
   );
 };

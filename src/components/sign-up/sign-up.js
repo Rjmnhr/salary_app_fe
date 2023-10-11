@@ -91,7 +91,7 @@ const SignUp = () => {
         }}
       >
         {contextHolder}
-        <div class="container card col-12 col-lg-4 p-3" data-aos="fade-up">
+        <div class="container card col-12  p-3" data-aos="fade-up">
           <div class="section-title">
             <h2>Create your account</h2>
           </div>
@@ -183,13 +183,14 @@ const SignUp = () => {
                   <GoogleLoginComponent element={"sign up with Google"} />
                   <p class="card-text text-muted">
                     Remember your password?
-                    <p
-                      class="link"
+                    <span
+                      class="text-primary"
                       style={{ cursor: "pointer" }}
                       onClick={handleSwitch}
                     >
+                      {" "}
                       Log in
-                    </p>
+                    </span>
                   </p>
                 </div>
               </form>

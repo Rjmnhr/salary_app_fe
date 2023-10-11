@@ -1,6 +1,7 @@
 import React from "react";
 
 import DocViewer from "react-doc-viewer";
+import NavBar from "../../components/nav-bar";
 
 function PPTviewer() {
   const docs = [
@@ -13,7 +14,8 @@ function PPTviewer() {
 const ExecutiveReports = () => {
   return (
     <>
-      <div className="vh-100">
+      <NavBar />
+      <div className="vh-100 " style={{ marginTop: "100px" }}>
         <h1>Executive Compensation Reports</h1>
         <PPTviewer />
       </div>
