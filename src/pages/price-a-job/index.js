@@ -282,6 +282,12 @@ const PriceAJob = () => {
     setIsSupervise(value);
   };
 
+  const handleLogOut = () => {
+    navigate("/");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("isLoggedIn");
+  };
+
   return (
     <>
       <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
@@ -337,7 +343,13 @@ const PriceAJob = () => {
                     <a href="#contact">Contact</a>
                   </li> */}
                   <li>
-                    <a href="/login">Login</a>
+                    {isLoggedIn === "true" ? (
+                      <a href="#eq" onClick={handleLogOut}>
+                        Log out
+                      </a>
+                    ) : (
+                      <a href="/login">Log in</a>
+                    )}
                   </li>
                 </ul>
               </nav>

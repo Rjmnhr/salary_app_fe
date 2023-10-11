@@ -45,41 +45,38 @@ const CapitalizeFirstLetter = (data) => {
   return capitalizedWords?.join(" ");
 };
 
-// Helper function to calculate average salary
+// // Helper function to calculate average salary
 function calculateAverageSalary(data) {
   const salaries = data.map((job) => job.mapped_average_sal);
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
   return totalSalary / salaries.length;
 }
 
+// Helper function to calculate quartiles
+function calculateQuartile(data, percentile) {
+  const sortedData = [...data].sort((a, b) => a - b);
+  const index = Math.floor((sortedData.length - 1) * percentile);
+  const diff = (sortedData.length - 1) * percentile - index;
+  return sortedData[index] + diff * (sortedData[index + 1] - sortedData[index]);
+}
+
+// Helper function to categorize experience levels based on quartiles
+function categorizeExperienceLevels(data, firstQuartile, thirdQuartile) {
+  return data.map((job) => {
+    if (job.avg_experience <= firstQuartile) {
+      return { ...job, experienceLevel: "Junior" };
+    } else if (job.avg_experience <= thirdQuartile) {
+      return { ...job, experienceLevel: "MidLevel" };
+    } else {
+      return { ...job, experienceLevel: "Senior" };
+    }
+  });
+}
 const GeneratedReport = ({ jobsData }) => {
   const storedLocation = sessionStorage.getItem("location");
-  // Group job data by experience levels
-  const experienceGroups = {
-    Junior: jobsData?.filter((job) => job.avg_experience <= 2),
-    MidLevel: jobsData?.filter(
-      (job) => job.avg_experience > 2 && job.avg_experience <= 5
-    ),
-    Senior: jobsData?.filter((job) => job.avg_experience > 5),
-  };
 
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
-
-  // Calculate average salary for each experience level
-  const averageSalaries = {
-    Junior: calculateAverageSalary(experienceGroups.Junior),
-    MidLevel: calculateAverageSalary(experienceGroups.MidLevel),
-    Senior: calculateAverageSalary(experienceGroups.Senior),
-  };
-
-  // Create data for the grouped bar chart
-  const groupedBarChartData = Object.keys(averageSalaries).map(
-    (experienceLevel) => ({
-      experienceLevel,
-      averageSalary: averageSalaries[experienceLevel],
-    })
-  );
 
   // Calculate average salary
   const salaries = jobsData.map((job) => job.mapped_average_sal);
@@ -103,6 +100,38 @@ const GeneratedReport = ({ jobsData }) => {
   const totalExperience = experiences.reduce((acc, val) => acc + val, 0);
   const averageExperience = totalExperience / experiences.length;
 
+  // Calculate quartiles to categorize experience levels
+  const firstQuartile = calculateQuartile(experiences, 0.25);
+  const thirdQuartile = calculateQuartile(experiences, 0.75);
+
+  // Categorize jobs based on quartiles
+  const experienceGroups = categorizeExperienceLevels(
+    jobsData,
+    firstQuartile,
+    thirdQuartile
+  );
+
+  const experienceGroupsAlter = {
+    Junior: jobsData?.filter((job) => job.avg_experience <= 2),
+    MidLevel: jobsData?.filter(
+      (job) => job.avg_experience > 2 && job.avg_experience <= 5
+    ),
+    Senior: jobsData?.filter((job) => job.avg_experience > 5),
+  };
+
+  // Calculate average salary for each experience level
+  const averageSalaries = {
+    Junior: calculateAverageSalary(experienceGroupsAlter.Junior),
+    MidLevel: calculateAverageSalary(experienceGroupsAlter.MidLevel),
+    Senior: calculateAverageSalary(experienceGroupsAlter.Senior),
+  };
+
+  const groupedBarChartData = Object.keys(averageSalaries).map(
+    (experienceLevel) => ({
+      experienceLevel,
+      averageSalary: averageSalaries[experienceLevel],
+    })
+  );
   // Create data for the salary increment chart
   // const salaryIncrementData = jobsData.map((job, index) => ({
   //   job: job.mapped_job_title,
@@ -483,12 +512,17 @@ const GeneratedReport = ({ jobsData }) => {
               <LineChart
                 width={chartWidth}
                 height={chartHeight}
-                data={groupedBarChartData}
+                data={experienceGroups}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="experienceLevel" />
+                <XAxis
+                  tick={null}
+                  dataKey="avg_experience"
+                  label="Experience Level"
+                />
                 <YAxis
-                  dataKey="averageSalary"
+                  dataKey="mapped_average_sal"
+                  name="Average Salary"
                   type="number"
                   label="Average Salary  "
                 />
@@ -496,9 +530,9 @@ const GeneratedReport = ({ jobsData }) => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="averageSalary"
-                  stroke="#8884d8"
+                  dataKey="mapped_average_sal"
                   name="Average Salary"
+                  stroke="#8884d8"
                 />
               </LineChart>
             </div>
@@ -579,7 +613,7 @@ const ReportsPage = () => {
     const newArr = storedJobTitles.map((jobTitle) => ({
       job_titles: jobTitle,
       location: storedLocation,
-      experience: storedExperience,
+      experience: Number(storedExperience),
       skills: sessionStorage.getItem("selected_skills"),
       manage: storedManage,
       supervise: storedSupervise,
@@ -606,14 +640,21 @@ const ReportsPage = () => {
     )
       .then(async (response) => {
         const data = await response.data;
+        console.log("🚀 ~ file: index.js:609 ~ .then ~ data:", data);
 
-        setDataArray([...createdArray, ...data]);
+        // Use Set to store distinct objects
+        const uniqueObjects = new Set(
+          [...createdArray, ...data].map(JSON.stringify)
+        );
+
+        // Convert Set back to an array of objects
+        const distinctArray = [...uniqueObjects].map(JSON.parse);
+
+        setDataArray(distinctArray);
       })
       .catch((err) => console.log(err));
     //eslint-disable-next-line
   }, []);
-
-  console.log("🚀 ~ file: index.js:594 ~ ReportsPage ~ dataArray:", dataArray);
 
   useEffect(() => {
     if (saveTheReport === "true") {
