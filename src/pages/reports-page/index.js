@@ -72,9 +72,7 @@ function categorizeExperienceLevels(data, firstQuartile, thirdQuartile) {
     }
   });
 }
-const GeneratedReport = ({ jobsData }) => {
-  const storedLocation = sessionStorage.getItem("location");
-
+const GeneratedReport = ({ jobsData, location }) => {
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
 
@@ -230,7 +228,7 @@ const GeneratedReport = ({ jobsData }) => {
               style={{ display: "flex", alignItems: "center", gap: "3px" }}
             >
               {" "}
-              <EnvironmentOutlined /> {storedLocation}
+              <EnvironmentOutlined /> {location}
             </p>
           </div>
           <div>
@@ -911,7 +909,10 @@ const ReportsPage = () => {
           }}
         >
           {salaryData.length > 0 ? (
-            <GeneratedReport jobsData={salaryData[activeIndex]} />
+            <GeneratedReport
+              jobsData={salaryData[activeIndex]}
+              location={dataArray[activeIndex].location}
+            />
           ) : (
             <div
               style={{ height: "80vh", display: "grid", placeItems: "center" }}
