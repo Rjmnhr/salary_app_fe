@@ -1,23 +1,15 @@
 import React from "react";
 
-import DocViewer from "react-doc-viewer";
 import NavBar from "../../components/nav-bar";
-
-function PPTviewer() {
-  const docs = [
-    { uri: require("./CEO_pay_NSE100.pptx") }, // Local File
-  ];
-
-  return <DocViewer documents={docs} />;
-}
+import pdf from "./CEO_pay_NSE100.pdf";
 
 const ExecutiveReports = () => {
   return (
     <>
       <NavBar />
-      <div className="vh-100 " style={{ marginTop: "100px" }}>
+      <div className="vh-100" style={{ marginTop: "100px" }}>
         <h1>Executive Compensation Reports</h1>
-        <PPTviewer />
+        <iframe title="pdf" src={pdf} width="100%" height="700px"></iframe>
       </div>
     </>
   );
