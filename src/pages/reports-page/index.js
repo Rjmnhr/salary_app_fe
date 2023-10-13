@@ -15,10 +15,10 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ReferenceLine,
   LineChart,
   Line,
 } from "recharts";
+import { RadialChart } from "react-vis";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -31,6 +31,7 @@ import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import AxiosInstance from "../../components/axios";
+import JsPDF from "jspdf";
 // import { format } from "date-fns"; // Import date-fns for date formatting
 
 const CapitalizeFirstLetter = (data) => {
@@ -49,72 +50,107 @@ const CapitalizeFirstLetter = (data) => {
 function calculateAverageSalary(data) {
   const salaries = data.map((job) => job.mapped_average_sal);
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
-  return totalSalary / salaries.length;
+  return (totalSalary / salaries.length).toFixed(2);
 }
 
-// Helper function to calculate quartiles
-function calculateQuartile(data, percentile) {
-  const sortedData = [...data].sort((a, b) => a - b);
-  const index = Math.floor((sortedData.length - 1) * percentile);
-  const diff = (sortedData.length - 1) * percentile - index;
-  return sortedData[index] + diff * (sortedData[index + 1] - sortedData[index]);
-}
+// // Helper function to calculate quartiles
+// function calculateQuartile(data, percentile) {
+//   const sortedData = [...data].sort((a, b) => a - b);
+//   const index = Math.floor((sortedData.length - 1) * percentile);
+//   const diff = (sortedData.length - 1) * percentile - index;
+//   return sortedData[index] + diff * (sortedData[index + 1] - sortedData[index]);
+// }
 
-// Helper function to categorize experience levels based on quartiles
-function categorizeExperienceLevels(data, firstQuartile, thirdQuartile) {
-  return data.map((job) => {
-    if (job.avg_experience <= firstQuartile) {
-      return { ...job, experienceLevel: "Junior" };
-    } else if (job.avg_experience <= thirdQuartile) {
-      return { ...job, experienceLevel: "MidLevel" };
-    } else {
-      return { ...job, experienceLevel: "Senior" };
-    }
+// // Helper function to categorize experience levels based on quartiles
+// function categorizeExperienceLevels(data, firstQuartile, thirdQuartile) {
+//   return data.map((job) => {
+//     if (job.avg_experience <= firstQuartile) {
+//       return { ...job, experienceLevel: "Junior" };
+//     } else if (job.avg_experience <= thirdQuartile) {
+//       return { ...job, experienceLevel: "MidLevel" };
+//     } else {
+//       return { ...job, experienceLevel: "Senior" };
+//     }
+//   });
+// }
+
+const generatePDF = () => {
+  const report = new JsPDF("portrait", "pt", "a4");
+  report.html(document.querySelector("#report")).then(() => {
+    report.save("report.pdf");
   });
-}
-const GeneratedReport = ({ jobsData, location }) => {
+};
+const GeneratedReport = ({
+  jobsData,
+  location,
+  experience,
+  jobsDataByRole,
+}) => {
+  console.log("🚀 ~ file: index.js:82 ~ jobsDataByRole:", jobsDataByRole);
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
 
-  // Calculate average salary
-  const salaries = jobsData.map((job) => job.mapped_average_sal);
-  const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
-  const averageSalary = totalSalary / salaries.length;
+  // Define a function to calculate statistics for a given dataset
+  function calculateStatistics(data) {
+    // Calculate average salary
+    const salaries = data.map((job) => job.mapped_average_sal);
+    const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
+    const averageSalary = totalSalary / salaries.length;
 
-  // Calculate median salary
-  const sortedSalaries = [...salaries].sort((a, b) => a - b);
-  const middleIndex = Math.floor(sortedSalaries.length / 2);
-  const medianSalary =
-    sortedSalaries.length % 2 === 0
-      ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-      : sortedSalaries[middleIndex];
+    // Calculate median salary
+    const sortedSalaries = [...salaries].sort((a, b) => a - b);
+    const middleIndex = Math.floor(sortedSalaries.length / 2);
+    const medianSalary =
+      sortedSalaries.length % 2 === 0
+        ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+        : sortedSalaries[middleIndex];
 
-  // Calculate minimum and maximum salary
-  const minSalary = Math.min(...salaries);
-  const maxSalary = Math.max(...salaries);
+    // Calculate minimum and maximum salary
+    const minSalary = Math.min(...salaries);
+    const maxSalary = Math.max(...salaries);
 
-  // Calculate average experience
-  const experiences = jobsData.map((job) => job.avg_experience);
-  const totalExperience = experiences.reduce((acc, val) => acc + val, 0);
-  const averageExperience = totalExperience / experiences.length;
+    // Calculate 10th and 90th percentile values
+    const percentile25 =
+      sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+    const percentile75 =
+      sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
 
-  // Calculate quartiles to categorize experience levels
-  const firstQuartile = calculateQuartile(experiences, 0.25);
-  const thirdQuartile = calculateQuartile(experiences, 0.75);
+    return {
+      averageSalary,
+      medianSalary,
+      minSalary,
+      maxSalary,
+      percentile25,
+      percentile75,
+    };
+  }
 
-  // Categorize jobs based on quartiles
-  const experienceGroups = categorizeExperienceLevels(
-    jobsData,
-    firstQuartile,
-    thirdQuartile
-  );
+  // Calculate statistics for jobsData
+  const statisticsForJobsData = calculateStatistics(jobsData);
+
+  // Calculate statistics for jobsDataByRole
+  const statisticsForJobsDataByRole = calculateStatistics(jobsDataByRole);
+
+  // // Calculate average experience
+  // const experiences = jobsData.map((job) => job.avg_experience);
+
+  // // Calculate quartiles to categorize experience levels
+  // const firstQuartile = calculateQuartile(experiences, 0.25);
+  // const thirdQuartile = calculateQuartile(experiences, 0.75);
+
+  // // Categorize jobs based on quartiles
+  // const experienceGroups = categorizeExperienceLevels(
+  //   jobsData,
+  //   firstQuartile,
+  //   thirdQuartile
+  // );
 
   const experienceGroupsAlter = {
-    Junior: jobsData?.filter((job) => job.avg_experience <= 2),
-    MidLevel: jobsData?.filter(
+    Junior: jobsDataByRole?.filter((job) => job.avg_experience <= 2),
+    MidLevel: jobsDataByRole?.filter(
       (job) => job.avg_experience > 2 && job.avg_experience <= 5
     ),
-    Senior: jobsData?.filter((job) => job.avg_experience > 5),
+    Senior: jobsDataByRole?.filter((job) => job.avg_experience > 5),
   };
 
   // Calculate average salary for each experience level
@@ -197,6 +233,49 @@ const GeneratedReport = ({ jobsData, location }) => {
   //   }
   // );
 
+  // Step 1: Extract and count skills
+  const skillCounts = {};
+
+  jobsData.forEach((item) => {
+    const skills = item.combined_skills.split(",");
+    skills.forEach((skill) => {
+      skill = skill.trim(); // Remove leading/trailing spaces
+      if (skillCounts[skill]) {
+        skillCounts[skill]++;
+      } else {
+        skillCounts[skill] = 1;
+      }
+    });
+  });
+
+  // Step 2: Sort skills by count in descending order
+  const sortedSkills = Object.keys(skillCounts).sort(
+    (a, b) => skillCounts[b] - skillCounts[a]
+  );
+
+  // Step 3: Select the top 5 skills
+  const topSkills = sortedSkills.slice(0, 5);
+
+  const chartData = topSkills.map((skill) => ({
+    angle: skillCounts[skill],
+    label: skill,
+  }));
+
+  const PieChartComponent = () => {
+    return (
+      <div style={{ width: "100%", margin: "auto", textAlign: "center" }}>
+        <h4> Most Five Common Skills</h4>
+        <RadialChart
+          data={chartData}
+          width={400}
+          height={400}
+          innerRadius={60}
+          radius={80}
+          showLabels
+        />
+      </div>
+    );
+  };
   return (
     <>
       {jobsData.length > 1 ? (
@@ -207,8 +286,17 @@ const GeneratedReport = ({ jobsData, location }) => {
             height: "100vh",
             overflowY: "scroll",
           }}
+          id="report"
         >
-          <h3>{CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Report</h3>
+          <div className="w-100 text-right">
+            <button onClick={generatePDF} type="button">
+              Export PDF
+            </button>
+          </div>
+
+          <h3>
+            {CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Salary Report
+          </h3>
           <div className="d-lg-flex justify-content-start align-items-center">
             <p
               className=" border-right px-2"
@@ -219,8 +307,8 @@ const GeneratedReport = ({ jobsData, location }) => {
                 gap: "3px",
               }}
             >
-              <CalendarOutlined /> Average Experience :{" "}
-              {Math.round(averageExperience)} years
+              <CalendarOutlined /> Experience : {experience}
+              years
             </p>
 
             <p
@@ -234,9 +322,27 @@ const GeneratedReport = ({ jobsData, location }) => {
           <div>
             {/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}
           </div>
+          <p
+            style={{
+              fontSize: "14px",
+              textAlign: "center",
+              display: "grid",
+              placeItems: "center",
+            }}
+            className="text-primary"
+          >
+            The charts below only show data for roles in {location} with{" "}
+            {experience} of experience. It doesn't show data for the skill(s)
+            you have selected.
+          </p>
           <div className="mt-3">
             <h5>Average Salary </h5>
-            <p className="fs-3">₹ {averageSalary.toFixed(2)} Lakhs Per Annum</p>
+            <p className="fs-3">
+              ₹ {statisticsForJobsData.averageSalary.toFixed(2)} Lakhs Per Annum
+              (LPA)
+            </p>
+
+            <p className="text-primary ">In {location}</p>
             <div className="d-flex mb-3 mt-3">
               <div style={{ height: "100px", width: "10%" }}>
                 <svg height="30" width="100%">
@@ -261,23 +367,23 @@ const GeneratedReport = ({ jobsData, location }) => {
                   ></rect>
                   Sorry, your browser does not support inline SVG.
                 </svg>
+                <div className="w-100 text-start mt-2">
+                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
+                    Min
+                  </p>
+                  <p style={{ fontWeight: "bold", color: "gray" }}>
+                    {statisticsForJobsData.minSalary} LPA
+                  </p>
+                </div>
               </div>
               <div style={{ height: "100px", width: "15%" }}>
                 <div
                   style={{
                     height: "30px",
                     width: "100%",
-                    background: "#f8a66e",
+                    background: "#00aaa4",
                   }}
                 ></div>
-                <div className="w-100 text-start mt-2">
-                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    10%
-                  </p>
-                  <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {minSalary} LPA
-                  </p>
-                </div>
               </div>
               ​{" "}
               <div style={{ height: "100px", width: "50%" }}>
@@ -319,12 +425,116 @@ const GeneratedReport = ({ jobsData, location }) => {
                   />
                   Sorry, your browser does not support inline SVG.
                 </svg>
-                <div className="w-100 text-center mt-2">
+                <div className="w-100 d-flex justify-content-between">
+                  <div className="w-100 text-start mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      25 Percentile
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsData.percentile25} LPA
+                    </p>
+                  </div>
+                  <div className="w-100 text-center mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      MEDIAN
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsData.medianSalary} LPA
+                    </p>
+                  </div>
+                  <div className="w-100 text-right mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      75 Percentile
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsData.percentile75} LPA
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div style={{ height: "100px", width: "15%" }}>
+                <div
+                  style={{
+                    height: "30px",
+                    width: "100%",
+                    background: "#3b7dd8",
+                  }}
+                ></div>
+              </div>
+              <div style={{ height: "100px", width: "10%" }}>
+                <svg
+                  height="30"
+                  width="100%"
+                  style={{ transform: "rotate(180deg)" }}
+                >
+                  <defs>
+                    <linearGradient
+                      id="default-bar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop style={{ stopColor: "#fff" }} />
+                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-bar')"
+                  ></rect>
+                  Sorry, your browser does not support inline SVG.
+                </svg>
+                <div className="w-100 text-right mt-2">
                   <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    MEDIAN
+                    Max
                   </p>
                   <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {medianSalary} LPA
+                    {statisticsForJobsData.maxSalary} LPA
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p className="text-primary ">Across India</p>
+            <div className="d-flex mb-3 mt-3">
+              <div style={{ height: "100px", width: "10%" }}>
+                <svg height="30" width="100%">
+                  <defs>
+                    <linearGradient
+                      id="default-bar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop style={{ stopColor: "#fff" }} />
+                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-bar')"
+                  ></rect>
+                  Sorry, your browser does not support inline SVG.
+                </svg>
+                <div className="w-100 text-start mt-2">
+                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
+                    Min
+                  </p>
+                  <p style={{ fontWeight: "bold", color: "gray" }}>
+                    {statisticsForJobsDataByRole.minSalary} LPA
                   </p>
                 </div>
               </div>
@@ -336,41 +546,125 @@ const GeneratedReport = ({ jobsData, location }) => {
                     background: "#00aaa4",
                   }}
                 ></div>
+              </div>
+              ​{" "}
+              <div style={{ height: "100px", width: "50%" }}>
+                <svg height="30" width="100%">
+                  <defs>
+                    <linearGradient
+                      id="default-middleBar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop
+                        offset="0%"
+                        style={{ stopColor: "#18969b", stopOpacity: 1 }}
+                      />
+                      <stop
+                        offset="100%"
+                        style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-middleBar')"
+                  />
+                  {/* Vertical dotted line in the middle */}
+                  <line
+                    x1="50%"
+                    y1="0"
+                    x2="50%"
+                    y2="100%"
+                    stroke="#fff"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                  />
+                  Sorry, your browser does not support inline SVG.
+                </svg>
+                <div className="w-100 d-flex justify-content-between">
+                  <div className="w-100 text-start mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      25 Percentile
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsDataByRole.percentile25} LPA
+                    </p>
+                  </div>
+                  <div className="w-100 text-center mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      MEDIAN
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsDataByRole.medianSalary} LPA
+                    </p>
+                  </div>
+                  <div className="w-100 text-right mt-2">
+                    <p
+                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+                    >
+                      75 Percentile
+                    </p>
+                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                      {statisticsForJobsDataByRole.percentile75} LPA
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div style={{ height: "100px", width: "15%" }}>
+                <div
+                  style={{
+                    height: "30px",
+                    width: "100%",
+                    background: "#3b7dd8",
+                  }}
+                ></div>
+              </div>
+              <div style={{ height: "100px", width: "10%" }}>
+                <svg
+                  height="30"
+                  width="100%"
+                  style={{ transform: "rotate(180deg)" }}
+                >
+                  <defs>
+                    <linearGradient
+                      id="default-bar"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop style={{ stopColor: "#fff" }} />
+                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url('#default-bar')"
+                  ></rect>
+                  Sorry, your browser does not support inline SVG.
+                </svg>
                 <div className="w-100 text-right mt-2">
                   <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    90%
+                    Max
                   </p>
                   <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {maxSalary} LPA
+                    {statisticsForJobsDataByRole.maxSalary} LPA
                   </p>
                 </div>
               </div>
-              <svg
-                height="30"
-                width="10%"
-                style={{ transform: "rotate(180deg)" }}
-              >
-                <defs>
-                  <linearGradient
-                    id="default-bar"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop style={{ stopColor: "#fff" }} />
-                    <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                  </linearGradient>
-                </defs>
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  fill="url('#default-bar')"
-                ></rect>
-                Sorry, your browser does not support inline SVG.
-              </svg>
             </div>
 
             <div
@@ -381,43 +675,18 @@ const GeneratedReport = ({ jobsData, location }) => {
                 alignContent: "center",
               }}
             >
-              <h5 className="">Salary Chart</h5>
+              <h5 className="">Average Salary Chart</h5>
               <BarChart width={chartWidth} height={chartHeight} data={jobsData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis tick={null} dataKey="mapped_job_title_1" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+
                 <Bar
                   dataKey="mapped_average_sal"
                   label="Average Salary"
                   fill="#8884d8"
                   name="Average Salary"
-                />
-                {/* Add reference lines for minimum, median, and maximum salaries */}
-                <ReferenceLine
-                  y={averageSalary}
-                  stroke="green"
-                  strokeDasharray="3 3"
-                  label="Average"
-                />
-                <ReferenceLine
-                  y={medianSalary}
-                  stroke="blue"
-                  strokeDasharray="3 3"
-                  label="Median"
-                />
-                <ReferenceLine
-                  y={minSalary}
-                  stroke="red"
-                  strokeDasharray="3 3"
-                  label="Minimum"
-                />
-                <ReferenceLine
-                  y={maxSalary}
-                  stroke="orange"
-                  strokeDasharray="3 3"
-                  label="Maximum"
                 />
               </BarChart>
               {/* Render other report components */}
@@ -430,26 +699,23 @@ const GeneratedReport = ({ jobsData, location }) => {
                 alignContent: "center",
               }}
             >
-              <h4>Line Chart (Salary vs. Experience)</h4>
+              <h4>Average Salary vs Experience Level</h4>
               <LineChart
                 width={chartWidth}
                 height={chartHeight}
                 data={lineChartData}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="experience"
-                  type="number"
-                  label="Experience (Years)"
-                />
-                <YAxis dataKey="salary" type="number" label="Salary ($)" />
+                <XAxis dataKey="experience" type="number" />
+                <YAxis dataKey="salary" type="number" />
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
                 <Legend />
                 <Line
                   type="monotone"
                   dataKey="salary"
-                  stroke="#8884d8"
+                  stroke="none"
                   name="Salary"
+                  dot={{ stroke: "#8884d8", strokeWidth: 2, fill: "#fff" }}
                 />
               </LineChart>
               {/* <LineChart
@@ -480,7 +746,7 @@ const GeneratedReport = ({ jobsData, location }) => {
                 alignContent: "center",
               }}
             >
-              <h4>Grouped Bar Chart (Salary vs. Experience Level)</h4>
+              <h4> Average Salary vs Grouped Experience Level</h4>
               <BarChart
                 width={chartWidth}
                 height={chartHeight}
@@ -490,7 +756,7 @@ const GeneratedReport = ({ jobsData, location }) => {
                 <XAxis dataKey="experienceLevel" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+
                 <Bar
                   dataKey="averageSalary"
                   name="Average Salary"
@@ -505,35 +771,9 @@ const GeneratedReport = ({ jobsData, location }) => {
                 justifyItems: "center",
                 alignContent: "center",
               }}
-            >
-              <h4>Grouped Line Chart (Salary vs. Experience Level)</h4>
-              <LineChart
-                width={chartWidth}
-                height={chartHeight}
-                data={experienceGroups}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  tick={null}
-                  dataKey="avg_experience"
-                  label="Experience Level"
-                />
-                <YAxis
-                  dataKey="mapped_average_sal"
-                  name="Average Salary"
-                  type="number"
-                  label="Average Salary  "
-                />
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="mapped_average_sal"
-                  name="Average Salary"
-                  stroke="#8884d8"
-                />
-              </LineChart>
-            </div>
+            ></div>
+
+            <PieChartComponent />
           </div>
         </div>
       ) : (
@@ -585,7 +825,7 @@ const ReportsPage = () => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   const [dataArray, setDataArray] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
-
+  const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const storedLocation = sessionStorage.getItem("location");
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
@@ -622,10 +862,6 @@ const ReportsPage = () => {
 
   useEffect(() => {
     const createdArray = CreateArr();
-    console.log(
-      "🚀 ~ file: index.js:566 ~ useEffect ~ createdArray:",
-      createdArray
-    );
 
     AxiosInstance.post(
       "/api/report/get",
@@ -638,7 +874,6 @@ const ReportsPage = () => {
     )
       .then(async (response) => {
         const data = await response.data;
-        console.log("🚀 ~ file: index.js:609 ~ .then ~ data:", data);
 
         // Use Set to store distinct objects
         const uniqueObjects = new Set(
@@ -656,15 +891,7 @@ const ReportsPage = () => {
 
   useEffect(() => {
     if (saveTheReport === "true") {
-      if (
-        storedJobTitles &&
-        storedUserID &&
-        storedExperience &&
-        storedSkills &&
-        storedLocation &&
-        storedSupervise &&
-        storedManage
-      ) {
+      if (storedJobTitles && storedUserID) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         saveTheReport = "false";
         saveReport();
@@ -702,6 +929,44 @@ const ReportsPage = () => {
       sessionStorage.setItem("saveTheReport", "false"); // Mark report as saved in localStorage
     }
   };
+
+  useEffect(() => {
+    if (dataArray && dataArray.length > 0) {
+      const fetchResponses = async () => {
+        const jobTitleResponses = await Promise.all(
+          dataArray.map(async (data) => {
+            const response = await AxiosInstance.post(
+              "/api/salary/data/role",
+              {
+                job_title: data.job_titles,
+              },
+              {
+                headers: {
+                  "content-type": "application/json",
+                },
+              }
+            );
+            return response.data;
+          })
+        );
+
+        setSalaryDataByRole(jobTitleResponses);
+        console.log(
+          "🚀 ~ file: index.js:788 ~ fetchResponses ~ jobTitleResponses:",
+          jobTitleResponses
+        );
+      };
+
+      fetchResponses();
+    }
+
+    //eslint-disable-next-line
+  }, [dataArray]);
+
+  console.log(
+    "🚀 ~ file: index.js:799 ~ ReportsPage ~ salaryDataByRole:",
+    salaryDataByRole
+  );
 
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
@@ -885,15 +1150,6 @@ const ReportsPage = () => {
                           </span>{" "}
                         </p>
                       </div>
-                      <p
-                        style={{
-                          fontSize: "10px",
-                          color: "gray",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        BENCHMARKED JOB
-                      </p>
                     </Collapse>
                   </Card>
                 );
@@ -908,10 +1164,12 @@ const ReportsPage = () => {
             justifyItems: "center",
           }}
         >
-          {salaryData.length > 0 ? (
+          {salaryData.length > 0 && salaryDataByRole.length > 0 ? (
             <GeneratedReport
               jobsData={salaryData[activeIndex]}
               location={dataArray[activeIndex].location}
+              experience={dataArray[activeIndex].experience}
+              jobsDataByRole={salaryDataByRole[activeIndex]}
             />
           ) : (
             <div

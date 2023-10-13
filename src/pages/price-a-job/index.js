@@ -9,30 +9,22 @@ import { NavBarStyled } from "../../components/nav-bar/style";
 import AxiosInstance from "../../components/axios";
 
 const items = [
-  "Engineer",
-  "Tech Support",
   "Customer Support",
-  "Consultant",
-  "Unclassified",
-  "Digital Marketing",
-  "Sales and Business Development",
-  "Medical Coder",
-  "Accountant",
-  "Business Analyst",
-  "Software Developer",
-  "Architect",
-  "Human Resource",
-  "Management",
-  "Project Manager",
-  "Data Science/Engineer",
-  "Operations",
-  "Product Manager",
-  "UI/UX Designer",
-  "Graphic Designer",
+  "Voice Process",
+  "Software Development",
+  "Sales",
+  "Business Development",
   "Counsellor",
-  "Content/Copy Writer",
-  "Equity Advisor",
-  "Medical Billing",
+  "Lead/Management",
+  "Recruiter",
+  "Devops",
+  "Product Management",
+  "Engineer",
+  "Business Analyst",
+  "Data Engineer",
+  "Data Scientist",
+  "Project Management",
+  "Digital Marketing",
 ];
 
 const cities = [
@@ -409,7 +401,6 @@ const PriceAJob = () => {
                     label: item,
                   }))}
                   className="border text-start"
-                  required
                 />
               </div>
 
@@ -434,7 +425,6 @@ const PriceAJob = () => {
                     value: d,
                     label: d,
                   }))}
-                  required
                 />
               </div>
 
@@ -448,7 +438,6 @@ const PriceAJob = () => {
                   step={1} // Optional: Set the step increment/
                   value={experience}
                   onChange={handleExperience}
-                  required
                 />
               </div>
 
@@ -468,13 +457,12 @@ const PriceAJob = () => {
                 }}
                 options={educationItems}
                 className="input border"
-                required
+                
               />
             </div> */}
 
               <div className="mb-3 col-12 col-lg-7 ">
                 <Select
-                  required
                   mode="multiple"
                   size={"large"}
                   style={{
@@ -521,7 +509,6 @@ const PriceAJob = () => {
                     },
                   ]}
                   className="border text-start"
-                  required
                   onChange={handleSuperviseSelect}
                 />
               </div>
@@ -547,16 +534,11 @@ const PriceAJob = () => {
                     },
                   ]}
                   className="border text-start"
-                  required
                   onChange={handleManageSelect}
                 />
               </div>
 
-              {selectedJobTitles.length > 0 &&
-              selectedSkills.length > 0 &&
-              location &&
-              isSupervise &&
-              isManage ? (
+              {selectedJobTitles.length > 0 && location ? (
                 <button type="submit" className="btn btn-primary mt-3 w-25">
                   Next
                 </button>
