@@ -17,8 +17,11 @@ import {
   Legend,
   LineChart,
   Line,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
-import { RadialChart } from "react-vis";
+// import { RadialChart } from "react-vis";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -234,6 +237,7 @@ const GeneratedReport = ({
   // );
 
   // Step 1: Extract and count skills
+  // Step 1: Extract and count skills
   const skillCounts = {};
 
   jobsData.forEach((item) => {
@@ -257,22 +261,63 @@ const GeneratedReport = ({
   const topSkills = sortedSkills.slice(0, 5);
 
   const chartData = topSkills.map((skill) => ({
-    angle: skillCounts[skill],
-    label: skill,
+    name: skill,
+    value: skillCounts[skill],
   }));
+
+  const colors = ["#FF5733", "#33FFC3", "#3356FF", "#FF33E2", "#A133FF"]; // Specify colors for each segment
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active) {
+      return (
+        <div className="custom-tooltip">
+          <p>{`${payload[0].name}: ${payload[0].value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   const PieChartComponent = () => {
     return (
-      <div style={{ width: "100%", margin: "auto", textAlign: "center" }}>
-        <h4> Most Five Common Skills</h4>
-        <RadialChart
-          data={chartData}
-          width={400}
-          height={400}
-          innerRadius={60}
-          radius={80}
-          showLabels
-        />
+      <div
+        className="text-center mt-3"
+        style={{
+          display: "grid",
+          justifyItems: "center",
+          alignContent: "center",
+        }}
+      >
+        <h4>Most Five Common Skills </h4>
+        <PieChart width={400} height={400}>
+          <Pie
+            dataKey="value"
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            startAngle={90}
+            endAngle={450}
+            label
+          >
+            {chartData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={colors[index % colors.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          <Legend
+            align="center"
+            verticalAlign="bottom"
+            height={36}
+            iconSize={24}
+            iconType="circle"
+          />
+        </PieChart>
       </div>
     );
   };
@@ -333,7 +378,7 @@ const GeneratedReport = ({
           >
             The charts below only show data for roles in {location} with{" "}
             {experience} of experience. It doesn't show data for the skill(s)
-            you have selected.
+            you have selected.
           </p>
           <div className="mt-3">
             <h5>Average Salary </h5>
