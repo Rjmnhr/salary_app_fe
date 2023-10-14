@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // import { Tabs } from "antd";
 import {
   CalendarOutlined,
@@ -35,7 +35,9 @@ import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import AxiosInstance from "../../components/axios";
-import JsPDF from "jspdf";
+import { jsPDF } from "jspdf";
+import * as htmlToImage from "html-to-image";
+
 // import { format } from "date-fns"; // Import date-fns for date formatting
 
 const CapitalizeFirstLetter = (data) => {
@@ -78,12 +80,13 @@ function calculateAverageSalary(data) {
 //   });
 // }
 
-const generatePDF = () => {
-  const report = new JsPDF("portrait", "pt", "a4");
-  report.html(document.querySelector("#report")).then(() => {
-    report.save("report.pdf");
-  });
-};
+// const generatePDF = () => {
+//   const report = new JsPDF("portrait", "pt", "a4");
+//   report.html(document.querySelector("#report")).then(() => {
+//     report.save("report.pdf");
+//   });
+// };
+
 const GeneratedReport = ({
   jobsData,
   location,
@@ -92,6 +95,24 @@ const GeneratedReport = ({
 }) => {
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
+  const elementRef = useRef(null);
+
+  const generatePDF = () => {
+    const element = elementRef.current;
+
+    if (element) {
+      htmlToImage.toPng(element, { quality: 0.95 }).then(function (dataUrl) {
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("download.pdf");
+      });
+    } else {
+      console.error("Element not found.");
+    }
+  };
 
   // Define a function to calculate statistics for a given dataset
   function calculateStatistics(data) {
@@ -326,10 +347,8 @@ const GeneratedReport = ({
           className="container  col-lg-11 col-12 m-lg-3 m-2 p-lg-3 p-1 text-left scrollable-container"
           style={{
             background: "white",
-            height: "100vh",
-            overflowY: "scroll",
           }}
-          id="report"
+          ref={elementRef}
         >
           <div className="w-100 text-right">
             <button onClick={generatePDF} type="button">

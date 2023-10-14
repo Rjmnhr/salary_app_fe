@@ -16,6 +16,7 @@
     "axios": "^1.5.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
+    "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-doc-viewer": "^0.1.5",
