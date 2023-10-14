@@ -538,7 +538,7 @@ const PriceAJob = () => {
                 />
               </div>
 
-              {selectedJobTitles.length > 0 && location ? (
+              {selectedJobTitles.length > 0 && location && experience ? (
                 <button type="submit" className="btn btn-primary mt-3 w-25">
                   Next
                 </button>

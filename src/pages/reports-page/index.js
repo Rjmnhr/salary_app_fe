@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 // import { Tabs } from "antd";
 import {
   CalendarOutlined,
+  DownloadOutlined,
   EnvironmentOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
@@ -23,7 +24,7 @@ import {
   Legend,
 } from "recharts";
 // import { RadialChart } from "react-vis";
-
+import { notification } from "antd";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 
@@ -36,7 +37,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import AxiosInstance from "../../components/axios";
 import { jsPDF } from "jspdf";
-import * as htmlToImage from "html-to-image";
+// import * as htmlToImage from "html-to-image";
+import html2canvas from "html2canvas";
 
 // import { format } from "date-fns"; // Import date-fns for date formatting
 
@@ -96,21 +98,36 @@ const GeneratedReport = ({
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
   const elementRef = useRef(null);
+  const [api, contextHolder] = notification.useNotification();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const openNotification = (placement) => {
+    api.info({
+      message: `Your report is getting downloaded`,
+
+      placement,
+    });
+  };
 
   const generatePDF = () => {
+    setIsLoading(true);
+    openNotification("topRight");
     const element = elementRef.current;
 
     if (element) {
-      htmlToImage.toPng(element, { quality: 0.95 }).then(function (dataUrl) {
-        const pdf = new jsPDF();
-        const imgProps = pdf.getImageProperties(dataUrl);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("download.pdf");
+      html2canvas(element).then((canvas) => {
+        const imgData = canvas.toDataURL("img/png");
+        const doc = new jsPDF("p", "mm", "a4");
+
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = doc.internal.pageSize.getHeight();
+        doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        setIsLoading(false);
+        doc.save(`Equipay_${jobsData[0]?.mapped_job_title}_Salary_Report.pdf`);
       });
     } else {
       console.error("Element not found.");
+      setIsLoading(false);
     }
   };
 
@@ -342,563 +359,610 @@ const GeneratedReport = ({
   );
   return (
     <>
+      {contextHolder}
       {jobsData.length > 1 ? (
         <div
-          className="container  col-lg-11 col-12 m-lg-3 m-2 p-lg-3 p-1 text-left scrollable-container"
+          className="container  col-lg-11 col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
           style={{
             background: "white",
+            height: "100vh",
+            overflowY: "scroll",
           }}
-          ref={elementRef}
         >
-          <div className="w-100 text-right">
-            <button onClick={generatePDF} type="button">
-              Export PDF
-            </button>
-          </div>
-
-          <h3>
-            {CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Salary Report
-          </h3>
-          <div className="d-lg-flex justify-content-start align-items-center">
+          <div className="w-100 text-right p-1">
             <p
-              className=" border-right px-2"
-              style={{
-                borderRight: "1px solid",
-                display: "flex",
-                alignItems: "center",
-                gap: "3px",
-              }}
-            >
-              <CalendarOutlined /> Experience : {experience}
-              years
-            </p>
-
-            <p
-              className=" border-right px-2"
-              style={{ display: "flex", alignItems: "center", gap: "3px" }}
+              style={{ fontSize: "15px" }}
+              className="btn border"
+              onClick={generatePDF}
             >
               {" "}
-              <EnvironmentOutlined /> {location}
+              Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
             </p>
           </div>
-          <div>
-            {/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}
-          </div>
-          <p
-            style={{
-              fontSize: "14px",
-              textAlign: "center",
-              display: "grid",
-              placeItems: "center",
-            }}
-            className="text-primary"
-          >
-            The charts below only show data for roles in {location} with{" "}
-            {experience} of experience. It doesn't show data for the skill(s)
-            you have selected.
-          </p>
-          <div className="mt-3">
-            <h5>Average Salary </h5>
-            <p className="fs-3">
-              ₹ {statisticsForJobsData.averageSalary.toFixed(2)} Lakhs Per Annum
-              (LPA)
-            </p>
 
-            <p className="text-primary ">In {location}</p>
-            <div className="d-flex mb-3 mt-3">
-              <div style={{ height: "100px", width: "10%" }}>
-                <svg height="30" width="100%">
-                  <defs>
-                    <linearGradient
-                      id="default-bar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop style={{ stopColor: "#fff" }} />
-                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-bar')"
-                  ></rect>
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 text-start mt-2">
-                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    Min
-                  </p>
-                  <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {statisticsForJobsData.minSalary} LPA
-                  </p>
-                </div>
-              </div>
-              <div style={{ height: "100px", width: "15%" }}>
-                <div
-                  style={{
-                    height: "30px",
-                    width: "100%",
-                    background: "#00aaa4",
-                  }}
-                ></div>
-              </div>
-              ​{" "}
-              <div style={{ height: "100px", width: "50%" }}>
-                <svg height="30" width="100%">
-                  <defs>
-                    <linearGradient
-                      id="default-middleBar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop
-                        offset="0%"
-                        style={{ stopColor: "#18969b", stopOpacity: 1 }}
-                      />
-                      <stop
-                        offset="100%"
-                        style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-middleBar')"
-                  />
-                  {/* Vertical dotted line in the middle */}
-                  <line
-                    x1="50%"
-                    y1="0"
-                    x2="50%"
-                    y2="100%"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                  />
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 d-flex justify-content-between">
+          <div className="p-lg-3 p-1" ref={elementRef}>
+            <h3>
+              {CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Salary
+              Report
+            </h3>
+            <div className="d-lg-flex justify-content-start align-items-center">
+              <p
+                className=" border-right px-2"
+                style={{
+                  borderRight: "1px solid",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                <CalendarOutlined /> Experience : {experience} years
+              </p>
+
+              <p
+                className=" border-right px-2"
+                style={{ display: "flex", alignItems: "center", gap: "3px" }}
+              >
+                {" "}
+                <EnvironmentOutlined /> {location}
+              </p>
+            </div>
+            <div>
+              {/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}
+            </div>
+            <p
+              style={{
+                fontSize: "14px",
+                textAlign: "center",
+                display: "grid",
+                placeItems: "center",
+              }}
+              className="text-primary"
+            >
+              The charts below show data for roles in {location} with{" "}
+              {experience} of experience.It doesn't show data for the skill(s)
+              you have selected.
+            </p>
+            <div className="mt-3">
+              <h5>Average Salary </h5>
+              <p className="fs-3">
+                ₹ {statisticsForJobsData.averageSalary.toFixed(2)} Lakhs Per
+                Annum (LPA)
+              </p>
+
+              <p className="text-primary ">In {location}</p>
+              <div className="d-flex mb-3 mt-3">
+                <div style={{ height: "100px", width: "10%" }}>
+                  <svg height="30" width="100%">
+                    <defs>
+                      <linearGradient
+                        id="default-bar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop style={{ stopColor: "#fff" }} />
+                        <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-bar')"
+                    ></rect>
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
                   <div className="w-100 text-start mt-2">
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      25th Percentile
+                      Min
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsData.percentile25} LPA
+                      {statisticsForJobsData.minSalary} LPA
                     </p>
                   </div>
-                  <div className="w-100 text-center mt-2">
-                    <p
-                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
-                    >
-                      MEDIAN
-                    </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsData.medianSalary} LPA
-                    </p>
+                </div>
+                <div style={{ height: "100px", width: "15%" }}>
+                  <div
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      background: "#00aaa4",
+                    }}
+                  ></div>
+                </div>
+                ​{" "}
+                <div style={{ height: "100px", width: "50%" }}>
+                  <svg height="30" width="100%">
+                    <defs>
+                      <linearGradient
+                        id="default-middleBar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop
+                          offset="0%"
+                          style={{ stopColor: "#18969b", stopOpacity: 1 }}
+                        />
+                        <stop
+                          offset="100%"
+                          style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-middleBar')"
+                    />
+                    {/* Vertical dotted line in the middle */}
+                    <line
+                      x1="50%"
+                      y1="0"
+                      x2="50%"
+                      y2="100%"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeDasharray="4 4"
+                    />
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
+                  <div className="w-100 d-flex justify-content-between">
+                    <div className="w-100 text-start mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        25th Percentile
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsData.percentile25} LPA
+                      </p>
+                    </div>
+                    <div className="w-100 text-center mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        MEDIAN
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsData.medianSalary} LPA
+                      </p>
+                    </div>
+                    <div className="w-100 text-right mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        75th Percentile
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsData.percentile75} LPA
+                      </p>
+                    </div>
                   </div>
+                </div>
+                <div style={{ height: "100px", width: "15%" }}>
+                  <div
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      background: "#3b7dd8",
+                    }}
+                  ></div>
+                </div>
+                <div style={{ height: "100px", width: "10%" }}>
+                  <svg
+                    height="30"
+                    width="100%"
+                    style={{ transform: "rotate(180deg)" }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="default-bar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop style={{ stopColor: "#fff" }} />
+                        <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-bar')"
+                    ></rect>
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
                   <div className="w-100 text-right mt-2">
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      75th Percentile
+                      Max
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsData.percentile75} LPA
+                      {statisticsForJobsData.maxSalary} LPA
                     </p>
                   </div>
                 </div>
               </div>
-              <div style={{ height: "100px", width: "15%" }}>
-                <div
-                  style={{
-                    height: "30px",
-                    width: "100%",
-                    background: "#3b7dd8",
-                  }}
-                ></div>
-              </div>
-              <div style={{ height: "100px", width: "10%" }}>
-                <svg
-                  height="30"
-                  width="100%"
-                  style={{ transform: "rotate(180deg)" }}
-                >
-                  <defs>
-                    <linearGradient
-                      id="default-bar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop style={{ stopColor: "#fff" }} />
-                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-bar')"
-                  ></rect>
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 text-right mt-2">
-                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    Max
-                  </p>
-                  <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {statisticsForJobsData.maxSalary} LPA
-                  </p>
-                </div>
-              </div>
-            </div>
-            <p className="text-primary ">Across India</p>
-            <div className="d-flex mb-3 mt-3">
-              <div style={{ height: "100px", width: "10%" }}>
-                <svg height="30" width="100%">
-                  <defs>
-                    <linearGradient
-                      id="default-bar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop style={{ stopColor: "#fff" }} />
-                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-bar')"
-                  ></rect>
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 text-start mt-2">
-                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    Min
-                  </p>
-                  <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {statisticsForJobsDataByRole.minSalary} LPA
-                  </p>
-                </div>
-              </div>
-              <div style={{ height: "100px", width: "15%" }}>
-                <div
-                  style={{
-                    height: "30px",
-                    width: "100%",
-                    background: "#00aaa4",
-                  }}
-                ></div>
-              </div>
-              ​{" "}
-              <div style={{ height: "100px", width: "50%" }}>
-                <svg height="30" width="100%">
-                  <defs>
-                    <linearGradient
-                      id="default-middleBar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop
-                        offset="0%"
-                        style={{ stopColor: "#18969b", stopOpacity: 1 }}
-                      />
-                      <stop
-                        offset="100%"
-                        style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-middleBar')"
-                  />
-                  {/* Vertical dotted line in the middle */}
-                  <line
-                    x1="50%"
-                    y1="0"
-                    x2="50%"
-                    y2="100%"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                  />
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 d-flex justify-content-between">
+              <p className="text-primary ">Across India</p>
+              <div className="d-flex mb-3 mt-3">
+                <div style={{ height: "100px", width: "10%" }}>
+                  <svg height="30" width="100%">
+                    <defs>
+                      <linearGradient
+                        id="default-bar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop style={{ stopColor: "#fff" }} />
+                        <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-bar')"
+                    ></rect>
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
                   <div className="w-100 text-start mt-2">
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      25th Percentile
+                      Min
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsDataByRole.percentile25} LPA
+                      {statisticsForJobsDataByRole.minSalary} LPA
                     </p>
                   </div>
-                  <div className="w-100 text-center mt-2">
-                    <p
-                      style={{ fontWeight: "bold", margin: "0", color: "gray" }}
-                    >
-                      MEDIAN
-                    </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsDataByRole.medianSalary} LPA
-                    </p>
+                </div>
+                <div style={{ height: "100px", width: "15%" }}>
+                  <div
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      background: "#00aaa4",
+                    }}
+                  ></div>
+                </div>
+                ​{" "}
+                <div style={{ height: "100px", width: "50%" }}>
+                  <svg height="30" width="100%">
+                    <defs>
+                      <linearGradient
+                        id="default-middleBar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop
+                          offset="0%"
+                          style={{ stopColor: "#18969b", stopOpacity: 1 }}
+                        />
+                        <stop
+                          offset="100%"
+                          style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-middleBar')"
+                    />
+                    {/* Vertical dotted line in the middle */}
+                    <line
+                      x1="50%"
+                      y1="0"
+                      x2="50%"
+                      y2="100%"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeDasharray="4 4"
+                    />
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
+                  <div className="w-100 d-flex justify-content-between">
+                    <div className="w-100 text-start mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        25th Percentile
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsDataByRole.percentile25} LPA
+                      </p>
+                    </div>
+                    <div className="w-100 text-center mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        MEDIAN
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsDataByRole.medianSalary} LPA
+                      </p>
+                    </div>
+                    <div className="w-100 text-right mt-2">
+                      <p
+                        style={{
+                          fontWeight: "bold",
+                          margin: "0",
+                          color: "gray",
+                        }}
+                      >
+                        75th Percentile
+                      </p>
+                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                        {statisticsForJobsDataByRole.percentile75} LPA
+                      </p>
+                    </div>
                   </div>
+                </div>
+                <div style={{ height: "100px", width: "15%" }}>
+                  <div
+                    style={{
+                      height: "30px",
+                      width: "100%",
+                      background: "#3b7dd8",
+                    }}
+                  ></div>
+                </div>
+                <div style={{ height: "100px", width: "10%" }}>
+                  <svg
+                    height="30"
+                    width="100%"
+                    style={{ transform: "rotate(180deg)" }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="default-bar"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop style={{ stopColor: "#fff" }} />
+                        <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
+                      </linearGradient>
+                    </defs>
+                    <rect
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      fill="url('#default-bar')"
+                    ></rect>
+                    Sorry, your browser does not support inline SVG.
+                  </svg>
                   <div className="w-100 text-right mt-2">
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      75th Percentile
+                      Max
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsDataByRole.percentile75} LPA
+                      {statisticsForJobsDataByRole.maxSalary} LPA
                     </p>
                   </div>
                 </div>
               </div>
-              <div style={{ height: "100px", width: "15%" }}>
-                <div
-                  style={{
-                    height: "30px",
-                    width: "100%",
-                    background: "#3b7dd8",
-                  }}
-                ></div>
-              </div>
-              <div style={{ height: "100px", width: "10%" }}>
-                <svg
-                  height="30"
-                  width="100%"
-                  style={{ transform: "rotate(180deg)" }}
+
+              <div
+                className="text-center mt-3"
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                }}
+              >
+                <p>
+                  Average salary for all individual roles mapped to{" "}
+                  {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                  experience in{" "}
+                  <span className="text-primary"> {location}</span>
+                </p>
+
+                <LineChart
+                  width={chartWidth}
+                  height={chartHeight}
+                  data={sortedJobsData}
                 >
-                  <defs>
-                    <linearGradient
-                      id="default-bar"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop style={{ stopColor: "#fff" }} />
-                      <stop offset="100%" style={{ stopColor: "#e9e9ec" }} />
-                    </linearGradient>
-                  </defs>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="100%"
-                    height="100%"
-                    fill="url('#default-bar')"
-                  ></rect>
-                  Sorry, your browser does not support inline SVG.
-                </svg>
-                <div className="w-100 text-right mt-2">
-                  <p style={{ fontWeight: "bold", margin: "0", color: "gray" }}>
-                    Max
-                  </p>
-                  <p style={{ fontWeight: "bold", color: "gray" }}>
-                    {statisticsForJobsDataByRole.maxSalary} LPA
-                  </p>
-                </div>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis tick={false} dataKey="mapped_job_title_1">
+                    <Label
+                      value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </XAxis>
+                  <YAxis>
+                    <Label
+                      value="Average Salary (LPA)"
+                      angle={-90}
+                      position="insideLeft"
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </YAxis>
+                  <Tooltip
+                    formatter={(value, name, props) => [
+                      `${name} : ${value} LPA`,
+                    ]}
+                    labelFormatter={() => <p></p>}
+                  />
+
+                  <Line
+                    type="monotone"
+                    dataKey="mapped_average_sal"
+                    name="Average Salary"
+                    stroke="#8884d8"
+                    dot={false} // Disable data points
+                  />
+                </LineChart>
+                {/* Render other report components */}
               </div>
-            </div>
-
-            <div
-              className="text-center mt-3"
-              style={{
-                display: "grid",
-                justifyItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <p>
-                Average salary for all individual roles mapped to{" "}
-                {jobsData[0]?.mapped_job_title} with {experience} year(s) of
-                experience in <span className="text-primary"> {location}</span>
-              </p>
-
-              <LineChart
-                width={chartWidth}
-                height={chartHeight}
-                data={sortedJobsData}
+              <div
+                className="text-center mt-3"
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis tick={false} dataKey="mapped_job_title_1">
-                  <Label
-                    value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
-                  />
-                </XAxis>
-                <YAxis>
-                  <Label
-                    value="Average Salary (LPA)"
-                    angle={-90}
-                    position="insideLeft"
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
-                  />
-                </YAxis>
-                <Tooltip
-                  formatter={(value, name, props) => [`${name} : ${value} LPA`]}
-                />
+                <p>
+                  Average salary for all individual roles mapped to{" "}
+                  {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                  experience in <span className="text-primary"> India</span>
+                </p>
 
-                <Line
-                  type="monotone"
-                  dataKey="mapped_average_sal"
-                  name="Average Salary"
-                  stroke="#8884d8"
-                  dot={false} // Disable data points
-                />
-              </LineChart>
-              {/* Render other report components */}
-            </div>
-            <div
-              className="text-center mt-3"
-              style={{
-                display: "grid",
-                justifyItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <p>
-                Average salary for all individual roles mapped to{" "}
-                {jobsData[0]?.mapped_job_title} with {experience} year(s) of
-                experience in <span className="text-primary"> India</span>
-              </p>
+                <LineChart
+                  width={chartWidth}
+                  height={chartHeight}
+                  data={sortedJobsDataByRole}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis tick={false} dataKey="mapped_job_title_1">
+                    <Label
+                      value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </XAxis>
+                  <YAxis>
+                    <Label
+                      value="Average Salary (LPA)"
+                      angle={-90}
+                      position="insideLeft"
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </YAxis>
+                  <Tooltip
+                    formatter={(value, name, props) => [
+                      `${name} : ${value} LPA`,
+                    ]}
+                    labelFormatter={() => <p></p>}
+                  />
 
-              <LineChart
-                width={chartWidth}
-                height={chartHeight}
-                data={sortedJobsDataByRole}
+                  <Line
+                    type="monotone"
+                    dataKey="mapped_average_sal"
+                    name="Average Salary"
+                    stroke="#8884d8"
+                    dot={false} // Disable data points
+                  />
+                </LineChart>
+                {/* Render other report components */}
+              </div>
+              <div
+                className="text-center mt-3"
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis tick={false} dataKey="mapped_job_title_1">
-                  <Label
-                    value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
+                <h4>Average Salary vs Experience Level</h4>
+                <LineChart
+                  width={chartWidth}
+                  height={chartHeight}
+                  data={lineChartData}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="experience" type="number" name="Experience">
+                    <Label
+                      value="Experience (Year)"
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </XAxis>
+                  <YAxis dataKey="salary" type="number" height={40}>
+                    <Label
+                      value="Average Salary (LPA)"
+                      angle={-90}
+                      position="insideLeft"
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </YAxis>
+                  <Tooltip
+                    formatter={(value, name, props) => [
+                      `Average Salary : ${value} LPA`,
+                    ]}
                   />
-                </XAxis>
-                <YAxis>
-                  <Label
-                    value="Average Salary (LPA)"
-                    angle={-90}
-                    position="insideLeft"
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
-                  />
-                </YAxis>
-                <Tooltip
-                  formatter={(value, name, props) => [`${name} : ${value} LPA`]}
-                />
 
-                <Line
-                  type="monotone"
-                  dataKey="mapped_average_sal"
-                  name="Average Salary"
-                  stroke="#8884d8"
-                  dot={false} // Disable data points
-                />
-              </LineChart>
-              {/* Render other report components */}
-            </div>
-            <div
-              className="text-center mt-3"
-              style={{
-                display: "grid",
-                justifyItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <h4>Average Salary vs Experience Level</h4>
-              <LineChart
-                width={chartWidth}
-                height={chartHeight}
-                data={lineChartData}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="experience" type="number" name="Experience">
-                  <Label
-                    value="Experience (Year)"
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
+                  <Line
+                    type="monotone"
+                    dataKey="salary"
+                    stroke="none"
+                    dot={{ stroke: "#8884d8", strokeWidth: 2, fill: "#fff" }}
                   />
-                </XAxis>
-                <YAxis dataKey="salary" type="number" height={40}>
-                  <Label
-                    value="Average Salary (LPA)"
-                    angle={-90}
-                    position="insideLeft"
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
-                  />
-                </YAxis>
-                <Tooltip
-                  formatter={(value, name, props) => [
-                    `Average Salary : ${value} LPA`,
-                  ]}
-                />
-
-                <Line
-                  type="monotone"
-                  dataKey="salary"
-                  stroke="none"
-                  dot={{ stroke: "#8884d8", strokeWidth: 2, fill: "#fff" }}
-                />
-              </LineChart>
-              {/* <LineChart
+                </LineChart>
+                {/* <LineChart
                 width={600}
                 height={300}
                 data={trendDataByDate}
@@ -916,63 +980,65 @@ const GeneratedReport = ({
                   activeDot={{ r: 8 }}
                 />
               </LineChart> */}
-            </div>
+              </div>
 
-            <div
-              className="text-center mt-3"
-              style={{
-                display: "grid",
-                justifyItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <h4> Average Salary vs Grouped Experience Level</h4>
-              <BarChart
-                width={chartWidth}
-                height={chartHeight}
-                data={groupedBarChartData}
+              <div
+                className="text-center mt-3"
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="experienceLevel" />
+                <h4> Average Salary vs Grouped Experience Level</h4>
+                <BarChart
+                  width={chartWidth}
+                  height={chartHeight}
+                  data={groupedBarChartData}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="experienceLevel" />
 
-                <YAxis>
-                  {" "}
-                  <Label
-                    value="Average Salary (LPA)"
-                    angle={-90}
-                    position="insideLeft"
-                    style={{
-                      textAnchor: "middle",
-                      fontSize: "14px",
-                      fill: "blue",
-                      fontFamily: "Arial, sans-serif", // Adjust the font family here
-                    }}
+                  <YAxis>
+                    {" "}
+                    <Label
+                      value="Average Salary (LPA)"
+                      angle={-90}
+                      position="insideLeft"
+                      style={{
+                        textAnchor: "middle",
+                        fontSize: "14px",
+                        fill: "blue",
+                        fontFamily: "Arial, sans-serif", // Adjust the font family here
+                      }}
+                    />
+                  </YAxis>
+
+                  <Tooltip
+                    formatter={(value, name, props) => [
+                      `Average Salary : ${value} LPA`,
+                    ]}
                   />
-                </YAxis>
 
-                <Tooltip
-                  formatter={(value, name, props) => [
-                    `Average Salary : ${value} LPA`,
-                  ]}
-                />
-
-                <Bar
-                  dataKey="averageSalary"
-                  name="Average Salary"
-                  fill="#8884d8"
-                />
-              </BarChart>
+                  <Bar
+                    dataKey="averageSalary"
+                    name="Average Salary"
+                    fill="#8884d8"
+                  />
+                </BarChart>
+              </div>
+              <div
+                className="text-center mt-3"
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                }}
+              ></div>
+              <div className="mb-3">
+                <SimplePieChart />
+              </div>
             </div>
-            <div
-              className="text-center mt-3"
-              style={{
-                display: "grid",
-                justifyItems: "center",
-                alignContent: "center",
-              }}
-            ></div>
-
-            <SimplePieChart />
           </div>
         </div>
       ) : (
@@ -1034,6 +1100,7 @@ const ReportsPage = () => {
   const storedSupervise = sessionStorage.getItem("isSupervise");
   const storedManage = sessionStorage.getItem("isManage");
   const storedUserID = localStorage.getItem("user_id");
+  const [showPreviousReports, setShowPreviousReports] = useState(false);
 
   let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(0);
@@ -1254,7 +1321,11 @@ const ReportsPage = () => {
         </div> */}
         <div
           className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
-          style={{ overflowY: "scroll", maxHeight: "100vh" }}
+          style={{
+            overflowY: "scroll",
+            maxHeight: "100vh",
+            transform: "transition 0.3s all ease",
+          }}
         >
           {/* <input className="form-control mb-3" placeholder="search" />
           <button
@@ -1263,88 +1334,181 @@ const ReportsPage = () => {
           >
             Get More Reports
           </button> */}
-
           <div>
-            {dataArray &&
-              dataArray.map((data, index) => {
-                return (
-                  <Card
-                    className={`card selectable-tab p-2 px-3 text-left mb-3 ${
-                      activeIndex === index ? "selected-tab" : ""
-                    }`}
-                    key={data.report_id}
-                    onClick={() => setActiveIndex(index)}
-                    style={{ cursor: "pointer" }}
+            {dataArray && dataArray.length > 0 && (
+              <Card
+                className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                  activeIndex === 0 ? "selected-tab" : ""
+                }`}
+                key={dataArray[0]?.report_id}
+                onClick={() => setActiveIndex(0)}
+                style={{ cursor: "pointer" }}
+              >
+                <p style={{ fontWeight: "500" }} className="fw-b text-primary">
+                  {dataArray[0]?.job_titles}
+                </p>
+                <div className="d-flex justify-content-start align-items-center">
+                  <p
+                    className=" border-right px-2"
+                    style={{
+                      borderRight: "1px solid",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "3px",
+                    }}
                   >
-                    <p
-                      style={{ fontWeight: "500" }}
-                      className="fw-b text-primary"
-                    >
-                      {data.job_titles}
-                    </p>
-                    <div className="d-flex justify-content-start align-items-center">
-                      <p
-                        className=" border-right px-2"
-                        style={{
-                          borderRight: "1px solid",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "3px",
-                        }}
-                      >
-                        <CalendarOutlined /> {data.experience} years
-                      </p>
-                      <p
-                        className=" border-right px-2"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "3px",
-                        }}
-                      >
-                        {" "}
-                        <EnvironmentOutlined /> {data.location}
-                      </p>
-                    </div>
+                    <CalendarOutlined /> {dataArray[0]?.experience} years
+                  </p>
+                  <p
+                    className=" border-right px-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "3px",
+                    }}
+                  >
+                    {" "}
+                    <EnvironmentOutlined /> {dataArray[0]?.location}
+                  </p>
+                </div>
 
-                    <CardActions disableSpacing>
-                      <p>See More</p>
-                      <ExpandMore
-                        expand={expanded[index] || false}
-                        onClick={() => handleExpandClick(index)}
-                        aria-expanded={expanded[index] || false}
-                        aria-label="show more"
-                      >
-                        <ExpandMoreIcon />
-                      </ExpandMore>
-                    </CardActions>
-                    <Collapse
-                      in={expanded[index] || false}
-                      timeout="auto"
-                      unmountOnExit
-                    >
-                      <div>
-                        <SkillsList skills={JSON.parse(data.skills)} />
-                      </div>
-                      <div>
-                        <p>
-                          Supervise employees :{" "}
-                          <span style={{ fontSize: "14px" }}>
-                            {data.supervise}
-                          </span>{" "}
-                        </p>
-                        <p>
-                          Manage projects :{" "}
-                          <span style={{ fontSize: "14px" }}>
-                            {data.manage}
-                          </span>{" "}
-                        </p>
-                      </div>
-                    </Collapse>
-                  </Card>
-                );
-              })}
+                <CardActions disableSpacing>
+                  <p>See More</p>
+                  <ExpandMore
+                    expand={expanded[0] || false}
+                    onClick={() => handleExpandClick(0)}
+                    aria-expanded={expanded[0] || false}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </ExpandMore>
+                </CardActions>
+                <Collapse
+                  in={expanded[0] || false}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <div>
+                    <SkillsList skills={JSON.parse(dataArray[0]?.skills)} />
+                  </div>
+                  <div>
+                    <p>
+                      Supervise employees :{" "}
+                      <span style={{ fontSize: "14px" }}>
+                        {dataArray[0]?.supervise}
+                      </span>{" "}
+                    </p>
+                    <p>
+                      Manage projects :{" "}
+                      <span style={{ fontSize: "14px" }}>
+                        {dataArray[0]?.manage}
+                      </span>{" "}
+                    </p>
+                  </div>
+                </Collapse>
+              </Card>
+            )}
           </div>
+          <button
+            onClick={() => {
+              setShowPreviousReports(!showPreviousReports);
+              setActiveIndex(0);
+            }}
+            className="btn btn-primary mb-3 w-100"
+          >
+            {showPreviousReports
+              ? "Hide previous reports"
+              : "See previous reports"}
+          </button>
+
+          {showPreviousReports && (
+            <div>
+              {dataArray &&
+                dataArray.map((data, index) => {
+                  // Check if the current index is not the first one (index 0)
+                  if (index !== 0) {
+                    return (
+                      <Card
+                        className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                          activeIndex === index ? "selected-tab" : ""
+                        }`}
+                        key={data.report_id}
+                        onClick={() => setActiveIndex(index)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <p
+                          style={{ fontWeight: "500" }}
+                          className="fw-b text-primary"
+                        >
+                          {data.job_titles}
+                        </p>
+                        <div className="d-flex justify-content-start align-items-center">
+                          <p
+                            className=" border-right px-2"
+                            style={{
+                              borderRight: "1px solid",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "3px",
+                            }}
+                          >
+                            <CalendarOutlined /> {data.experience} years
+                          </p>
+                          <p
+                            className=" border-right px-2"
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "3px",
+                            }}
+                          >
+                            {" "}
+                            <EnvironmentOutlined /> {data.location}
+                          </p>
+                        </div>
+
+                        <CardActions disableSpacing>
+                          <p>See More</p>
+                          <ExpandMore
+                            expand={expanded[index] || false}
+                            onClick={() => handleExpandClick(index)}
+                            aria-expanded={expanded[index] || false}
+                            aria-label="show more"
+                          >
+                            <ExpandMoreIcon />
+                          </ExpandMore>
+                        </CardActions>
+                        <Collapse
+                          in={expanded[index] || false}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <div>
+                            <SkillsList skills={JSON.parse(data.skills)} />
+                          </div>
+                          <div>
+                            <p>
+                              Supervise employees :{" "}
+                              <span style={{ fontSize: "14px" }}>
+                                {data.supervise}
+                              </span>{" "}
+                            </p>
+                            <p>
+                              Manage projects :{" "}
+                              <span style={{ fontSize: "14px" }}>
+                                {data.manage}
+                              </span>{" "}
+                            </p>
+                          </div>
+                        </Collapse>
+                      </Card>
+                    );
+                  }
+                  // If it's the first element, don't render anything or render something else.
+                  return null; // or any other component/element you want
+                })}
+            </div>
+          )}
         </div>
         <div
           className="container-fluid col-12 col-lg-9  d-grid "
