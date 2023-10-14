@@ -14,13 +14,13 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   LineChart,
   Line,
   PieChart,
   Pie,
   Cell,
   Label,
+  Legend,
 } from "recharts";
 // import { RadialChart } from "react-vis";
 
@@ -90,7 +90,6 @@ const GeneratedReport = ({
   experience,
   jobsDataByRole,
 }) => {
-  console.log("🚀 ~ file: index.js:82 ~ jobsDataByRole:", jobsDataByRole);
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
 
@@ -266,20 +265,20 @@ const GeneratedReport = ({
     value: skillCounts[skill],
   }));
 
-  const colors = ["#FF5733", "#33FFC3", "#3356FF", "#FF33E2", "#A133FF"]; // Specify colors for each segment
+  const COLORS = ["#e08963", "#38908f", "#b2ebe0", "#5e96ae", "#ffbfa3"];
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active) {
-      return (
-        <div className="custom-tooltip">
-          <p>{`${payload[0].name}: ${payload[0].value}`}</p>
-        </div>
-      );
-    }
-    return null;
-  };
+  // Calculate the total count of all skills
+  const totalCount = chartData.reduce((total, skill) => total + skill.value, 0);
 
-  const PieChartComponent = () => {
+  // Calculate the percentages
+  const chartDataWithPercentages = chartData.map((skill) => ({
+    name: CapitalizeFirstLetter(skill.name),
+    value: skill.value,
+    percentage: ((skill.value / totalCount) * 100).toFixed(2), // Calculate percentage
+  }));
+
+  // Update the SimplePieChart component
+  const SimplePieChart = () => {
     return (
       <div
         className="text-center mt-3"
@@ -289,35 +288,25 @@ const GeneratedReport = ({
           alignContent: "center",
         }}
       >
-        <h4>Most Five Common Skills </h4>
+        <h4>Most Five Common Skills</h4>
         <PieChart width={400} height={400}>
           <Pie
+            data={chartDataWithPercentages}
             dataKey="value"
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            innerRadius={60}
+            cx={200}
+            cy={200}
             outerRadius={80}
             fill="#8884d8"
-            startAngle={90}
-            endAngle={450}
-            label
+            label={({ percentage }) => `${percentage}%`} // Display name and percentage
           >
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={colors[index % colors.length]}
+                fill={COLORS[index % COLORS.length]}
               />
             ))}
           </Pie>
-          <Tooltip content={<CustomTooltip />} />
-          <Legend
-            align="center"
-            verticalAlign="bottom"
-            height={36}
-            iconSize={24}
-            iconType="circle"
-          />
+          <Legend />
         </PieChart>
       </div>
     );
@@ -964,7 +953,7 @@ const GeneratedReport = ({
               }}
             ></div>
 
-            <PieChartComponent />
+            <SimplePieChart />
           </div>
         </div>
       ) : (
@@ -1142,10 +1131,6 @@ const ReportsPage = () => {
         );
 
         setSalaryDataByRole(jobTitleResponses);
-        console.log(
-          "🚀 ~ file: index.js:788 ~ fetchResponses ~ jobTitleResponses:",
-          jobTitleResponses
-        );
       };
 
       fetchResponses();
@@ -1153,11 +1138,6 @@ const ReportsPage = () => {
 
     //eslint-disable-next-line
   }, [dataArray]);
-
-  console.log(
-    "🚀 ~ file: index.js:799 ~ ReportsPage ~ salaryDataByRole:",
-    salaryDataByRole
-  );
 
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
