@@ -20,6 +20,7 @@ import {
   PieChart,
   Pie,
   Cell,
+  Label,
 } from "recharts";
 // import { RadialChart } from "react-vis";
 
@@ -176,7 +177,7 @@ const GeneratedReport = ({
   // }));
 
   // Create data for the line chart (salary vs. experience)
-  const lineChartData = jobsData.map((job) => ({
+  const lineChartData = jobsDataByRole.map((job) => ({
     experience: job.avg_experience,
     salary: job.mapped_average_sal,
   }));
@@ -321,6 +322,14 @@ const GeneratedReport = ({
       </div>
     );
   };
+
+  const sortedJobsData = [...jobsData].sort(
+    (a, b) => a.mapped_average_sal - b.mapped_average_sal
+  );
+
+  const sortedJobsDataByRole = [...jobsDataByRole].sort(
+    (a, b) => a.mapped_average_sal - b.mapped_average_sal
+  );
   return (
     <>
       {jobsData.length > 1 ? (
@@ -720,20 +729,113 @@ const GeneratedReport = ({
                 alignContent: "center",
               }}
             >
-              <h5 className="">Average Salary Chart</h5>
-              <BarChart width={chartWidth} height={chartHeight} data={jobsData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis tick={null} dataKey="mapped_job_title_1" />
-                <YAxis />
-                <Tooltip />
+              <p>
+                Average salary for all individual roles mapped to{" "}
+                {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                experience in <span className="text-primary"> {location}</span>
+              </p>
 
-                <Bar
-                  dataKey="mapped_average_sal"
-                  label="Average Salary"
-                  fill="#8884d8"
-                  name="Average Salary"
+              <LineChart
+                width={chartWidth}
+                height={chartHeight}
+                data={sortedJobsData}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis tick={false} dataKey="mapped_job_title_1">
+                  <Label
+                    value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </XAxis>
+                <YAxis>
+                  <Label
+                    value="Average Salary (LPA)"
+                    angle={-90}
+                    position="insideLeft"
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </YAxis>
+                <Tooltip
+                  formatter={(value, name, props) => [`${name} : ${value} LPA`]}
                 />
-              </BarChart>
+
+                <Line
+                  type="monotone"
+                  dataKey="mapped_average_sal"
+                  name="Average Salary"
+                  stroke="#8884d8"
+                  dot={false} // Disable data points
+                />
+              </LineChart>
+              {/* Render other report components */}
+            </div>
+            <div
+              className="text-center mt-3"
+              style={{
+                display: "grid",
+                justifyItems: "center",
+                alignContent: "center",
+              }}
+            >
+              <p>
+                Average salary for all individual roles mapped to{" "}
+                {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                experience in <span className="text-primary"> India</span>
+              </p>
+
+              <LineChart
+                width={chartWidth}
+                height={chartHeight}
+                data={sortedJobsDataByRole}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis tick={false} dataKey="mapped_job_title_1">
+                  <Label
+                    value={`Different Job Roles in ${jobsData[0]?.mapped_job_title}`}
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </XAxis>
+                <YAxis>
+                  <Label
+                    value="Average Salary (LPA)"
+                    angle={-90}
+                    position="insideLeft"
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </YAxis>
+                <Tooltip
+                  formatter={(value, name, props) => [`${name} : ${value} LPA`]}
+                />
+
+                <Line
+                  type="monotone"
+                  dataKey="mapped_average_sal"
+                  name="Average Salary"
+                  stroke="#8884d8"
+                  dot={false} // Disable data points
+                />
+              </LineChart>
               {/* Render other report components */}
             </div>
             <div
@@ -751,15 +853,40 @@ const GeneratedReport = ({
                 data={lineChartData}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="experience" type="number" />
-                <YAxis dataKey="salary" type="number" />
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Legend />
+                <XAxis dataKey="experience" type="number" name="Experience">
+                  <Label
+                    value="Experience (Year)"
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </XAxis>
+                <YAxis dataKey="salary" type="number" height={40}>
+                  <Label
+                    value="Average Salary (LPA)"
+                    angle={-90}
+                    position="insideLeft"
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </YAxis>
+                <Tooltip
+                  formatter={(value, name, props) => [
+                    `Average Salary : ${value} LPA`,
+                  ]}
+                />
+
                 <Line
                   type="monotone"
                   dataKey="salary"
                   stroke="none"
-                  name="Salary"
                   dot={{ stroke: "#8884d8", strokeWidth: 2, fill: "#fff" }}
                 />
               </LineChart>
@@ -799,8 +926,27 @@ const GeneratedReport = ({
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="experienceLevel" />
-                <YAxis />
-                <Tooltip />
+
+                <YAxis>
+                  {" "}
+                  <Label
+                    value="Average Salary (LPA)"
+                    angle={-90}
+                    position="insideLeft"
+                    style={{
+                      textAnchor: "middle",
+                      fontSize: "14px",
+                      fill: "blue",
+                      fontFamily: "Arial, sans-serif", // Adjust the font family here
+                    }}
+                  />
+                </YAxis>
+
+                <Tooltip
+                  formatter={(value, name, props) => [
+                    `Average Salary : ${value} LPA`,
+                  ]}
+                />
 
                 <Bar
                   dataKey="averageSalary"
