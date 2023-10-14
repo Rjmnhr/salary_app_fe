@@ -484,7 +484,7 @@ const GeneratedReport = ({
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      25 Percentile
+                      25th Percentile
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
                       {statisticsForJobsData.percentile25} LPA
@@ -504,7 +504,7 @@ const GeneratedReport = ({
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      75 Percentile
+                      75th Percentile
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
                       {statisticsForJobsData.percentile75} LPA
@@ -646,7 +646,7 @@ const GeneratedReport = ({
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      25 Percentile
+                      25th Percentile
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
                       {statisticsForJobsDataByRole.percentile25} LPA
@@ -666,7 +666,7 @@ const GeneratedReport = ({
                     <p
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
-                      75 Percentile
+                      75th Percentile
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
                       {statisticsForJobsDataByRole.percentile75} LPA
