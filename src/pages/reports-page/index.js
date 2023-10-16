@@ -33,6 +33,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+//eslint-disable-next-line
 const GenerateSalaryValue = (originalData, storedExperience) => {
   if (originalData.length > 0) {
     // Function to calculate the "calculated salary" based on the stored experience
@@ -75,6 +76,7 @@ const GenerateSalaryValue = (originalData, storedExperience) => {
     };
 
     // Modify the original 2D array to include "calculated salary"
+    //eslint-disable-next-line
     const modifiedData = originalData.map((nestedArray) => {
       return nestedArray.map((item) => {
         const calculatedSalary = calculateCalculatedSalary(
@@ -94,11 +96,6 @@ const GenerateSalaryValue = (originalData, storedExperience) => {
         }
       });
     });
-
-    console.log(
-      "🚀 ~ file: index.js:77 ~ GenerateSalaryValue ~ modifiedData:",
-      modifiedData
-    );
   }
 };
 
@@ -304,7 +301,7 @@ const ReportsPage = () => {
     return capitalizedWords?.join(" ");
   };
 
-  GenerateSalaryValue(salaryData, parseInt(storedExperience));
+  // GenerateSalaryValue(salaryData, parseInt(storedExperience));
   return (
     <>
       <NavBar />
@@ -569,8 +566,7 @@ const ReportsPage = () => {
         </div>
       ) : (
         <div
-          className="container-fluid  d-lg-flex justify-content-center align-items-start 
-       "
+          className="container-fluid"
           style={{ padding: "0", marginTop: "90px" }}
         >
           {" "}
