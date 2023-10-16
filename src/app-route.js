@@ -5,7 +5,7 @@ import ReportsPage from "./pages/reports-page";
 
 import PriceAJob from "./pages/price-a-job";
 import ExecutiveReports from "./pages/executive-reports";
-import JobReport from "./components/sample";
+
 import LoginPage from "./pages/login-page";
 import OtpVerification from "./pages/otp-verification";
 
@@ -46,14 +46,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route
-          path="/test"
-          element={
-            <>
-              <JobReport />
-            </>
-          }
-        />
+
         <Route
           path="/login"
           element={
