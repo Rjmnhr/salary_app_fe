@@ -4,6 +4,8 @@ import {
   CalendarOutlined,
   EnvironmentOutlined,
   LoadingOutlined,
+  EditOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
 import NavBar from "../../components/nav-bar/index";
 import "./style.css";
@@ -20,7 +22,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import AxiosInstance from "../../components/axios";
 import GeneratedReport from "../../components/generate_report";
-import { Skeleton } from "antd";
+import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
+import { cities, items } from "../price-a-job";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,6 +35,10 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
+function formatColumnName(columnName) {
+  return columnName?.replace(/[\s/]+/g, "_").toLowerCase();
+}
 
 //eslint-disable-next-line
 const GenerateSalaryValue = (originalData, storedExperience) => {
@@ -115,8 +122,21 @@ const ReportsPage = () => {
   const storedUserID = localStorage.getItem("user_id");
   const [showPreviousReports, setShowPreviousReports] = useState(false);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableExperience, setEditableExperience] =
+    useState(storedExperience);
+  const [editableLocation, setEditableLocation] = useState("");
+  const [editableJobTitle, setEditableJobTitle] = useState("");
+  const [editableSkills, setEditableSkills] = useState([]);
   let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(0);
+  const [jobsData, setJobsData] = useState(items);
+  const [locationData, setLocationData] = useState(cities);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [skillSet, setSkillSet] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+  const { Option } = Select;
+  const [isReportReady, setIsReportReady] = useState(false);
 
   const handleExpandClick = (index) => {
     setExpanded((prevExpanded) => ({
@@ -163,6 +183,9 @@ const ReportsPage = () => {
         const distinctArray = [...uniqueObjects].map(JSON.parse);
 
         setDataArray(distinctArray);
+        setEditableJobTitle(distinctArray[0].job_titles);
+        setEditableLocation(distinctArray[0].location);
+        setEditableSkills(JSON.parse(distinctArray[0].skills));
       })
       .catch((err) => console.log(err));
     //eslint-disable-next-line
@@ -210,6 +233,7 @@ const ReportsPage = () => {
   };
 
   useEffect(() => {
+    console.log("entered");
     if (dataArray && dataArray.length > 0) {
       const fetchResponses = async () => {
         const jobTitleResponses = await Promise.all(
@@ -261,12 +285,8 @@ const ReportsPage = () => {
             return response.data;
           })
         );
-
+        setIsReportReady(true);
         setSalaryData(jobTitleResponses);
-        console.log(
-          "🚀 ~ file: index.js:1240 ~ fetchResponses ~ jobTitleResponses:",
-          jobTitleResponses
-        );
       };
 
       fetchResponses();
@@ -301,7 +321,235 @@ const ReportsPage = () => {
     return capitalizedWords?.join(" ");
   };
 
+  const handleChangeEdit = () => {
+    setIsEditing(!isEditing);
+
+    if (!isEditing) {
+      setIsModalVisible(true);
+    } else {
+      setIsModalVisible(false);
+    }
+
+    if (isEditing) {
+      setIsReportReady(false);
+      // Create a new report object with the edited values
+      const editedReport = {
+        job_titles: editableJobTitle,
+        location: editableLocation,
+        experience: editableExperience,
+        skills: JSON.stringify(editableSkills),
+        manage: storedManage,
+        supervise: storedSupervise,
+      };
+
+      // Update the first element of dataArray with the edited report
+      const updatedDataArray = [...dataArray];
+      updatedDataArray[0] = editedReport;
+
+      // Update the state with the modified dataArray
+      setDataArray(updatedDataArray);
+    }
+  };
   // GenerateSalaryValue(salaryData, parseInt(storedExperience));
+
+  const handleSelectEditableJob = (value) => {
+    setEditableJobTitle(value);
+  };
+  const handleJobSearch = (newValue) => {
+    const filter = items.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+
+    setJobsData(filter);
+  };
+  const handleSearch = (newValue) => {
+    const filter = cities.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setLocationData(filter);
+  };
+
+  const handleSelectEditableLocation = (value) => {
+    setEditableLocation(value);
+  };
+  const handleSelectEditableExperience = (value) => {
+    setEditableExperience(value);
+  };
+  const handleSelectEditableSkills = (value) => {
+    setEditableSkills(value);
+  };
+
+  const handleSkillSearch = (newValue) => {
+    const filter = skillSet.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setSkillData(filter);
+  };
+
+  useEffect(() => {
+    if (editableJobTitle) {
+      AxiosInstance.post(
+        "/api/skills/data",
+        {
+          job_title: formatColumnName(editableJobTitle),
+        },
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
+        .then(async (response) => {
+          const retrievedSkillsData = await response.data;
+          const nestedSkillsData = [retrievedSkillsData];
+          console.log(
+            "🚀 ~ file: index.js:403 ~ .then ~ nestedSkillsData:",
+            nestedSkillsData
+          );
+          const uniqueValues = new Set();
+
+          nestedSkillsData.forEach((innerArray) => {
+            innerArray.forEach((obj) => {
+              const value = Object.values(obj)[0];
+              if (value !== null && value.trim() !== "" && value.length > 1) {
+                uniqueValues.add(value);
+              }
+            });
+          });
+
+          const flattenedUniqueValues = [...uniqueValues];
+
+          const sortedArr = flattenedUniqueValues.sort((a, b) => {
+            const isSpecialA = /[^a-zA-Z]/.test(a[0]); // Check if a starts with a special character
+            const isSpecialB = /[^a-zA-Z]/.test(b[0]); // Check if b starts with a special character
+
+            if (isSpecialA && !isSpecialB) {
+              return 1; // Move a to the end
+            } else if (!isSpecialA && isSpecialB) {
+              return -1; // Move b to the end
+            } else {
+              return a.localeCompare(b); // Sort alphabetically
+            }
+          });
+
+          setSkillSet(sortedArr);
+
+          setSkillData(sortedArr);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [editableJobTitle]);
+  const EditableModalComponent = () => {
+    return (
+      <div>
+        <form>
+          <div className="mb-3  d-flex align-items-center">
+            <label className="col-3">Job title : </label>
+            <div className="col-8">
+              <Select
+                size={"large"}
+                showSearch
+                value={editableJobTitle}
+                onChange={handleSelectEditableJob}
+                onSearch={handleJobSearch}
+                style={{
+                  width: "100%",
+                  borderRadius: "3px",
+                  textAlign: "start",
+                }}
+                options={(jobsData || []).map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                className="border text-start"
+              />
+            </div>
+          </div>
+
+          <div className="mb-3  d-flex align-items-center">
+            <label className="col-3">Location : </label>
+            <div className="col-8">
+              <Select
+                size={"large"}
+                style={{
+                  width: "100%",
+                  borderRadius: "0",
+                  textAlign: "start",
+                }}
+                className="input border"
+                showSearch
+                value={editableLocation}
+                defaultActiveFirstOption={false}
+                suffixIcon={null}
+                filterOption={false}
+                onSearch={handleSearch}
+                onChange={handleSelectEditableLocation}
+                notFoundContent={null}
+                options={(locationData || []).map((d) => ({
+                  value: d,
+                  label: d,
+                }))}
+              />
+            </div>
+          </div>
+          <div className="mb-3  d-flex align-items-center">
+            <label className="col-3">Experience : </label>
+            <div className="col-8">
+              <InputNumber
+                size={"large"}
+                placeholder="Years of experience"
+                style={{ width: "100%" }}
+                min={0} // Optional: Set a minimum value
+                max={100} // Optional: Set a maximum value
+                step={1} // Optional: Set the step increment/
+                value={editableExperience}
+                onChange={handleSelectEditableExperience}
+              />
+            </div>
+          </div>
+
+          <div className="mb-3  d-flex align-items-center">
+            <label className="col-3">Skills : </label>
+            <div className="col-8">
+              <Select
+                mode="multiple"
+                size={"large"}
+                style={{
+                  width: "100%",
+                  borderRadius: "0",
+                  textAlign: "start",
+                }}
+                className="input border"
+                showSearch
+                placeholder="Important skills"
+                defaultActiveFirstOption={false}
+                suffixIcon={null}
+                filterOption={false}
+                onSearch={handleSkillSearch}
+                onChange={handleSelectEditableSkills}
+                notFoundContent={null}
+                value={editableSkills}
+              >
+                {(skillData || []).map((d) => (
+                  <Option key={d} value={d}>
+                    {CapitalizeFirstLetter(d)}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+  };
+  const modalFooter = (
+    <div>
+      <Button type="primary" onClick={handleChangeEdit}>
+        Save
+      </Button>
+    </div>
+  );
+
   return (
     <>
       <NavBar />
@@ -354,6 +602,10 @@ const ReportsPage = () => {
           >
             Get More Reports
           </button> */}
+
+            <Modal visible={isModalVisible} footer={modalFooter}>
+              <EditableModalComponent />
+            </Modal>
             <div>
               {dataArray && dataArray.length > 0 && (
                 <Card
@@ -364,12 +616,49 @@ const ReportsPage = () => {
                   onClick={() => setActiveIndex(0)}
                   style={{ cursor: "pointer" }}
                 >
-                  <p
-                    style={{ fontWeight: "500" }}
-                    className="fw-b text-primary"
-                  >
-                    {dataArray[0]?.job_titles}
-                  </p>
+                  <div className="d-flex align-content-center justify-content-between ">
+                    <p
+                      style={{ fontWeight: "500" }}
+                      className="fw-b text-primary"
+                    >
+                      {dataArray[0]?.job_titles}
+                    </p>
+
+                    {isEditing ? (
+                      <Popconfirm
+                        title="Are you sure you want to save?"
+                        onConfirm={handleChangeEdit}
+                        okText="Yes"
+                        cancelText="No"
+                        placement="topRight" // Adjust the placement as needed
+                      >
+                        <div
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          <SaveOutlined />{" "}
+                        </div>
+                      </Popconfirm>
+                    ) : (
+                      <Popconfirm
+                        title="Are you sure you want to edit?"
+                        onConfirm={handleChangeEdit}
+                        okText="Yes"
+                        cancelText="No"
+                        placement="topRight" // Adjust the placement as needed
+                      >
+                        <div
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          <EditOutlined />
+                        </div>
+                      </Popconfirm>
+                    )}
+                  </div>
+
                   <div className="d-flex justify-content-start align-items-center">
                     <p
                       className=" border-right px-2"
@@ -380,7 +669,7 @@ const ReportsPage = () => {
                         gap: "3px",
                       }}
                     >
-                      <CalendarOutlined /> {dataArray[0]?.experience} years
+                      <CalendarOutlined /> {editableExperience} years
                     </p>
                     <p
                       className=" border-right px-2"
@@ -391,12 +680,12 @@ const ReportsPage = () => {
                       }}
                     >
                       {" "}
-                      <EnvironmentOutlined /> {dataArray[0]?.location}
+                      <EnvironmentOutlined /> {editableLocation}
                     </p>
                   </div>
 
                   <CardActions disableSpacing>
-                    <p>See More</p>
+                    <p style={{ margin: "0" }}>See More</p>
                     <ExpandMore
                       expand={expanded[0] || false}
                       onClick={() => handleExpandClick(0)}
@@ -541,7 +830,7 @@ const ReportsPage = () => {
               justifyItems: "center",
             }}
           >
-            {salaryData.length > 0 && salaryDataByRole.length > 0 ? (
+            {isReportReady ? (
               <GeneratedReport
                 jobsData={salaryData[activeIndex]}
                 location={dataArray[activeIndex].location}

@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 import { Input, InputNumber, Select } from "antd";
-import { NavBarStyled } from "../../components/nav-bar/style";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 import AxiosInstance from "../../components/axios";
 
-const items = [
+export const items = [
   "Customer Support",
   "Voice Process",
   "Software Development",
@@ -27,7 +26,7 @@ const items = [
   "Digital Marketing",
 ];
 
-const cities = [
+export const cities = [
   "Chandigarh",
   "New Delhi",
   "Hyderabad",
@@ -87,6 +86,10 @@ const PriceAJob = () => {
   const [experience, setExperience] = useState("");
   const [isSupervise, setIsSupervise] = useState("");
   const [isManage, setIsManage] = useState("");
+  const [topSkills, setTopSkills] = useState([]);
+  const [initialTopSkills, setInitialTopSkills] = useState([]);
+  const { Option } = Select;
+  const [displayedSkills, setDisplayedSkills] = useState(6);
 
   sessionStorage.removeItem("saveTheReport");
 
@@ -116,6 +119,10 @@ const PriceAJob = () => {
             );
             return response.data;
           })
+        );
+        console.log(
+          "🚀 ~ file: index.js:123 ~ fetchResponses ~ retrievedSkillsData:",
+          retrievedSkillsData
         );
         const uniqueValues = new Set();
 
@@ -149,6 +156,31 @@ const PriceAJob = () => {
       };
 
       fetchResponses();
+    }
+  }, [selectedJobTitles]);
+
+  useEffect(() => {
+    if (selectedJobTitles && selectedJobTitles.length > 0) {
+      AxiosInstance.post(
+        "/api/skills/data/top-skills",
+        { job_title: formatColumnName(selectedJobTitles[0]) },
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
+        .then(async (response) => {
+          const resultData = await response.data;
+
+          const valuesArray = resultData
+            .map((item) => Object.values(item))
+            .flat();
+
+          setTopSkills(valuesArray);
+          setInitialTopSkills(valuesArray);
+        })
+        .catch((err) => console.log(err));
     }
   }, [selectedJobTitles]);
 
@@ -226,8 +258,23 @@ const PriceAJob = () => {
     );
     setSkillData(filter);
   };
+
   const handleSkillSelectChange = (value) => {
+    // Check if a skill has been removed
+    const removedSkills = selectedSkills.filter(
+      (skill) => !value.includes(skill)
+    );
+
     setSelectedSkills(value);
+
+    const itIsTopSkill = initialTopSkills.filter(
+      (skill) => skill === removedSkills[0]
+    );
+
+    // If a skill has been removed, add it back to topSkills
+    if (itIsTopSkill.length > 0) {
+      setTopSkills((prevTopSkills) => [...removedSkills, ...prevTopSkills]);
+    }
   };
 
   const handleSearch = (newValue) => {
@@ -248,7 +295,8 @@ const PriceAJob = () => {
     setLocation(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     sessionStorage.setItem(
       "selectedJobTitles",
       JSON.stringify(selectedJobTitles)
@@ -280,94 +328,98 @@ const PriceAJob = () => {
     localStorage.removeItem("isLoggedIn");
   };
 
+  const handleSkillButtonClick = (skill) => {
+    // Add the selected skill to the Select input
+    setSelectedSkills([...selectedSkills, skill]);
+    // Remove the skill from topSkills
+    setSkillData(skillData.filter((s) => s !== skill));
+    setTopSkills(topSkills.filter((s) => s !== skill));
+  };
+
   return (
     <>
       <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
-        <NavBarStyled>
-          <button
-            type="button"
-            class="mobile-nav-toggle d-lg-none"
-            onClick={handleMenuToggle}
-          >
-            <i class="icofont-navigation-menu"></i>
-          </button>
-          <header
-            id="header"
-            className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
-            style={{
-              background: ` ${scrolled ? "#fff" : "#fff"}`,
-              borderBottom: "1px solid gray",
-            }}
-          >
-            <div class="container d-flex align-items-center">
-              <h1 class="logo me-auto">
-                <a href="/">Equipay Partners</a>
-              </h1>
+        <button
+          type="button"
+          class="mobile-nav-toggle d-lg-none"
+          onClick={handleMenuToggle}
+        >
+          <i class="icofont-navigation-menu"></i>
+        </button>
+        <header
+          id="header"
+          className={`navbar  ${scrolled ? "scrolled" : ""}`}
+          style={{
+            background: ` ${scrolled ? "#fff" : "#fff"}`,
+            borderBottom: "1px solid gray",
+          }}
+        >
+          <div class="container d-flex align-items-center">
+            <h1 class="logo me-auto">
+              <a href="/">Equipay Partners</a>
+            </h1>
 
-              <nav
-                class={`${
-                  menuOpen
-                    ? "mobile-nav d-lg-none"
-                    : " nav-menu d-none d-lg-block"
-                } `}
-              >
-                <ul>
-                  <li>
-                    <a href="/">Home</a>
-                  </li>
-                  <li class="active">
-                    <a href="/price-a-job">Price a Job</a>
-                  </li>
-                  <li>
-                    <a href="/executive-reports">
-                      Executive Compensation Reports
-                    </a>
-                  </li>
+            <nav
+              class={`${
+                menuOpen
+                  ? "mobile-nav d-lg-none"
+                  : " nav-menu d-none d-lg-block"
+              } `}
+            >
+              <ul>
+                <li>
+                  <a href="/">Home</a>
+                </li>
+                <li class="active">
+                  <a href="/price-a-job">Price a Job</a>
+                </li>
+                <li>
+                  <a href="/executive-reports">
+                    Executive Compensation Reports
+                  </a>
+                </li>
 
-                  <li>
-                    <a href="#training">Training</a>
-                  </li>
-                  <li>
-                    <a href="#sales">Sales Incentive</a>
-                  </li>
+                <li>
+                  <a href="#training">Training</a>
+                </li>
+                <li>
+                  <a href="#sales">Sales Incentive</a>
+                </li>
 
-                  {/* <li>
+                {/* <li>
                     <a href="#contact">Contact</a>
                   </li> */}
-                  <li>
-                    {isLoggedIn === "true" ? (
-                      <a href="#eq" onClick={handleLogOut}>
-                        Log out
-                      </a>
-                    ) : (
-                      <a href="/login">Log in</a>
-                    )}
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </header>
-        </NavBarStyled>
+                <li>
+                  {isLoggedIn === "true" ? (
+                    <a href="#eq" onClick={handleLogOut}>
+                      Log out
+                    </a>
+                  ) : (
+                    <a href="/login">Log in</a>
+                  )}
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
       </body>
 
       <div
-        className="container-fluid mt-3 "
+        className="container-fluid "
         style={{
           background: "gainsboro",
-          height: "100vh",
-          borderTop: "1px solid gray",
+          MinHeight: "100vh",
         }}
       >
         <div
           className="container container-fluid main-container "
           style={{
             background: "white",
-            height: "100vh",
+            MinHeight: "100vh",
             overflowY: "scroll",
             display: "grid",
-            justifyItems: "center",
+            justifyItems: "start",
             alignContent: "center",
-            borderTop: "1px solid gray",
           }}
         >
           <div className="container p-3 mt-5">
@@ -377,10 +429,9 @@ const PriceAJob = () => {
               benchmark jobs.
             </h5>
 
-            <form
+            <div
               className="w-100 mt-5"
               style={{ display: "grid", placeItems: "center" }}
-              onSubmit={handleSubmit}
             >
               <div className="mb-3 col-12 col-lg-7">
                 <Select
@@ -441,26 +492,6 @@ const PriceAJob = () => {
                 />
               </div>
 
-              {/* <div className="mb-3 col-12 col-lg-7">
-              <label>Education</label>
-              <br />
-
-              <Select
-                size={"large"}
-                showSearch
-                placeholder="Select education"
-                optionFilterProp="children"
-                filterOption={filterOption}
-                style={{
-                  width: "100%",
-                  borderRadius: "3px",
-                }}
-                options={educationItems}
-                className="input border"
-                
-              />
-            </div> */}
-
               <div className="mb-3 col-12 col-lg-7 ">
                 <Select
                   mode="multiple"
@@ -472,18 +503,46 @@ const PriceAJob = () => {
                   }}
                   className="input border"
                   showSearch
-                  placeholder=" Important skills"
+                  placeholder="Important skills"
                   defaultActiveFirstOption={false}
                   suffixIcon={null}
                   filterOption={false}
                   onSearch={handleSkillSearch}
                   onChange={handleSkillSelectChange}
                   notFoundContent={null}
-                  options={(skillData || []).map((d) => ({
-                    value: d,
-                    label: CapitalizeFirstLetter(d),
-                  }))}
-                />
+                  value={selectedSkills}
+                >
+                  {(skillData || []).map((d) => (
+                    <Option key={d} value={d}>
+                      {CapitalizeFirstLetter(d)}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div
+                style={{ transition: " all 0.3s ease" }}
+                className="d-flex col-12 col-lg-7 flex-wrap justify-content-start align-items-center mt-1 mb-2"
+              >
+                {topSkills.slice(0, displayedSkills).map((skill, index) => {
+                  return (
+                    <button
+                      onClick={() => handleSkillButtonClick(skill)}
+                      key={index}
+                      className="btn border m-1"
+                    >
+                      {CapitalizeFirstLetter(skill)}
+                    </button>
+                  );
+                })}
+
+                {displayedSkills < topSkills.length && (
+                  <div
+                    className="text-primary btn load-more-btn"
+                    onClick={() => setDisplayedSkills(topSkills.length)}
+                  >
+                    Load More...
+                  </div>
+                )}
               </div>
               <div className="mb-3 col-12 col-lg-7 ">
                 <Input placeholder="Any other description" allowClear />
@@ -537,17 +596,21 @@ const PriceAJob = () => {
                   onChange={handleManageSelect}
                 />
               </div>
+            </div>
 
-              {selectedJobTitles.length > 0 && location && experience ? (
-                <button type="submit" className="btn btn-primary mt-3 w-25">
-                  Next
-                </button>
-              ) : (
-                <button disabled className="btn btn-primary mt-3 w-25">
-                  Next
-                </button>
-              )}
-            </form>
+            {selectedJobTitles.length > 0 && location && experience ? (
+              <button
+                onClick={handleSubmit}
+                type="submit"
+                className="btn btn-primary mt-3 w-25"
+              >
+                Next
+              </button>
+            ) : (
+              <button disabled className="btn btn-primary mt-3 w-25">
+                Next
+              </button>
+            )}
           </div>
         </div>
       </div>
