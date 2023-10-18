@@ -750,18 +750,21 @@ const ReportsPage = () => {
                 </Card>
               )}
             </div>
-
-            <button
-              onClick={() => {
-                setShowPreviousReports(!showPreviousReports);
-                setActiveIndex(0);
-              }}
-              className="btn btn-primary mb-3 w-100"
-            >
-              {showPreviousReports
-                ? "Hide previous reports"
-                : "See previous reports"}
-            </button>
+            {dataArray.length > 1 ? (
+              <button
+                onClick={() => {
+                  setShowPreviousReports(!showPreviousReports);
+                  setActiveIndex(0);
+                }}
+                className="btn btn-primary mb-3 w-100"
+              >
+                {showPreviousReports
+                  ? "Hide previous reports"
+                  : "See previous reports"}
+              </button>
+            ) : (
+              ""
+            )}
 
             {showPreviousReports && (
               <div>
@@ -891,6 +894,8 @@ const ReportsPage = () => {
           style={{ padding: "0", marginTop: "90px" }}
         >
           {" "}
+          <Skeleton active />
+          <Skeleton active />
           <Skeleton active />
           <Skeleton active />
         </div>
