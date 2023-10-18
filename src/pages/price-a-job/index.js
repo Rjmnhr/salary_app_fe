@@ -154,6 +154,16 @@ const PriceAJob = () => {
   }, [selectedJobTitles]);
 
   useEffect(() => {
+    // Filter elements from topSkills that do not exist in selectedSkills
+    const filteredTopSkills = topSkills.filter(
+      (skill) => !selectedSkills.includes(skill)
+    );
+
+    setTopSkills(filteredTopSkills);
+    //eslint-disable-next-line
+  }, [selectedSkills]);
+
+  useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       AxiosInstance.post(
         "/api/skills/data/top-skills",
@@ -262,7 +272,7 @@ const PriceAJob = () => {
     setSelectedSkills(value);
 
     const itIsTopSkill = initialTopSkills.filter(
-      (skill) => skill === removedSkills[0]
+      (skill) => skill === removedSkills[0]?.toLowerCase()
     );
 
     // If a skill has been removed, add it back to topSkills
@@ -327,7 +337,7 @@ const PriceAJob = () => {
     setSelectedSkills([...selectedSkills, skill]);
     // Remove the skill from topSkills
     setSkillData(skillData.filter((s) => s !== skill));
-    setTopSkills(topSkills.filter((s) => s !== skill));
+    setTopSkills(topSkills.filter((s) => s !== skill?.toLowerCase()));
   };
 
   return (
@@ -337,8 +347,9 @@ const PriceAJob = () => {
           type="button"
           class="mobile-nav-toggle d-lg-none"
           onClick={handleMenuToggle}
+          style={{ position: "absolute" }}
         >
-          <i class="icofont-navigation-menu"></i>
+          <i style={{ color: "black" }} class="icofont-navigation-menu"></i>
         </button>
         <header
           id="header"
@@ -410,7 +421,7 @@ const PriceAJob = () => {
           style={{
             background: "white",
             MinHeight: "100vh",
-            overflowY: "scroll",
+
             display: "grid",
             justifyItems: "start",
             alignContent: "center",
@@ -520,7 +531,9 @@ const PriceAJob = () => {
                 {topSkills.slice(0, displayedSkills).map((skill, index) => {
                   return (
                     <button
-                      onClick={() => handleSkillButtonClick(skill)}
+                      onClick={() =>
+                        handleSkillButtonClick(CapitalizeFirstLetter(skill))
+                      }
                       key={index}
                       className="btn skill-btn border m-1"
                     >

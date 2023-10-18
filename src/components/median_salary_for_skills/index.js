@@ -39,17 +39,24 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
   // Calculate the median salary for each skill
   skills.forEach((skill) => {
     const filteredData = data.filter((item) =>
-      item.combined_skills.includes(skill)
+      item.combined_skills.includes(skill?.toLowerCase())
     );
     const median = calculateMedian(
       filteredData.map((item) => item.mapped_average_sal)
     );
-    skillMedians.push({ skill: CapitalizeFirstLetter(skill), median: median });
+
+    // Check if the median is valid (not NaN or null) before adding it to the array
+    if (!isNaN(median) && median !== null) {
+      skillMedians.push({
+        skill: CapitalizeFirstLetter(skill),
+        median: median,
+      });
+    }
   });
 
   return (
     <>
-      {skills && skills?.length > 0 ? (
+      {skills && skills?.length > 0 && skillMedians.length > 0 ? (
         <div
           className="text-center mt-3"
           style={{
@@ -58,7 +65,11 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
             alignContent: "center",
           }}
         >
-          <h5> Median salary for skills selected across india</h5>
+          <h5>
+            {" "}
+            Median salary for skill(s) you have selected across{" "}
+            <span className="tex-primary">India</span>
+          </h5>
           <BarChart width={600} height={400} data={skillMedians}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="skill" tick={false}>

@@ -40,77 +40,84 @@ function formatColumnName(columnName) {
   return columnName?.replace(/[\s/]+/g, "_").toLowerCase();
 }
 
-//eslint-disable-next-line
-const GenerateSalaryValue = (originalData, storedExperience) => {
-  if (originalData.length > 0) {
-    // Function to calculate the "calculated salary" based on the stored experience
-    const calculateCalculatedSalary = (
-      experienceRange,
-      salaryRange,
-      storedExperience
-    ) => {
-      const [experienceStart, experienceEnd] = experienceRange
-        .split(" ")[0]
-        .split("-")
-        .map(Number);
+// const GenerateSalaryValue = (originalData, storedExperience) => {
+//   if (originalData.length > 0) {
+//     // Function to calculate the "calculated salary" based on the stored experience
+//     const calculateCalculatedSalary = (
+//       experienceRange,
+//       salaryRange,
+//       storedExperience
+//     ) => {
+//       const [experienceStart, experienceEnd] = experienceRange
+//         .split(" ")[0]
+//         .split("-")
+//         .map(Number);
 
-      const [salaryStart, salaryEnd] = salaryRange
-        .split(" ")[0]
-        .split("-")
-        .map(Number);
+//       const [salaryStart, salaryEnd] = salaryRange
+//         .split(" ")[0]
+//         .split("-")
+//         .map(Number);
 
-      if (storedExperience === experienceStart) {
-        console.log(
-          "🚀 ~ file: index.js:58 ~ GenerateSalaryValue ~ salaryStart:",
-          salaryStart
-        );
-        return salaryStart;
-      } else if (storedExperience === experienceEnd) {
-        return salaryEnd;
-      } else if (
-        storedExperience > experienceStart &&
-        storedExperience < experienceEnd
-      ) {
-        const experienceRangeLength = experienceEnd - experienceStart;
-        const salaryRangeLength = salaryEnd - salaryStart;
-        const salaryPerYear = salaryRangeLength / experienceRangeLength;
-        return (
-          salaryStart + (storedExperience - experienceStart) * salaryPerYear
-        );
-      } else {
-        return null; // Handle cases where storedExperience is not within the experience range
-      }
-    };
+//       if (storedExperience === experienceStart) {
+//         return salaryStart;
+//       } else if (storedExperience === experienceEnd) {
+//         return salaryEnd;
+//       } else if (
+//         storedExperience > experienceStart &&
+//         storedExperience < experienceEnd
+//       ) {
+//         const experienceRangeLength = experienceEnd - experienceStart;
+//         const salaryRangeLength = salaryEnd - salaryStart;
+//         const salaryPerYear = salaryRangeLength / experienceRangeLength;
+//         return (
+//           salaryStart + (storedExperience - experienceStart) * salaryPerYear
+//         );
+//       } else {
+//         console.log(typeof storedExperience);
+//         console.log("exception");
+//         return null; // Handle cases where storedExperience is not within the experience range
+//       }
+//     };
 
-    // Modify the original 2D array to include "calculated salary"
-    //eslint-disable-next-line
-    const modifiedData = originalData.map((nestedArray) => {
-      return nestedArray.map((item) => {
-        const calculatedSalary = calculateCalculatedSalary(
-          item.experience,
-          item.salary,
-          storedExperience
-        );
+//     // Modify the original 2D array to include "calculated salary"
 
-        if (calculatedSalary !== null) {
-          return {
-            ...item,
-            "calculated salary": calculatedSalary,
-          };
-        } else {
-          // Handle cases where storedExperience is not within the experience range
-          return item;
-        }
-      });
-    });
-  }
-};
+//     const modifiedData = originalData.map((nestedArray) => {
+//       return nestedArray.map((item) => {
+//         const calculatedSalary = calculateCalculatedSalary(
+//           item.experience,
+//           item.salary,
+//           storedExperience
+//         );
+
+//         if (calculatedSalary !== null) {
+//           return {
+//             ...item,
+//             calculated_salary: calculatedSalary,
+//           };
+//         } else {
+//           console.log(" adding exception");
+//           // Handle cases where storedExperience is not within the experience range
+//           return item;
+//         }
+//       });
+//     });
+
+//     return modifiedData;
+//   }
+// };
 
 const ReportsPage = () => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
+  // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
+  // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
+  //   []
+  // );
+
+  const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
+  const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
   const storedLocation = sessionStorage.getItem("location");
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
@@ -233,37 +240,6 @@ const ReportsPage = () => {
   };
 
   useEffect(() => {
-    console.log("entered");
-    if (dataArray && dataArray.length > 0) {
-      const fetchResponses = async () => {
-        const jobTitleResponses = await Promise.all(
-          dataArray.map(async (data) => {
-            const response = await AxiosInstance.post(
-              "/api/salary/data/role",
-              {
-                job_title: data.job_titles,
-                skills: JSON.parse(data.skills),
-              },
-              {
-                headers: {
-                  "content-type": "application/json",
-                },
-              }
-            );
-            return response.data;
-          })
-        );
-
-        setSalaryDataByRole(jobTitleResponses);
-      };
-
-      fetchResponses();
-    }
-
-    //eslint-disable-next-line
-  }, [dataArray]);
-
-  useEffect(() => {
     if (dataArray && dataArray.length > 0) {
       const fetchResponses = async () => {
         const jobTitleResponses = await Promise.all(
@@ -282,11 +258,15 @@ const ReportsPage = () => {
                 },
               }
             );
-            return response.data;
+            return { data: response.data.data, bool: response.data.bool };
           })
         );
+        const filteredJobResponse = jobTitleResponses.map((item) => item.data);
+        const filteredSkillBool = jobTitleResponses.map((item) => item.bool);
+
+        setFilteredThroughSkill(filteredSkillBool);
         setIsReportReady(true);
-        setSalaryData(jobTitleResponses);
+        setSalaryData(filteredJobResponse);
       };
 
       fetchResponses();
@@ -294,6 +274,71 @@ const ReportsPage = () => {
 
     //eslint-disable-next-line
   }, [dataArray]);
+
+  useEffect(() => {
+    if (salaryData.length > 0) {
+      if (dataArray && dataArray.length > 0) {
+        const fetchResponses = async () => {
+          const jobTitleResponses = await Promise.all(
+            dataArray.map(async (data) => {
+              const response = await AxiosInstance.post(
+                "/api/salary/data/role",
+                {
+                  job_title: data.job_titles,
+                  skills: JSON.parse(data.skills),
+                  experience: data.experience,
+                },
+                {
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                }
+              );
+              return response.data;
+            })
+          );
+
+          setSalaryDataByRole(jobTitleResponses);
+        };
+
+        fetchResponses();
+      }
+    }
+
+    //eslint-disable-next-line
+  }, [dataArray, salaryData]);
+
+  useEffect(() => {
+    if (salaryData.length > 0) {
+      if (dataArray && dataArray.length > 0) {
+        const fetchResponses = async () => {
+          const jobTitleResponses = await Promise.all(
+            dataArray.map(async (data) => {
+              const response = await AxiosInstance.post(
+                "/api/salary/data/role/no-experience",
+                {
+                  job_title: data.job_titles,
+                  skills: JSON.parse(data.skills),
+                },
+                {
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                }
+              );
+              return response.data;
+            })
+          );
+
+          setSalaryDataNoExp(jobTitleResponses);
+        };
+
+        fetchResponses();
+      }
+    }
+
+    //eslint-disable-next-line
+  }, [dataArray, salaryData]);
 
   function SkillsList({ skills }) {
     return (
@@ -350,17 +395,31 @@ const ReportsPage = () => {
       setDataArray(updatedDataArray);
     }
   };
-  // GenerateSalaryValue(salaryData, parseInt(storedExperience));
+  // useEffect(() => {
+  //   if (salaryData.length > 0) {
+  //     const data = GenerateSalaryValue(
+  //       salaryData,
+  //       parseInt(dataArray[activeIndex].experience)
+  //     );
+
+  //     setCalculatedSalaryData(data);
+  //   }
+  // }, [salaryData, dataArray, activeIndex]);
+  // useEffect(() => {
+  //   if (salaryDataByRole.length > 0) {
+  //     const data = GenerateSalaryValue(
+  //       salaryDataByRole,
+  //       parseInt(dataArray[activeIndex].experience)
+  //     );
+
+  //     setCalculatedSalaryDataByRole(data);
+  //   }
+  // }, [salaryDataByRole, dataArray, activeIndex]);
 
   const handleSelectEditableJob = (value) => {
     setEditableJobTitle(value);
   };
   const handleJobSearch = (newValue) => {
-    console.log(
-      "🚀 ~ file: index.js:359 ~ handleJobSearch ~ newValue:",
-      newValue
-    );
-
     const filter = items.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
@@ -407,10 +466,7 @@ const ReportsPage = () => {
         .then(async (response) => {
           const retrievedSkillsData = await response.data;
           const nestedSkillsData = [retrievedSkillsData];
-          console.log(
-            "🚀 ~ file: index.js:403 ~ .then ~ nestedSkillsData:",
-            nestedSkillsData
-          );
+
           const uniqueValues = new Set();
 
           nestedSkillsData.forEach((innerArray) => {
@@ -456,40 +512,14 @@ const ReportsPage = () => {
   return (
     <>
       <NavBar />
-      {salaryData.length > 0 && salaryDataByRole.length > 0 ? (
+      {salaryData.length > 0 &&
+      salaryDataByRole.length > 0 &&
+      salaryDataNoExp.length > 0 ? (
         <div
           className="container-fluid  d-lg-flex justify-content-center align-items-start 
          "
           style={{ padding: "0", marginTop: "90px" }}
         >
-          {/* <div
-          className="container col-12 col-lg-2  side-bar border vh-5 vh-lg-100 "
-          style={{ padding: "0" }}
-        >
-          <div className="container-fluid p-0 text-center">
-            <Tabs
-              style={{ width: "100%", textAlign: "center" }}
-              defaultActiveKey="1"
-              items={[
-                {
-                  key: "1",
-                  label: "Business",
-                },
-                {
-                  key: "2",
-                  label: "Personal",
-                },
-              ]}
-            />
-          </div>
-          <div className="container-fluid d-none d-lg-block vh-100  p-0">
-            <ul style={{ listStyle: "none", padding: "0" }}>
-              <li className="p-3 border" style={{ background: "powderblue" }}>
-                Reports
-              </li>
-            </ul>
-          </div>
-        </div> */}
           <div
             className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
             style={{
@@ -836,7 +866,9 @@ const ReportsPage = () => {
                 location={dataArray[activeIndex].location}
                 experience={dataArray[activeIndex].experience}
                 jobsDataByRole={salaryDataByRole[activeIndex]}
+                jobsDataNoExp={salaryDataNoExp[activeIndex]}
                 selectedSkills={dataArray[activeIndex].skills}
+                skillsBool={filteredThroughSkill[activeIndex]}
               />
             ) : (
               <div

@@ -45,43 +45,22 @@ const CapitalizeFirstLetter = (data) => {
 function calculateAverageSalary(data) {
   const salaries = data.map((job) => job.mapped_average_sal);
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
-  return (totalSalary / salaries.length).toFixed(2);
+  return (totalSalary / salaries.length)?.toFixed(2);
 }
 
-// // Helper function to calculate quartiles
-// function calculateQuartile(data, percentile) {
-//   const sortedData = [...data].sort((a, b) => a - b);
-//   const index = Math.floor((sortedData.length - 1) * percentile);
-//   const diff = (sortedData.length - 1) * percentile - index;
-//   return sortedData[index] + diff * (sortedData[index + 1] - sortedData[index]);
-// }
-
-// // Helper function to categorize experience levels based on quartiles
-// function categorizeExperienceLevels(data, firstQuartile, thirdQuartile) {
-//   return data.map((job) => {
-//     if (job.avg_experience <= firstQuartile) {
-//       return { ...job, experienceLevel: "Junior" };
-//     } else if (job.avg_experience <= thirdQuartile) {
-//       return { ...job, experienceLevel: "MidLevel" };
-//     } else {
-//       return { ...job, experienceLevel: "Senior" };
-//     }
-//   });
-// }
-
-// const generatePDF = () => {
-//   const report = new JsPDF("portrait", "pt", "a4");
-//   report.html(document.querySelector("#report")).then(() => {
-//     report.save("report.pdf");
-//   });
-// };
+const decimalFix = (number) => {
+  const trimmed = Math.floor(number * 100) / 100;
+  return trimmed;
+};
 
 const GeneratedReport = ({
   jobsData,
   location,
   experience,
   jobsDataByRole,
+  jobsDataNoExp,
   selectedSkills,
+  skillsBool,
 }) => {
   const [chartWidth, setChartWidth] = useState(600);
   const [chartHeight, setChartHeight] = useState(300);
@@ -97,46 +76,7 @@ const GeneratedReport = ({
     });
   };
 
-  //   const generatePDF = () => {
-  //     setIsLoading(true);
-  //     openNotification("topRight");
-  //     const element = elementRef.current;
-
-  //     if (element) {
-  //       // Define a fixed size for the PDF page (e.g., A4 size: 210x297 mm)
-  //       const pdfWidth = 420;
-  //       const pdfHeight = 600;
-
-  //       // Calculate the scaling factor to fit the content within the fixed size
-  //       const scale = Math.min(
-  //         pdfWidth / element.offsetWidth,
-  //         pdfHeight / element.offsetHeight
-  //       );
-
-  //       // Scale the HTML content to fit the PDF page size
-  //       const scaledWidth = element.offsetWidth * scale;
-  //       const scaledHeight = element.offsetHeight * scale;
-
-  //       html2canvas(element, { width: scaledWidth, height: scaledHeight }).then(
-  //         (canvas) => {
-  //           const imgData = canvas.toDataURL("img/png");
-  //           const doc = new jsPDF("p", "mm", [pdfWidth, pdfHeight]);
-  //           doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //           setIsLoading(false);
-  //           doc.save(
-  //             `Equipay_${jobsData[0]?.mapped_job_title}_Salary_Report.pdf`
-  //           );
-  //         }
-  //       );
-  //     } else {
-  //       console.error("Element not found.");
-  //       setIsLoading(false);
-  //     }
-  //   };
-
   const generatePDF = () => {
-    setIsLoading(true);
-    openNotification("topRight");
     const element = elementRef.current;
 
     if (element) {
@@ -161,6 +101,7 @@ const GeneratedReport = ({
   function calculateStatistics(data) {
     // Calculate average salary
     const salaries = data.map((job) => job.mapped_average_sal);
+
     const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
     const averageSalary = totalSalary / salaries.length;
 
@@ -174,6 +115,7 @@ const GeneratedReport = ({
 
     // Calculate minimum and maximum salary
     const minSalary = Math.min(...salaries);
+
     const maxSalary = Math.max(...salaries);
 
     // Calculate 10th and 90th percentile values
@@ -198,26 +140,12 @@ const GeneratedReport = ({
   // Calculate statistics for jobsDataByRole
   const statisticsForJobsDataByRole = calculateStatistics(jobsDataByRole);
 
-  // // Calculate average experience
-  // const experiences = jobsData.map((job) => job.avg_experience);
-
-  // // Calculate quartiles to categorize experience levels
-  // const firstQuartile = calculateQuartile(experiences, 0.25);
-  // const thirdQuartile = calculateQuartile(experiences, 0.75);
-
-  // // Categorize jobs based on quartiles
-  // const experienceGroups = categorizeExperienceLevels(
-  //   jobsData,
-  //   firstQuartile,
-  //   thirdQuartile
-  // );
-
   const experienceGroupsAlter = {
-    Junior: jobsDataByRole?.filter((job) => job.avg_experience <= 2),
-    MidLevel: jobsDataByRole?.filter(
+    Junior: jobsDataNoExp?.filter((job) => job.avg_experience <= 2),
+    MidLevel: jobsDataNoExp?.filter(
       (job) => job.avg_experience > 2 && job.avg_experience <= 5
     ),
-    Senior: jobsDataByRole?.filter((job) => job.avg_experience > 5),
+    Senior: jobsDataNoExp?.filter((job) => job.avg_experience > 5),
   };
 
   // Calculate average salary for each experience level
@@ -237,14 +165,9 @@ const GeneratedReport = ({
       averageSalary: averageSalaries[experienceLevel],
     })
   );
-  // Create data for the salary increment chart
-  // const salaryIncrementData = jobsData.map((job, index) => ({
-  //   job: job.mapped_job_title,
-  //   increment: job.mapped_average_sal - averageSalary,
-  // }));
 
   // Create data for the line chart (salary vs. experience)
-  const lineChartData = jobsDataByRole.map((job) => ({
+  const lineChartData = jobsDataNoExp.map((job) => ({
     experience: job.avg_experience,
     salary: job.mapped_average_sal,
   }));
@@ -277,32 +200,6 @@ const GeneratedReport = ({
       window.removeEventListener("resize", updateChartSize);
     };
   }, []);
-  // // Group data by 'date' and calculate average salary
-  // const groupedDataByDate = jobsData?.reduce((groups, item) => {
-  //   const date = item.current_date;
-  //   const salary = parseFloat(item.mapped_average_sal);
-
-  //   if (!groups[date]) {
-  //     groups[date] = [];
-  //   }
-
-  //   groups[date].push(salary);
-  //   return groups;
-  // }, {});
-
-  // // Calculate average salary for each date
-  // const trendDataByDate = Object.keys(groupedDataByDate).map(
-  //   (formattedDate) => {
-  //     const salaries = groupedDataByDate[formattedDate];
-  //     const averageSalary =
-  //       salaries.reduce((sum, salary) => sum + salary, 0) / salaries.length;
-
-  //     return {
-  //       formattedDate: format(new Date(formattedDate), "MM/dd/yyyy"), // Format the date here
-  //       averageSalary,
-  //     };
-  //   }
-  // );
 
   // Step 1: Extract and count skills
   // Step 1: Extract and count skills
@@ -342,7 +239,7 @@ const GeneratedReport = ({
   const chartDataWithPercentages = chartData.map((skill) => ({
     name: CapitalizeFirstLetter(skill.name),
     value: skill.value,
-    percentage: ((skill.value / totalCount) * 100).toFixed(2), // Calculate percentage
+    percentage: ((skill.value / totalCount) * 100)?.toFixed(2), // Calculate percentage
   }));
 
   // Update the SimplePieChart component
@@ -356,7 +253,9 @@ const GeneratedReport = ({
           alignContent: "center",
         }}
       >
-        <h4>Most Five Common Skills</h4>
+        <h5 className="mb-2">
+          Most five common skills for {jobsData[0]?.mapped_job_title}{" "}
+        </h5>
         <PieChart width={400} height={400}>
           <Pie
             data={chartDataWithPercentages}
@@ -387,6 +286,7 @@ const GeneratedReport = ({
   const sortedJobsDataByRole = [...jobsDataByRole].sort(
     (a, b) => a.mapped_average_sal - b.mapped_average_sal
   );
+
   return (
     <>
       {contextHolder}
@@ -409,7 +309,11 @@ const GeneratedReport = ({
               marginRight: "10px",
             }}
             className="btn border"
-            onClick={generatePDF}
+            onClick={() => {
+              setIsLoading(true);
+              openNotification("topRight");
+              generatePDF();
+            }}
           >
             {" "}
             Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
@@ -442,7 +346,7 @@ const GeneratedReport = ({
               </p>
             </div>
             <div>
-              {/* <h5 className="mb-5">{jobsData[0].comp_industry}</h5> */}
+              {/* <h5 className="mb-2" className="mb-5">{jobsData[0].comp_industry}</h5> */}
             </div>
             <p
               style={{
@@ -454,13 +358,17 @@ const GeneratedReport = ({
               className="text-primary"
             >
               The charts below show data for roles in {location} with{" "}
-              {experience} of experience.It doesn't show data for the skill(s)
-              you have selected.
+              {experience} year(s) of experience{" "}
+              {skillsBool !== null
+                ? skillsBool
+                  ? " and selected skill(s)"
+                  : ". It doesn't show data for the skill(s) you have selected."
+                : ""}
             </p>
             <div className="mt-3">
-              <h5>Average Salary </h5>
+              <h5 className="mb-2">Average Salary </h5>
               <p className="fs-3">
-                ₹ {statisticsForJobsData.averageSalary.toFixed(2)} Lakhs Per
+                ₹ {decimalFix(statisticsForJobsData.averageSalary)} Lakhs Per
                 Annum (LPA)
               </p>
 
@@ -496,7 +404,7 @@ const GeneratedReport = ({
                       Min
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsData.minSalary} LPA
+                      {decimalFix(statisticsForJobsData.minSalary)} LPA
                     </p>
                   </div>
                 </div>
@@ -561,7 +469,7 @@ const GeneratedReport = ({
                         25th Percentile
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsData.percentile25} LPA
+                        {decimalFix(statisticsForJobsData.percentile25)} LPA
                       </p>
                     </div>
                     <div className="w-100 text-center mt-2">
@@ -575,7 +483,7 @@ const GeneratedReport = ({
                         MEDIAN
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsData.medianSalary} LPA
+                        {decimalFix(statisticsForJobsData.medianSalary)} LPA
                       </p>
                     </div>
                     <div className="w-100 text-right mt-2">
@@ -589,7 +497,7 @@ const GeneratedReport = ({
                         75th Percentile
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsData.percentile75} LPA
+                        {decimalFix(statisticsForJobsData.percentile75)} LPA
                       </p>
                     </div>
                   </div>
@@ -637,7 +545,7 @@ const GeneratedReport = ({
                       Max
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsData.maxSalary} LPA
+                      {decimalFix(statisticsForJobsData.maxSalary)} LPA
                     </p>
                   </div>
                 </div>
@@ -674,7 +582,7 @@ const GeneratedReport = ({
                       Min
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsDataByRole.minSalary} LPA
+                      {decimalFix(statisticsForJobsDataByRole.minSalary)} LPA
                     </p>
                   </div>
                 </div>
@@ -739,7 +647,8 @@ const GeneratedReport = ({
                         25th Percentile
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsDataByRole.percentile25} LPA
+                        {decimalFix(statisticsForJobsDataByRole.percentile25)}{" "}
+                        LPA
                       </p>
                     </div>
                     <div className="w-100 text-center mt-2">
@@ -753,7 +662,8 @@ const GeneratedReport = ({
                         MEDIAN
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsDataByRole.medianSalary} LPA
+                        {decimalFix(statisticsForJobsDataByRole.medianSalary)}{" "}
+                        LPA
                       </p>
                     </div>
                     <div className="w-100 text-right mt-2">
@@ -767,7 +677,8 @@ const GeneratedReport = ({
                         75th Percentile
                       </p>
                       <p style={{ fontWeight: "bold", color: "gray" }}>
-                        {statisticsForJobsDataByRole.percentile75} LPA
+                        {decimalFix(statisticsForJobsDataByRole.percentile75)}{" "}
+                        LPA
                       </p>
                     </div>
                   </div>
@@ -815,7 +726,7 @@ const GeneratedReport = ({
                       Max
                     </p>
                     <p style={{ fontWeight: "bold", color: "gray" }}>
-                      {statisticsForJobsDataByRole.maxSalary} LPA
+                      {decimalFix(statisticsForJobsDataByRole.maxSalary)} LPA
                     </p>
                   </div>
                 </div>
@@ -954,7 +865,7 @@ const GeneratedReport = ({
                   alignContent: "center",
                 }}
               >
-                <h4>Average Salary vs Experience Level</h4>
+                <h5 className="mb-2">Average Salary vs Experience Level</h5>
                 <LineChart
                   width={chartWidth}
                   height={chartHeight}
@@ -1013,7 +924,10 @@ const GeneratedReport = ({
                   alignContent: "center",
                 }}
               >
-                <h4> Average Salary vs Grouped Experience Level</h4>
+                <h5 className="mb-2">
+                  {" "}
+                  Average Salary vs Grouped Experience Level
+                </h5>
                 <BarChart
                   width={chartWidth}
                   height={chartHeight}
