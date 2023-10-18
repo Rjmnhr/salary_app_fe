@@ -356,6 +356,11 @@ const ReportsPage = () => {
     setEditableJobTitle(value);
   };
   const handleJobSearch = (newValue) => {
+    console.log(
+      "🚀 ~ file: index.js:359 ~ handleJobSearch ~ newValue:",
+      newValue
+    );
+
     const filter = items.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
@@ -439,109 +444,7 @@ const ReportsPage = () => {
         .catch((err) => console.log(err));
     }
   }, [editableJobTitle]);
-  const EditableModalComponent = () => {
-    return (
-      <div>
-        <form>
-          <div className="mb-3  d-flex align-items-center">
-            <label className="col-3">Job title : </label>
-            <div className="col-8">
-              <Select
-                size={"large"}
-                showSearch
-                value={editableJobTitle}
-                onChange={handleSelectEditableJob}
-                onSearch={handleJobSearch}
-                style={{
-                  width: "100%",
-                  borderRadius: "3px",
-                  textAlign: "start",
-                }}
-                options={(jobsData || []).map((item) => ({
-                  value: item,
-                  label: item,
-                }))}
-                className="border text-start"
-              />
-            </div>
-          </div>
 
-          <div className="mb-3  d-flex align-items-center">
-            <label className="col-3">Location : </label>
-            <div className="col-8">
-              <Select
-                size={"large"}
-                style={{
-                  width: "100%",
-                  borderRadius: "0",
-                  textAlign: "start",
-                }}
-                className="input border"
-                showSearch
-                value={editableLocation}
-                defaultActiveFirstOption={false}
-                suffixIcon={null}
-                filterOption={false}
-                onSearch={handleSearch}
-                onChange={handleSelectEditableLocation}
-                notFoundContent={null}
-                options={(locationData || []).map((d) => ({
-                  value: d,
-                  label: d,
-                }))}
-              />
-            </div>
-          </div>
-          <div className="mb-3  d-flex align-items-center">
-            <label className="col-3">Experience : </label>
-            <div className="col-8">
-              <InputNumber
-                size={"large"}
-                placeholder="Years of experience"
-                style={{ width: "100%" }}
-                min={0} // Optional: Set a minimum value
-                max={100} // Optional: Set a maximum value
-                step={1} // Optional: Set the step increment/
-                value={editableExperience}
-                onChange={handleSelectEditableExperience}
-              />
-            </div>
-          </div>
-
-          <div className="mb-3  d-flex align-items-center">
-            <label className="col-3">Skills : </label>
-            <div className="col-8">
-              <Select
-                mode="multiple"
-                size={"large"}
-                style={{
-                  width: "100%",
-                  borderRadius: "0",
-                  textAlign: "start",
-                }}
-                className="input border"
-                showSearch
-                placeholder="Important skills"
-                defaultActiveFirstOption={false}
-                suffixIcon={null}
-                filterOption={false}
-                onSearch={handleSkillSearch}
-                onChange={handleSelectEditableSkills}
-                notFoundContent={null}
-                value={editableSkills}
-              >
-                {(skillData || []).map((d) => (
-                  <Option key={d} value={d}>
-                    {CapitalizeFirstLetter(d)}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  };
   const modalFooter = (
     <div>
       <Button type="primary" onClick={handleChangeEdit}>
@@ -604,7 +507,103 @@ const ReportsPage = () => {
           </button> */}
 
             <Modal visible={isModalVisible} footer={modalFooter}>
-              <EditableModalComponent />
+              <div>
+                <div className="mb-3  d-flex align-items-center">
+                  <label className="col-3">Job title : </label>
+                  <div className="col-8">
+                    <Select
+                      size={"large"}
+                      showSearch
+                      value={editableJobTitle}
+                      onChange={handleSelectEditableJob}
+                      onSearch={handleJobSearch}
+                      style={{
+                        width: "100%",
+                        borderRadius: "3px",
+                        textAlign: "start",
+                      }}
+                      options={(jobsData || []).map((item) => ({
+                        value: item,
+                        label: item,
+                      }))}
+                      className="border text-start"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3  d-flex align-items-center">
+                  <label className="col-3">Location : </label>
+                  <div className="col-8">
+                    <Select
+                      size={"large"}
+                      style={{
+                        width: "100%",
+                        borderRadius: "0",
+                        textAlign: "start",
+                      }}
+                      className="input border"
+                      showSearch
+                      value={editableLocation}
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      filterOption={false}
+                      onSearch={handleSearch}
+                      onChange={handleSelectEditableLocation}
+                      notFoundContent={null}
+                      options={(locationData || []).map((d) => ({
+                        value: d,
+                        label: d,
+                      }))}
+                    />
+                  </div>
+                </div>
+                <div className="mb-3  d-flex align-items-center">
+                  <label className="col-3">Experience : </label>
+                  <div className="col-8">
+                    <InputNumber
+                      size={"large"}
+                      placeholder="Years of experience"
+                      style={{ width: "100%" }}
+                      min={0} // Optional: Set a minimum value
+                      max={100} // Optional: Set a maximum value
+                      step={1} // Optional: Set the step increment/
+                      value={editableExperience}
+                      onChange={handleSelectEditableExperience}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3  d-flex align-items-center">
+                  <label className="col-3">Skills : </label>
+                  <div className="col-8">
+                    <Select
+                      mode="multiple"
+                      size={"large"}
+                      style={{
+                        width: "100%",
+                        borderRadius: "0",
+                        textAlign: "start",
+                      }}
+                      className="input border"
+                      showSearch
+                      placeholder="Important skills"
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      filterOption={false}
+                      onSearch={handleSkillSearch}
+                      onChange={handleSelectEditableSkills}
+                      notFoundContent={null}
+                      value={editableSkills}
+                    >
+                      {(skillData || []).map((d) => (
+                        <Option key={d} value={d}>
+                          {CapitalizeFirstLetter(d)}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
+              </div>
             </Modal>
             <div>
               {dataArray && dataArray.length > 0 && (
@@ -721,6 +720,7 @@ const ReportsPage = () => {
                 </Card>
               )}
             </div>
+
             <button
               onClick={() => {
                 setShowPreviousReports(!showPreviousReports);

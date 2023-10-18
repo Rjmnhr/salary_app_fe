@@ -38,8 +38,6 @@ export const cities = [
   "Kochi",
   "Indore",
   "Mumbai",
-  "Mumbai Suburban",
-  "Navi Mumbai",
   "Pune",
   "Jaipur",
   "Chennai",
@@ -49,7 +47,6 @@ export const cities = [
   "Kolkata",
   "Thane",
   "Delhi",
-  "Mumbai ",
 ];
 
 items.sort();
@@ -120,10 +117,7 @@ const PriceAJob = () => {
             return response.data;
           })
         );
-        console.log(
-          "🚀 ~ file: index.js:123 ~ fetchResponses ~ retrievedSkillsData:",
-          retrievedSkillsData
-        );
+
         const uniqueValues = new Set();
 
         retrievedSkillsData.forEach((innerArray) => {
@@ -528,7 +522,7 @@ const PriceAJob = () => {
                     <button
                       onClick={() => handleSkillButtonClick(skill)}
                       key={index}
-                      className="btn border m-1"
+                      className="btn skill-btn border m-1"
                     >
                       {CapitalizeFirstLetter(skill)}
                     </button>

@@ -147,9 +147,10 @@ const GeneratedReport = ({
         html2canvas: { scale: 3 }, // Higher scale for better quality
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
-      setIsLoading(false);
+
       // eslint-disable-next-line
       html2pdf().from(element).set(pdfOptions).save();
+      setIsLoading(false);
     } else {
       console.error("Element not found.");
 
@@ -398,16 +399,21 @@ const GeneratedReport = ({
             overflowY: "scroll",
           }}
         >
-          <div className="w-100 text-right p-1">
-            <p
-              style={{ fontSize: "15px" }}
-              className="btn border"
-              onClick={generatePDF}
-            >
-              {" "}
-              Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
-            </p>
-          </div>
+          <p
+            style={{
+              fontSize: "15px",
+              position: "absolute",
+              top: "0",
+              right: "0",
+              marginTop: "10px",
+              marginRight: "10px",
+            }}
+            className="btn border"
+            onClick={generatePDF}
+          >
+            {" "}
+            Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
+          </p>
 
           <div className="p-lg-3 p-1" ref={elementRef}>
             <h3>

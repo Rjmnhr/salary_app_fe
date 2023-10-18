@@ -24,20 +24,13 @@
     font-size: 16px; 
 }
 
-.skill-tag{
- padding: 8px;
+
+.skill-btn{
     border-radius: 18px;
-    height: 30px;
-    text-align: center;
-    border: 1px solid blue;
-    display: grid;
-    place-items: center;
 }
 
-
-
-.skill-tag:hover{
-    background-color: powderblue;
+.skill-btn:hover{
+    background-color: #007BFF;
     color: white;
     cursor: pointer;
 }
