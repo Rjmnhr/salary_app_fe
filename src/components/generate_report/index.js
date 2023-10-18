@@ -24,6 +24,7 @@ import {
 } from "recharts";
 // import { RadialChart } from "react-vis";
 import { Button, notification } from "antd";
+import "./style.css";
 
 import MedianSalaryChartForSkills from "../median_salary_for_skills";
 
@@ -63,6 +64,7 @@ const GeneratedReport = ({
   skillsBool,
 }) => {
   const [chartWidth, setChartWidth] = useState(600);
+  const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
   const elementRef = useRef(null);
   const [api, contextHolder] = notification.useNotification();
@@ -243,13 +245,16 @@ const GeneratedReport = ({
       if (screenWidth < 912) {
         setChartWidth(300);
         setChartHeight(200);
+        setPieChartWidth(300);
       }
       if (screenWidth < 600) {
         setChartWidth(300);
         setChartHeight(150);
+        setPieChartWidth(200);
       } else {
         setChartWidth(600);
         setChartHeight(300);
+        setPieChartWidth(400);
       }
     };
 
@@ -320,13 +325,13 @@ const GeneratedReport = ({
         <h5 className="mb-2">
           Most five common skills for {jobsData[0]?.mapped_job_title}{" "}
         </h5>
-        <PieChart width={400} height={400}>
+        <PieChart width={pieChartWidth} height={pieChartWidth}>
           <Pie
             data={chartDataWithPercentages}
             dataKey="value"
-            cx={200}
-            cy={200}
-            outerRadius={80}
+            cx={pieChartWidth / 2}
+            cy={pieChartWidth / 2}
+            outerRadius={pieChartWidth * 0.2}
             fill="#8884d8"
             label={({ percentage }) => `${percentage}%`} // Display name and percentage
           >
@@ -445,13 +450,13 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-start mt-2">
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Min
                     </p>
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", color: "gray" }}
                     >
                       {decimalFix(statisticsForJobsData.minSalary)} LPA
@@ -510,7 +515,7 @@ const GeneratedReport = ({
                   <div className="w-100 d-flex justify-content-between">
                     <div className="w-100 text-start mt-2">
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -520,7 +525,7 @@ const GeneratedReport = ({
                         25th Percentile
                       </p>
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{ fontWeight: "bold", color: "gray" }}
                       >
                         {decimalFix(statisticsForJobsData.percentile25)} LPA
@@ -528,7 +533,7 @@ const GeneratedReport = ({
                     </div>
                     <div className="w-100 text-center mt-2">
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -537,12 +542,16 @@ const GeneratedReport = ({
                       >
                         MEDIAN
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stripe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsData.medianSalary)} LPA
                       </p>
                     </div>
                     <div className="w-100 text-right mt-2">
                       <p
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -552,7 +561,7 @@ const GeneratedReport = ({
                         75th Percentile
                       </p>
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{ fontWeight: "bold", color: "gray" }}
                       >
                         {decimalFix(statisticsForJobsData.percentile75)} LPA
@@ -598,13 +607,13 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-right mt-2">
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Max
                     </p>
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", color: "gray" }}
                     >
                       {decimalFix(statisticsForJobsData.maxSalary)} LPA
@@ -639,13 +648,13 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-start mt-2">
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Min
                     </p>
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", color: "gray" }}
                     >
                       {decimalFix(statisticsForJobsDataByRole.minSalary)} LPA
@@ -704,7 +713,7 @@ const GeneratedReport = ({
                   <div className="w-100 d-flex justify-content-between">
                     <div className="w-100 text-start mt-2">
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -714,7 +723,7 @@ const GeneratedReport = ({
                         25th Percentile
                       </p>
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{ fontWeight: "bold", color: "gray" }}
                       >
                         {decimalFix(statisticsForJobsDataByRole.percentile25)}{" "}
@@ -723,7 +732,7 @@ const GeneratedReport = ({
                     </div>
                     <div className="w-100 text-center mt-2">
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -733,7 +742,7 @@ const GeneratedReport = ({
                         MEDIAN
                       </p>
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{ fontWeight: "bold", color: "gray" }}
                       >
                         {decimalFix(statisticsForJobsDataByRole.medianSalary)}{" "}
@@ -742,7 +751,7 @@ const GeneratedReport = ({
                     </div>
                     <div className="w-100 text-right mt-2">
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -752,7 +761,7 @@ const GeneratedReport = ({
                         75th Percentile
                       </p>
                       <p
-                        className="stipe-text"
+                        className="stripe-text"
                         style={{ fontWeight: "bold", color: "gray" }}
                       >
                         {decimalFix(statisticsForJobsDataByRole.percentile75)}{" "}
@@ -799,13 +808,13 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-right mt-2">
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Max
                     </p>
                     <p
-                      className="stipe-text"
+                      className="stripe-text"
                       style={{ fontWeight: "bold", color: "gray" }}
                     >
                       {decimalFix(statisticsForJobsDataByRole.maxSalary)} LPA
@@ -1054,9 +1063,13 @@ const GeneratedReport = ({
                   alignContent: "center",
                 }}
               ></div>
-              <div className="mb-5">
-                <SimplePieChart />
-              </div>
+              {isMobile ? (
+                ""
+              ) : (
+                <div className="mb-5">
+                  <SimplePieChart />
+                </div>
+              )}
 
               <MedianSalaryChartForSkills
                 data={jobsDataByRole}

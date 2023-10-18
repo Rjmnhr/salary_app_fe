@@ -1,0 +1,5 @@
+@media screen and (max-width: 768px) {
+    .stripe-text {
+      font-size: 11px; /* Adjust the font size for smaller screens */
+    }
+  }
