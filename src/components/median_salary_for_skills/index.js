@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   BarChart,
@@ -34,6 +34,37 @@ const CapitalizeFirstLetter = (data) => {
 };
 const MedianSalaryChartForSkills = ({ data, skills }) => {
   // Initialize an empty array to store the median salary data for each skill
+  const [chartWidth, setChartWidth] = useState(600);
+  const [chartHeight, setChartHeight] = useState(300);
+
+  useEffect(() => {
+    const updateChartSize = () => {
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth < 912) {
+        setChartWidth(300);
+        setChartHeight(200);
+      }
+      if (screenWidth < 600) {
+        setChartWidth(300);
+        setChartHeight(150);
+      } else {
+        setChartWidth(600);
+        setChartHeight(300);
+      }
+    };
+
+    // Call the function to set initial size
+    updateChartSize();
+
+    // Add an event listener to check for window size changes
+    window.addEventListener("resize", updateChartSize);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", updateChartSize);
+    };
+  }, []);
   const skillMedians = [];
 
   // Calculate the median salary for each skill
@@ -70,7 +101,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
             Median salary for skill(s) you have selected across{" "}
             <span className="tex-primary">India</span>
           </h5>
-          <BarChart width={600} height={400} data={skillMedians}>
+          <BarChart width={chartWidth} height={chartHeight} data={skillMedians}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="skill" tick={false}>
               <Label

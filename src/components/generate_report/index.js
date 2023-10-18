@@ -23,7 +23,7 @@ import {
   Legend,
 } from "recharts";
 // import { RadialChart } from "react-vis";
-import { notification } from "antd";
+import { Button, notification } from "antd";
 
 import MedianSalaryChartForSkills from "../median_salary_for_skills";
 
@@ -67,6 +67,70 @@ const GeneratedReport = ({
   const elementRef = useRef(null);
   const [api, contextHolder] = notification.useNotification();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const DownloadButtonComponent = () => {
+    const downloadButton = (
+      <p
+        style={{
+          fontSize: "15px",
+          position: "absolute",
+          top: "0",
+          right: "0",
+          marginTop: "10px",
+          marginRight: "10px",
+        }}
+        className="btn border"
+        onClick={() => {
+          setIsLoading(true);
+          openNotification("topRight");
+          generatePDF();
+        }}
+      >
+        {" "}
+        Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
+      </p>
+    );
+
+    const mobileButton = (
+      <Button
+        type="primary"
+        shape="circle"
+        icon={isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: "9999",
+        }}
+        onClick={() => {
+          setIsLoading(true);
+          openNotification("topRight");
+          generatePDF();
+        }}
+      />
+    );
+
+    return isMobile ? mobileButton : downloadButton;
+  };
 
   const openNotification = (placement) => {
     api.info({
@@ -299,25 +363,7 @@ const GeneratedReport = ({
             overflowY: "scroll",
           }}
         >
-          <p
-            style={{
-              fontSize: "15px",
-              position: "absolute",
-              top: "0",
-              right: "0",
-              marginTop: "10px",
-              marginRight: "10px",
-            }}
-            className="btn border"
-            onClick={() => {
-              setIsLoading(true);
-              openNotification("topRight");
-              generatePDF();
-            }}
-          >
-            {" "}
-            Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
-          </p>
+          <DownloadButtonComponent />
 
           <div className="p-lg-3 p-1" ref={elementRef}>
             <h3>
@@ -399,11 +445,15 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-start mt-2">
                     <p
+                      className="stipe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Min
                     </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                    <p
+                      className="stipe-text"
+                      style={{ fontWeight: "bold", color: "gray" }}
+                    >
                       {decimalFix(statisticsForJobsData.minSalary)} LPA
                     </p>
                   </div>
@@ -460,6 +510,7 @@ const GeneratedReport = ({
                   <div className="w-100 d-flex justify-content-between">
                     <div className="w-100 text-start mt-2">
                       <p
+                        className="stipe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -468,12 +519,16 @@ const GeneratedReport = ({
                       >
                         25th Percentile
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stipe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsData.percentile25)} LPA
                       </p>
                     </div>
                     <div className="w-100 text-center mt-2">
                       <p
+                        className="stipe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -496,7 +551,10 @@ const GeneratedReport = ({
                       >
                         75th Percentile
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stipe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsData.percentile75)} LPA
                       </p>
                     </div>
@@ -540,11 +598,15 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-right mt-2">
                     <p
+                      className="stipe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Max
                     </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                    <p
+                      className="stipe-text"
+                      style={{ fontWeight: "bold", color: "gray" }}
+                    >
                       {decimalFix(statisticsForJobsData.maxSalary)} LPA
                     </p>
                   </div>
@@ -577,11 +639,15 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-start mt-2">
                     <p
+                      className="stipe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Min
                     </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                    <p
+                      className="stipe-text"
+                      style={{ fontWeight: "bold", color: "gray" }}
+                    >
                       {decimalFix(statisticsForJobsDataByRole.minSalary)} LPA
                     </p>
                   </div>
@@ -638,6 +704,7 @@ const GeneratedReport = ({
                   <div className="w-100 d-flex justify-content-between">
                     <div className="w-100 text-start mt-2">
                       <p
+                        className="stipe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -646,13 +713,17 @@ const GeneratedReport = ({
                       >
                         25th Percentile
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stipe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsDataByRole.percentile25)}{" "}
                         LPA
                       </p>
                     </div>
                     <div className="w-100 text-center mt-2">
                       <p
+                        className="stipe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -661,13 +732,17 @@ const GeneratedReport = ({
                       >
                         MEDIAN
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stipe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsDataByRole.medianSalary)}{" "}
                         LPA
                       </p>
                     </div>
                     <div className="w-100 text-right mt-2">
                       <p
+                        className="stipe-text"
                         style={{
                           fontWeight: "bold",
                           margin: "0",
@@ -676,7 +751,10 @@ const GeneratedReport = ({
                       >
                         75th Percentile
                       </p>
-                      <p style={{ fontWeight: "bold", color: "gray" }}>
+                      <p
+                        className="stipe-text"
+                        style={{ fontWeight: "bold", color: "gray" }}
+                      >
                         {decimalFix(statisticsForJobsDataByRole.percentile75)}{" "}
                         LPA
                       </p>
@@ -721,11 +799,15 @@ const GeneratedReport = ({
                   </svg>
                   <div className="w-100 text-right mt-2">
                     <p
+                      className="stipe-text"
                       style={{ fontWeight: "bold", margin: "0", color: "gray" }}
                     >
                       Max
                     </p>
-                    <p style={{ fontWeight: "bold", color: "gray" }}>
+                    <p
+                      className="stipe-text"
+                      style={{ fontWeight: "bold", color: "gray" }}
+                    >
                       {decimalFix(statisticsForJobsDataByRole.maxSalary)} LPA
                     </p>
                   </div>
