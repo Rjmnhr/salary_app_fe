@@ -44,6 +44,7 @@ const HomePage = () => {
                       textAlign: "start",
                       display: "flex",
                       alignItems: "center",
+                      gap: "5px",
                     }}
                   >
                     <button
@@ -62,11 +63,16 @@ const HomePage = () => {
                         <ArrowRightAltOutlined />
                       </span>
                     </button>
-                    <form action="/create-checkout-session" method="POST">
+                    <form
+                      action="https://equipaypartnersbe-myyduar5.b4a.run/create-checkout-session"
+                      method="POST"
+                    >
                       <button
                         style={{
                           fontSize: "20px",
                           marginTop: "10px",
+                          background: "white",
+                          color: "black",
                         }}
                         className="btn border "
                         m
