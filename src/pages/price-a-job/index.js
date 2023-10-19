@@ -391,9 +391,6 @@ const PriceAJob = () => {
                   <a href="#sales">Sales Incentive</a>
                 </li>
 
-                {/* <li>
-                    <a href="#contact">Contact</a>
-                  </li> */}
                 <li>
                   {isLoggedIn === "true" ? (
                     <a href="#eq" onClick={handleLogOut}>
@@ -409,216 +406,196 @@ const PriceAJob = () => {
         </header>
       </body>
 
-      <div
-        className="container-fluid "
-        style={{
-          background: "gainsboro",
-          MinHeight: "100vh",
-        }}
-      >
+      <div className="container-fluid">
+        <h2 className="fs-2 mt-3">Price a Job</h2>
+        <h5 className="mt-3">
+          Let's start building a profile with compensable factors to benchmark
+          jobs.
+        </h5>
         <div
-          className="container container-fluid main-container "
-          style={{
-            background: "white",
-            MinHeight: "100vh",
-
-            display: "grid",
-            justifyItems: "start",
-            alignContent: "center",
-          }}
+          className="w-100 mt-5"
+          style={{ display: "grid", placeItems: "center" }}
         >
-          <div className="container p-3 mt-5">
-            <h2 className="fs-2">Price a Job</h2>
-            <h5 className="mt-3">
-              Let's start building a profile with compensable factors to
-              benchmark jobs.
-            </h5>
+          <div className="mb-3 col-12 col-lg-6">
+            <Select
+              mode="multiple"
+              size={"large"}
+              showSearch
+              placeholder="Job Title"
+              value={selectedJobTitles}
+              onChange={setSelectedJobTitles}
+              onSearch={handleJobSearch}
+              style={{
+                width: "100%",
+                borderRadius: "3px",
+                textAlign: "start",
+              }}
+              options={(jobsData || []).map((item) => ({
+                value: item,
+                label: item,
+              }))}
+              className="border text-start"
+            />
+          </div>
 
-            <div
-              className="w-100 mt-5"
-              style={{ display: "grid", placeItems: "center" }}
+          <div className="mb-3 col-12 col-lg-6">
+            <Select
+              size={"large"}
+              style={{
+                width: "100%",
+                borderRadius: "0",
+                textAlign: "start",
+              }}
+              className="input border"
+              showSearch
+              placeholder="City"
+              defaultActiveFirstOption={false}
+              suffixIcon={null}
+              filterOption={false}
+              onSearch={handleSearch}
+              onChange={handleSelectChange}
+              notFoundContent={null}
+              options={(data || []).map((d) => ({
+                value: d,
+                label: d,
+              }))}
+            />
+          </div>
+
+          <div className="mb-3 col-12 col-lg-6">
+            <InputNumber
+              size={"large"}
+              placeholder="Years of experience"
+              style={{ width: "100%" }}
+              min={0} // Optional: Set a minimum value
+              max={100} // Optional: Set a maximum value
+              step={1} // Optional: Set the step increment/
+              value={experience}
+              onChange={handleExperience}
+            />
+          </div>
+
+          <div className="mb-3 col-12 col-lg-6 ">
+            <Select
+              mode="multiple"
+              size={"large"}
+              style={{
+                width: "100%",
+                borderRadius: "0",
+                textAlign: "start",
+              }}
+              className="input border"
+              showSearch
+              placeholder="Important skills"
+              defaultActiveFirstOption={false}
+              suffixIcon={null}
+              filterOption={false}
+              onSearch={handleSkillSearch}
+              onChange={handleSkillSelectChange}
+              notFoundContent={null}
+              value={selectedSkills}
             >
-              <div className="mb-3 col-12 col-lg-7">
-                <Select
-                  mode="multiple"
-                  size={"large"}
-                  showSearch
-                  placeholder="Job Title"
-                  value={selectedJobTitles}
-                  onChange={setSelectedJobTitles}
-                  onSearch={handleJobSearch}
-                  style={{
-                    width: "100%",
-                    borderRadius: "3px",
-                    textAlign: "start",
-                  }}
-                  options={(jobsData || []).map((item) => ({
-                    value: item,
-                    label: item,
-                  }))}
-                  className="border text-start"
-                />
-              </div>
-
-              <div className="mb-3 col-12 col-lg-7">
-                <Select
-                  size={"large"}
-                  style={{
-                    width: "100%",
-                    borderRadius: "0",
-                    textAlign: "start",
-                  }}
-                  className="input border"
-                  showSearch
-                  placeholder="City"
-                  defaultActiveFirstOption={false}
-                  suffixIcon={null}
-                  filterOption={false}
-                  onSearch={handleSearch}
-                  onChange={handleSelectChange}
-                  notFoundContent={null}
-                  options={(data || []).map((d) => ({
-                    value: d,
-                    label: d,
-                  }))}
-                />
-              </div>
-
-              <div className="mb-3 col-12 col-lg-7">
-                <InputNumber
-                  size={"large"}
-                  placeholder="Years of experience"
-                  style={{ width: "100%" }}
-                  min={0} // Optional: Set a minimum value
-                  max={100} // Optional: Set a maximum value
-                  step={1} // Optional: Set the step increment/
-                  value={experience}
-                  onChange={handleExperience}
-                />
-              </div>
-
-              <div className="mb-3 col-12 col-lg-7 ">
-                <Select
-                  mode="multiple"
-                  size={"large"}
-                  style={{
-                    width: "100%",
-                    borderRadius: "0",
-                    textAlign: "start",
-                  }}
-                  className="input border"
-                  showSearch
-                  placeholder="Important skills"
-                  defaultActiveFirstOption={false}
-                  suffixIcon={null}
-                  filterOption={false}
-                  onSearch={handleSkillSearch}
-                  onChange={handleSkillSelectChange}
-                  notFoundContent={null}
-                  value={selectedSkills}
+              {(skillData || []).map((d) => (
+                <Option key={d} value={d}>
+                  {CapitalizeFirstLetter(d)}
+                </Option>
+              ))}
+            </Select>
+          </div>
+          <div
+            style={{ transition: " all 0.3s ease" }}
+            className="d-flex col-12 col-lg-6 flex-wrap justify-content-start align-items-center mt-1 mb-2"
+          >
+            {topSkills.slice(0, displayedSkills).map((skill, index) => {
+              return (
+                <button
+                  onClick={() =>
+                    handleSkillButtonClick(CapitalizeFirstLetter(skill))
+                  }
+                  key={index}
+                  className="btn skill-btn border m-1"
                 >
-                  {(skillData || []).map((d) => (
-                    <Option key={d} value={d}>
-                      {CapitalizeFirstLetter(d)}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
+                  {CapitalizeFirstLetter(skill)}
+                </button>
+              );
+            })}
+
+            {displayedSkills < topSkills.length && (
               <div
-                style={{ transition: " all 0.3s ease" }}
-                className="d-flex col-12 col-lg-7 flex-wrap justify-content-start align-items-center mt-1 mb-2"
+                className="text-primary btn load-more-btn"
+                onClick={() => setDisplayedSkills(topSkills.length)}
               >
-                {topSkills.slice(0, displayedSkills).map((skill, index) => {
-                  return (
-                    <button
-                      onClick={() =>
-                        handleSkillButtonClick(CapitalizeFirstLetter(skill))
-                      }
-                      key={index}
-                      className="btn skill-btn border m-1"
-                    >
-                      {CapitalizeFirstLetter(skill)}
-                    </button>
-                  );
-                })}
-
-                {displayedSkills < topSkills.length && (
-                  <div
-                    className="text-primary btn load-more-btn"
-                    onClick={() => setDisplayedSkills(topSkills.length)}
-                  >
-                    Load More...
-                  </div>
-                )}
+                Load More...
               </div>
-              <div className="mb-3 col-12 col-lg-7 ">
-                <Input placeholder="Any other description" allowClear />
-              </div>
-              <div className="mb-3 col-12 col-lg-7">
-                <Select
-                  size={"large"}
-                  placeholder="Does this role supervise employees?"
-                  optionFilterProp="children"
-                  style={{
-                    width: "100%",
-                    borderRadius: "3px",
-                    textAlign: "start",
-                  }}
-                  options={[
-                    {
-                      value: "Yes",
-                      label: "Yes",
-                    },
-                    {
-                      value: "No",
-                      label: "No",
-                    },
-                  ]}
-                  className="border text-start"
-                  onChange={handleSuperviseSelect}
-                />
-              </div>
-
-              <div className="mb-3 col-12 col-lg-7">
-                <Select
-                  size={"large"}
-                  placeholder="Does this role manage or lead projects?"
-                  optionFilterProp="children"
-                  style={{
-                    width: "100%",
-                    borderRadius: "3px",
-                    textAlign: "start",
-                  }}
-                  options={[
-                    {
-                      value: "Yes",
-                      label: "Yes",
-                    },
-                    {
-                      value: "No",
-                      label: "No",
-                    },
-                  ]}
-                  className="border text-start"
-                  onChange={handleManageSelect}
-                />
-              </div>
-            </div>
-
-            {selectedJobTitles.length > 0 && location && experience ? (
-              <button
-                onClick={handleSubmit}
-                type="submit"
-                className="btn btn-primary mt-3 w-25"
-              >
-                Next
-              </button>
-            ) : (
-              <button disabled className="btn btn-primary mt-3 w-25">
-                Next
-              </button>
             )}
           </div>
+          <div className="mb-3 col-12 col-lg-6 ">
+            <Input placeholder="Any other description" allowClear />
+          </div>
+          <div className="mb-3 col-12 col-lg-6">
+            <Select
+              size={"large"}
+              placeholder="Does this role supervise employees?"
+              optionFilterProp="children"
+              style={{
+                width: "100%",
+                borderRadius: "3px",
+                textAlign: "start",
+              }}
+              options={[
+                {
+                  value: "Yes",
+                  label: "Yes",
+                },
+                {
+                  value: "No",
+                  label: "No",
+                },
+              ]}
+              className="border text-start"
+              onChange={handleSuperviseSelect}
+            />
+          </div>
+
+          <div className="mb-3 col-12 col-lg-6">
+            <Select
+              size={"large"}
+              placeholder="Does this role manage or lead projects?"
+              optionFilterProp="children"
+              style={{
+                width: "100%",
+                borderRadius: "3px",
+                textAlign: "start",
+              }}
+              options={[
+                {
+                  value: "Yes",
+                  label: "Yes",
+                },
+                {
+                  value: "No",
+                  label: "No",
+                },
+              ]}
+              className="border text-start"
+              onChange={handleManageSelect}
+            />
+          </div>
+        </div>
+        <div className="mb-3">
+          {selectedJobTitles.length > 0 && location && experience ? (
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className="btn btn-primary mt-3 w-25"
+            >
+              Next
+            </button>
+          ) : (
+            <button disabled className="btn btn-primary mt-3 w-25">
+              Next
+            </button>
+          )}
         </div>
       </div>
     </>

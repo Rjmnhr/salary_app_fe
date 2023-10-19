@@ -891,7 +891,7 @@ const ReportsPage = () => {
       ) : (
         <div
           className="container-fluid"
-          style={{ padding: "0", marginTop: "90px" }}
+          style={{ padding: "0", marginTop: "100px" }}
         >
           {" "}
           <Skeleton active />
