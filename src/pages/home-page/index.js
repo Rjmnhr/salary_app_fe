@@ -38,7 +38,14 @@ const HomePage = () => {
                     YOUR PARTNERS IN ALL
                     <span className="text-primary"> MATTERS</span> PAY
                   </h1>
-                  <div style={{ width: "100%", textAlign: "start" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      textAlign: "start",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <button
                       onClick={() => navigate("/price-a-job")}
                       style={{
@@ -55,6 +62,18 @@ const HomePage = () => {
                         <ArrowRightAltOutlined />
                       </span>
                     </button>
+                    <form action="/create-checkout-session" method="POST">
+                      <button
+                        style={{
+                          fontSize: "20px",
+                          marginTop: "10px",
+                        }}
+                        className="btn border "
+                        m
+                      >
+                        checkout
+                      </button>
+                    </form>
                   </div>
 
                   {/* <a href="#contact" class="btn-get-started scrollto">
