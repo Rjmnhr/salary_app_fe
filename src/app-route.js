@@ -8,6 +8,8 @@ import ExecutiveReports from "./pages/executive-reports";
 
 import LoginPage from "./pages/login-page";
 import OtpVerification from "./pages/otp-verification";
+import Success from "./components/payment_checkout/Success";
+import Canceled from "./components/payment_checkout/Canceled";
 
 const AppRoute = () => {
   return (
@@ -71,6 +73,8 @@ const AppRoute = () => {
             </>
           }
         />
+        <Route path="/success.html" element={<Success />} />
+        <Route path="/canceled.html" element={<Canceled />} />
       </Routes>
     </BrowserRouter>
   );
