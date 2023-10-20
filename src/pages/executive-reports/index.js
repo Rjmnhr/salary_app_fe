@@ -10,12 +10,16 @@ const ExecutiveReports = () => {
   return (
     <>
       <NavBar />
-      <div className="vh-100" style={{ marginTop: "100px" }}>
+      <div
+        className="vh-90"
+        style={{ marginTop: "100px", display: "grid", placeItems: "center" }}
+      >
         {/* <iframe title="pdf" src={pdf} width="100%" height="700px"></iframe> */}
         <div
           className="container col-12 "
           style={{ display: "grid", placeItems: "center" }}
         >
+          <h5>Executive Compensation Reports</h5>
           <div style={{ width: "240px" }}>
             <Badge.Ribbon placement="start" text="Best seller">
               <Card
