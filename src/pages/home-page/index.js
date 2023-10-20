@@ -63,23 +63,6 @@ const HomePage = () => {
                         <ArrowRightAltOutlined />
                       </span>
                     </button>
-                    <form
-                      action="https://equipaypartnersbe-myyduar5.b4a.run/create-checkout-session"
-                      method="POST"
-                    >
-                      <button
-                        style={{
-                          fontSize: "20px",
-                          marginTop: "10px",
-                          background: "white",
-                          color: "black",
-                        }}
-                        className="btn border "
-                        m
-                      >
-                        checkout
-                      </button>
-                    </form>
                   </div>
 
                   {/* <a href="#contact" class="btn-get-started scrollto">

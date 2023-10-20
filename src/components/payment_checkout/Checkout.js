@@ -1,35 +1,22 @@
-import React from 'react';
+import React from "react";
 
-const Checkout = () => {
+const CheckoutComponent = () => {
   return (
-    <div className="sr-root">
-      <div className="sr-main">
-        <section className="container">
-          <div>
-            <h1>Single photo</h1>
-            <h4>Purchase a Pasha original photo</h4>
-            <div className="pasha-image">
-              <img
-                alt="Random asset from Picsum"
-                src="https://picsum.photos/280/320?random=4"
-                width="140"
-                height="160"
-              />
-            </div>
-          </div>
-
-          <form
-            action="http://localhost:8003/create-checkout-session"
-            method="POST"
-          >
-            <button id="submit" role="link">
-              Buy
-            </button>
-          </form>
-        </section>
-      </div>
-    </div>
+    <form
+      action="https://equipaypartnersbe-myyduar5.b4a.run/create-checkout-session"
+      method="POST"
+    >
+      <button
+        style={{
+          background: "black",
+          color: "white",
+        }}
+        className="btn border "
+      >
+        Buy now
+      </button>
+    </form>
   );
 };
 
-export default Checkout;
+export default CheckoutComponent;
