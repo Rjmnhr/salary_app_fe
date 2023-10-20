@@ -19,7 +19,7 @@ const ExecutiveReports = () => {
           className="container col-12 "
           style={{ display: "grid", placeItems: "center" }}
         >
-          <h5>Executive Compensation Reports</h5>
+          <h5 className="mb-3">Executive Compensation Reports</h5>
           <div style={{ width: "240px" }}>
             <Badge.Ribbon placement="start" text="Best seller">
               <Card
