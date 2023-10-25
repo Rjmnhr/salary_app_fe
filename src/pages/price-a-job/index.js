@@ -390,10 +390,10 @@ const PriceAJob = () => {
                 </li>
 
                 <li>
-                  <a href="#training">Training</a>
+                  <a href="/training">Training</a>
                 </li>
                 <li>
-                  <a href="#sales">Sales Incentive</a>
+                  <a href="/sales">Sales Incentive</a>
                 </li>
 
                 <li>
