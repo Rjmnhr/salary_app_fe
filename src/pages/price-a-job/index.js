@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Input, InputNumber, Select } from "antd";
+import { Input, InputNumber, Select, Tag } from "antd";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 import AxiosInstance from "../../components/axios";
@@ -56,14 +56,19 @@ const CapitalizeFirstLetter = (data) => {
   // Split the string into words
   const words = data?.split(" ");
   // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words?.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  );
+  const capitalizedWords = words?.map((word) => {
+    if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+      // If the first letter is already capitalized, keep it as is
+      return word;
+    } else {
+      // Otherwise, capitalize the first letter and make the rest lowercase
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }
+  });
 
   // Join the words back together with spaces
   return capitalizedWords?.join(" ");
 };
-
 function formatColumnName(columnName) {
   return columnName?.replace(/[\s/]+/g, "_").toLowerCase();
 }
@@ -86,7 +91,7 @@ const PriceAJob = () => {
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
   const { Option } = Select;
-  const [displayedSkills, setDisplayedSkills] = useState(6);
+  // const [displayedSkills, setDisplayedSkills] = useState(6);
 
   sessionStorage.removeItem("saveTheReport");
 
@@ -506,20 +511,20 @@ const PriceAJob = () => {
             style={{ transition: " all 0.3s ease" }}
             className="d-flex col-12 col-lg-6 flex-wrap justify-content-start align-items-center mt-1 mb-2"
           >
-            {topSkills.slice(0, displayedSkills).map((skill, index) => {
+            {topSkills.map((skill, index) => {
               return (
-                <button
+                <Tag
                   onClick={() =>
                     handleSkillButtonClick(CapitalizeFirstLetter(skill))
                   }
                   key={index}
-                  className="btn skill-btn border m-1"
+                  className=" skill-btn  m-1"
                 >
                   {CapitalizeFirstLetter(skill)}
-                </button>
+                </Tag>
               );
             })}
-
+            {/* 
             {displayedSkills < topSkills.length && (
               <div
                 className="text-primary btn load-more-btn"
@@ -527,7 +532,7 @@ const PriceAJob = () => {
               >
                 Load More...
               </div>
-            )}
+            )} */}
           </div>
           <div className="mb-3 col-12 col-lg-6 ">
             <Input placeholder="Any other description" allowClear />

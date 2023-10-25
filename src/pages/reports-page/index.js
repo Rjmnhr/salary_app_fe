@@ -188,7 +188,7 @@ const ReportsPage = () => {
 
         // Convert Set back to an array of objects
         const distinctArray = [...uniqueObjects].map(JSON.parse);
-
+        console.log("2 get");
         setDataArray(distinctArray);
         setEditableJobTitle(distinctArray[0].job_titles);
         setEditableLocation(distinctArray[0].location);
@@ -265,6 +265,7 @@ const ReportsPage = () => {
         const filteredSkillBool = jobTitleResponses.map((item) => item.bool);
 
         setFilteredThroughSkill(filteredSkillBool);
+        console.log("3 data");
         setIsReportReady(true);
         setSalaryData(filteredJobResponse);
       };
@@ -297,7 +298,7 @@ const ReportsPage = () => {
               return response.data;
             })
           );
-
+          console.log("4 role");
           setSalaryDataByRole(jobTitleResponses);
         };
 
@@ -312,25 +313,28 @@ const ReportsPage = () => {
     if (salaryData.length > 0) {
       if (dataArray && dataArray.length > 0) {
         const fetchResponses = async () => {
-          const jobTitleResponses = await Promise.all(
-            dataArray.map(async (data) => {
-              const response = await AxiosInstance.post(
-                "/api/salary/data/role/no-experience",
-                {
-                  job_title: data.job_titles,
-                  skills: JSON.parse(data.skills),
-                },
-                {
-                  headers: {
-                    "content-type": "application/json",
+          try {
+            const jobTitleResponses = await Promise.all(
+              dataArray.map(async (data) => {
+                const response = await AxiosInstance.post(
+                  "/api/salary/data/role/no-experience",
+                  {
+                    job_title: data.job_titles,
+                    skills: JSON.parse(data.skills),
                   },
-                }
-              );
-              return response.data;
-            })
-          );
-
-          setSalaryDataNoExp(jobTitleResponses);
+                  {
+                    headers: {
+                      "content-type": "application/json",
+                    },
+                  }
+                );
+                return response.data;
+              })
+            );
+            setSalaryDataNoExp(jobTitleResponses);
+          } catch (error) {
+            console.error("API request failed:", error);
+          }
         };
 
         fetchResponses();
@@ -492,6 +496,8 @@ const ReportsPage = () => {
               return a.localeCompare(b); // Sort alphabetically
             }
           });
+
+          console.log("1  skill data");
 
           setSkillSet(sortedArr);
 

@@ -11,6 +11,7 @@ const Success = () => {
   const location = useLocation();
   const sessionId = location.search.replace("?session_id=", "");
   const navigate = useNavigate();
+  const validation = sessionStorage.getItem("ghdcefjhgfre");
 
   useEffect(() => {
     async function fetchSession() {
@@ -18,11 +19,16 @@ const Success = () => {
         async (res) => {
           const response = await res.data;
           setSession(response);
+          console.log(
+            "🚀 ~ file: Success.js:21 ~ response:",
+            JSON.stringify(response)
+          );
+          const reportProduct = response.metadata.report_product;
           const status = response.payment_status;
           const email = response.customer_details.email;
-          console.log("🚀 ~ file: Success.js:19 ~ email:", email);
+
           if (status === "paid") {
-            RedirectToDownload(email);
+            RedirectToDownload(email, reportProduct);
           }
         }
       );
@@ -31,10 +37,12 @@ const Success = () => {
     //eslint-disable-next-line
   }, [sessionId]);
 
-  const RedirectToDownload = (email) => {
+  const RedirectToDownload = (email, product) => {
+    if (validation === "hgwfdytewfteyffrefrvgceyt") return;
+
     AxiosInstance.post(
       "/payment-success",
-      { sessionId: sessionId, email: email },
+      { sessionId: sessionId, email: email, product: product },
       {
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +50,7 @@ const Success = () => {
       }
     )
       .then(async (res) => {
+        sessionStorage.setItem("ghdcefjhgfre", "hgwfdytewfteyffrefrvgceyt");
         await res.data;
       })
       .catch((err) => console.log(err));
@@ -58,11 +67,10 @@ const Success = () => {
       }}
     >
       {/* <div className="sr-section completed-view">
-          <div className="sr-callout">
-            <pre>{JSON.stringify(session, null, 2)}</pre>
-          </div>
-          <Link to="/">Restart demo</Link>
-        </div> */}
+        <div className="sr-callout">
+          <pre>{JSON.stringify(session, null, 2)}</pre>
+        </div>
+      </div> */}
 
       <div className="sr-content p-3 col-12 col-lg-8">
         <div>

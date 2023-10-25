@@ -10,6 +10,8 @@ import LoginPage from "./pages/login-page";
 import OtpVerification from "./pages/otp-verification";
 import Success from "./components/payment_checkout/Success";
 import Canceled from "./components/payment_checkout/Canceled";
+import TrainingPage from "./pages/training-page";
+import SalesIncentive from "./pages/sales-incentive-page";
 
 const AppRoute = () => {
   return (
@@ -70,6 +72,22 @@ const AppRoute = () => {
           element={
             <>
               <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path="/training"
+          element={
+            <>
+              <TrainingPage />
+            </>
+          }
+        />
+        <Route
+          path="/sales"
+          element={
+            <>
+              <SalesIncentive />
             </>
           }
         />

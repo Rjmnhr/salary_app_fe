@@ -18,6 +18,10 @@ const NavBar = ({ scrollToContact }) => {
         return "price-a-job";
       case "/executive-reports":
         return "executive-reports";
+      case "/training":
+        return "training";
+      case "/sales":
+        return "sales";
       // Add more cases for other routes
       default:
         return "";
@@ -101,11 +105,11 @@ const NavBar = ({ scrollToContact }) => {
                   </a>
                 </li>
 
-                <li>
-                  <a href="#training">Training</a>
+                <li className={activeLink === "training" ? "active" : ""}>
+                  <a href="/training">Training</a>
                 </li>
-                <li>
-                  <a href="#sales">Sales Incentive</a>
+                <li className={activeLink === "sales" ? "active" : ""}>
+                  <a href="/sales">Sales Incentive</a>
                 </li>
                 {/* 
                 <li>
