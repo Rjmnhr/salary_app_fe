@@ -1,7 +1,8 @@
 import "./App.css";
-import AppRoute from "./app-route";
+
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AppContextProvider } from "./context/app-context";
+import AppRoute from "./app-routes/app-route";
 
 function App() {
   return (
