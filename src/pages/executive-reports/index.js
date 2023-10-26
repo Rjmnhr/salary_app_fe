@@ -50,7 +50,7 @@ const ExecutiveReports = () => {
                     ₹ 25,000
                   </p>
                   <p>Receive Instantly</p>
-                  <CheckoutComponent price={"price_1O2oj5SHdxsAYvlqZD5LRK6Q"} />
+                  <CheckoutComponent price={"price_1O5LKYDNZni9rE7FT1E5VSrW"} />
                 </div>
               </Card>
             </Badge.Ribbon>
