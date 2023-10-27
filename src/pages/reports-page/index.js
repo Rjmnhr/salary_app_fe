@@ -23,7 +23,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AxiosInstance from "../../components/axios";
 import GeneratedReport from "../../components/generate_report";
 import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
-import { cities, items } from "../price-a-job";
+import { cities } from "../price-a-job";
+import reportLimitIcon from "../../caution.png";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -137,13 +138,27 @@ const ReportsPage = () => {
   const [editableSkills, setEditableSkills] = useState([]);
   let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(0);
-  const [jobsData, setJobsData] = useState(items);
+  // const [jobsData, setJobsData] = useState(items);
   const [locationData, setLocationData] = useState(cities);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [skillSet, setSkillSet] = useState([]);
   const [skillData, setSkillData] = useState([]);
   const { Option } = Select;
   const [isReportReady, setIsReportReady] = useState(false);
+  const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
+
+  const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
+
+  const userPlan = sessionStorage.getItem("plan");
+
+  useEffect(() => {
+    // Fetch the user's subscription plan and set the report limit accordingly
+    if (userPlan === "Standard") {
+      setReportLimit(5);
+    } else if (userPlan === "Premium") {
+      setReportLimit(Infinity); // Unlimited reports
+    }
+  }, [userPlan]);
 
   const handleExpandClick = (index) => {
     setExpanded((prevExpanded) => ({
@@ -420,16 +435,16 @@ const ReportsPage = () => {
   //   }
   // }, [salaryDataByRole, dataArray, activeIndex]);
 
-  const handleSelectEditableJob = (value) => {
-    setEditableJobTitle(value);
-  };
-  const handleJobSearch = (newValue) => {
-    const filter = items.filter((data) =>
-      data?.toLowerCase().includes(newValue.toLowerCase())
-    );
+  // const handleSelectEditableJob = (value) => {
+  //   setEditableJobTitle(value);
+  // };
+  // const handleJobSearch = (newValue) => {
+  //   const filter = items.filter((data) =>
+  //     data?.toLowerCase().includes(newValue.toLowerCase())
+  //   );
 
-    setJobsData(filter);
-  };
+  //   setJobsData(filter);
+  // };
   const handleSearch = (newValue) => {
     const filter = cities.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
@@ -514,6 +529,11 @@ const ReportsPage = () => {
       </Button>
     </div>
   );
+  useEffect(() => {
+    if (dataArray.length > reportLimit) {
+      setIsActiveIndexLimited(true);
+    }
+  }, [dataArray, reportLimit]);
 
   return (
     <>
@@ -544,7 +564,7 @@ const ReportsPage = () => {
 
             <Modal visible={isModalVisible} footer={modalFooter}>
               <div>
-                <div className="mb-3  d-flex align-items-center">
+                {/* <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Job title : </label>
                   <div className="col-8">
                     <Select
@@ -565,7 +585,7 @@ const ReportsPage = () => {
                       className="border text-start"
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Location : </label>
@@ -869,7 +889,49 @@ const ReportsPage = () => {
               justifyItems: "center",
             }}
           >
-            {isReportReady ? (
+            {isActiveIndexLimited ? (
+              activeIndex > 0 ? (
+                isReportReady ? (
+                  <GeneratedReport
+                    jobsData={salaryData[activeIndex]}
+                    location={dataArray[activeIndex].location}
+                    experience={dataArray[activeIndex].experience}
+                    jobsDataByRole={salaryDataByRole[activeIndex]}
+                    jobsDataNoExp={salaryDataNoExp[activeIndex]}
+                    selectedSkills={dataArray[activeIndex].skills}
+                    skillsBool={filteredThroughSkill[activeIndex]}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      height: "80vh",
+                      display: "grid",
+                      placeItems: "center",
+                    }}
+                  >
+                    <h3>
+                      Your report is getting ready... <LoadingOutlined />{" "}
+                    </h3>
+                  </div>
+                )
+              ) : (
+                <div
+                  style={{
+                    height: "80vh",
+                    display: "grid",
+                    justifyItems: "center",
+                    alignContent: "start",
+                  }}
+                >
+                  <img height={100} width={100} src={reportLimitIcon} alt="" />
+                  <h3>
+                    You have reached your maximum report limit. Please upgrade
+                    your plan.
+                  </h3>
+                </div>
+              )
+            ) : // When isActiveIndexLimited is false, activeIndex condition doesn't apply
+            isReportReady ? (
               <GeneratedReport
                 jobsData={salaryData[activeIndex]}
                 location={dataArray[activeIndex].location}

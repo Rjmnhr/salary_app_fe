@@ -12,6 +12,8 @@ import Success from "../components/payment_checkout/Success";
 import Canceled from "../components/payment_checkout/Canceled";
 import TrainingPage from "../pages/training-page";
 import SalesIncentive from "../pages/sales-incentive-page";
+import RegistrationPricing from "../pages/registration-pricing";
+import SuccessRegistration from "../components/payment_checkout/success-registration";
 
 const AppRoute = () => {
   return (
@@ -25,14 +27,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route
-          path="/price-a-job"
-          element={
-            <>
-              <PriceAJob />
-            </>
-          }
-        />
+        <Route path="/price-a-job" element={<PriceAJob />} />
 
         <Route
           path="/reports"
@@ -88,6 +83,22 @@ const AppRoute = () => {
           element={
             <>
               <SalesIncentive />
+            </>
+          }
+        />
+        <Route
+          path="/registration-pricing"
+          element={
+            <>
+              <RegistrationPricing />
+            </>
+          }
+        />
+        <Route
+          path="/success-registration"
+          element={
+            <>
+              <SuccessRegistration />
             </>
           }
         />

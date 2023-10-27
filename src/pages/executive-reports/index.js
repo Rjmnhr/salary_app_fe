@@ -50,7 +50,10 @@ const ExecutiveReports = () => {
                     ₹ 25,000
                   </p>
                   <p>Receive Instantly</p>
-                  <CheckoutComponent price={"price_1O5NytDNZni9rE7FcilndeEn"} />
+                  <CheckoutComponent
+                    text={"Buy now"}
+                    price={"price_1O5NytDNZni9rE7FcilndeEn"}
+                  />
                 </div>
               </Card>
             </Badge.Ribbon>
@@ -85,7 +88,10 @@ const ExecutiveReports = () => {
                   ₹ 25,000
                 </p>
                 <p>Receive Instantly</p>
-                <CheckoutComponent price={"price_1O548aSHdxsAYvlqbhphgSW8"} />
+                <CheckoutComponent
+                  text={"Buy now"}
+                  price={"price_1O548aSHdxsAYvlqbhphgSW8"}
+                />
               </div>
             </Card>
           </div>
@@ -119,7 +125,10 @@ const ExecutiveReports = () => {
                   ₹ 25,000
                 </p>
                 <p>Receive Instantly</p>
-                <CheckoutComponent price={"price_1O54EESHdxsAYvlqG7Q6zQOU"} />
+                <CheckoutComponent
+                  text={"Buy now"}
+                  price={"price_1O54EESHdxsAYvlqG7Q6zQOU"}
+                />
               </div>
             </Card>
           </div>

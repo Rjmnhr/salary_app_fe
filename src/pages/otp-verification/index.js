@@ -3,12 +3,23 @@ import { useState, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { OtpVerificationPageStyled } from "./style";
-import { message } from "antd";
+
 import AxiosInstance from "../../components/axios";
 
 import { LoadingOutlined } from "@ant-design/icons";
-import { useApplicationContext } from "../../context/app-context";
+import { Steps } from "antd";
 
+const items = [
+  {
+    title: "Verification",
+  },
+  {
+    title: "Plan",
+  },
+  {
+    title: "Payment",
+  },
+];
 const OtpVerification = () => {
   const [warning, setWarning] = useState("");
 
@@ -17,22 +28,8 @@ const OtpVerification = () => {
   const inputRefs = useRef([]);
 
   const email = localStorage.getItem("email");
-  const first_name = localStorage.getItem("first_name");
-  const last_name = localStorage.getItem("last_name");
-  const password = localStorage.getItem("password");
-  const phone = localStorage.getItem("phone");
+
   const [isLoading, setIsLoading] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const { setIsSignIn } = useApplicationContext();
-
-  const clearLocalStorage = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("first_name");
-    localStorage.removeItem("last_name");
-    localStorage.removeItem("password");
-    localStorage.removeItem("phone");
-  };
 
   const handleInputChange = (index, event) => {
     const input = event.target.value;
@@ -76,6 +73,7 @@ const OtpVerification = () => {
   };
 
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const joinedOtpPin = otpPin.join("");
 
@@ -85,115 +83,51 @@ const OtpVerification = () => {
     })
       .then(async (response) => {
         const data = await response.data;
+        setIsLoading(false);
         console.log(data);
         if (!response.status === 200) {
           alert("something wrong");
           return;
         }
 
-        CreateProfile();
+        navigate("/registration-pricing");
       })
       .catch((err) => {
+        setIsLoading(false);
         setWarning("Invalid OTP");
 
         console.log(err);
       });
   };
 
-  const error = (data) => {
-    messageApi.open({
-      type: "error",
-      content: data,
-    });
-  };
-
-  const CreateProfile = () => {
-    const formData = new FormData();
-
-    formData.append("first_name", first_name);
-    formData.append("last_name", last_name);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("phone", phone);
-
-    AxiosInstance.post("/api/user/signup", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        const data = await response.data;
-        setIsSignIn(false);
-        setIsLoading(false);
-
-        const accessToken = data.accessToken;
-        const id = data.id;
-
-        if (!accessToken) {
-          error("Registration failed");
-          navigate("/login");
-          clearLocalStorage();
-          return;
-        }
-
-        const userType = data.user_type;
-        const user_id = data.id;
-
-        localStorage.setItem("userType", userType);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("user_id", id);
-        localStorage.setItem("user_name", data.first_name);
-        localStorage.setItem("email", data.email);
-
-        if (userType === "admin") {
-          localStorage.setItem("isAdmin", "true");
-        } else {
-          localStorage.setItem("isAdmin", "false");
-        }
-
-        clearLocalStorage();
-
-        if (Location.pathname === "/login-app") {
-          navigate("/price-a-job");
-        } else {
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("something is wrong");
-        navigate("/login");
-      });
-  };
-
   return (
     <>
-      {contextHolder}
       <OtpVerificationPageStyled>
-        <div className="main-container">
+        <div
+          style={{
+            marginTop: "100px",
+            transition: "all 0.3s ease",
+          }}
+          class="overflow-hidden "
+        >
           <div
-            className="left-container img_container"
-            style={{
-              backgroundImage:
-                "url(https://res.cloudinary.com/dsw1ubwyh/image/upload/v1695657433/pgsgfjhvitdmjl0pnbco.png)",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-              height: "100vh",
-              transform: "translate3d(0px, 0px, 0px)",
-            }}
+            style={{ display: "grid", placeItems: "center" }}
+            className="col-12 mb-5"
           >
-            <p style={{ fontSize: "80px" }}>
-              <span className="text-primary" style={{ fontWeight: "bold" }}>
-                {" "}
-                Equipay
-              </span>{" "}
-              <span style={{ color: "white" }}>Partners</span>
-            </p>
+            <Steps
+              className="col-8"
+              current={0}
+              size="small"
+              labelPlacement="vertical"
+              items={items}
+            />
           </div>
-          <div className="right-container">
-            <div className="right-sub-container">
+
+          <div
+            style={{ display: "grid", placeItems: "center" }}
+            class="container col-12 text-left"
+          >
+            <div className="col-8">
               <div>
                 <div>
                   <h3>Enter Verification Code</h3>
@@ -227,9 +161,25 @@ const OtpVerification = () => {
 
                 <p style={{ color: "red" }}>{warning}</p>
                 <br />
-                <button type="submit">
-                  {isLoading ? <LoadingOutlined /> : "NEXT"}
-                </button>
+
+                {otpPin.length > 5 ? (
+                  <button
+                    style={{ background: "black", color: "white" }}
+                    className="btn"
+                    type="submit"
+                  >
+                    {isLoading ? <LoadingOutlined /> : "Verify"}
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    style={{ background: "black", color: "white" }}
+                    className="btn"
+                    type="submit"
+                  >
+                    {isLoading ? <LoadingOutlined /> : "Verify"}
+                  </button>
+                )}
               </form>
             </div>
           </div>

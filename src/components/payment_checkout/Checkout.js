@@ -1,16 +1,13 @@
 import React from "react";
 import AxiosInstance from "../axios";
 
-const CheckoutComponent = ({ price }) => {
+const CheckoutComponent = ({ price, plan, text }) => {
   const handleBuyNow = async () => {
     try {
-      console.log(
-        "🚀 ~ file: Checkout.js:5 ~ CheckoutComponent ~ price:",
-        price
-      );
       const response = await AxiosInstance.post(
         "/create-checkout-session",
-        { price: price },
+        { price: price, plan: plan },
+
         {
           headers: {
             "Content-Type": "application/json",
@@ -34,9 +31,9 @@ const CheckoutComponent = ({ price }) => {
         background: "black",
         color: "white",
       }}
-      className="btn border "
+      className="btn border w-75 "
     >
-      Buy now
+      {text}
     </button>
   );
 };

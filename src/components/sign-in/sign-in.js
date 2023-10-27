@@ -7,7 +7,7 @@ import {
   EyeTwoTone,
   LoadingOutlined,
 } from "@ant-design/icons";
-import GoogleLoginComponent from "../google-login/google-login";
+
 import AxiosInstance from "../axios";
 
 const SignIn = () => {
@@ -52,6 +52,7 @@ const SignIn = () => {
 
         const accessToken = data.accessToken;
         const user_id = data.id;
+        const plan = data.plan;
 
         if (!accessToken) return error(data);
 
@@ -61,6 +62,7 @@ const SignIn = () => {
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("plan", plan);
         sessionStorage.setItem("info", "");
 
         setIsLoggedIn(true);
@@ -149,7 +151,7 @@ const SignIn = () => {
                 <button className="btn btn-primary w-75 mb-3" type="submit">
                   {isLoading ? <LoadingOutlined /> : "Log in"}
                 </button>
-                <GoogleLoginComponent element={"Log in with Google"} />
+                {/* <GoogleLoginComponent element={"Log in with Google"} /> */}
                 <p class="card-text text-muted">
                   Don't have an account yet?
                   <span

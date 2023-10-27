@@ -96,17 +96,11 @@ const PriceAJob = () => {
   sessionStorage.removeItem("saveTheReport");
 
   const isLoggedIn = localStorage.getItem("isLoggedIn");
-  useEffect(() => {
-    if (isLoggedIn !== "true") {
-      navigate("/login-app");
-    }
-    // eslint-disable-next-line
-  }, [isLoggedIn]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
 
-    fetch("https://equipaypartnersbe-myyduar5.b4a.run/api/token/verify", {
+    fetch("https://backend.equipaypartners.com/api/token/verify", {
       headers: {
         token: `Bearer ${accessToken}`,
       },

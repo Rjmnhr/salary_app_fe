@@ -4,34 +4,30 @@ import NavBar from "../../components/nav-bar/index";
 import SignUp from "../../components/sign-up/sign-up";
 import { useApplicationContext } from "../../context/app-context";
 
-import AxiosInstance from "../../components/axios";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { LoginPagestyled } from "./style";
 
 const LoginPage = () => {
   const { isSignIn } = useApplicationContext();
-  const Location = useLocation();
 
-  useEffect(() => {
-    AxiosInstance.post(
-      `/api/track-data/store3`,
-      { path: Location.pathname },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then(async (response) => {
-        const data = await response.data;
+  // useEffect(() => {
+  //   AxiosInstance.post(
+  //     `/api/track-data/store3`,
+  //     { path: Location.pathname },
+  //     {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     }
+  //   )
+  //     .then(async (response) => {
+  //       const data = await response.data;
 
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
+  //       console.log(data);
+  //     })
+  //     .catch((err) => console.log(err));
 
-    //eslint-disable-next-line
-  }, []);
+  //   //eslint-disable-next-line
+  // }, []);
 
   return (
     <>

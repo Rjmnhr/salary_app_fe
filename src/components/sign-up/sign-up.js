@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../axios";
 import { useEffect } from "react";
 import { Input, message } from "antd";
-import GoogleLoginComponent from "../google-login/google-login";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +20,7 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordSame, setIsPasswordSame] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUserExists, setIsUserExists] = useState(false);
 
   const { setIsSignIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
@@ -38,9 +38,17 @@ const SignUp = () => {
     setIsSignIn(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    const validate = await checkForExistingUser();
+
+    if (validate) {
+      setIsUserExists(true);
+      setIsLoading(false);
+      return;
+    }
 
     if (confirmPassword !== password) {
       error();
@@ -69,6 +77,18 @@ const SignUp = () => {
       .catch((err) => console.log(err));
   };
 
+  const checkForExistingUser = async () => {
+    try {
+      const res = await AxiosInstance.post("/api/user/check", { email: email });
+      const response = res.data;
+
+      return response;
+    } catch (err) {
+      console.log(err);
+      // Handle the error here or return an error response if needed
+      throw err;
+    }
+  };
   useEffect(() => {
     if (password && confirmPassword)
       if (password === confirmPassword) {
@@ -137,8 +157,15 @@ const SignUp = () => {
                     data-rule="email"
                     data-msg="Please enter a valid email"
                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <div class="validate"></div>
+                  />{" "}
+                  {isUserExists ? (
+                    <p style={{ color: "red", fontSize: "12px" }}>
+                      {" "}
+                      User already exists
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <div className="mb-3 col-12 col-lg-12">
                   <Input.Password
@@ -180,7 +207,7 @@ const SignUp = () => {
                   <button className="btn btn-primary w-75 mb-3" type="submit">
                     {isLoading ? <LoadingOutlined /> : "Create an account"}
                   </button>
-                  <GoogleLoginComponent element={"sign up with Google"} />
+                  {/* <GoogleLoginComponent element={"sign up with Google"} /> */}
                   <p class="card-text text-muted">
                     Remember your password?
                     <span
