@@ -104,7 +104,7 @@ const HomePage = () => {
                   />
                   <h3 style={{ marginTop: "10px" }}>Advisory</h3>
                   <p>
-                    We advice global organisations and startups to design best
+                    We advice global organizations and startups to design best
                     in class incentives, remuneration and classification
                     framework, and benchmarking
                   </p>
@@ -119,10 +119,10 @@ const HomePage = () => {
                     alt=""
                     style={{ width: "20%" }}
                   />
-                  <h3 style={{ marginTop: "10px" }}>Sales Service</h3>
+                  <h3 style={{ marginTop: "10px" }}>Custom Salary Survey</h3>
                   <p>
                     We run regular custom salary surveys and also have
-                    remuneration data for multiple georgaphies and roles
+                    remuneration data for multiple geographies and roles
                   </p>
                 </div>
                 <div
