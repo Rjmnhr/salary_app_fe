@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home-page/index";
 
-import ReportsPage from "../pages/reports-page";
+import LandingPage from "../pages/landing-page";
 
 import PriceAJob from "../pages/price-a-job";
 import ExecutiveReports from "../pages/executive-reports";
@@ -14,6 +14,10 @@ import TrainingPage from "../pages/training-page";
 import SalesIncentive from "../pages/sales-incentive-page";
 import RegistrationPricing from "../pages/registration-pricing";
 import SuccessRegistration from "../components/payment_checkout/success-registration";
+import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
+import ProtectedRoute from "./protected-route";
+
+import ReportsPage from "../pages/reports-page";
 
 const AppRoute = () => {
   return (
@@ -27,8 +31,28 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route path="/price-a-job" element={<PriceAJob />} />
+        <Route
+          path="/landing"
+          element={
+            <>
+              <LandingPage />
+            </>
+          }
+        />
+        <Route
+          path="/price-a-job"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <PriceAJob />
+                </>
+              }
+            />
+          }
+        />
 
+        {/* <Route path="/reports" element={<VerifyPlanRoute />} /> */}
         <Route
           path="/reports"
           element={
@@ -99,6 +123,14 @@ const AppRoute = () => {
           element={
             <>
               <SuccessRegistration />
+            </>
+          }
+        />
+        <Route
+          path="/success-upgrade"
+          element={
+            <>
+              <SuccessUpgrade />
             </>
           }
         />

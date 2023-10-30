@@ -1,12 +1,15 @@
 import React from "react";
 import AxiosInstance from "../axios";
 
-const CheckoutComponent = ({ price, plan, text }) => {
+const CheckoutComponent = ({ price, plan, text, action }) => {
+  const userID = localStorage.getItem("user_id");
+
   const handleBuyNow = async () => {
+    console.log("entered");
     try {
       const response = await AxiosInstance.post(
         "/create-checkout-session",
-        { price: price, plan: plan },
+        { price: price, plan: plan, action: action, id: userID },
 
         {
           headers: {

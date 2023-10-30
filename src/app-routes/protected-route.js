@@ -1,48 +1,43 @@
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   const VerifyToken = async () => {
     try {
-      const res = await fetch("http://localhost:8003/api/token/verify", {
-        headers: {
-          token: `Bearer ${accessToken}`,
-        },
-      });
-      console.log(
-        "🚀 ~ file: protected-route.js:19 ~ verify ~ res.status:",
-        res.status
+      const res = await fetch(
+        "https://backend.equipaypartners.com/api/token/verify",
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
       );
+
       if (res.status === 200) {
-        return true;
+        setIsAuthenticated(true);
       } else {
-        return false;
+        setIsAuthenticated(false);
       }
     } catch (err) {
       console.log(err);
       // Handle the error here or return an error response if needed
-      return false;
+      setIsAuthenticated(false);
     }
   };
 
-  const isAuthenticated = VerifyToken();
-  console.log(
-    "🚀 ~ file: protected-route.js:30 ~ ProtectedRoute ~ isAuthenticated:",
-    isAuthenticated
-  );
+  VerifyToken();
 
-  console.log(
-    "🚀 ~ file: protected-route.js:37 ~ ProtectedRoute ~ element:",
-    element
-  );
+  if (isAuthenticated !== null) {
+    if (isAuthenticated) {
+      return element;
+    } else {
+      // Redirect to the login page if not authenticated
 
-  if (isAuthenticated) {
-    return element;
-  } else {
-    // Redirect to the login page if not authenticated
-
-    return <Navigate to="/login-app" />;
+      return <Navigate to="/login-app" />;
+    }
   }
 };
 

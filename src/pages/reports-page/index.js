@@ -24,7 +24,8 @@ import AxiosInstance from "../../components/axios";
 import GeneratedReport from "../../components/generate_report";
 import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities } from "../price-a-job";
-import reportLimitIcon from "../../caution.png";
+
+import ReportLimitFallBack from "../../components/report-limit-fallback";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -107,7 +108,7 @@ function formatColumnName(columnName) {
 //   }
 // };
 
-const ReportsPage = () => {
+const ReportsPage = ({ userID }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
   // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
@@ -116,6 +117,7 @@ const ReportsPage = () => {
 
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
+  const [duplicateDataArray, setDuplicateDataArray] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
@@ -149,7 +151,7 @@ const ReportsPage = () => {
 
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
-  const userPlan = sessionStorage.getItem("plan");
+  const userPlan = localStorage.getItem("plan");
 
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
@@ -196,15 +198,17 @@ const ReportsPage = () => {
       .then(async (response) => {
         const data = await response.data;
 
+        const reversedData = [...data].reverse();
         // Use Set to store distinct objects
         const uniqueObjects = new Set(
-          [...createdArray, ...data].map(JSON.stringify)
+          [...createdArray, ...reversedData].map(JSON.stringify)
         );
 
         // Convert Set back to an array of objects
         const distinctArray = [...uniqueObjects].map(JSON.parse);
-        console.log("2 get");
+
         setDataArray(distinctArray);
+        setDuplicateDataArray(distinctArray);
         setEditableJobTitle(distinctArray[0].job_titles);
         setEditableLocation(distinctArray[0].location);
         setEditableSkills(JSON.parse(distinctArray[0].skills));
@@ -890,7 +894,7 @@ const ReportsPage = () => {
             }}
           >
             {isActiveIndexLimited ? (
-              activeIndex > 0 ? (
+              activeIndex > duplicateDataArray.length - (reportLimit + 1) ? (
                 isReportReady ? (
                   <GeneratedReport
                     jobsData={salaryData[activeIndex]}
@@ -915,20 +919,7 @@ const ReportsPage = () => {
                   </div>
                 )
               ) : (
-                <div
-                  style={{
-                    height: "80vh",
-                    display: "grid",
-                    justifyItems: "center",
-                    alignContent: "start",
-                  }}
-                >
-                  <img height={100} width={100} src={reportLimitIcon} alt="" />
-                  <h3>
-                    You have reached your maximum report limit. Please upgrade
-                    your plan.
-                  </h3>
-                </div>
+                <ReportLimitFallBack userPlan={userPlan} />
               )
             ) : // When isActiveIndexLimited is false, activeIndex condition doesn't apply
             isReportReady ? (
@@ -957,16 +948,51 @@ const ReportsPage = () => {
           </div>
         </div>
       ) : (
-        <div
-          className="container-fluid"
-          style={{ padding: "0", marginTop: "100px" }}
-        >
-          {" "}
-          <Skeleton active />
-          <Skeleton active />
-          <Skeleton active />
-          <Skeleton active />
-        </div>
+        <>
+          <div
+            className="container-fluid  d-lg-flex justify-content-center align-items-start 
+         "
+            style={{ padding: "0", marginTop: "90px" }}
+          >
+            <div
+              className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
+              style={{
+                overflowY: "scroll",
+                maxHeight: "100vh",
+                transform: "transition 0.3s all ease",
+              }}
+            >
+              <div>
+                <Card>
+                  <div className="p-2">
+                    <Skeleton active />
+                  </div>
+                </Card>
+              </div>
+            </div>
+            <div
+              className="container-fluid col-12 col-lg-9  d-grid "
+              style={{
+                background: "rgba(0, 0, 0, 0.02)",
+                height: "100vh",
+                justifyItems: "center",
+              }}
+            >
+              <div
+                className="container  col-lg-11 col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
+                style={{
+                  background: "white",
+                  height: "100vh",
+                  overflowY: "scroll",
+                }}
+              >
+                <Skeleton active />
+                <Skeleton active />
+                <Skeleton active />
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

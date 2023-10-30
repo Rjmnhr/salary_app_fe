@@ -16,6 +16,8 @@ const NavBar = ({ scrollToContact }) => {
         return "price-a-job";
       case "/reports":
         return "price-a-job";
+      case "/landing":
+        return "price-a-job";
       case "/executive-reports":
         return "executive-reports";
       case "/training":
@@ -95,7 +97,7 @@ const NavBar = ({ scrollToContact }) => {
                   <a href="/">Home</a>
                 </li>
                 <li className={activeLink === "price-a-job" ? "active" : ""}>
-                  <a href="/price-a-job">Price a Job</a>
+                  <a href="/landing">Price a Job</a>
                 </li>
                 <li
                   className={activeLink === "executive-reports" ? "active" : ""}

@@ -1,44 +1,50 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React from "react";
+import cancel from "../../cancelled.png";
+import { useNavigate } from "react-router-dom";
 
 const Canceled = () => {
+  const navigate = useNavigate();
   return (
-    <div className="sr-root">
-      <div className="sr-main">
-        <header className="sr-header">
-          <div className="sr-header__logo"></div>
-        </header>
-        <div className="sr-payment-summary completed-view">
-          <h1>Your payment was canceled</h1>
-          <Link to="/">Restart demo</Link>
-        </div>
+    <div
+      className="sr-root"
+      style={{
+        display: "grid",
+        justifyItems: "center",
+        height: "100vh",
+        alignContent: "center",
+      }}
+    >
+      {/* <div className="sr-section completed-view">
+      <div className="sr-callout">
+        <pre>{JSON.stringify(session, null, 2)}</pre>
       </div>
-      <div className="sr-content">
-        <div className="pasha-image-stack">
-          <img
-            alt=""
-            src="https://picsum.photos/280/320?random=1"
-            width="140"
-            height="160"
-          />
-          <img
-            alt=""
-            src="https://picsum.photos/280/320?random=2"
-            width="140"
-            height="160"
-          />
-          <img
-            alt=""
-            src="https://picsum.photos/280/320?random=3"
-            width="140"
-            height="160"
-          />
-          <img
-            alt=""
-            src="https://picsum.photos/280/320?random=4"
-            width="140"
-            height="160"
-          />
+    </div> */}
+
+      <div className="sr-content p-3 col-12 col-lg-8">
+        <div>
+          <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+            <h1>Payment was cancelled!</h1>
+            <img
+              style={{ marginLeft: "10px" }}
+              src={cancel}
+              alt=""
+              width={50}
+              height={50}
+            />{" "}
+          </div>
+
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              fontSize: "20px",
+              margin: "10px",
+              background: "black",
+              color: "white",
+            }}
+            className="btn "
+          >
+            Go to Home
+          </button>
         </div>
       </div>
     </div>

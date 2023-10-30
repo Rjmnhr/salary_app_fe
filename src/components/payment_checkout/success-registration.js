@@ -16,6 +16,7 @@ const SuccessRegistration = () => {
   const phone = localStorage.getItem("phone");
   const email = localStorage.getItem("email");
   const [isProfileCreated, setProfileCreated] = useState(false);
+  const [userAction, setUserAction] = useState("");
 
   const [seconds, setSeconds] = useState(5);
   const navigate = useNavigate();
@@ -45,8 +46,13 @@ const SuccessRegistration = () => {
           setSession(response);
 
           const UserPlan = response.metadata.plan;
-          if (!isProfileCreated) {
+          const action = response.metadata.action;
+          setUserAction(action);
+          if (!isProfileCreated && action === "Register") {
             CreateProfile(UserPlan);
+          } else if (action === "Upgrade") {
+            sessionStorage.setItem("upgrade_plan", UserPlan);
+            navigate("/success-upgrade");
           }
         }
       );
@@ -114,55 +120,63 @@ const SuccessRegistration = () => {
   };
 
   return (
-    <div
-      className="sr-root"
-      style={{
-        display: "grid",
-        justifyItems: "center",
-        height: "100vh",
-        alignContent: "center",
-      }}
-    >
-      {/* <div className="sr-section completed-view">
+    <>
+      {userAction === "Register" ? (
+        <div
+          className="sr-root"
+          style={{
+            display: "grid",
+            justifyItems: "center",
+            height: "100vh",
+            alignContent: "center",
+          }}
+        >
+          {/* <div className="sr-section completed-view">
         <div className="sr-callout">
           <pre>{JSON.stringify(session, null, 2)}</pre>
         </div>
       </div> */}
 
-      <div className="sr-content p-3 col-12 col-lg-8">
-        <div>
-          <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-            <h1>Payment Successful!</h1>
-            <img
-              style={{ marginLeft: "10px" }}
-              src={successTick}
-              alt=""
-              width={50}
-              height={50}
-            />{" "}
-          </div>
-          {isProfileCreated ? (
-            <>
-              {" "}
-              <h1>Your Account is ready </h1>{" "}
-              <p>You will be redirecting automatically in {seconds} seconds</p>{" "}
-              or <a href="/price-a-job">Click here</a>{" "}
-            </>
-          ) : (
-            <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-              <h1>Your Account is getting ready </h1>
-              <img
-                style={{ marginLeft: "10px" }}
-                src={preLoader}
-                alt=""
-                width={50}
-                height={50}
-              />{" "}
+          <div className="sr-content p-3 col-12 col-lg-8">
+            <div>
+              <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+                <h1>Payment Successful!</h1>
+                <img
+                  style={{ marginLeft: "10px" }}
+                  src={successTick}
+                  alt=""
+                  width={50}
+                  height={50}
+                />{" "}
+              </div>
+              {isProfileCreated ? (
+                <>
+                  {" "}
+                  <h1>Your Account is ready </h1>{" "}
+                  <p>
+                    You will be redirecting automatically in {seconds} seconds
+                  </p>{" "}
+                  or <a href="/price-a-job">Click here</a>{" "}
+                </>
+              ) : (
+                <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+                  <h1>Your Account is getting ready </h1>
+                  <img
+                    style={{ marginLeft: "10px" }}
+                    src={preLoader}
+                    alt=""
+                    width={50}
+                    height={50}
+                  />{" "}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 

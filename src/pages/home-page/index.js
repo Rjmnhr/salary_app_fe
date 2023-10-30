@@ -8,12 +8,9 @@ import ParallaxComponent from "../../components/react-parallax";
 import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
-import { useNavigate } from "react-router-dom";
-import { ArrowRightAltOutlined } from "@mui/icons-material";
 
 const HomePage = () => {
   const contactRef = useRef(null);
-  const navigate = useNavigate();
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
@@ -46,24 +43,7 @@ const HomePage = () => {
                       alignItems: "center",
                       gap: "5px",
                     }}
-                  >
-                    <button
-                      onClick={() => navigate("/price-a-job")}
-                      style={{
-                        fontSize: "20px",
-                        marginTop: "10px",
-                        background: "linear-gradient(90deg,#2d67b9,#235090)",
-                        color: "white",
-                      }}
-                      className="btn "
-                      m
-                    >
-                      Salary market data{" "}
-                      <span>
-                        <ArrowRightAltOutlined />
-                      </span>
-                    </button>
-                  </div>
+                  ></div>
 
                   {/* <a href="#contact" class="btn-get-started scrollto">
                     Use Free Profile Evaluator

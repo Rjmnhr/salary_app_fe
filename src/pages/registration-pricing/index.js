@@ -85,6 +85,7 @@ const RegistrationPricing = () => {
                       </div>
                     </div>
                     <CheckoutComponent
+                      action={"Register"}
                       className="mt-3"
                       text={"Select"}
                       price={"price_1O5isbSHdxsAYvlqsTcV7kAw"}
@@ -135,6 +136,7 @@ const RegistrationPricing = () => {
                       </div>
                     </div>
                     <CheckoutComponent
+                      action={"Register"}
                       className="mt-3"
                       text={"Select"}
                       price={"price_1O5itXSHdxsAYvlqFmXt6lwV"}
@@ -186,6 +188,7 @@ const RegistrationPricing = () => {
                       </div>
                     </div>
                     <CheckoutComponent
+                      action={"Register"}
                       className="mt-3"
                       text={"Select"}
                       price={"price_1O5iuUSHdxsAYvlqPOP39oMk"}
