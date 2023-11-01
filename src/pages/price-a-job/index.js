@@ -426,7 +426,7 @@ const PriceAJob = () => {
                   <a href="/sales">Sales Incentive</a>
                 </li>
 
-                {isLoggedIn === true ? (
+                {isLoggedIn === "true" ? (
                   <>
                     <Dropdown
                       menu={{
