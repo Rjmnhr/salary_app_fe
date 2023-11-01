@@ -8,6 +8,7 @@ import AxiosInstance from "../../components/axios";
 
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps } from "antd";
+import { retrieveAndDecryptDataLocal } from "../../components/data-encryption";
 
 const items = [
   {
@@ -27,7 +28,7 @@ const OtpVerification = () => {
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
-  const email = localStorage.getItem("email");
+  const email = retrieveAndDecryptDataLocal("email").data;
 
   const [isLoading, setIsLoading] = useState(false);
 

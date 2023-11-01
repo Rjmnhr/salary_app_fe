@@ -63,6 +63,7 @@ const GeneratedReport = ({
   selectedSkills,
   skillsBool,
 }) => {
+  console.log("🚀 ~ file: index.js:66 ~ jobsData:", jobsDataByRole);
   const [chartWidth, setChartWidth] = useState(600);
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);

@@ -1,6 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  encryptAndStoreDataLocal,
+  retrieveAndDecryptDataLocal,
+} from "../data-encryption";
+import { Avatar, Dropdown } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+
+const CapitalizeFirstLetter = (data) => {
+  // Split the string into words
+  const words = data?.split(" ");
+  // Capitalize the first letter of each word and make the rest lowercase
+  const capitalizedWords = words?.map((word) => {
+    if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+      // If the first letter is already capitalized, keep it as is
+      return word;
+    } else {
+      // Otherwise, capitalize the first letter and make the rest lowercase
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }
+  });
+
+  // Join the words back together with spaces
+  return capitalizedWords?.join(" ");
+};
 
 const NavBar = ({ scrollToContact }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -54,14 +78,26 @@ const NavBar = ({ scrollToContact }) => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
+  const isLoggedIn = retrieveAndDecryptDataLocal("isLoggedIn")?.data;
+  const userName = retrieveAndDecryptDataLocal("user_name")?.data;
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-
+  //eslint-disable-next-line
   const handleLogOut = () => {
     navigate("/");
-    localStorage.setItem("accessToken", "");
-    localStorage.setItem("isLoggedIn", false);
+    localStorage.removeItem("accessToken", "");
+    encryptAndStoreDataLocal("isLoggedIn", false);
   };
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a href="#eq" onClick={handleLogOut}>
+          Log out
+        </a>
+      ),
+    },
+  ];
 
   return (
     <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
@@ -113,21 +149,42 @@ const NavBar = ({ scrollToContact }) => {
                 <li className={activeLink === "sales" ? "active" : ""}>
                   <a href="/sales">Sales Incentive</a>
                 </li>
-                {/* 
-                <li>
-                  <a href="#contact" onClick={scrollToContact}>
-                    Contact
-                  </a>
-                </li> */}
-                <li>
-                  {isLoggedIn === "true" ? (
-                    <a href="#eq" onClick={handleLogOut}>
-                      Log out
-                    </a>
-                  ) : (
+
+                {isLoggedIn === true ? (
+                  <>
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      placement="bottomRight"
+                      arrow
+                    >
+                      <li
+                        style={{
+                          paddingTop: "5px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <a href="#profile">{CapitalizeFirstLetter(userName)}</a>
+
+                        <Avatar
+                          size="small"
+                          style={{
+                            background:
+                              "linear-gradient(90deg, rgb(45, 103, 185), rgb(35, 80, 144))",
+                          }}
+                          icon={<UserOutlined />}
+                        />
+                      </li>
+                    </Dropdown>
+                  </>
+                ) : (
+                  <li>
                     <a href="/login">Log in</a>
-                  )}
-                </li>
+                  </li>
+                )}
               </ul>
             </nav>
           </div>

@@ -4,22 +4,36 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AxiosInstance from "../../components/axios";
 import successTick from "../../check-soft-bg.svg";
 import preLoader from "../../Settings.gif";
+import {
+  encryptAndStoreDataLocal,
+  encryptAndStoreDataSession,
+  retrieveAndDecryptDataLocal,
+} from "../data-encryption";
 
 const SuccessRegistration = () => {
   //eslint-disable-next-line
   const [session, setSession] = useState({});
   const location = useLocation();
   const sessionId = location.search.replace("?session_id=", "");
-  const first_name = localStorage.getItem("first_name");
-  const last_name = localStorage.getItem("last_name");
-  const password = localStorage.getItem("password");
-  const phone = localStorage.getItem("phone");
-  const email = localStorage.getItem("email");
+
+  const first_name = retrieveAndDecryptDataLocal("first_name")?.data;
+
+  const last_name = retrieveAndDecryptDataLocal("last_name")?.data;
+  const password = retrieveAndDecryptDataLocal("password")?.data;
+  const phone = retrieveAndDecryptDataLocal("phone")?.data;
+  const email = retrieveAndDecryptDataLocal("email")?.data;
   const [isProfileCreated, setProfileCreated] = useState(false);
   const [userAction, setUserAction] = useState("");
 
   const [seconds, setSeconds] = useState(5);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionId) {
+      navigate("/");
+    }
+    //eslint-disable-next-line
+  }, [sessionId]);
 
   useEffect(() => {
     if (isProfileCreated) {
@@ -51,13 +65,17 @@ const SuccessRegistration = () => {
           if (!isProfileCreated && action === "Register") {
             CreateProfile(UserPlan);
           } else if (action === "Upgrade") {
-            sessionStorage.setItem("upgrade_plan", UserPlan);
+            encryptAndStoreDataSession("upgrade_plan", UserPlan);
+
             navigate("/success-upgrade");
           }
         }
       );
     }
-    fetchSession();
+    if (sessionId) {
+      fetchSession();
+    }
+
     //eslint-disable-next-line
   }, [sessionId]);
 
@@ -88,7 +106,6 @@ const SuccessRegistration = () => {
         const data = await response.data;
 
         const accessToken = data.accessToken;
-        const id = data.id;
 
         if (!accessToken) {
           navigate("/login");
@@ -96,18 +113,12 @@ const SuccessRegistration = () => {
           return;
         }
 
-        const userType = data.user_type;
         const user_id = data.id;
-        const plan = data.plan;
 
-        localStorage.setItem("userType", userType);
-        localStorage.setItem("user_id", user_id);
+        encryptAndStoreDataLocal("user_id", user_id);
+        encryptAndStoreDataLocal("isLoggedIn", true);
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("user_id", id);
-        localStorage.setItem("user_name", data.first_name);
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("plan", plan);
+        encryptAndStoreDataLocal("email", data.email);
 
         clearLocalStorage();
         setProfileCreated(true); // Mark profile as created
@@ -115,13 +126,14 @@ const SuccessRegistration = () => {
       .catch((err) => {
         console.log(err);
         alert("something is wrong");
-        // navigate("/login");
+
+        navigate("/login");
       });
   };
 
   return (
     <>
-      {userAction === "Register" ? (
+      {userAction === "Register" && sessionId ? (
         <div
           className="sr-root"
           style={{

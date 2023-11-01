@@ -17,7 +17,8 @@ import SuccessRegistration from "../components/payment_checkout/success-registra
 import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
 import ProtectedRoute from "./protected-route";
 
-import ReportsPage from "../pages/reports-page";
+import VerifyPlanRoute from "./verifyPlan";
+import ForgotPasswordPage from "../pages/forgot-password-page";
 
 const AppRoute = () => {
   return (
@@ -52,15 +53,15 @@ const AppRoute = () => {
           }
         />
 
-        {/* <Route path="/reports" element={<VerifyPlanRoute />} /> */}
-        <Route
+        <Route path="/reports" element={<VerifyPlanRoute />} />
+        {/* <Route
           path="/reports"
           element={
             <>
               <ReportsPage />
             </>
           }
-        />
+        /> */}
         <Route
           path="/executive-reports"
           element={
@@ -129,8 +130,21 @@ const AppRoute = () => {
         <Route
           path="/success-upgrade"
           element={
+            <ProtectedRoute
+              element={
+                <>
+                  <SuccessUpgrade />
+                </>
+              }
+            />
+          }
+        />
+
+        <Route
+          path="/forgot-password"
+          element={
             <>
-              <SuccessUpgrade />
+              <ForgotPasswordPage />
             </>
           }
         />

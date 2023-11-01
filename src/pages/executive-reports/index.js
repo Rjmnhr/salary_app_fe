@@ -52,7 +52,7 @@ const ExecutiveReports = () => {
                   <p>Receive Instantly</p>
                   <CheckoutComponent
                     text={"Buy now"}
-                    price={"price_1O5NytDNZni9rE7FcilndeEn"}
+                    price={"price_1O2oj5SHdxsAYvlqZD5LRK6Q"}
                   />
                 </div>
               </Card>

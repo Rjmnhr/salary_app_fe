@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import ReportsPage from "../pages/reports-page";
+import AxiosInstance from "../components/axios";
+import { retrieveAndDecryptDataLocal } from "../components/data-encryption";
 
 const VerifyPlanRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
-  const userID = localStorage.getItem("user_id");
+  const userID = retrieveAndDecryptDataLocal("user_id").data;
+
   const [userPlan, setUserPlan] = useState(null);
 
   const VerifyToken = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:8003/api/token/plan",
+      const res = await AxiosInstance.post(
+        "/api/token/plan",
         { id: userID },
         {
           headers: {
@@ -19,8 +22,7 @@ const VerifyPlanRoute = ({ element }) => {
         }
       );
 
-      const data = res.json();
-      console.log("🚀 ~ file: verifyPlan.js:23 ~ VerifyToken ~ data:", data);
+      const data = res.data[0];
 
       if (res.status === 200) {
         setUserPlan(data.plan);
@@ -36,7 +38,7 @@ const VerifyPlanRoute = ({ element }) => {
 
   VerifyToken();
 
-  if (userPlan !== null) {
+  if (userPlan !== null && userPlan !== undefined) {
     if (userPlan) {
       return (
         <>

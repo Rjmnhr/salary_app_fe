@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Input, InputNumber, Select, Tag } from "antd";
+import { Avatar, Input, InputNumber, Select, Tag, Dropdown } from "antd";
+
+import { UserOutlined } from "@ant-design/icons";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 import AxiosInstance from "../../components/axios";
+import { retrieveAndDecryptDataLocal } from "../../components/data-encryption";
 
-export const items = [
+export const mappedJobs = [
   "Customer Support",
   "Voice Process",
   "Software Development",
@@ -49,7 +52,7 @@ export const cities = [
   "Delhi",
 ];
 
-items.sort();
+mappedJobs.sort();
 cities.sort();
 
 const CapitalizeFirstLetter = (data) => {
@@ -83,19 +86,21 @@ const PriceAJob = () => {
   // eslint-disable-next-line
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [skillData, setSkillData] = useState([]);
-  const [jobsData, setJobsData] = useState(items);
+  const [jobsData, setJobsData] = useState(mappedJobs);
   const [skillSet, setSkillSet] = useState([]);
   const [experience, setExperience] = useState("");
   const [isSupervise, setIsSupervise] = useState("");
   const [isManage, setIsManage] = useState("");
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
+
+  const userName = retrieveAndDecryptDataLocal("user_name")?.data;
   const { Option } = Select;
   // const [displayedSkills, setDisplayedSkills] = useState(6);
 
   sessionStorage.removeItem("saveTheReport");
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const isLoggedIn = retrieveAndDecryptDataLocal("isLoggedIn")?.data;
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -310,7 +315,7 @@ const PriceAJob = () => {
   };
 
   const handleJobSearch = (newValue) => {
-    const filter = items.filter((data) =>
+    const filter = mappedJobs.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
 
@@ -360,7 +365,16 @@ const PriceAJob = () => {
     setSkillData(skillData.filter((s) => s !== skill));
     setTopSkills(topSkills.filter((s) => s !== skill?.toLowerCase()));
   };
-
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a href="#eq" onClick={handleLogOut}>
+          Log out
+        </a>
+      ),
+    },
+  ];
   return (
     <>
       <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
@@ -412,15 +426,41 @@ const PriceAJob = () => {
                   <a href="/sales">Sales Incentive</a>
                 </li>
 
-                <li>
-                  {isLoggedIn === "true" ? (
-                    <a href="#eq" onClick={handleLogOut}>
-                      Log out
-                    </a>
-                  ) : (
+                {isLoggedIn === true ? (
+                  <>
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      placement="bottomRight"
+                      arrow
+                    >
+                      <li
+                        style={{
+                          paddingTop: "5px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <a href="#profile">{CapitalizeFirstLetter(userName)}</a>
+
+                        <Avatar
+                          size="small"
+                          style={{
+                            background:
+                              "linear-gradient(90deg, rgb(45, 103, 185), rgb(35, 80, 144))",
+                          }}
+                          icon={<UserOutlined />}
+                        />
+                      </li>
+                    </Dropdown>
+                  </>
+                ) : (
+                  <li>
                     <a href="/login">Log in</a>
-                  )}
-                </li>
+                  </li>
+                )}
               </ul>
             </nav>
           </div>

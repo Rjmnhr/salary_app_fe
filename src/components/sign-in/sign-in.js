@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 
 import AxiosInstance from "../axios";
+import { encryptAndStoreDataLocal } from "../data-encryption";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ const SignIn = () => {
     setIsSignIn(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     setIsLoading(true);
     event.preventDefault();
 
@@ -32,59 +33,50 @@ const SignIn = () => {
     formData.append("email", email);
     formData.append("password", password);
 
-    AxiosInstance.post("/api/user/login", formData, {
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(async (response) => {
-        const data = await response.data;
-        setIsLoading(false);
-
-        if (!response.status === 200) {
-          error("wrong password or username");
-          document.querySelector("#signupSrPassword").style.border =
-            "1px solid red";
-          document.querySelector("#signinSrEmail").style.border =
-            "1px solid red";
-          return;
-        }
-
-        success();
-
-        const accessToken = data.accessToken;
-        const user_id = data.id;
-        const plan = data.plan;
-
-        if (!accessToken) return error(data);
-
-        const userType = data.user_type;
-
-        localStorage.setItem("userType", userType);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("plan", plan);
-        sessionStorage.setItem("info", "");
-
-        setIsLoggedIn(true);
-
-        if (userType === "admin") {
-          localStorage.setItem("isAdmin", "true");
-        } else {
-          localStorage.setItem("isAdmin", "false");
-        }
-
-        setEmail("");
-        setPassword("");
-        if (Location.pathname === "/login-app") {
-          navigate("/price-a-job");
-        } else {
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        error("Something wrong");
-        console.log(err);
+    try {
+      const response = await AxiosInstance.post("/api/user/login", formData, {
+        headers: { "Content-Type": "application/json" },
       });
+
+      const data = await response.data;
+
+      setIsLoading(false);
+
+      if (data === 404) {
+        error("Wrong password or username");
+        document.querySelector(".ant-input-affix-wrapper").style.border =
+          "1px solid red";
+        document.querySelector("#email-login").style.border = "1px solid red";
+        return;
+      }
+
+      success();
+
+      const accessToken = data.accessToken;
+      const user_id = data.id;
+      const user_name = data.first_name;
+
+      if (!accessToken) return error(data);
+
+      encryptAndStoreDataLocal("user_id", user_id);
+      encryptAndStoreDataLocal("isLoggedIn", true);
+      encryptAndStoreDataLocal("user_name", user_name);
+
+      localStorage.setItem("accessToken", accessToken);
+
+      setIsLoggedIn(true);
+
+      setEmail("");
+      setPassword("");
+      if (Location.pathname === "/login-app") {
+        navigate("/price-a-job");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      error("Something Wrong");
+      console.log(err);
+    }
   };
 
   const success = () => {
@@ -124,14 +116,13 @@ const SignIn = () => {
           <div class="col-lg-12">
             <form class="php-email-form" onSubmit={handleSubmit}>
               <div class="col form-group">
-                <input
+                <Input
+                  style={{ borderRadius: "0" }}
                   type="email"
-                  class="form-control"
                   name="email"
-                  id="email"
+                  id="email-login"
                   placeholder="Email"
                   data-rule="email"
-                  data-msg="Please enter a valid email"
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <div class="validate"></div>
@@ -142,9 +133,16 @@ const SignIn = () => {
                   iconRender={(visible) =>
                     visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                   }
-                  className="border text-start"
+                  className="text-start"
+                  id="password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
+              </div>
+
+              <div className="d-flex justify-content-end mb-4">
+                <a className="form-label-link" href="/forgot-password">
+                  Forgot Password?
+                </a>
               </div>
 
               <div class="text-center">

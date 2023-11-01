@@ -9,23 +9,19 @@ import {
 } from "@ant-design/icons";
 import NavBar from "../../components/nav-bar/index";
 import "./style.css";
-
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
-
 import IconButton from "@mui/material/IconButton";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import AxiosInstance from "../../components/axios";
 import GeneratedReport from "../../components/generate_report";
 import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities } from "../price-a-job";
 
 import ReportLimitFallBack from "../../components/report-limit-fallback";
+import { retrieveAndDecryptDataLocal } from "../../components/data-encryption";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -108,7 +104,7 @@ function formatColumnName(columnName) {
 //   }
 // };
 
-const ReportsPage = ({ userID }) => {
+const ReportsPage = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
   // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
@@ -129,7 +125,8 @@ const ReportsPage = ({ userID }) => {
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
   const storedManage = sessionStorage.getItem("isManage");
-  const storedUserID = localStorage.getItem("user_id");
+  const storedUserID = retrieveAndDecryptDataLocal("user_id").data;
+
   const [showPreviousReports, setShowPreviousReports] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -150,8 +147,6 @@ const ReportsPage = ({ userID }) => {
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
 
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
-
-  const userPlan = localStorage.getItem("plan");
 
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
@@ -260,16 +255,97 @@ const ReportsPage = ({ userID }) => {
 
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
-      const fetchResponses = async () => {
-        const jobTitleResponses = await Promise.all(
-          dataArray.map(async (data) => {
+      setIsReportReady(false);
+      const fetchResponse = async (index) => {
+        if (index >= 0 && index < dataArray.length) {
+          const data = dataArray[index];
+          const response = await AxiosInstance.post(
+            "/api/salary/data",
+            {
+              location: data.location,
+              job_title: data.job_titles,
+              skills: JSON.parse(data.skills),
+              experience: data.experience,
+            },
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+            }
+          );
+          return { data: response.data.data, bool: response.data.bool };
+        } else {
+          return null; // Handle out-of-bounds index
+        }
+      };
+
+      const fetchDataForActiveIndex = async () => {
+        const index = activeIndex; // Get the active index
+        const response = await fetchResponse(index);
+        if (response) {
+          const { data, bool } = response;
+
+          setFilteredThroughSkill(bool);
+          setIsReportReady(true);
+          setSalaryData(data);
+        }
+      };
+
+      fetchDataForActiveIndex();
+    }
+
+    // eslint-disable-next-line
+  }, [activeIndex, dataArray]);
+
+  useEffect(() => {
+    if (salaryData.length > 0) {
+      const fetchResponseByRole = async (index) => {
+        if (index >= 0 && index < dataArray.length) {
+          const data = dataArray[index];
+          const response = await AxiosInstance.post(
+            "/api/salary/data/role",
+            {
+              job_title: data.job_titles,
+              skills: JSON.parse(data.skills),
+              experience: data.experience,
+            },
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+            }
+          );
+          return response.data;
+        } else {
+          return null; // Handle out-of-bounds index
+        }
+      };
+
+      const fetchDataForActiveIndexByRole = async () => {
+        const index = activeIndex; // Get the active index
+        const response = await fetchResponseByRole(index);
+        if (response) {
+          setSalaryDataByRole(response);
+        }
+      };
+
+      fetchDataForActiveIndexByRole();
+    }
+
+    // eslint-disable-next-line
+  }, [activeIndex, dataArray, salaryData]);
+
+  useEffect(() => {
+    if (salaryData.length > 0) {
+      const fetchResponseNoExperience = async (index) => {
+        if (index >= 0 && index < dataArray.length) {
+          const data = dataArray[index];
+          try {
             const response = await AxiosInstance.post(
-              "/api/salary/data",
+              "/api/salary/data/role/no-experience",
               {
-                location: data.location,
                 job_title: data.job_titles,
                 skills: JSON.parse(data.skills),
-                experience: data.experience,
               },
               {
                 headers: {
@@ -277,91 +353,29 @@ const ReportsPage = ({ userID }) => {
                 },
               }
             );
-            return { data: response.data.data, bool: response.data.bool };
-          })
-        );
-        const filteredJobResponse = jobTitleResponses.map((item) => item.data);
-        const filteredSkillBool = jobTitleResponses.map((item) => item.bool);
-
-        setFilteredThroughSkill(filteredSkillBool);
-        console.log("3 data");
-        setIsReportReady(true);
-        setSalaryData(filteredJobResponse);
-      };
-
-      fetchResponses();
-    }
-
-    //eslint-disable-next-line
-  }, [dataArray]);
-
-  useEffect(() => {
-    if (salaryData.length > 0) {
-      if (dataArray && dataArray.length > 0) {
-        const fetchResponses = async () => {
-          const jobTitleResponses = await Promise.all(
-            dataArray.map(async (data) => {
-              const response = await AxiosInstance.post(
-                "/api/salary/data/role",
-                {
-                  job_title: data.job_titles,
-                  skills: JSON.parse(data.skills),
-                  experience: data.experience,
-                },
-                {
-                  headers: {
-                    "content-type": "application/json",
-                  },
-                }
-              );
-              return response.data;
-            })
-          );
-          console.log("4 role");
-          setSalaryDataByRole(jobTitleResponses);
-        };
-
-        fetchResponses();
-      }
-    }
-
-    //eslint-disable-next-line
-  }, [dataArray, salaryData]);
-
-  useEffect(() => {
-    if (salaryData.length > 0) {
-      if (dataArray && dataArray.length > 0) {
-        const fetchResponses = async () => {
-          try {
-            const jobTitleResponses = await Promise.all(
-              dataArray.map(async (data) => {
-                const response = await AxiosInstance.post(
-                  "/api/salary/data/role/no-experience",
-                  {
-                    job_title: data.job_titles,
-                    skills: JSON.parse(data.skills),
-                  },
-                  {
-                    headers: {
-                      "content-type": "application/json",
-                    },
-                  }
-                );
-                return response.data;
-              })
-            );
-            setSalaryDataNoExp(jobTitleResponses);
+            return response.data;
           } catch (error) {
             console.error("API request failed:", error);
+            return null; // Handle the error gracefully
           }
-        };
+        } else {
+          return null; // Handle out-of-bounds index
+        }
+      };
 
-        fetchResponses();
-      }
+      const fetchDataForActiveIndexNoExperience = async () => {
+        const index = activeIndex; // Get the active index
+        const response = await fetchResponseNoExperience(index);
+        if (response) {
+          setSalaryDataNoExp(response);
+        }
+      };
+
+      fetchDataForActiveIndexNoExperience();
     }
 
-    //eslint-disable-next-line
-  }, [dataArray, salaryData]);
+    // eslint-disable-next-line
+  }, [activeIndex, dataArray, salaryData]);
 
   function SkillsList({ skills }) {
     return (
@@ -516,8 +530,6 @@ const ReportsPage = ({ userID }) => {
             }
           });
 
-          console.log("1  skill data");
-
           setSkillSet(sortedArr);
 
           setSkillData(sortedArr);
@@ -559,12 +571,20 @@ const ReportsPage = ({ userID }) => {
             }}
           >
             {/* <input className="form-control mb-3" placeholder="search" />
-          <button
-            onClick={() => navigate("/price-a-job")}
-            className="btn btn-primary mb-3 w-100"
-          >
-            Get More Reports
-          </button> */}
+            <button
+              onClick={() => navigate("/price-a-job")}
+              className="btn btn-primary mb-3 w-100"
+            >
+              Get More Reports
+            </button> */}
+            {userPlan === "Premium" ? (
+              <p>Unlimited Reports</p>
+            ) : (
+              <p>
+                Remaining reports :{" "}
+                {Math.max(reportLimit - dataArray.length, 0)}
+              </p>
+            )}
 
             <Modal visible={isModalVisible} footer={modalFooter}>
               <div>
@@ -672,7 +692,9 @@ const ReportsPage = ({ userID }) => {
                     activeIndex === 0 ? "selected-tab" : ""
                   }`}
                   key={dataArray[0]?.report_id}
-                  onClick={() => setActiveIndex(0)}
+                  onClick={() => {
+                    setActiveIndex(0);
+                  }}
                   style={{ cursor: "pointer" }}
                 >
                   <div className="d-flex align-content-center justify-content-between ">
@@ -784,6 +806,7 @@ const ReportsPage = ({ userID }) => {
               <button
                 onClick={() => {
                   setShowPreviousReports(!showPreviousReports);
+
                   setActiveIndex(0);
                 }}
                 className="btn btn-primary mb-3 w-100"
@@ -808,7 +831,9 @@ const ReportsPage = ({ userID }) => {
                             activeIndex === index ? "selected-tab" : ""
                           }`}
                           key={data.report_id}
-                          onClick={() => setActiveIndex(index)}
+                          onClick={() => {
+                            setActiveIndex(index);
+                          }}
                           style={{ cursor: "pointer" }}
                         >
                           <p
@@ -897,13 +922,13 @@ const ReportsPage = ({ userID }) => {
               activeIndex > duplicateDataArray.length - (reportLimit + 1) ? (
                 isReportReady ? (
                   <GeneratedReport
-                    jobsData={salaryData[activeIndex]}
+                    jobsData={salaryData}
                     location={dataArray[activeIndex].location}
                     experience={dataArray[activeIndex].experience}
-                    jobsDataByRole={salaryDataByRole[activeIndex]}
-                    jobsDataNoExp={salaryDataNoExp[activeIndex]}
+                    jobsDataByRole={salaryDataByRole}
+                    jobsDataNoExp={salaryDataNoExp}
                     selectedSkills={dataArray[activeIndex].skills}
-                    skillsBool={filteredThroughSkill[activeIndex]}
+                    skillsBool={filteredThroughSkill}
                   />
                 ) : (
                   <div
@@ -924,13 +949,13 @@ const ReportsPage = ({ userID }) => {
             ) : // When isActiveIndexLimited is false, activeIndex condition doesn't apply
             isReportReady ? (
               <GeneratedReport
-                jobsData={salaryData[activeIndex]}
+                jobsData={salaryData}
                 location={dataArray[activeIndex].location}
                 experience={dataArray[activeIndex].experience}
-                jobsDataByRole={salaryDataByRole[activeIndex]}
-                jobsDataNoExp={salaryDataNoExp[activeIndex]}
+                jobsDataByRole={salaryDataByRole}
+                jobsDataNoExp={salaryDataNoExp}
                 selectedSkills={dataArray[activeIndex].skills}
-                skillsBool={filteredThroughSkill[activeIndex]}
+                skillsBool={filteredThroughSkill}
               />
             ) : (
               <div

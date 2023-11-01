@@ -4,6 +4,7 @@ import axios from "axios";
 
 import AxiosInstance from "../axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { encryptAndStoreDataLocal } from "../data-encryption";
 const GoogleLoginComponent = ({ element }) => {
   const navigate = useNavigate();
   const Location = useLocation();
@@ -40,19 +41,11 @@ const GoogleLoginComponent = ({ element }) => {
         console.log(data);
         if (!response.status === 200) return alert("Something ids wrong");
 
-        const userType = data.user_type;
         const user_id = data.id;
-        localStorage.setItem("userType", userType);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("isLoggedIn", true);
-        sessionStorage.setItem("info", "");
 
-        if (userType === "admin") {
-          localStorage.setItem("isAdmin", "true");
-        } else {
-          localStorage.setItem("isAdmin", "false");
-        }
+        encryptAndStoreDataLocal("user_id", user_id);
+        encryptAndStoreDataLocal("isLoggedIn", true);
+        localStorage.setItem("accessToken", data.accessToken);
 
         if (Location.pathname === "/login-app") {
           navigate("/price-a-job");

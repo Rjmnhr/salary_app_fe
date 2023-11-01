@@ -101,7 +101,7 @@ const SalesIncentive = () => {
                         <h2>Design of SIP</h2>
                       </div>
                       <div className="text-left">
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
@@ -111,7 +111,7 @@ const SalesIncentive = () => {
                           />{" "}
                           Assessment of what's working vs not working
                         </h5>
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
@@ -122,7 +122,7 @@ const SalesIncentive = () => {
                           Participants,KPIs, leverage, measures, gateway,
                           behaviors, vehicle, deferral
                         </h5>
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
@@ -158,7 +158,7 @@ const SalesIncentive = () => {
                         <h2>What does implementation include?</h2>
                       </div>
                       <div className="text-left">
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
@@ -168,7 +168,7 @@ const SalesIncentive = () => {
                           />{" "}
                           Draft of plan rules, FAQs
                         </h5>
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
@@ -179,7 +179,7 @@ const SalesIncentive = () => {
                           Draft of working examples, payout-performance models,
                           offer letters
                         </h5>
-                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-11">
+                        <h5 className="d-flex justify-contents-start align-items-center mb-3 col-lg-11 col-12">
                           <img
                             style={{ marginRight: "8px" }}
                             src={pointArrow}
