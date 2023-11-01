@@ -21,7 +21,6 @@ import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities } from "../price-a-job";
 
 import ReportLimitFallBack from "../../components/report-limit-fallback";
-import { retrieveAndDecryptDataLocal } from "../../components/data-encryption";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -104,7 +103,7 @@ function formatColumnName(columnName) {
 //   }
 // };
 
-const ReportsPage = ({ userPlan }) => {
+const ReportsPage = () => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
   // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
@@ -125,7 +124,7 @@ const ReportsPage = ({ userPlan }) => {
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
   const storedManage = sessionStorage.getItem("isManage");
-  const storedUserID = retrieveAndDecryptDataLocal("user_id").data;
+  const storedUserID = localStorage.getItem("user_id");
 
   const [showPreviousReports, setShowPreviousReports] = useState(false);
 
@@ -147,6 +146,8 @@ const ReportsPage = ({ userPlan }) => {
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
 
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
+
+  const userPlan = localStorage.getItem("plan");
 
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly

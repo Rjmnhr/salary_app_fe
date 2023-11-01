@@ -8,7 +8,6 @@ import { UserOutlined } from "@ant-design/icons";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 import AxiosInstance from "../../components/axios";
-import { retrieveAndDecryptDataLocal } from "../../components/data-encryption";
 
 export const mappedJobs = [
   "Customer Support",
@@ -94,13 +93,13 @@ const PriceAJob = () => {
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
 
-  const userName = retrieveAndDecryptDataLocal("user_name")?.data;
+  const userName = localStorage.getItem("user_name");
   const { Option } = Select;
   // const [displayedSkills, setDisplayedSkills] = useState(6);
 
   sessionStorage.removeItem("saveTheReport");
 
-  const isLoggedIn = retrieveAndDecryptDataLocal("isLoggedIn")?.data;
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -171,8 +170,6 @@ const PriceAJob = () => {
         });
 
         setSkillSet(sortedArr);
-
-        setSkillData(sortedArr);
       };
 
       fetchResponses();
@@ -283,10 +280,18 @@ const PriceAJob = () => {
   };
 
   const handleSkillSearch = (newValue) => {
-    const filter = skillSet.filter((data) =>
-      data?.toLowerCase().includes(newValue.toLowerCase())
-    );
-    setSkillData(filter);
+    if (newValue) {
+      if (newValue.length > 0) {
+        const filter = skillSet.filter((data) =>
+          data.toLowerCase().includes(newValue.toLowerCase())
+        );
+        setSkillData(filter);
+      } else {
+        setSkillData([]);
+      }
+    } else {
+      setSkillData([]);
+    }
   };
 
   const handleSkillSelectChange = (value) => {
@@ -298,7 +303,7 @@ const PriceAJob = () => {
     setSelectedSkills(value);
 
     const itIsTopSkill = initialTopSkills.filter(
-      (skill) => skill === removedSkills[0]?.toLowerCase()
+      (skill) => skill === removedSkills[0]
     );
 
     // If a skill has been removed, add it back to topSkills
@@ -570,13 +575,11 @@ const PriceAJob = () => {
             {topSkills.map((skill, index) => {
               return (
                 <Tag
-                  onClick={() =>
-                    handleSkillButtonClick(CapitalizeFirstLetter(skill))
-                  }
+                  onClick={() => handleSkillButtonClick(skill)}
                   key={index}
                   className=" skill-btn  m-1"
                 >
-                  {CapitalizeFirstLetter(skill)}
+                  {skill}
                 </Tag>
               );
             })}
@@ -591,7 +594,10 @@ const PriceAJob = () => {
             )} */}
           </div>
           <div className="mb-3 col-12 col-lg-6 ">
-            <Input placeholder="Any other description" allowClear />
+            <Input
+              placeholder="Any other skills or additional information"
+              allowClear
+            />
           </div>
           <div className="mb-3 col-12 col-lg-6">
             <Select

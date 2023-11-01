@@ -4,11 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AxiosInstance from "../../components/axios";
 import successTick from "../../icons/check-soft-bg.svg";
 import preLoader from "../../icons/Settings.gif";
-import {
-  encryptAndStoreDataLocal,
-  encryptAndStoreDataSession,
-  retrieveAndDecryptDataLocal,
-} from "../data-encryption";
 
 const SuccessRegistration = () => {
   //eslint-disable-next-line
@@ -16,12 +11,12 @@ const SuccessRegistration = () => {
   const location = useLocation();
   const sessionId = location.search.replace("?session_id=", "");
 
-  const first_name = retrieveAndDecryptDataLocal("first_name")?.data;
+  const first_name = localStorage.getItem("first_name");
 
-  const last_name = retrieveAndDecryptDataLocal("last_name")?.data;
-  const password = retrieveAndDecryptDataLocal("password")?.data;
-  const phone = retrieveAndDecryptDataLocal("phone")?.data;
-  const email = retrieveAndDecryptDataLocal("email")?.data;
+  const last_name = localStorage.getItem("last_name");
+  const password = localStorage.getItem("password");
+  const phone = localStorage.getItem("phone");
+  const email = localStorage.getItem("email");
   const [isProfileCreated, setProfileCreated] = useState(false);
   const [userAction, setUserAction] = useState("");
 
@@ -65,7 +60,7 @@ const SuccessRegistration = () => {
           if (!isProfileCreated && action === "Register") {
             CreateProfile(UserPlan);
           } else if (action === "Upgrade") {
-            encryptAndStoreDataSession("upgrade_plan", UserPlan);
+            sessionStorage.setItem("upgrade_plan", UserPlan);
 
             navigate("/success-upgrade");
           }
@@ -114,11 +109,13 @@ const SuccessRegistration = () => {
         }
 
         const user_id = data.id;
+        const plan = data.plan;
 
-        encryptAndStoreDataLocal("user_id", user_id);
-        encryptAndStoreDataLocal("isLoggedIn", true);
+        localStorage.setItem("plan", plan);
+        localStorage.setItem("user_id", user_id);
+        localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("accessToken", accessToken);
-        encryptAndStoreDataLocal("email", data.email);
+        localStorage.setItem("email", data.email);
 
         clearLocalStorage();
         setProfileCreated(true); // Mark profile as created

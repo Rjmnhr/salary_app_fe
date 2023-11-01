@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../axios";
 import { useEffect } from "react";
 import { Input, message } from "antd";
-import { encryptAndStoreDataLocal } from "../data-encryption";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -66,11 +65,11 @@ const SignUp = () => {
         const data = await response.data;
         // Handle successful OTP request
         console.log(data);
-        encryptAndStoreDataLocal("email", lowerCasedEmail);
+        localStorage.setItem("email", lowerCasedEmail);
 
-        encryptAndStoreDataLocal("first_name", firstName);
-        encryptAndStoreDataLocal("last_name", lastName);
-        encryptAndStoreDataLocal("password", password);
+        localStorage.setItem("first_name", firstName);
+        localStorage.setItem("last_name", lastName);
+        localStorage.setItem("password", password);
 
         setIsLoading(false);
         navigate("/otp-validation");

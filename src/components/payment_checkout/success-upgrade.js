@@ -5,18 +5,14 @@ import { useEffect } from "react";
 import AxiosInstance from "../axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  retrieveAndDecryptDataLocal,
-  retrieveAndDecryptDataSession,
-} from "../data-encryption";
 
 const SuccessUpgrade = () => {
   const [isProfileUpdated, setIsProfileUpdated] = useState(false);
   const [seconds, setSeconds] = useState(5);
   const navigate = useNavigate();
   useEffect(() => {
-    const userID = retrieveAndDecryptDataLocal("user_id").data;
-    const userPlan = retrieveAndDecryptDataSession("upgrade_plan").data;
+    const userID = localStorage.getItem("user_id");
+    const userPlan = sessionStorage.getItem("upgrade_plan");
 
     AxiosInstance.post(
       "/api/user/upgrade",
@@ -30,7 +26,7 @@ const SuccessUpgrade = () => {
       .then(async (response) => {
         //eslint-disable-next-line
         const data = await response.data;
-
+        localStorage.setItem("plan", userPlan);
         setIsProfileUpdated(true);
       })
       .catch((err) => {

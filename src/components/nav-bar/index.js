@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  encryptAndStoreDataLocal,
-  retrieveAndDecryptDataLocal,
-} from "../data-encryption";
+
 import { Avatar, Dropdown } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
@@ -78,19 +75,23 @@ const NavBar = ({ scrollToContact }) => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
-  const isLoggedIn = retrieveAndDecryptDataLocal("isLoggedIn")?.data;
-  const userName = retrieveAndDecryptDataLocal("user_name")?.data;
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userName = localStorage.getItem("user_name");
 
   //eslint-disable-next-line
   const handleLogOut = () => {
     navigate("/");
     localStorage.removeItem("accessToken", "");
-    encryptAndStoreDataLocal("isLoggedIn", false);
+    localStorage.setItem("isLoggedIn", false);
   };
 
   const items = [
     {
       key: "1",
+      label: <a href="/account">My Account</a>,
+    },
+    {
+      key: "2",
       label: (
         <a href="#eq" onClick={handleLogOut}>
           Log out

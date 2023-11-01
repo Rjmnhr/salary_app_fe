@@ -15,9 +15,14 @@ const ExecutiveReports = () => {
         style={{ marginTop: "100px", display: "grid", placeItems: "center" }}
       >
         {/* <iframe title="pdf" src={pdf} width="100%" height="700px"></iframe> */}
-        <h5 className="mb-3">Executive Compensation Reports</h5>
-        <div className="container d-flex justify-content-around col-12 ">
-          <div style={{ width: "240px" }}>
+        <div className="col-12 section-title ">
+          <h2 style={{ width: "100%" }} className="col-12 ">
+            Executive Compensation Reports
+          </h2>
+        </div>
+
+        <div className="container d-flex justify-content-lg-around align-items-center flex-lg-row flex-column  col-12  ">
+          <div style={{ width: "240px" }} className="mb-3">
             <Badge.Ribbon placement="start" text="Best seller">
               <Card
                 hoverable
@@ -58,7 +63,7 @@ const ExecutiveReports = () => {
               </Card>
             </Badge.Ribbon>
           </div>
-          <div style={{ width: "240px" }}>
+          <div style={{ width: "240px" }} className="mb-3">
             <Card
               hoverable
               style={{ width: 240 }}
@@ -95,7 +100,7 @@ const ExecutiveReports = () => {
               </div>
             </Card>
           </div>
-          <div style={{ width: "240px" }}>
+          <div style={{ width: "240px" }} className="mb-3">
             <Card
               hoverable
               style={{ width: 240 }}

@@ -30,7 +30,7 @@ const TrainingPage = () => {
             compensation professional in mind. The primary focus of our training
             program are to:
           </h5>
-          <div class="container col-12 container-fluid   bg-light rounded-3 p-5 ">
+          <div class="container col-12 container-fluid   bg-light rounded-3 p-3 p-lg-5 mt-3  ">
             <ul style={{ fontWeight: "bold" }}>
               <li className="mb-2">
                 <span style={{ fontWeight: "bold" }}>
@@ -73,7 +73,7 @@ const TrainingPage = () => {
             There are multiple training programs we run. Please enquire with us
             to discuss your specific needs.
           </h5>
-          <div class="container col-12 container-fluid   bg-light rounded-3 p-5 ">
+          <div class="container col-12 container-fluid   bg-light rounded-3  p-3 p-lg-5 mt-3 ">
             <ul style={{ fontWeight: "bold" }}>
               <li className="mb-2">Compensation masterclass</li>
               <li className="mb-2">Long Term Incentive design</li>

@@ -17,8 +17,12 @@ import SuccessRegistration from "../components/payment_checkout/success-registra
 import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
 import ProtectedRoute from "./protected-route";
 
-import VerifyPlanRoute from "./verifyPlan";
+import ReportsPage from "../pages/reports-page";
 import ForgotPasswordPage from "../pages/forgot-password-page";
+import UserAccount from "../pages/user-account-page";
+import ChangeEmail from "../components/change-email";
+import ChangePassword from "../components/change-password";
+import ChangePlan from "../components/change-plan";
 
 const AppRoute = () => {
   return (
@@ -53,15 +57,15 @@ const AppRoute = () => {
           }
         />
 
-        <Route path="/reports" element={<VerifyPlanRoute />} />
-        {/* <Route
+        {/* <Route path="/reports" element={<VerifyPlanRoute />} /> */}
+        <Route
           path="/reports"
           element={
             <>
               <ReportsPage />
             </>
           }
-        /> */}
+        />
         <Route
           path="/executive-reports"
           element={
@@ -139,7 +143,54 @@ const AppRoute = () => {
             />
           }
         />
-
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <UserAccount />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/change-email"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangeEmail />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/change-password"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangePassword />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/change-plan"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangePlan />
+                </>
+              }
+            />
+          }
+        />
         <Route
           path="/forgot-password"
           element={

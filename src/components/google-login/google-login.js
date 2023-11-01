@@ -4,7 +4,7 @@ import axios from "axios";
 
 import AxiosInstance from "../axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import { encryptAndStoreDataLocal } from "../data-encryption";
+
 const GoogleLoginComponent = ({ element }) => {
   const navigate = useNavigate();
   const Location = useLocation();
@@ -43,8 +43,8 @@ const GoogleLoginComponent = ({ element }) => {
 
         const user_id = data.id;
 
-        encryptAndStoreDataLocal("user_id", user_id);
-        encryptAndStoreDataLocal("isLoggedIn", true);
+        localStorage.setItem("user_id", user_id);
+        localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("accessToken", data.accessToken);
 
         if (Location.pathname === "/login-app") {

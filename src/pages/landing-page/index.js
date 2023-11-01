@@ -51,7 +51,7 @@ const LandingPage = () => {
                       }}
                       className="btn "
                     >
-                      Salary market data{" "}
+                      GO{" "}
                       <span>
                         <ArrowRightAltOutlined />
                       </span>

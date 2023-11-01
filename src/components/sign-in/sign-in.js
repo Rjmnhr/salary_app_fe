@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 
 import AxiosInstance from "../axios";
-import { encryptAndStoreDataLocal } from "../data-encryption";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -55,12 +54,13 @@ const SignIn = () => {
       const accessToken = data.accessToken;
       const user_id = data.id;
       const user_name = data.first_name;
+      const plan = data.plan;
 
       if (!accessToken) return error(data);
-
-      encryptAndStoreDataLocal("user_id", user_id);
-      encryptAndStoreDataLocal("isLoggedIn", true);
-      encryptAndStoreDataLocal("user_name", user_name);
+      localStorage.setItem("plan", plan);
+      localStorage.setItem("user_id", user_id);
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("user_name", user_name);
 
       localStorage.setItem("accessToken", accessToken);
 
@@ -121,6 +121,7 @@ const SignIn = () => {
                   type="email"
                   name="email"
                   id="email-login"
+                  Password
                   placeholder="Email"
                   data-rule="email"
                   onChange={(e) => setEmail(e.target.value)}
