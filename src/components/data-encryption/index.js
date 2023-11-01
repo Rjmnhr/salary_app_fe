@@ -19,8 +19,7 @@ function decryptData(encryptedData) {
 
 // Encrypt both key and data
 export function encryptAndStoreDataLocal(key, data) {
-  const combinedData = JSON.stringify({ key, data });
-  const encryptedData = encryptData(combinedData);
+  const encryptedData = encryptData(data);
   localStorage.setItem(key, encryptedData);
 }
 
@@ -28,17 +27,16 @@ export function encryptAndStoreDataLocal(key, data) {
 export function retrieveAndDecryptDataLocal(key) {
   const encryptedData = localStorage.getItem(key);
   if (encryptedData) {
-    const combinedData = decryptData(encryptedData);
-    const { key: decryptedKey, data } = JSON.parse(combinedData);
-    return { key: decryptedKey, data };
+    const data = decryptData(encryptedData);
+
+    return { key, data };
   }
   return null;
 }
 
 // Encrypt both key and data
 export function encryptAndStoreDataSession(key, data) {
-  const combinedData = JSON.stringify({ key, data });
-  const encryptedData = encryptData(combinedData);
+  const encryptedData = encryptData(data);
   sessionStorage.setItem(key, encryptedData);
 }
 
@@ -46,9 +44,9 @@ export function encryptAndStoreDataSession(key, data) {
 export function retrieveAndDecryptDataSession(key) {
   const encryptedData = sessionStorage.getItem(key);
   if (encryptedData) {
-    const combinedData = decryptData(encryptedData);
-    const { key: decryptedKey, data } = JSON.parse(combinedData);
-    return { key: decryptedKey, data };
+    const data = decryptData(encryptedData);
+
+    return { key, data };
   }
   return null;
 }
