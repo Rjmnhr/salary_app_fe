@@ -1,7 +1,7 @@
 import React from "react";
 import CheckoutComponent from "../payment_checkout/Checkout";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import reportLimitIcon from "../../caution.png";
+import reportLimitIcon from "../../icons/caution.png";
 
 const ReportLimitFallBack = ({ userPlan }) => {
   return (

@@ -116,10 +116,9 @@ const OtpVerification = () => {
             className="col-12 mb-5"
           >
             <Steps
-              className="col-8"
+              className="col-lg-8 col-12"
               current={0}
               size="small"
-              labelPlacement="vertical"
               items={items}
             />
           </div>
@@ -128,7 +127,7 @@ const OtpVerification = () => {
             style={{ display: "grid", placeItems: "center" }}
             class="container col-12 text-left"
           >
-            <div className="col-8">
+            <div className="col-lg-8 col-12">
               <div>
                 <div>
                   <h3>Enter Verification Code</h3>

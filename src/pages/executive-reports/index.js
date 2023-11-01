@@ -3,7 +3,7 @@ import React from "react";
 import NavBar from "../../components/nav-bar";
 // import pdf from "./CEO_pay_NSE100.pdf";
 import { Card, Badge } from "antd";
-import pdfIcon from "../../pdf.png";
+import pdfIcon from "../../icons/pdf.png";
 import CheckoutComponent from "../../components/payment_checkout/Checkout";
 
 const ExecutiveReports = () => {

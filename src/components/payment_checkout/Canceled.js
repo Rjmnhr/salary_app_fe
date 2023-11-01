@@ -1,5 +1,5 @@
 import React from "react";
-import cancel from "../../cancelled.png";
+import cancel from "../../icons/cancelled.png";
 import { useNavigate } from "react-router-dom";
 
 const Canceled = () => {

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 
-import coverImg from "../../cover.jpg";
-import secondCoverImg from "../../cover-2.jpg";
+import coverImg from "../../icons/cover.jpg";
+import secondCoverImg from "../../icons/cover-2.jpg";
 // import eagle from "../../eagle.jpg";
 
 import ParallaxComponent from "../../components/react-parallax";

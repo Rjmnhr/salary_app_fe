@@ -10,7 +10,6 @@ const LandingPage = () => {
   return (
     <>
       <NavBar />
-
       <div
         className="container-fluid "
         style={{
@@ -19,11 +18,11 @@ const LandingPage = () => {
           marginTop: "80px",
         }}
       >
-        <section id="about" class="about ">
-          <div class="container" data-aos="fade-up">
-            <div class="row no-gutters">
-              <div class="content col-xl-5 d-flex align-items-stretch">
-                <div class="content">
+        <section id="about" className="about ">
+          <div className="container" data-aos="fade-up">
+            <div className="row no-gutters">
+              <div className="content col-xl-5 d-flex align-items-stretch">
+                <div className="content">
                   <h1
                     style={{
                       textAlign: "start",
@@ -51,7 +50,6 @@ const LandingPage = () => {
                         color: "white",
                       }}
                       className="btn "
-                      m
                     >
                       Salary market data{" "}
                       <span>
@@ -59,25 +57,25 @@ const LandingPage = () => {
                       </span>
                     </button>
 
-                    {/* <a href="#contact" class="btn-get-started scrollto">
+                    {/* <a href="#contact" className="btn-get-started scrollto">
                     Use Free Profile Evaluator
                   </a> */}
                   </div>
                 </div>
               </div>
               <div></div>
-              <div class="col-xl-7 d-flex align-items-stretch">
-                <div class="icon-boxes d-flex flex-column justify-content-center">
-                  <div class="section-title">
+              <div className="col-xl-7 d-flex align-items-stretch">
+                <div className="icon-boxes d-flex flex-column justify-content-center">
+                  <div className="section-title">
                     <h2>Why choose us?</h2>
                   </div>
-                  <div class="row">
+                  <div className="row">
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="100"
                     >
-                      <i class="bx bx-receipt"></i>
+                      <i className="bx bx-receipt"></i>
                       <h4>Real Time</h4>
                       <p className="text-left">
                         This is completely real-time – no more waiting for 6
@@ -86,11 +84,11 @@ const LandingPage = () => {
                       </p>
                     </div>
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="200"
                     >
-                      <i class="bx bx-cube-alt"></i>
+                      <i className="bx bx-cube-alt"></i>
                       <h4>Instant Response</h4>
                       <p className="text-left">
                         You don’t need to spend weeks on submitting data in
@@ -99,11 +97,11 @@ const LandingPage = () => {
                     </div>
 
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
-                      <i class="bx bx-images"></i>
+                      <i className="bx bx-images"></i>
                       <h4>See Market Movement</h4>
                       <p className="text-left">
                         You don’t need to spend weeks on submitting data in
@@ -112,11 +110,11 @@ const LandingPage = () => {
                     </div>
 
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="100"
                     >
-                      <i class="bx bx-receipt"></i>
+                      <i className="bx bx-receipt"></i>
                       <h4>Affordable Package</h4>
                       <p className="text-left">
                         The best part, accessing our tool is about a third the
@@ -124,11 +122,11 @@ const LandingPage = () => {
                       </p>
                     </div>
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="100"
                     >
-                      <i class="bx bx-receipt"></i>
+                      <i className="bx bx-receipt"></i>
                       <h4>Search by Location</h4>
                       <p className="text-left">
                         Salary surveys very rarely give you information about
@@ -140,11 +138,11 @@ const LandingPage = () => {
                       </p>
                     </div>
                     <div
-                      class="col-md-6 icon-box"
+                      className="col-md-6 icon-box"
                       data-aos="fade-up"
                       data-aos-delay="400"
                     >
-                      <i class="bx bx-shield"></i>
+                      <i className="bx bx-shield"></i>
                       <h4>Search by Skill</h4>
                       <p className="text-left">
                         Salary surveys don’t tell you salaries by skills

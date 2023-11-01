@@ -1,6 +1,6 @@
 import React from "react";
-import successTick from "../../check-soft-bg.svg";
-import preLoader from "../../Settings.gif";
+import successTick from "../../icons/check-soft-bg.svg";
+import preLoader from "../../icons/Settings.gif";
 import { useEffect } from "react";
 import AxiosInstance from "../axios";
 import { useState } from "react";

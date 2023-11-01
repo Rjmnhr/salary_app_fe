@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import AxiosInstance from "../../components/axios";
-import successTick from "../../check-soft-bg.svg";
-import preLoader from "../../Settings.gif";
+import successTick from "../../icons/check-soft-bg.svg";
+import preLoader from "../../icons/Settings.gif";
 import {
   encryptAndStoreDataLocal,
   encryptAndStoreDataSession,

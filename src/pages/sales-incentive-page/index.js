@@ -1,7 +1,7 @@
 import React from "react";
 
 import NavBar from "../../components/nav-bar";
-import pointArrow from "../../right-arrow.png";
+import pointArrow from "../../icons/right-arrow.png";
 
 const SalesIncentive = () => {
   return (

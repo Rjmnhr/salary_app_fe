@@ -3,7 +3,7 @@ import AxiosInstance from "../axios";
 import { retrieveAndDecryptDataLocal } from "../data-encryption";
 
 const CheckoutComponent = ({ price, plan, text, action }) => {
-  const userID = retrieveAndDecryptDataLocal("user_id").data;
+  const userID = retrieveAndDecryptDataLocal("user_id")?.data;
 
   const handleBuyNow = async () => {
     console.log("entered");
