@@ -3,6 +3,7 @@ import React from "react";
 import CheckoutComponent from "../../components/payment_checkout/Checkout";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Steps } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const items = [
   {
@@ -17,6 +18,7 @@ const items = [
 ];
 
 const RegistrationPricing = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div
@@ -55,7 +57,7 @@ const RegistrationPricing = () => {
                     <div class="d-flex-center mb-5">
                       <div class="flex-shrink-0">
                         <p style={{ fontSize: "2.5rem", fontWeight: "500" }}>
-                          ₹ 20,000
+                          Free
                         </p>{" "}
                       </div>
                       {/* <div class="flex-grow-1 align-self-end ms-3">
@@ -77,20 +79,23 @@ const RegistrationPricing = () => {
                         </p>
                         <p
                           style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
+                          className="d-flex justify-content-start align-items-center gap-2 invisible "
                         >
                           <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
                           PDF Download
                         </p>
                       </div>
                     </div>
-                    <CheckoutComponent
-                      action={"Register"}
-                      className="mt-3"
-                      text={"Select"}
-                      price={"price_1O5isbSHdxsAYvlqsTcV7kAw"}
-                      plan={"Basic"}
-                    />
+                    <button
+                      onClick={() => navigate("/success-registration-basic")}
+                      style={{
+                        background: "black",
+                        color: "white",
+                      }}
+                      className="btn border w-75 "
+                    >
+                      Select
+                    </button>
                   </div>
                 </div>
               </div>

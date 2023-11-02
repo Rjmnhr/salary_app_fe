@@ -38,7 +38,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                           fontWeight: "500",
                         }}
                       >
-                        ₹ 20,000
+                        Free
                       </p>{" "}
                     </div>
                     {/* <div class="flex-grow-1 align-self-end ms-3">

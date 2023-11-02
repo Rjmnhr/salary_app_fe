@@ -23,6 +23,7 @@ import UserAccount from "../pages/user-account-page";
 import ChangeEmail from "../components/change-email";
 import ChangePassword from "../components/change-password";
 import ChangePlan from "../components/change-plan";
+import SuccessRegistrationBasic from "../components/payment_checkout/success-registration-basic";
 
 const AppRoute = () => {
   return (
@@ -128,6 +129,14 @@ const AppRoute = () => {
           element={
             <>
               <SuccessRegistration />
+            </>
+          }
+        />
+        <Route
+          path="/success-registration-basic"
+          element={
+            <>
+              <SuccessRegistrationBasic />
             </>
           }
         />

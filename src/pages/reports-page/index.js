@@ -21,6 +21,7 @@ import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities } from "../price-a-job";
 
 import ReportLimitFallBack from "../../components/report-limit-fallback";
+import { useLocation } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -149,6 +150,8 @@ const ReportsPage = () => {
 
   const userPlan = localStorage.getItem("plan");
 
+  const location = useLocation();
+
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
     if (userPlan === "Standard") {
@@ -180,7 +183,12 @@ const ReportsPage = () => {
   };
 
   useEffect(() => {
-    const createdArray = CreateArr();
+    let createdArray = "";
+    if (location.pathname === "/reports#dashboard") {
+      createdArray = "";
+    } else {
+      createdArray = CreateArr();
+    }
 
     AxiosInstance.post(
       "/api/report/get",
@@ -214,13 +222,18 @@ const ReportsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (saveTheReport === "true") {
-      if (storedJobTitles && storedUserID) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        saveTheReport = "false";
-        saveReport();
+    if (location.pathname === "/reports#dashboard") {
+      return;
+    } else {
+      if (saveTheReport === "true") {
+        if (storedJobTitles && storedUserID) {
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          saveTheReport = "false";
+          saveReport();
+        }
       }
     }
+
     //eslint-disable-next-line
   }, []);
 

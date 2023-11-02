@@ -301,6 +301,7 @@ const PriceAJob = () => {
     );
 
     setSelectedSkills(value);
+    setSkillData([]);
 
     const itIsTopSkill = initialTopSkills.filter(
       (skill) => skill === removedSkills[0]
@@ -349,6 +350,11 @@ const PriceAJob = () => {
     setExperience(value);
   };
 
+  const handleSelectJob = (value) => {
+    setSelectedJobTitles([value]);
+    setJobsData(mappedJobs);
+  };
+
   const handleManageSelect = (value) => {
     setIsManage(value);
   };
@@ -373,6 +379,10 @@ const PriceAJob = () => {
   const items = [
     {
       key: "1",
+      label: <a href="/account">My Account</a>,
+    },
+    {
+      key: "2",
       label: (
         <a href="#eq" onClick={handleLogOut}>
           Log out
@@ -416,7 +426,7 @@ const PriceAJob = () => {
                   <a href="/">Home</a>
                 </li>
                 <li class="active">
-                  <a href="/price-a-job">Price a Job</a>
+                  <a href="/landing">Price a Job</a>
                 </li>
                 <li>
                   <a href="/executive-reports">
@@ -484,12 +494,11 @@ const PriceAJob = () => {
         >
           <div className="mb-3 col-12 col-lg-6">
             <Select
-              mode="multiple"
               size={"large"}
               showSearch
               placeholder="Job Title"
               value={selectedJobTitles}
-              onChange={setSelectedJobTitles}
+              onChange={handleSelectJob}
               onSearch={handleJobSearch}
               style={{
                 width: "100%",
