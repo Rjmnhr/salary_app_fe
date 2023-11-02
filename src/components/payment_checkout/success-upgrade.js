@@ -14,26 +14,34 @@ const SuccessUpgrade = () => {
     const userID = localStorage.getItem("user_id");
     const userPlan = sessionStorage.getItem("upgrade_plan");
 
-    AxiosInstance.post(
-      "/api/user/upgrade",
-      { plan: userPlan, id: userID },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then(async (response) => {
-        //eslint-disable-next-line
-        const data = await response.data;
-        localStorage.setItem("plan", userPlan);
-        setIsProfileUpdated(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("something is wrong");
-        // navigate("/login");
-      });
+    if (userPlan && userID) {
+      AxiosInstance.post(
+        "/api/user/upgrade",
+        { plan: userPlan, id: userID },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then(async (response) => {
+          //eslint-disable-next-line
+          const data = await response.data;
+          sessionStorage.removeItem("upgrade_plan");
+          setIsProfileUpdated(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("something is wrong");
+          sessionStorage.removeItem("upgrade_plan");
+          // navigate("/login");
+        });
+    } else {
+      alert("something wrong");
+      navigate("/");
+    }
+
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {

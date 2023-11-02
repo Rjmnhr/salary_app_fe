@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { ArrowRightAltOutlined } from "@mui/icons-material";
-import BgVideo from "../../video/ScreenVideo_2023112_112404.mkv";
+
+import BgVideo from "../../video/demo.mp4";
 
 import NavBar from "../../components/nav-bar/index";
 import DownloadSamplePDF from "../../components/download-sample-pdf";
 import AxiosInstance from "../../components/axios";
+import { ArrowRightOutlined } from "@ant-design/icons";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -83,8 +84,8 @@ const LandingPage = () => {
                       className="btn "
                     >
                       Get your salary report
-                      <span>
-                        <ArrowRightAltOutlined />
+                      <span style={{ marginLeft: "8px" }}>
+                        <ArrowRightOutlined />
                       </span>
                     </button>
 

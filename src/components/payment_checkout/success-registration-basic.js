@@ -75,9 +75,9 @@ const SuccessRegistrationBasic = () => {
         }
 
         const user_id = data.id;
-        const plan = data.plan;
+        // const plan = data.plan;
 
-        localStorage.setItem("plan", plan);
+        // localStorage.setItem("plan", plan);
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("accessToken", accessToken);

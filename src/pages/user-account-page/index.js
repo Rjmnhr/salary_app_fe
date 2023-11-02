@@ -9,6 +9,7 @@ const UserAccount = () => {
     AxiosInstance.get(`api/user/details?id=${userID}`)
       .then(async (res) => {
         const response = await res.data;
+        sessionStorage.setItem("user-email", response.email);
         setUserInfo(response);
       })
       .catch((err) => console.log(err));

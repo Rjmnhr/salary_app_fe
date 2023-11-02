@@ -104,7 +104,7 @@ function formatColumnName(columnName) {
 //   }
 // };
 
-const ReportsPage = () => {
+const ReportsPage = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
   // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
@@ -147,8 +147,6 @@ const ReportsPage = () => {
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
 
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
-
-  const userPlan = localStorage.getItem("plan");
 
   const location = useLocation();
 

@@ -21,17 +21,6 @@ const calculateMedian = (arr) => {
   }
 };
 
-const CapitalizeFirstLetter = (data) => {
-  // Split the string into words
-  const words = data?.split(" ");
-  // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words?.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  );
-
-  // Join the words back together with spaces
-  return capitalizedWords?.join(" ");
-};
 const MedianSalaryChartForSkills = ({ data, skills }) => {
   // Initialize an empty array to store the median salary data for each skill
   const [chartWidth, setChartWidth] = useState(600);
@@ -70,7 +59,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
   // Calculate the median salary for each skill
   skills.forEach((skill) => {
     const filteredData = data.filter((item) =>
-      item.combined_skills.includes(skill?.toLowerCase())
+      item.combined_skills?.toLowerCase().includes(skill?.toLowerCase())
     );
     const median = calculateMedian(
       filteredData.map((item) => item.mapped_average_sal)
@@ -79,7 +68,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
     // Check if the median is valid (not NaN or null) before adding it to the array
     if (!isNaN(median) && median !== null) {
       skillMedians.push({
-        skill: CapitalizeFirstLetter(skill),
+        skill: skill,
         median: median,
       });
     }

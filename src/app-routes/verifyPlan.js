@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import ReportsPage from "../pages/reports-page";
 import AxiosInstance from "../components/axios";
-import { retrieveAndDecryptDataLocal } from "../components/data-encryption";
 
 const VerifyPlanRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
-  const userID = retrieveAndDecryptDataLocal("user_id").data;
+  const userID = localStorage.getItem("user_id");
 
   const [userPlan, setUserPlan] = useState(null);
 

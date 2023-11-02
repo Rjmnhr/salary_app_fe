@@ -95,7 +95,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
             <div class="card card-lg card-shadow card-pinned h-100">
               <div class="card-body">
                 <div class="mb-3">
-                  <h2 style={{ width: "  109%" }} class="mb-1 text-primary">
+                  <h2 style={{ width: "  114%" }} class="mb-1 text-primary">
                     STANDARD
                   </h2>
                 </div>
@@ -104,7 +104,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                   <p
                     style={{
                       fontSize: "2.5rem",
-                      fontWeight: "500",
+                      fontWeight: "400",
                     }}
                   >
                     ₹ 60,000

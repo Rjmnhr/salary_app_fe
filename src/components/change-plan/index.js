@@ -2,7 +2,8 @@ import React from "react";
 import CheckoutComponent from "../payment_checkout/Checkout";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 
-const ChangePlan = ({ userPlan }) => {
+const ChangePlan = () => {
+  const userPlan = "Basic";
   return (
     <div
       style={{
@@ -34,7 +35,7 @@ const ChangePlan = ({ userPlan }) => {
                           fontWeight: "500",
                         }}
                       >
-                        ₹ 20,000
+                        Free
                       </p>{" "}
                     </div>
                     {/* <div class="flex-grow-1 align-self-end ms-3">

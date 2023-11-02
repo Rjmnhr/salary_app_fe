@@ -1,6 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
+import AxiosInstance from "../axios";
+import { Modal } from "antd";
+import { CheckCircleOutlineRounded } from "@mui/icons-material";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const Contact = () => {
+  const [query, setQuery] = useState("");
+  const [name, setName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [email, setEmail] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData();
+
+    formData.append("name", name);
+
+    formData.append("subject", subject);
+
+    formData.append("email", email);
+
+    formData.append("details", query);
+
+    AxiosInstance.post("/api/enquiry/send-enquiry", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        //eslint-disable-next-line
+        const data = await response.data;
+
+        setIsLoading(false);
+
+        setModalVisible(true);
+        e.target.reset();
+
+        setName("");
+        setSubject("");
+        setEmail("");
+        setQuery("");
+      })
+      .catch((err) => {
+        alert("Message sending Failed");
+        console.log("error", err);
+      });
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+
   return (
     <div>
       <section id="contact" class="contact">
@@ -37,10 +91,11 @@ const Contact = () => {
             </div>
 
             <div class="col-lg-6">
-              <form class="php-email-form">
+              <form class="php-email-form" onSubmit={handleSubmit}>
                 <div class="row">
                   <div class="col form-group">
                     <input
+                      required
                       type="text"
                       name="name"
                       class="form-control"
@@ -48,11 +103,13 @@ const Contact = () => {
                       placeholder="Your Name"
                       data-rule="minlen:4"
                       data-msg="Please enter at least 4 chars"
+                      onChange={(e) => setName(e.target.value)}
                     />
                     <div class="validate"></div>
                   </div>
                   <div class="col form-group">
                     <input
+                      required
                       type="email"
                       class="form-control"
                       name="email"
@@ -60,12 +117,14 @@ const Contact = () => {
                       placeholder="Your Email"
                       data-rule="email"
                       data-msg="Please enter a valid email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <div class="validate"></div>
                   </div>
                 </div>
                 <div class="form-group">
                   <input
+                    required
                     type="text"
                     class="form-control"
                     name="subject"
@@ -73,6 +132,7 @@ const Contact = () => {
                     placeholder="Subject"
                     data-rule="minlen:4"
                     data-msg="Please enter at least 8 chars of subject"
+                    onChange={(e) => setSubject(e.target.value)}
                   />
                   <div class="validate"></div>
                 </div>
@@ -81,27 +141,37 @@ const Contact = () => {
                     class="form-control"
                     name="message"
                     rows="5"
-                    data-rule="required"
                     data-msg="Please write something for us"
                     placeholder="Message"
+                    onChange={(e) => setQuery(e.target.value)}
                   ></textarea>
                   <div class="validate"></div>
                 </div>
-                <div class="mb-3">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">
-                    Your message has been sent. Thank you!
-                  </div>
-                </div>
+
                 <div class="text-center">
-                  <button type="submit">Send Message</button>
+                  <button className="w-75" type="submit">
+                    {" "}
+                    {isLoading ? <LoadingOutlined /> : " Send Message"}
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </section>
+      <Modal
+        visible={modalVisible}
+        onCancel={handleModalClose}
+        onOk={handleModalClose}
+      >
+        <div className="container p-3 d-flex-column align-items-center">
+          <p className="d-flex align-items-center gap-1 ">
+            Your enquiry has been sent successfully
+            <CheckCircleOutlineRounded sx={{ color: "green" }} />{" "}
+          </p>
+          <p>We will get back to you soon.</p>
+        </div>
+      </Modal>
     </div>
   );
 };
