@@ -24,6 +24,7 @@ import ChangeEmail from "../components/change-email";
 import ChangePassword from "../components/change-password";
 import ChangePlan from "../components/change-plan";
 import SuccessRegistrationBasic from "../components/payment_checkout/success-registration-basic";
+import Contact from "../components/contact";
 
 const AppRoute = () => {
   return (
@@ -159,6 +160,18 @@ const AppRoute = () => {
               element={
                 <>
                   <UserAccount />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <Contact />
                 </>
               }
             />

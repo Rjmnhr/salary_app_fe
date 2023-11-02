@@ -3,7 +3,7 @@ import SignIn from "../../components/sign-in/sign-in";
 import NavBar from "../../components/nav-bar/index";
 import SignUp from "../../components/sign-up/sign-up";
 import { useApplicationContext } from "../../context/app-context";
-
+import loginBG from "../../icons/salary-wave.png";
 import { LoginPagestyled } from "./style";
 
 const LoginPage = () => {
@@ -38,8 +38,7 @@ const LoginPage = () => {
           <div
             className="left-container img_container"
             style={{
-              backgroundImage:
-                "url(https://res.cloudinary.com/dsw1ubwyh/image/upload/v1697028167/nfettkwdlclbz0viva6h.png)",
+              backgroundImage: `url(${loginBG})`,
               backgroundPosition: "center",
               backgroundSize: "cover",
               height: "100vh",

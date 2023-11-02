@@ -250,7 +250,7 @@ const LandingPage = () => {
                     <li>1 Salary Report</li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="#contact" class="btn-buy">
+                    <a href="/contact" class="btn-buy">
                       Discuss more
                     </a>
                   </div>
@@ -272,7 +272,7 @@ const LandingPage = () => {
                     <li>PDF Downloads </li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="#contact" class="btn-buy">
+                    <a href="/contact" class="btn-buy">
                       Discuss more
                     </a>
                   </div>
@@ -281,7 +281,7 @@ const LandingPage = () => {
 
               <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
                 <div class="box" data-aos="fade-up" data-aos-delay="300">
-                  <h3>Premium 5 college</h3>
+                  <h3>Premium</h3>
                   <h4>
                     <sup>₹</sup>1,20,000
                   </h4>
@@ -290,7 +290,7 @@ const LandingPage = () => {
                     <li>PDF Downloads </li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="#contact" class="btn-buy">
+                    <a href="/contact" class="btn-buy">
                       Discuss more
                     </a>
                   </div>
