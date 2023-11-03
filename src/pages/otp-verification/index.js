@@ -27,7 +27,7 @@ const OtpVerification = () => {
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
-  const email = localStorage.getItem("email");
+  const email = sessionStorage.getItem("email");
 
   const [isLoading, setIsLoading] = useState(false);
 

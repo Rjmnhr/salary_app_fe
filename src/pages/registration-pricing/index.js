@@ -144,7 +144,7 @@ const RegistrationPricing = () => {
                       action={"Register"}
                       className="mt-3"
                       text={"Select"}
-                      price={process.env.REACT_APP_PRICE_STANDARD}
+                      price={"price_1O5itXSHdxsAYvlqFmXt6lwV"}
                       plan={"Standard"}
                     />
                   </div>
@@ -196,7 +196,7 @@ const RegistrationPricing = () => {
                       action={"Register"}
                       className="mt-3"
                       text={"Select"}
-                      price={process.env.REACT_APP_PRICE_PREMIUM}
+                      price={"price_1O5iuUSHdxsAYvlqPOP39oMk"}
                       plan={"Premium"}
                     />
                   </div>

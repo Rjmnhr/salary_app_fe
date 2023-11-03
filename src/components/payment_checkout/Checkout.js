@@ -3,10 +3,10 @@ import AxiosInstance from "../axios";
 import { retrieveAndDecryptDataLocal } from "../data-encryption";
 
 const CheckoutComponent = ({ price, plan, text, action }) => {
-  console.log("🚀 ~ file: Checkout.js:6 ~ CheckoutComponent ~ price:", price);
   const userID = retrieveAndDecryptDataLocal("user_id")?.data;
 
   const handleBuyNow = async () => {
+    console.log("🚀 ~ file: Checkout.js:6 ~ CheckoutComponent ~ price:", price);
     console.log("entered");
     try {
       const response = await AxiosInstance.post(

@@ -78,7 +78,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                       action={"Upgrade"}
                       className="mt-3"
                       text={"Upgrade"}
-                      price={process.env.REACT_APP_PRICE_BASIC}
+                      price={"price_1O5isbSHdxsAYvlqsTcV7kAw"}
                       plan={"Basic"}
                     />
                   )}
@@ -145,7 +145,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                     action={"Upgrade"}
                     className="mt-3"
                     text={"Upgrade"}
-                    price={process.env.REACT_APP_PRICE_STANDARD}
+                    price={"price_1O5itXSHdxsAYvlqFmXt6lwV"}
                     plan={"Standard"}
                   />
                 )}
@@ -209,7 +209,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                     action={"Upgrade"}
                     className="mt-3"
                     text={"Upgrade"}
-                    price={process.env.REACT_APP_PRICE_PREMIUM}
+                    price={"price_1O5iuUSHdxsAYvlqPOP39oMk"}
                     plan={"Premium"}
                   />
                 )}

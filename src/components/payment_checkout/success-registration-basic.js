@@ -6,12 +6,14 @@ import preLoader from "../../icons/Settings.gif";
 import { useNavigate } from "react-router-dom";
 
 const SuccessRegistrationBasic = () => {
-  const first_name = localStorage.getItem("first_name");
+  const first_name = sessionStorage.getItem("first_name");
 
-  const last_name = localStorage.getItem("last_name");
-  const password = localStorage.getItem("password");
-  const phone = localStorage.getItem("phone");
-  const email = localStorage.getItem("email");
+  const last_name = sessionStorage.getItem("last_name");
+  const password = sessionStorage.getItem("password");
+  const phone = sessionStorage.getItem("phone");
+  const email = sessionStorage.getItem("email");
+  const job = sessionStorage.getItem("job");
+  const company = sessionStorage.getItem("company");
   const [isProfileCreated, setProfileCreated] = useState(false);
 
   const [seconds, setSeconds] = useState(5);
@@ -40,12 +42,14 @@ const SuccessRegistrationBasic = () => {
     //eslint-disable-next-line
   }, []);
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("first_name");
-    localStorage.removeItem("last_name");
-    localStorage.removeItem("password");
-    localStorage.removeItem("phone");
+  const clearSessionStorage = () => {
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("first_name");
+    sessionStorage.removeItem("last_name");
+    sessionStorage.removeItem("password");
+    sessionStorage.removeItem("phone");
+    sessionStorage.removeItem("job");
+    sessionStorage.removeItem("company");
   };
 
   const CreateProfile = (plan) => {
@@ -57,7 +61,8 @@ const SuccessRegistrationBasic = () => {
     formData.append("password", password);
     formData.append("phone", phone);
     formData.append("plan", plan);
-
+    formData.append("job", job);
+    formData.append("company", company);
     AxiosInstance.post("/api/user/signup", formData, {
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +75,7 @@ const SuccessRegistrationBasic = () => {
 
         if (!accessToken) {
           navigate("/login");
-          clearLocalStorage();
+          clearSessionStorage();
           return;
         }
 
@@ -83,7 +88,7 @@ const SuccessRegistrationBasic = () => {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("email", data.email);
 
-        clearLocalStorage();
+        clearSessionStorage();
         setProfileCreated(true); // Mark profile as created
       })
       .catch((err) => {

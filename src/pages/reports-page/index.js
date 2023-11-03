@@ -153,7 +153,7 @@ const ReportsPage = ({ userPlan }) => {
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
     if (userPlan === "Standard") {
-      setReportLimit(5);
+      setReportLimit(6);
     } else if (userPlan === "Premium") {
       setReportLimit(Infinity); // Unlimited reports
     }

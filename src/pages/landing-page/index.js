@@ -252,7 +252,7 @@ const LandingPage = () => {
                   </ul>
                   <div class="btn-wrap">
                     <a href="/contact" class="btn-buy">
-                      Discuss more
+                      Contact now
                     </a>
                   </div>
                 </div>
@@ -274,7 +274,7 @@ const LandingPage = () => {
                   </ul>
                   <div class="btn-wrap">
                     <a href="/contact" class="btn-buy">
-                      Discuss more
+                      Contact now
                     </a>
                   </div>
                 </div>
@@ -292,7 +292,7 @@ const LandingPage = () => {
                   </ul>
                   <div class="btn-wrap">
                     <a href="/contact" class="btn-buy">
-                      Discuss more
+                      Contact now
                     </a>
                   </div>
                 </div>

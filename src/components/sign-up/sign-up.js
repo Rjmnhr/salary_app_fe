@@ -21,6 +21,8 @@ const SignUp = () => {
   const [isPasswordSame, setIsPasswordSame] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUserExists, setIsUserExists] = useState(false);
+  const [jobTitle, setJobTitle] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   const { setIsSignIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
@@ -65,11 +67,14 @@ const SignUp = () => {
         const data = await response.data;
         // Handle successful OTP request
         console.log(data);
-        localStorage.setItem("email", lowerCasedEmail);
+        sessionStorage.setItem("email", lowerCasedEmail);
 
-        localStorage.setItem("first_name", firstName);
-        localStorage.setItem("last_name", lastName);
-        localStorage.setItem("password", password);
+        sessionStorage.setItem("first_name", firstName);
+        sessionStorage.setItem("last_name", lastName);
+        sessionStorage.setItem("password", password);
+        sessionStorage.setItem("job", jobTitle);
+
+        sessionStorage.setItem("company", companyName);
 
         setIsLoading(false);
         navigate("/otp-validation");
@@ -122,6 +127,7 @@ const SignUp = () => {
                 <div class="d-flex">
                   <div class="col-6 form-group">
                     <input
+                      required
                       type="text"
                       name="first Name"
                       class="form-control"
@@ -135,6 +141,7 @@ const SignUp = () => {
                   </div>
                   <div class="col-6 form-group">
                     <input
+                      required
                       type="text"
                       class="form-control"
                       name="last name"
@@ -147,8 +154,39 @@ const SignUp = () => {
                     <div class="validate"></div>
                   </div>
                 </div>
+                <div class="d-flex">
+                  <div class="col-6 form-group">
+                    <input
+                      required
+                      type="text"
+                      name="job title"
+                      class="form-control"
+                      id="name"
+                      placeholder="Job title"
+                      data-rule="minlen:4"
+                      data-msg="Please enter at least 4 chars"
+                      onChange={(e) => setJobTitle(e.target.value)}
+                    />
+                    <div class="validate"></div>
+                  </div>
+                  <div class="col-6 form-group">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      name="Company name"
+                      id="Company name"
+                      placeholder="Company name"
+                      data-rule="Company name"
+                      data-msg="Please enter a valid Company name"
+                      onChange={(e) => setCompanyName(e.target.value)}
+                    />
+                    <div class="validate"></div>
+                  </div>
+                </div>
                 <div class="col form-group">
                   <input
+                    required
                     type="email"
                     class="form-control"
                     name="email"
@@ -169,6 +207,7 @@ const SignUp = () => {
                 </div>
                 <div className="mb-3 col-12 col-lg-12">
                   <Input.Password
+                    required
                     placeholder=" Password"
                     iconRender={(visible) =>
                       visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -180,6 +219,7 @@ const SignUp = () => {
 
                 <div className="mb-3 col-12 col-lg-12">
                   <Input.Password
+                    required
                     placeholder="Confirm password"
                     iconRender={(visible) =>
                       visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
