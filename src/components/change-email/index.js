@@ -11,6 +11,7 @@ import { CheckCircleOutlineRounded } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const email = sessionStorage.getItem("user-email");
+const userID = localStorage.getItem("user_id");
 
 const VerifyEmail = ({ setIsOtpSend }) => {
   const handleSubmit = async () => {
@@ -31,7 +32,7 @@ const VerifyEmail = ({ setIsOtpSend }) => {
   };
   return (
     <>
-      <div>
+      <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
         <div
           style={{
             display: "grid",
@@ -84,7 +85,7 @@ const VerifyEmail = ({ setIsOtpSend }) => {
   );
 };
 
-const OtpVerification = ({ email }) => {
+const OtpVerification = () => {
   const [otp, setOtp] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [warning, setWarning] = useState("");
@@ -115,7 +116,7 @@ const OtpVerification = ({ email }) => {
   };
 
   return (
-    <>
+    <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
       <form onSubmit={handleSubmit} class=" text-start  col-lg-12">
         <div class="mb-5 text-start">
           <h1>SECURITY CHECK</h1>
@@ -147,13 +148,15 @@ const OtpVerification = ({ email }) => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 
 const ChangeNewMail = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [modalVisible, setModalVisible] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailUsed, setEmailUsed] = useState(false);
   const navigate = useNavigate();
 
   const notification = ({ message, type }) => {
@@ -173,7 +176,8 @@ const ChangeNewMail = () => {
     AxiosInstance.post(
       "/api/user/change-email",
       {
-        email: email,
+        email: newEmail,
+        id: userID,
       },
       {
         headers: {
@@ -185,17 +189,22 @@ const ChangeNewMail = () => {
         //eslint-disable-next-line
         const data = await response.data;
 
-        if (!response.status === 200) {
-          notification("Password reset failed", "error");
+        if (data === 404) {
+          setEmailUsed(true);
           return;
         }
 
-        notification("Password has been successfully reset!", "success");
+        if (!response.status === 200) {
+          notification("email change failed", "error");
+          return;
+        }
+
+        notification("email has been changed successfully ", "success");
         setModalVisible(true);
         e.target.reset();
         setTimeout(() => {
           // Navigate to the desired route after 5 seconds
-          navigate("/login"); // Replace 'destination' with your actual route
+          navigate("/account"); // Replace 'destination' with your actual route
         }, 5000); // 3 seconds in millisecondsx
       })
       .catch((err) => {
@@ -217,7 +226,10 @@ const ChangeNewMail = () => {
           <h2>Change Email</h2>
           <p>Current Email is {email}</p>
 
-          <form onSubmit={handleSubmit} class="php-email-form col-12 col-lg-8">
+          <form
+            onSubmit={handleSubmit}
+            class="php-email-form col-12 col-lg-8 p-0"
+          >
             <div class="form-group mb-3 ">
               <input
                 type="text"
@@ -226,8 +238,13 @@ const ChangeNewMail = () => {
                 id="New email"
                 placeholder="New email"
                 required
+                onChange={(e) => setNewEmail(e.target.value)}
               />
-              <div class="validate"></div>
+              <p style={{ fontSize: "14px", color: "red" }}>
+                {emailUsed
+                  ? "Email is already in use with another account"
+                  : ""}
+              </p>
             </div>
 
             <div class="text-left">
@@ -245,12 +262,8 @@ const ChangeNewMail = () => {
       >
         <div className="container p-3 d-flex-column align-items-center">
           <p className="d-flex align-items-center gap-1 ">
-            Your password has been successfully reset!
+            Your email has been changed successfully!
             <CheckCircleOutlineRounded sx={{ color: "green" }} />{" "}
-          </p>
-
-          <p style={{ cursor: "pointer" }}>
-            You can now log in with your new password.
           </p>
         </div>
       </Modal>
@@ -283,7 +296,7 @@ const ChangeEmail = () => {
     //eslint-disable-next-line
   }, []);
   return (
-    <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
+    <div>
       {isOtpSend ? (
         isEmailVerified ? (
           <ChangeNewMail />

@@ -54,6 +54,7 @@ const SignIn = () => {
       const accessToken = data.accessToken;
       const user_id = data.id;
       const user_name = data.first_name;
+
       // const plan = data.plan;
 
       if (!accessToken) return error(data);

@@ -10,6 +10,7 @@ const UserAccount = () => {
       .then(async (res) => {
         const response = await res.data;
         sessionStorage.setItem("user-email", response.email);
+        sessionStorage.setItem("user-plan", response.plan);
         setUserInfo(response);
       })
       .catch((err) => console.log(err));

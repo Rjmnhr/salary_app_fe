@@ -77,7 +77,7 @@ export default ExecutiveReports;
 //            <p>Receive Instantly</p>
 //            <CheckoutComponent
 //              text={"Buy now"}
-//              price={"price_1O2oj5SHdxsAYvlqZD5LRK6Q"}
+//              price={process.env.REACT_APP_PRICE_100}
 //            />
 //          </div>
 //        </Card>
@@ -115,7 +115,7 @@ export default ExecutiveReports;
 //          <p>Receive Instantly</p>
 //          <CheckoutComponent
 //            text={"Buy now"}
-//            price={"price_1O548aSHdxsAYvlqbhphgSW8"}
+//            price={process.env.REACT_APP_PRICE_250}
 //          />
 //        </div>
 //      </Card>
@@ -152,7 +152,7 @@ export default ExecutiveReports;
 //          <p>Receive Instantly</p>
 //          <CheckoutComponent
 //            text={"Buy now"}
-//            price={"price_1O54EESHdxsAYvlqG7Q6zQOU"}
+//            price={process.env.REACT_APP_PRICE_500}
 //          />
 //        </div>
 //      </Card>

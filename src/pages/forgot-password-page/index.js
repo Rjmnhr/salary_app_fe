@@ -192,7 +192,7 @@ const CreatePassword = ({ email }) => {
     }
 
     AxiosInstance.post(
-      "/api/user/change-password",
+      "/api/user/reset-password",
       {
         email: email,
         password: password,

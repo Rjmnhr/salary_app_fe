@@ -36,6 +36,7 @@ const HomePage = () => {
                     YOUR PARTNERS IN ALL
                     <span className="text-primary"> MATTERS</span> PAY
                   </h1>
+
                   <div
                     style={{
                       width: "100%",
@@ -45,10 +46,6 @@ const HomePage = () => {
                       gap: "5px",
                     }}
                   ></div>
-
-                  {/* <a href="#contact" class="btn-get-started scrollto">
-                    Use Free Profile Evaluator
-                  </a> */}
                 </div>
               </div>
             </div>
