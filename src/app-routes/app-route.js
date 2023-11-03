@@ -60,6 +60,7 @@ const AppRoute = () => {
         />
 
         <Route path="/reports" element={<VerifyPlanRoute />} />
+        <Route path="/reports-dashboard" element={<VerifyPlanRoute />} />
         {/* <Route
           path="/reports"
           element={

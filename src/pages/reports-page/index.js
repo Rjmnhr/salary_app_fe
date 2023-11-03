@@ -168,7 +168,8 @@ const ReportsPage = ({ userPlan }) => {
 
   // Create a new array by mapping the jobTitles array
   const CreateArr = () => {
-    const newArr = storedJobTitles.map((jobTitle) => ({
+    console.log("debug");
+    const newArr = storedJobTitles?.map((jobTitle) => ({
       job_titles: jobTitle,
       location: storedLocation,
       experience: Number(storedExperience),
@@ -182,9 +183,18 @@ const ReportsPage = ({ userPlan }) => {
 
   useEffect(() => {
     let createdArray = "";
-    if (location.pathname === "/reports#dashboard") {
+    if (location.pathname === "/reports-dashboard") {
+      console.log(
+        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:",
+        location.pathname
+      );
+
       createdArray = "";
     } else {
+      console.log(
+        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:else",
+        location.pathname
+      );
       createdArray = CreateArr();
     }
 

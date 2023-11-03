@@ -104,7 +104,7 @@ const LandingPage = () => {
                   >
                     {activateDashboard ? (
                       <button
-                        onClick={() => navigate("/reports#dashboard")}
+                        onClick={() => navigate("/reports-dashboard")}
                         style={{
                           fontSize: "20px",
 

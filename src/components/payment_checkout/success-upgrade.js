@@ -51,7 +51,7 @@ const SuccessUpgrade = () => {
           setSeconds(seconds - 1);
         } else {
           clearInterval(countdown);
-          navigate("/reports");
+          navigate("/reports-dashboard");
         }
       }, 1000);
 
