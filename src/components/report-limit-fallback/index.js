@@ -145,7 +145,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                     action={"Upgrade"}
                     className="mt-3"
                     text={"Upgrade"}
-                    price={"price_1O5itXSHdxsAYvlqFmXt6lwV"}
+                    price={"price_1O9KTPDNZni9rE7FAvQLL2KI"}
                     plan={"Standard"}
                   />
                 )}
@@ -209,7 +209,7 @@ const ReportLimitFallBack = ({ userPlan }) => {
                     action={"Upgrade"}
                     className="mt-3"
                     text={"Upgrade"}
-                    price={"price_1O5iuUSHdxsAYvlqPOP39oMk"}
+                    price={"price_1O9KffDNZni9rE7Fr8gBJURb"}
                     plan={"Premium"}
                   />
                 )}
