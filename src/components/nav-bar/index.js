@@ -140,7 +140,7 @@ const NavBar = ({ scrollToContact }) => {
                   className={activeLink === "executive-reports" ? "active" : ""}
                 >
                   <a href="/executive-reports">
-                    Executive Compensation Reports
+                    Executive Compensation Benchmarking
                   </a>
                 </li>
 

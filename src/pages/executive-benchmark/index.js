@@ -2,8 +2,18 @@ import React, { useEffect, useState } from "react";
 import Fraction from "fraction.js";
 import AxiosInstance from "../../components/axios";
 import { Select } from "antd";
+import NavBar from "../../components/nav-bar";
+import { useNavigate } from "react-router-dom";
 
-const ExecutiveBenchmark = () => {
+const BasedOnIndex = () => {
+  return (
+    <div>
+      <h3>This option will be available soon</h3>
+    </div>
+  );
+};
+
+const HandSelectedPeers = () => {
   const [marketCap, setMarketCap] = useState(0);
   const [totalAssets, setTotalAssets] = useState(0);
   const [sales, setSales] = useState(0);
@@ -23,6 +33,7 @@ const ExecutiveBenchmark = () => {
   const [maxAssets, setMaxAssets] = useState(0);
   const [maxSales, setMaxSales] = useState(0);
   const [maxPAT, setMaxPAT] = useState(0);
+  const navigate = useNavigate();
 
   const handleMarketCapChange = (event) => {
     const value = parseFloat(event.target.value);
@@ -141,10 +152,17 @@ const ExecutiveBenchmark = () => {
     })
       .then(async (res) => {
         const response = await res.data;
-        console.log(
-          "🚀 ~ file: index.js:123 ~ AxiosInstance.post ~ response:",
-          response
-        );
+
+        const companiesList = response.map((item) => Object.values(item)[0]);
+
+        // Create a new Set to store unique values
+        const uniqueSet = new Set(companiesList);
+
+        // Convert the Set back to an array, sort it, and remove "unclassified" if present
+        const uniqueArray = Array.from(uniqueSet).sort();
+
+        sessionStorage.setItem("companies", JSON.stringify(uniqueArray));
+        navigate("/role-information");
       })
       .catch((err) => console.log(err));
   };
@@ -154,8 +172,6 @@ const ExecutiveBenchmark = () => {
   };
   return (
     <div className="container-fluid">
-      <h2 className="fs-2 mt-3">Peer group creation</h2>
-      <h5 className="mt-3">Hand selected peers</h5>
       <div
         className="w-100 mt-5"
         style={{ display: "grid", placeItems: "center" }}
@@ -316,5 +332,53 @@ const ExecutiveBenchmark = () => {
     </div>
   );
 };
+
+function ExecutiveBenchmark() {
+  const [selectedOption, setSelectedOption] = useState("HandSelectedPeers");
+
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  return (
+    <>
+      <NavBar />
+      <div className="container-fluid " style={{ marginTop: "80px" }}>
+        {/* <h2 className="fs-2 mt-3">Peer group creation</h2> */}
+        <h3 className="mt-5">Choose any of the options</h3>
+        <div style={{ display: "grid", placeItems: "center" }}>
+          <div className="w-100 mt-3 d-flex justify-content-around col-lg-6">
+            <div>
+              <input
+                type="radio"
+                value="HandSelectedPeers"
+                checked={selectedOption === "HandSelectedPeers"}
+                onChange={handleRadioChange}
+                style={{ marginRight: "8px" }}
+              />
+              <label>Hand selected peers</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                value="BasedOnIndex"
+                checked={selectedOption === "BasedOnIndex"}
+                onChange={handleRadioChange}
+                style={{ marginRight: "8px" }}
+              />
+              <label>Based on index</label>
+            </div>
+          </div>
+        </div>
+
+        {selectedOption === "HandSelectedPeers" ? (
+          <HandSelectedPeers />
+        ) : (
+          <BasedOnIndex />
+        )}
+      </div>
+    </>
+  );
+}
 
 export default ExecutiveBenchmark;
