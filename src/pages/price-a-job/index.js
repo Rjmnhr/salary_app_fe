@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Input, InputNumber, Select, Tag, Dropdown } from "antd";
+import {
+  Avatar,
+  Input,
+  InputNumber,
+  Select,
+  Tag,
+  Dropdown,
+  Skeleton,
+} from "antd";
 
 import { UserOutlined } from "@ant-design/icons";
 
@@ -51,7 +59,7 @@ const CapitalizeFirstLetter = (data) => {
   // Join the words back together with spaces
   return capitalizedWords?.join(" ");
 };
-function formatColumnName(columnName) {
+export function formatColumnName(columnName) {
   // Replace spaces and slashes with underscores
   columnName = columnName.replace(/[\s/]+/g, "_").toLowerCase();
 
@@ -688,7 +696,10 @@ const PriceAJob = () => {
           </div>
         </>
       ) : (
-        ""
+        <div className="container-fluid p-3">
+          <Skeleton active />
+          <Skeleton active />
+        </div>
       )}
     </>
   );

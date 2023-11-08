@@ -18,7 +18,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AxiosInstance from "../../components/axios";
 import GeneratedReport from "../../components/generate_report";
 import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
-import { cities } from "../price-a-job";
+import { cities, formatColumnName } from "../price-a-job";
 
 import ReportLimitFallBack from "../../components/report-limit-fallback";
 import { useLocation } from "react-router-dom";
@@ -33,10 +33,6 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-
-function formatColumnName(columnName) {
-  return columnName?.replace(/[\s/]+/g, "_").toLowerCase();
-}
 
 // const GenerateSalaryValue = (originalData, storedExperience) => {
 //   if (originalData.length > 0) {
