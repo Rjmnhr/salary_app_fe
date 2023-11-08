@@ -4,7 +4,6 @@ import HomePage from "../pages/home-page/index";
 import LandingPage from "../pages/landing-page";
 
 import PriceAJob from "../pages/price-a-job";
-import ExecutiveReports from "../pages/executive-reports";
 
 import LoginPage from "../pages/login-page";
 import OtpVerification from "../pages/otp-verification";
@@ -16,7 +15,7 @@ import RegistrationPricing from "../pages/registration-pricing";
 import SuccessRegistration from "../components/payment_checkout/success-registration";
 import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
 import ProtectedRoute from "./protected-route";
-
+import ExecutiveReports from "../pages/executive-reports";
 import ForgotPasswordPage from "../pages/forgot-password-page";
 import UserAccount from "../pages/user-account-page";
 import ChangeEmail from "../components/change-email";

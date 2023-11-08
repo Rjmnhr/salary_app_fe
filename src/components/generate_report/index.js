@@ -30,17 +30,17 @@ import MedianSalaryChartForSkills from "../median_salary_for_skills";
 
 // import { format } from "date-fns"; // Import date-fns for date formatting
 
-const CapitalizeFirstLetter = (data) => {
-  // Split the string into words
-  const words = data?.split(" ");
-  // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words?.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  );
+// const CapitalizeFirstLetter = (data) => {
+//   // Split the string into words
+//   const words = data?.split(" ");
+//   // Capitalize the first letter of each word and make the rest lowercase
+//   const capitalizedWords = words?.map(
+//     (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+//   );
 
-  // Join the words back together with spaces
-  return capitalizedWords?.join(" ");
-};
+//   // Join the words back together with spaces
+//   return capitalizedWords?.join(" ");
+// };
 
 // // Helper function to calculate average salary
 function calculateAverageSalary(data) {
@@ -306,7 +306,7 @@ const GeneratedReport = ({
 
   // Calculate the percentages
   const chartDataWithPercentages = chartData.map((skill) => ({
-    name: CapitalizeFirstLetter(skill.name),
+    name: skill.name,
     value: skill.value,
     percentage: ((skill.value / totalCount) * 100)?.toFixed(2), // Calculate percentage
   }));
@@ -371,10 +371,7 @@ const GeneratedReport = ({
           <DownloadButtonComponent />
 
           <div className="p-lg-3 p-1">
-            <h3>
-              {CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Salary
-              Report
-            </h3>
+            <h3>{jobsData[0]?.mapped_job_title} Salary Report</h3>
             <div className="d-lg-flex justify-content-start align-items-center">
               <p
                 className=" border-right px-2"
@@ -1079,10 +1076,7 @@ const GeneratedReport = ({
           </div>
           <div className="d-none">
             <div className="p-lg-3 p-1 " ref={elementRef}>
-              <h3>
-                {CapitalizeFirstLetter(jobsData[0]?.mapped_job_title)} Salary
-                Report
-              </h3>
+              <h3>{jobsData[0]?.mapped_job_title} Salary Report</h3>
               <div className="d-lg-flex justify-content-start align-items-center">
                 <p
                   className=" border-right px-2"
