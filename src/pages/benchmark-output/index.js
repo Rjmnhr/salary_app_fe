@@ -14,27 +14,37 @@ const BenchmarkOutput = () => {
     // Calculate average salary
     const salaries = data.map((result) => result.salary / 100000);
 
-    const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
-    const averageSalary = totalSalary / salaries.length;
+    // Remove zeros from the salaries array
+    const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
+
+    // Check if all values are zero
+    const allZeros = nonZeroSalaries.length === 0;
+
+    const totalSalary = allZeros
+      ? 0
+      : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
+    const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
 
     // Calculate median salary
-    const sortedSalaries = [...salaries].sort((a, b) => a - b);
+    const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
     const middleIndex = Math.floor(sortedSalaries.length / 2);
-    const medianSalary =
-      sortedSalaries.length % 2 === 0
-        ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-        : sortedSalaries[middleIndex];
+    const medianSalary = allZeros
+      ? 0
+      : sortedSalaries.length % 2 === 0
+      ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+      : sortedSalaries[middleIndex];
 
     // Calculate minimum and maximum salary
-    const minSalary = Math.min(...salaries);
+    const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
+    const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
 
-    const maxSalary = Math.max(...salaries);
-
-    // Calculate 10th and 90th percentile values
-    const percentile25 =
-      sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-    const percentile75 =
-      sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
+    // Calculate 25th and 75th percentile values
+    const percentile25 = allZeros
+      ? 0
+      : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+    const percentile75 = allZeros
+      ? 0
+      : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
 
     return {
       averageSalary,
@@ -52,27 +62,37 @@ const BenchmarkOutput = () => {
       (result) => result.directors_sitting_fees / 100000
     );
 
-    const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
-    const averageSalary = totalSalary / salaries.length;
+    // Remove zeros from the salaries array
+    const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
+
+    // Check if all values are zero
+    const allZeros = nonZeroSalaries.length === 0;
+
+    const totalSalary = allZeros
+      ? 0
+      : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
+    const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
 
     // Calculate median salary
-    const sortedSalaries = [...salaries].sort((a, b) => a - b);
+    const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
     const middleIndex = Math.floor(sortedSalaries.length / 2);
-    const medianSalary =
-      sortedSalaries.length % 2 === 0
-        ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-        : sortedSalaries[middleIndex];
+    const medianSalary = allZeros
+      ? 0
+      : sortedSalaries.length % 2 === 0
+      ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+      : sortedSalaries[middleIndex];
 
     // Calculate minimum and maximum salary
-    const minSalary = Math.min(...salaries);
+    const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
+    const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
 
-    const maxSalary = Math.max(...salaries);
-
-    // Calculate 10th and 90th percentile values
-    const percentile25 =
-      sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-    const percentile75 =
-      sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
+    // Calculate 25th and 75th percentile values
+    const percentile25 = allZeros
+      ? 0
+      : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+    const percentile75 = allZeros
+      ? 0
+      : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
 
     return {
       averageSalary,
