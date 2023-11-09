@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const BasedOnIndex = () => {
   return (
-    <div>
+    <div style={{ display: "grid", placeItems: "center", height: "60vh" }}>
       <h3>This option will be available soon</h3>
     </div>
   );
@@ -131,7 +131,7 @@ const HandSelectedPeers = () => {
   const handleSubmit = () => {
     const formData = new FormData();
 
-    formData.append("industries[]", selectedIndustries);
+    formData.append("industries", selectedIndustries?.join(","));
 
     formData.append("minMarketCap", minMarketCap);
     formData.append("maxMarketCap", maxMarketCap);
@@ -171,13 +171,14 @@ const HandSelectedPeers = () => {
     setSelectedIndustries(value);
   };
   return (
-    <div className="container-fluid">
+    <div className="container-fluid p-0 p-lg-3">
       <div
-        className="w-100 mt-5"
+        className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
       >
-        <div className="mb-3 d-flex col-12 col-lg-6 text-left">
-          <div class=" d-flex col-9 form-group">
+        <p className="text-primary">Select desired range for each entry</p>
+        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+          <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Market Capitalization</label>
             <input
               required
@@ -189,8 +190,9 @@ const HandSelectedPeers = () => {
               onChange={handleMarketCapChange}
             />
           </div>
+          <div class=" d-flex col-lg-3 col-12 form-group">
+            <label className="w-100 d-block d-lg-none">Range </label>
 
-          <div class="col-3 form-group">
             <select
               required
               type="number"
@@ -207,8 +209,8 @@ const HandSelectedPeers = () => {
             </select>
           </div>
         </div>
-        <div className="mb-3 d-flex col-12 col-lg-6 text-left">
-          <div class=" d-flex col-9 form-group">
+        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+          <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Total Assets </label>
             <input
               required
@@ -221,7 +223,8 @@ const HandSelectedPeers = () => {
             />
           </div>
 
-          <div class="col-3 form-group">
+          <div class=" d-flex col-lg-3 col-12 form-group">
+            <label className="w-100 d-block d-lg-none">Range </label>
             <select
               required
               type="number"
@@ -238,8 +241,8 @@ const HandSelectedPeers = () => {
             </select>
           </div>
         </div>
-        <div className="mb-3 d-flex col-12 col-lg-6 text-left">
-          <div class=" d-flex col-9 form-group">
+        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+          <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Sales </label>
             <input
               required
@@ -252,7 +255,8 @@ const HandSelectedPeers = () => {
             />
           </div>
 
-          <div class="col-3 form-group">
+          <div class=" d-flex col-lg-3 col-12 form-group">
+            <label className="w-100 d-block d-lg-none">Range </label>
             <select
               required
               type="number"
@@ -269,8 +273,8 @@ const HandSelectedPeers = () => {
             </select>
           </div>
         </div>
-        <div className="mb-3 d-flex col-12 col-lg-6 text-left">
-          <div class=" d-flex col-9 form-group">
+        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+          <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Profile After Tax </label>
             <input
               required
@@ -283,7 +287,8 @@ const HandSelectedPeers = () => {
             />
           </div>
 
-          <div class="col-3 form-group">
+          <div class=" d-flex col-lg-3 col-12 form-group">
+            <label className="w-100 d-block d-lg-none">Range </label>
             <select
               required
               type="number"
@@ -300,8 +305,8 @@ const HandSelectedPeers = () => {
             </select>
           </div>
         </div>
-        <div className="mb-3 d-flex col-12 col-lg-6 text-left">
-          <div class=" d-flex col form-group">
+        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+          <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Industries </label>
             <Select
               mode="multiple"

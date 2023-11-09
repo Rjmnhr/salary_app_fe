@@ -1,6 +1,7 @@
 import { Table } from "antd";
 
 import React, { useEffect, useState } from "react";
+import { CompaniesFilteredStyled } from "./style";
 const TableComponent = ({ showModal }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
@@ -40,33 +41,43 @@ const TableComponent = ({ showModal }) => {
   };
 
   const handleContinue = () => {
-    sessionStorage.setItem("companies", JSON.stringify(selectedCompanies));
+    sessionStorage.setItem(
+      "companies-selected",
+      JSON.stringify(selectedCompanies)
+    );
     showModal();
   };
 
   return (
     <div>
-      {data?.length > 0 ? (
-        <div
-          className="p-3 "
-          style={{ display: "grid", justifyItems: "center" }}
-        >
-          <h3>List of companies based on your selection </h3>
-          <div className="col-10 vh-80">
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={formattedData}
-            />
-          </div>
+      <CompaniesFilteredStyled>
+        {data?.length > 0 ? (
+          <div
+            className="p-3 "
+            style={{ display: "grid", justifyItems: "center" }}
+          >
+            <h3>List of companies based on your selection </h3>
+            <p>
+              You have the option to deselect any company that you do not wish
+              to include in the analysis. Your thoughtful consideration is
+              appreciated
+            </p>
+            <div className="col-lg-10 col-12 " style={{ minHeight: "40vh" }}>
+              <Table
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={formattedData}
+              />
+            </div>
 
-          <button onClick={handleContinue} className="btn btn-primary mt-3">
-            Continue
-          </button>
-        </div>
-      ) : (
-        ""
-      )}
+            <button onClick={handleContinue} className="btn btn-primary mt-3">
+              Continue
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
+      </CompaniesFilteredStyled>
     </div>
   );
 };

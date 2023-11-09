@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import coverImg from "../../icons/cover.jpg";
 import secondCoverImg from "../../icons/cover-2.jpg";
@@ -9,9 +9,30 @@ import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
+import AxiosInstance from "../../components/axios";
 
 const HomePage = () => {
   const contactRef = useRef(null);
+  const location = window.location.href;
+  const userID = localStorage.getItem("user_id");
+  useEffect(() => {
+    AxiosInstance.post(
+      `/api/track-data/store3`,
+      { path: location, id: userID },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(async (response) => {
+        //eslint-disable-next-line
+        const data = await response.data;
+      })
+      .catch((err) => console.log(err));
+
+    //eslint-disable-next-line
+  }, []);
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
