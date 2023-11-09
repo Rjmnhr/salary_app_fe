@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { message, Modal } from "antd";
 import { useApplicationContext } from "../../context/app-context";
 import { CheckCircleOutlineRounded } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VerifyEmail = ({ setEmail, email, setIsOtpSend }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -317,12 +317,13 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [isOtpSend, setIsOtpSend] = useState(false);
   const { isEmailVerified } = useApplicationContext();
-  const Location = useLocation();
 
+  const location = window.location.href;
+  const userID = localStorage.getItem("user_id");
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,
-      { path: Location.pathname },
+      { path: location, id: userID },
       {
         headers: {
           "Content-Type": "application/json",
@@ -330,14 +331,51 @@ const ForgotPasswordPage = () => {
       }
     )
       .then(async (response) => {
+        //eslint-disable-next-line
         const data = await response.data;
-
-        console.log(data);
       })
       .catch((err) => console.log(err));
 
     //eslint-disable-next-line
   }, []);
+
+  const [startTime, setStartTime] = useState(Date.now());
+  useEffect(() => {
+    // Set start time when the component mounts
+    setStartTime(Date.now());
+
+    // Add an event listener for the beforeunload event
+    const handleBeforeUnload = () => {
+      // Calculate time spent
+      const endTime = Date.now();
+      const timeSpentInSeconds = (endTime - startTime) / 1000;
+
+      // Send the data to your backend
+      AxiosInstance.post(
+        `/api/track-data/store2`,
+        { path: location, id: userID, timeSpent: timeSpentInSeconds },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then(async (response) => {
+          //eslint-disable-next-line
+          const data = await response.data;
+        })
+        .catch((err) => console.log(err));
+    };
+
+    // Add the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Specify the cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+    //eslint-disable-next-line
+  }, [location, userID]);
   return (
     <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
       <div class="card card-shadow card-login p-3 col-lg-6 ">

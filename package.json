@@ -33,6 +33,7 @@
     "react-scroll": "^1.8.9",
     "react-select": "^5.7.5",
     "react-tagsinput": "^3.20.3",
+    "react-youtube": "^10.1.0",
     "recharts": "^2.8.0",
     "styled-components": "^6.0.8",
     "web-vitals": "^2.1.4"

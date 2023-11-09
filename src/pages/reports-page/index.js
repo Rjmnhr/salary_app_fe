@@ -146,6 +146,65 @@ const ReportsPage = ({ userPlan }) => {
 
   const location = useLocation();
 
+  const locationURL = window.location.href;
+  const userID = localStorage.getItem("user_id");
+  useEffect(() => {
+    AxiosInstance.post(
+      `/api/track-data/store3`,
+      { path: locationURL, id: userID },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(async (response) => {
+        //eslint-disable-next-line
+        const data = await response.data;
+      })
+      .catch((err) => console.log(err));
+
+    //eslint-disable-next-line
+  }, []);
+
+  const [startTime, setStartTime] = useState(Date.now());
+  useEffect(() => {
+    // Set start time when the component mounts
+    setStartTime(Date.now());
+
+    // Add an event listener for the beforeunload event
+    const handleBeforeUnload = () => {
+      // Calculate time spent
+      const endTime = Date.now();
+      const timeSpentInSeconds = (endTime - startTime) / 1000;
+
+      // Send the data to your backend
+      AxiosInstance.post(
+        `/api/track-data/store2`,
+        { path: location, id: userID, timeSpent: timeSpentInSeconds },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then(async (response) => {
+          //eslint-disable-next-line
+          const data = await response.data;
+        })
+        .catch((err) => console.log(err));
+    };
+
+    // Add the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Specify the cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+    //eslint-disable-next-line
+  }, [location, userID]);
+
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
     if (userPlan === "Standard") {
@@ -180,17 +239,8 @@ const ReportsPage = ({ userPlan }) => {
   useEffect(() => {
     let createdArray = "";
     if (location.pathname === "/reports-dashboard") {
-      console.log(
-        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:",
-        location.pathname
-      );
-
       createdArray = "";
     } else {
-      console.log(
-        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:else",
-        location.pathname
-      );
       createdArray = CreateArr();
     }
 
