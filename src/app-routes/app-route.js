@@ -24,6 +24,7 @@ import ChangePlan from "../components/change-plan";
 import SuccessRegistrationBasic from "../components/payment_checkout/success-registration-basic";
 import Contact from "../components/contact";
 import VerifyPlanRoute from "./verifyPlan";
+import WebinarComponent from "../components/webinar-component";
 
 const AppRoute = () => {
   return (
@@ -214,6 +215,14 @@ const AppRoute = () => {
           element={
             <>
               <ForgotPasswordPage />
+            </>
+          }
+        />
+        <Route
+          path="/webinars"
+          element={
+            <>
+              <WebinarComponent />
             </>
           }
         />

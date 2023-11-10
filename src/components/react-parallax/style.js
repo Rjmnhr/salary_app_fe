@@ -26,7 +26,7 @@ export const ParallaxComponentStyled = styled.div`
       255,
       255,
       255,
-      0.5
+      0.3
     ); /* Adjust the opacity (0.5) as needed */
     z-index: 1; /* Make sure it's on top of the image */
   }

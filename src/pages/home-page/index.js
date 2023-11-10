@@ -9,9 +9,11 @@ import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const contactRef = useRef(null);
+  const navigate = useNavigate();
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
@@ -98,6 +100,7 @@ const HomePage = () => {
                   </h1>
 
                   <div
+                    className="mb-3"
                     style={{
                       width: "100%",
                       textAlign: "start",
@@ -105,7 +108,24 @@ const HomePage = () => {
                       alignItems: "center",
                       gap: "5px",
                     }}
-                  ></div>
+                  >
+                    <button
+                      onClick={() => navigate("/webinars")}
+                      style={{
+                        fontSize: "20px",
+                        marginTop: "10px",
+                        background: "linear-gradient(90deg,#2d67b9,#235090)",
+                        color: "white",
+                      }}
+                      className="btn "
+                    >
+                      See past webinars
+                    </button>
+
+                    {/* <a href="#contact" className="btn-get-started scrollto">
+                    Use Free Profile Evaluator
+                  </a> */}
+                  </div>
                 </div>
               </div>
             </div>

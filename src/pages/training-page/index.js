@@ -3,7 +3,7 @@ import NavBar from "../../components/nav-bar";
 import AxiosInstance from "../../components/axios";
 import YouTube from "react-youtube";
 
-const VideoPlayer = ({ videoId }) => {
+export const VideoPlayer = ({ videoId }) => {
   const opts = {
     height: "390",
     width: "640",
