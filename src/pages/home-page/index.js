@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
-import coverImg from "../../icons/cover.jpg";
+// import coverImg from "../../icons/cover.jpg";
 import secondCoverImg from "../../icons/cover-2.jpg";
 // import eagle from "../../eagle.jpg";
 
@@ -9,30 +9,63 @@ import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
-import AxiosInstance from "../../components/axios";
+// import AxiosInstance from "../../components/axios";
+// import { useIdleTimer } from "react-idle-timer";
 
 const HomePage = () => {
   const contactRef = useRef(null);
-  const location = window.location.href;
-  const userID = localStorage.getItem("user_id");
-  useEffect(() => {
-    AxiosInstance.post(
-      `/api/track-data/store3`,
-      { path: location, id: userID },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then(async (response) => {
-        //eslint-disable-next-line
-        const data = await response.data;
-      })
-      .catch((err) => console.log(err));
+  // const [pathTime, setPathTime] = useState({});
+  // const [isTabClosed, setIsTabClosed] = useState(false);
 
-    //eslint-disable-next-line
-  }, []);
+  // const onIdle = () => {
+  //   console.log("user is inactive");
+  //   setIsTabClosed(true);
+  // };
+
+  // const onActive = () => {
+  //   console.log("user is active");
+  //   setIsTabClosed(false);
+  // };
+
+  // const onAction = () => {
+  //   const path = window.location.pathname;
+  //   const timeSpent = (getRemainingTime() / 1000).toFixed(2);
+  //   setPathTime((prevState) => ({
+  //     ...prevState,
+  //     [path]: timeSpent,
+  //   }));
+  // };
+
+  // const { getRemainingTime } = useIdleTimer({
+  //   onIdle,
+  //   onActive,
+  //   onAction,
+  //   timeout: 10_000,
+  //   throttle: 500,
+  // });
+
+  // useEffect(() => {
+  //   const handleUnload = () => {
+  //     if (isTabClosed) {
+  //       const path = window.location.pathname;
+  //       const timeSpent = (getRemainingTime() / 1000).toFixed(2);
+  //       setPathTime((prevState) => ({
+  //         ...prevState,
+  //         [path]: timeSpent,
+  //       }));
+
+  //       sessionStorage.setItem("path-time", pathTime);
+  //       AxiosInstance.post("/api/path-time", { pathTime });
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleUnload);
+  //   };
+  //   //eslint-disable-next-line
+  // }, [isTabClosed]);
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
@@ -41,7 +74,9 @@ const HomePage = () => {
     <>
       <NavBar scrollToContact={scrollToContact} />
       <ParallaxComponent
-        img={coverImg}
+        img={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1699627708/piasi2ni1hph7gaaqr0a.webp"
+        }
         content={
           <section class="d-flex align-items-center">
             <div class="container" data-aos="zoom-out" data-aos-delay="100">

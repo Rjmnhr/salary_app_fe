@@ -2,11 +2,37 @@ import { Table } from "antd";
 
 import React, { useEffect, useState } from "react";
 import { CompaniesFilteredStyled } from "./style";
+import { BasedOnIndex } from "../../pages/executive-benchmark";
+import HandSelectedPeers from "../hand-selected-peers";
+import AxiosInstance from "../axios";
 const TableComponent = ({ showModal }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
+  const storeOption = sessionStorage.getItem("option");
 
   const data = JSON.parse(sessionStorage.getItem("companies"));
+
+  const [industries, setIndustries] = useState(null);
+
+  useEffect(() => {
+    AxiosInstance.get("/api/benchmark/industries")
+      .then(async (res) => {
+        const response = await res.data;
+
+        const industryGroupValues = response.map(
+          (item) => Object.values(item)[0]
+        );
+
+        // Create a new Set to store unique values
+        const uniqueSet = new Set(industryGroupValues);
+
+        // Convert the Set back to an array
+        const uniqueArray = Array.from(uniqueSet);
+        uniqueArray.sort();
+        setIndustries(uniqueArray);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     // Initially, select all rows and store them in the selectedCompanies state
@@ -75,7 +101,20 @@ const TableComponent = ({ showModal }) => {
             </button>
           </div>
         ) : (
-          ""
+          <>
+            <div
+              className="p-3 "
+              style={{ display: "grid", justifyItems: "center" }}
+            >
+              <h3>No companies has selected based on your selection </h3>
+              <p>Try giving different inputs</p>
+              {storeOption === "index" ? (
+                <BasedOnIndex industries={industries} />
+              ) : (
+                <HandSelectedPeers industries={industries} />
+              )}
+            </div>
+          </>
         )}
       </CompaniesFilteredStyled>
     </div>

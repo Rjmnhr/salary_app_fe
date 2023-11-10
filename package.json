@@ -26,6 +26,7 @@
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-idle-timer": "^5.7.2",
     "react-loading-skeleton": "^3.3.1",
     "react-parallax": "^3.5.1",
     "react-router-dom": "^6.16.0",

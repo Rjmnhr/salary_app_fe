@@ -1,14 +1,53 @@
 import React from "react";
 import NavBar from "../../components/nav-bar";
-import { Card } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { AimOutlined } from "@ant-design/icons";
+import "../reports-page/style.css";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const decimalFix = (number) => {
   const trimmed = Math.floor(number * 100) / 100;
   return trimmed;
 };
+
+function CompaniesList({ data }) {
+  return (
+    <div>
+      <p>
+        <span>Companies :</span>{" "}
+        <span style={{ fontSize: "14px" }}> {data.join(", ")}</span>
+      </p>
+    </div>
+  );
+}
 const BenchmarkOutput = () => {
   const resultData = JSON.parse(sessionStorage.getItem("result-data"));
+  const [expanded, setExpanded] = React.useState(false);
   const role = sessionStorage.getItem("role");
+  const storedOption = sessionStorage.getItem("option");
+  const storedCompanies = JSON.parse(sessionStorage.getItem("companies"));
+
+  const handleExpandClick = (index) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [index]: !prevExpanded[index],
+    }));
+  };
 
   function calculateStatisticsSalary(data) {
     // Calculate average salary
@@ -107,6 +146,7 @@ const BenchmarkOutput = () => {
   // Calculate statistics for jobsData
   const statisticsForSalary = calculateStatisticsSalary(resultData);
   const statisticsForFees = calculateStatisticsFees(resultData);
+
   return (
     <>
       <NavBar />
@@ -132,6 +172,49 @@ const BenchmarkOutput = () => {
             <p style={{ fontWeight: "500" }} className="fw-b text-primary">
               {role}
             </p>
+
+            {storedOption === "index" ? (
+              <p
+                className=" border-right px-2"
+                style={{
+                  borderRight: "1px solid",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                <AimOutlined /> Based on index
+              </p>
+            ) : (
+              <p
+                className=" border-right px-2"
+                style={{
+                  borderRight: "1px solid",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                <AimOutlined /> Hand selected
+              </p>
+            )}
+
+            <CardActions disableSpacing>
+              <p style={{ margin: "0" }}>See More</p>
+              <ExpandMore
+                expand={expanded[0] || false}
+                onClick={() => handleExpandClick(0)}
+                aria-expanded={expanded[0] || false}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </ExpandMore>
+            </CardActions>
+            <Collapse in={expanded[0] || false} timeout="auto" unmountOnExit>
+              <div>
+                <CompaniesList data={storedCompanies} />
+              </div>
+            </Collapse>
           </Card>
         </div>
 
