@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Fraction from "fraction.js";
 import AxiosInstance from "../../components/axios";
 import { Select } from "antd";
+import CurrencyInput from "react-currency-input-field";
+import "./style.css";
 
 import { useNavigate } from "react-router-dom";
 
@@ -25,34 +27,45 @@ const HandSelectedPeers = ({ industries }) => {
   const [maxAssets, setMaxAssets] = useState(0);
   const [maxSales, setMaxSales] = useState(0);
   const [maxPAT, setMaxPAT] = useState(0);
+  const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(null);
+  const [distinctCompaniesCountMetrics, setDistinctCompaniesCountMetrics] =
+    useState(null);
   const navigate = useNavigate();
 
-  const handleMarketCapChange = (event) => {
-    const value = parseFloat(event.target.value);
+  const handleMarketCapChange = (data) => {
+    const newValue = data?.replace(/[$,]/g, "");
+
+    const value = parseFloat(newValue);
     setMarketCap(value);
     const returnObject = calculateRange(value, marketRange);
     setMinMarketCap(returnObject.min);
     setMaxMarketCap(returnObject.max);
   };
 
-  const handleAssetsChange = (event) => {
-    const value = parseFloat(event.target.value);
+  const handleAssetsChange = (data) => {
+    const newValue = data?.replace(/[$,]/g, "");
+
+    const value = parseFloat(newValue);
     setTotalAssets(value);
     const returnObject = calculateRange(value, assetsRange);
     setMinAssets(returnObject.min);
     setMaxAssets(returnObject.max);
   };
 
-  const handleSalesChange = (event) => {
-    const value = parseFloat(event.target.value);
+  const handleSalesChange = (data) => {
+    const newValue = data?.replace(/[$,]/g, "");
+
+    const value = parseFloat(newValue);
     setSales(value);
     const returnObject = calculateRange(value, salesRange);
     setMinSales(returnObject.min);
     setMaxSales(returnObject.max);
   };
 
-  const handlePATChange = (event) => {
-    const value = parseFloat(event.target.value);
+  const handlePATChange = (data) => {
+    const newValue = data?.replace(/[$,]/g, "");
+
+    const value = parseFloat(newValue);
     setPat(value);
     const returnObject = calculateRange(value, patRange);
     setMinPAT(returnObject.min);
@@ -147,6 +160,64 @@ const HandSelectedPeers = ({ industries }) => {
 
   const handleChange = (value) => {
     setSelectedIndustries(value);
+    getCompaniesCount(value);
+  };
+
+  const getCompaniesCount = (data) => {
+    const formData = new FormData();
+
+    formData.append("industries", data?.join(","));
+    AxiosInstance.post("api/benchmark/companies-count", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        setDistinctCompaniesCount(response[0].distinct_company_count);
+      })
+      .catch((err) => console.log(err));
+  };
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    }).format(value);
+  };
+
+  useEffect(() => {
+    if (marketCap || totalAssets || sales || pat) {
+      getCompaniesCountByMetrics();
+    }
+    //eslint-disable-next-line
+  }, [marketCap, totalAssets, sales, pat]);
+
+  const getCompaniesCountByMetrics = () => {
+    const formData = new FormData();
+    formData.append("minMarketCap", minMarketCap);
+    formData.append("maxMarketCap", maxMarketCap);
+
+    formData.append("minAssets", minAssets);
+    formData.append("maxAssets", maxAssets);
+
+    formData.append("minSales", minSales);
+    formData.append("maxSales", maxSales);
+
+    formData.append("minPAT", minPAT);
+    formData.append("maxPAT", maxPAT);
+
+    AxiosInstance.post("api/benchmark/companies-count-metrics", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+
+        setDistinctCompaniesCountMetrics(response[0].distinct_company_count);
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div className="container-fluid p-0 p-lg-3">
@@ -162,15 +233,21 @@ const HandSelectedPeers = ({ industries }) => {
           <div className="d-lg-flex">
             <div class=" d-flex col-lg-9 col-12 form-group">
               <label className="w-100">Market Capitalization</label>
-              <input
-                required
-                type="number"
-                name="market"
+              <CurrencyInput
+                className="currency-input"
                 class="form-control"
-                id="market"
                 placeholder="Enter"
-                onChange={handleMarketCapChange}
-              />
+                style={{
+                  width: "100%",
+                  paddingLeft: "10px",
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                }}
+                // prefix="₹"
+                onValueChange={handleMarketCapChange}
+                decimalsLimit={0}
+              />{" "}
             </div>
             <div class=" d-flex col-lg-3 col-12 form-group">
               <label className="w-100 d-block d-lg-none">Range </label>
@@ -184,6 +261,7 @@ const HandSelectedPeers = ({ industries }) => {
                 placeholder="Enter"
                 value={marketRange}
                 onChange={handleMarketRangeChange}
+                style={{ outline: "none" }}
               >
                 <option value="1/2 - 2">1/2 - 2</option>
                 <option value="1/3 - 3">1/3 - 3</option>
@@ -198,7 +276,8 @@ const HandSelectedPeers = ({ industries }) => {
             }`}
           >
             <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {minMarketCap} - {maxMarketCap}
+              Value range : {formatCurrency(minMarketCap)} -{" "}
+              {formatCurrency(maxMarketCap)}
             </label>
           </div>
         </div>
@@ -206,15 +285,21 @@ const HandSelectedPeers = ({ industries }) => {
           <div className="d-lg-flex">
             <div class=" d-flex col-lg-9 col-12 form-group">
               <label className="w-100">Total Assets </label>
-              <input
-                required
-                type="number"
-                name="Assets"
+              <CurrencyInput
+                className="currency-input"
                 class="form-control"
-                id="Assets"
                 placeholder="Enter"
-                onChange={handleAssetsChange}
-              />
+                style={{
+                  width: "100%",
+                  paddingLeft: "10px",
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                }}
+                // prefix="₹"
+                onValueChange={handleAssetsChange}
+                decimalsLimit={0}
+              />{" "}
             </div>
 
             <div class=" d-flex col-lg-3 col-12 form-group">
@@ -241,7 +326,8 @@ const HandSelectedPeers = ({ industries }) => {
             }`}
           >
             <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {minAssets} - {maxAssets}
+              Value range : {formatCurrency(minAssets)} -{" "}
+              {formatCurrency(maxAssets)}
             </label>
           </div>
         </div>
@@ -249,15 +335,21 @@ const HandSelectedPeers = ({ industries }) => {
           <div className="d-lg-flex">
             <div class=" d-flex col-lg-9 col-12 form-group">
               <label className="w-100">Sales </label>
-              <input
-                required
-                type="number"
-                name="Sales"
+              <CurrencyInput
+                className="currency-input"
                 class="form-control"
-                id="Sales"
                 placeholder="Enter"
-                onChange={handleSalesChange}
-              />
+                style={{
+                  width: "100%",
+                  paddingLeft: "10px",
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                }}
+                // prefix="₹"
+                onValueChange={handleSalesChange}
+                decimalsLimit={0}
+              />{" "}
             </div>
 
             <div class=" d-flex col-lg-3 col-12 form-group">
@@ -284,7 +376,8 @@ const HandSelectedPeers = ({ industries }) => {
             }`}
           >
             <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {minSales} - {maxSales}
+              Value range : {formatCurrency(minSales)} -{" "}
+              {formatCurrency(maxSales)}
             </label>
           </div>
         </div>
@@ -292,15 +385,21 @@ const HandSelectedPeers = ({ industries }) => {
           <div className="d-lg-flex">
             <div class=" d-flex col-lg-9 col-12 form-group">
               <label className="w-100">Profile After Tax </label>
-              <input
-                required
-                type="number"
-                name="Profile After Tax"
+              <CurrencyInput
+                className="currency-input"
                 class="form-control"
-                id="Profile After Tax"
                 placeholder="Enter"
-                onChange={handlePATChange}
-              />
+                style={{
+                  width: "100%",
+                  paddingLeft: "10px",
+                  border: "1px solid #ced4da",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                }}
+                // prefix="₹"
+                onValueChange={handlePATChange}
+                decimalsLimit={0}
+              />{" "}
             </div>
 
             <div class=" d-flex col-lg-3 col-12 form-group">
@@ -327,19 +426,28 @@ const HandSelectedPeers = ({ industries }) => {
             }`}
           >
             <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {minPAT} - {maxPAT}
+              Value range : {formatCurrency(minPAT)} - {formatCurrency(maxPAT)}
             </label>
           </div>
         </div>
+        {distinctCompaniesCountMetrics &&
+        (marketCap || totalAssets || sales || pat) ? (
+          <label style={{ margin: "0", fontSize: "14px" }}>
+            Distinct companies matched on Financial metrics :{" "}
+            {distinctCompaniesCountMetrics}
+          </label>
+        ) : (
+          ""
+        )}
         <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Industries </label>
             <Select
               mode="multiple"
-              allowClear
-              className="border"
+              className="select-antd" // Add a custom class for styling
               style={{
                 width: "100%",
+                border: "1px solid #ced4da",
               }}
               placeholder="Please select"
               onChange={handleChange}
@@ -350,6 +458,14 @@ const HandSelectedPeers = ({ industries }) => {
             />
           </div>
         </div>
+        {distinctCompaniesCount && selectedIndustries.length > 0 ? (
+          <label style={{ margin: "0", fontSize: "14px" }}>
+            Distinct companies matched on selected industries :{" "}
+            {distinctCompaniesCount}
+          </label>
+        ) : (
+          ""
+        )}
       </div>
       <div className="mb-3">
         <button

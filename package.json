@@ -25,6 +25,7 @@
     "html2pdf.js": "^0.10.1",
     "jspdf": "^2.5.1",
     "react": "^18.2.0",
+    "react-currency-input-field": "^3.6.12",
     "react-dom": "^18.2.0",
     "react-idle-timer": "^5.7.2",
     "react-loading-skeleton": "^3.3.1",
