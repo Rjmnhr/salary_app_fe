@@ -27,6 +27,7 @@ import VerifyPlanRoute from "./verifyPlan";
 import ExecutiveBenchmark from "../pages/executive-benchmark";
 import RoleInformation from "../components/role-information";
 import BenchmarkOutput from "../pages/benchmark-output";
+import TableComponent from "../components/companies-filterd";
 
 const AppRoute = () => {
   return (
@@ -225,6 +226,14 @@ const AppRoute = () => {
           element={
             <>
               <RoleInformation />
+            </>
+          }
+        />
+        <Route
+          path="/companies-filtered"
+          element={
+            <>
+              <TableComponent />
             </>
           }
         />

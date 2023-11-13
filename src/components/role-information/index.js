@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import AxiosInstance from "../axios";
-import { Modal, Select } from "antd";
-import TableComponent from "../companies-filterd";
+import { Select } from "antd";
+
 import NavBar from "../../components/nav-bar";
 import { useNavigate } from "react-router-dom";
+
+export const availableRoles = [
+  "CMD - Chairperson & Managing Director",
+  "Managing Director",
+  "Other Director",
+  "CFO - Chief Financial Officer",
+  "Company Secretary",
+  "Chairperson",
+  "Nominee Director",
+  "CEO - Chief Executive Officer",
+  "Others",
+  "Chairperson Emeritus / Mentor",
+  "COO - Chief Operating Officer",
+  "Finance",
+  "Compliance Officer",
+];
 
 const RoleInformation = () => {
   const [role, setRole] = useState("");
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,33 +51,24 @@ const RoleInformation = () => {
   const handleChange = (value) => {
     setRole(value);
   };
-  const availableRoles = [
-    "CMD - Chairperson & Managing Director",
-    "Managing Director",
-    "Other Director",
-    "CFO - Chief Financial Officer",
-    "Company Secretary",
-    "Chairperson",
-    "Nominee Director",
-    "CEO - Chief Executive Officer",
-    "Others",
-    "Chairperson Emeritus / Mentor",
-    "COO - Chief Operating Officer",
-    "Finance",
-    "Compliance Officer",
-  ];
+
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "80px" }}>
-        <Modal
-          visible={isModalVisible}
-          onCancel={handleCancel}
-          footer={null} // To remove footer buttons
-          centered
-        >
-          <form onSubmit={handleSubmit}>
-            <h4 className="mb-3">Choose job role</h4>
+      <div
+        style={{
+          display: "grid",
+          placeItems: "center",
+          height: "50vh",
+          marginTop: "100px",
+        }}
+      >
+        <div class="container  text-left p-5 mt-lg-5 mt-2">
+          <h4 className="mb-3">Choose any job role to continue</h4>
+          <form
+            onSubmit={handleSubmit}
+            class="php-email-form col-12 col-lg-6 p-0"
+          >
             <Select
               placeholder="Select"
               className="border"
@@ -85,13 +83,11 @@ const RoleInformation = () => {
             />
 
             <br />
-            <button type="submit" className="btn mt-3 btn-primary">
+            <button type="submit" className="btn w-50 mt-3 btn-primary">
               Next
             </button>
           </form>
-        </Modal>
-
-        <TableComponent showModal={showModal} />
+        </div>
       </div>
     </>
   );

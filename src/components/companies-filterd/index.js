@@ -2,34 +2,42 @@ import { Table } from "antd";
 
 import React, { useEffect, useState } from "react";
 import { CompaniesFilteredStyled } from "./style";
-import { BasedOnIndex } from "../../pages/executive-benchmark";
-import HandSelectedPeers from "../hand-selected-peers";
+
+import HandSelectedPeers from "../benchmark-options/hand-selected-peers";
 import AxiosInstance from "../axios";
-const TableComponent = ({ showModal }) => {
+import BasedOnIndex from "../benchmark-options/based-on-index";
+import { useNavigate } from "react-router-dom";
+const TableComponent = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
   const storeOption = sessionStorage.getItem("option");
 
+  const navigate = useNavigate();
+
   const data = JSON.parse(sessionStorage.getItem("companies"));
 
-  const [industries, setIndustries] = useState(null);
+  const [sectors, setSectors] = useState(null);
 
   useEffect(() => {
-    AxiosInstance.get("/api/benchmark/industries")
+    AxiosInstance.get("/api/benchmark/sectors")
       .then(async (res) => {
         const response = await res.data;
 
-        const industryGroupValues = response.map(
+        const sectorGroupValues = response.map(
           (item) => Object.values(item)[0]
         );
 
+        // Filter out null and blank values
+        const filteredValues = sectorGroupValues.filter(
+          (value) => value !== null && value.trim() !== ""
+        );
         // Create a new Set to store unique values
-        const uniqueSet = new Set(industryGroupValues);
+        const uniqueSet = new Set(filteredValues);
 
         // Convert the Set back to an array
         const uniqueArray = Array.from(uniqueSet);
         uniqueArray.sort();
-        setIndustries(uniqueArray);
+        setSectors(uniqueArray);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -71,7 +79,7 @@ const TableComponent = ({ showModal }) => {
       "companies-selected",
       JSON.stringify(selectedCompanies)
     );
-    showModal();
+    navigate("/role-information");
   };
 
   return (
@@ -109,9 +117,9 @@ const TableComponent = ({ showModal }) => {
               <h3>No companies has selected based on your selection </h3>
               <p>Try giving different inputs</p>
               {storeOption === "index" ? (
-                <BasedOnIndex industries={industries} />
+                <BasedOnIndex sectors={sectors} />
               ) : (
-                <HandSelectedPeers industries={industries} />
+                <HandSelectedPeers sectors={sectors} />
               )}
             </div>
           </>

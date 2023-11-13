@@ -9,6 +9,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AimOutlined } from "@ant-design/icons";
 import "../reports-page/style.css";
 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Label,
+} from "recharts";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -49,6 +59,32 @@ const BenchmarkOutput = () => {
     }));
   };
 
+  const filteredResultData = resultData.filter((data) => data.salary !== 0);
+  // Convert salary values to lakhs
+  const dataInLakhs = filteredResultData.map((item) => {
+    return {
+      ...item,
+      salary: item.salary / 100000, // Convert salary to lakhs
+    };
+  });
+  // Sort based on market_capitalisation_2022
+  const sortedByMarketCapitalisation = [...dataInLakhs].sort(
+    (a, b) => a.market_capitalisation_2022 - b.market_capitalisation_2022
+  );
+
+  // Sort based on total_assets_2022
+  const sortedByTotalAssets = [...dataInLakhs].sort(
+    (a, b) => a.total_assets_2022 - b.total_assets_2022
+  );
+
+  // Sort based on sales_2022
+  const sortedBySales = [...dataInLakhs].sort(
+    (a, b) => a.sales_2022 - b.sales_2022
+  );
+
+  // Sort based on PAT_2022
+  const sortedByPAT = [...dataInLakhs].sort((a, b) => a.PAT_2022 - b.PAT_2022);
+  // const sortedResult = [...dataInLakhs].sort((a, b) => a.salary - b.salary);
   function calculateStatisticsSalary(data) {
     // Calculate average salary
     const salaries = data.map((result) => result.salary / 100000);
@@ -673,6 +709,198 @@ const BenchmarkOutput = () => {
                         </p>
                       </div>
                     </div>
+                  </div>
+                  <div className="mb-3 text-center">
+                    <h5 className="mb-3"> Market Capitalization vs Salary</h5>
+                    <LineChart
+                      width={800}
+                      height={400}
+                      data={sortedByMarketCapitalisation}
+                      style={{ pageBreakInside: "avoid" }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis tick={null} dataKey="market_capitalisation_2022">
+                        <Label
+                          value={`Market Capitalization `}
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </XAxis>
+                      <YAxis>
+                        <Label
+                          value="Salary (Lakhs)"
+                          angle={-90}
+                          position="insideLeft"
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </YAxis>
+                      <Tooltip
+                        formatter={(value, name, props) => [
+                          `Salary : ${value} Lakhs`,
+                        ]}
+                      />
+
+                      <Line
+                        type="monotone"
+                        dataKey="salary"
+                        name="Salary"
+                        stroke="#8884d8"
+                        dot={false} // Disable data points
+                      />
+                    </LineChart>
+                  </div>
+                  <div className="mb-3 text-center">
+                    <h5 className="mb-3">Total Assets vs Salary</h5>
+                    <LineChart
+                      width={800}
+                      height={400}
+                      data={sortedByTotalAssets}
+                      style={{ pageBreakInside: "avoid" }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis tick={null} dataKey="total_assets_2022">
+                        <Label
+                          value={`Total Assets`}
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </XAxis>
+                      <YAxis>
+                        <Label
+                          value="Salary (Lakhs)"
+                          angle={-90}
+                          position="insideLeft"
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </YAxis>
+                      <Tooltip
+                        formatter={(value, name, props) => [
+                          `Salary : ${value} Lakhs`,
+                        ]}
+                      />
+
+                      <Line
+                        type="monotone"
+                        dataKey="salary"
+                        name="Salary"
+                        stroke="#8884d8"
+                        dot={false} // Disable data points
+                      />
+                    </LineChart>
+                  </div>
+                  <div className="mb-3 text-center">
+                    <h5 className="mb-3">Sales vs Salary</h5>
+                    <LineChart
+                      width={800}
+                      height={400}
+                      data={sortedBySales}
+                      style={{ pageBreakInside: "avoid" }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis tick={null} dataKey="sales_2022">
+                        <Label
+                          value={`Sales`}
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </XAxis>
+                      <YAxis>
+                        <Label
+                          value="Salary (Lakhs)"
+                          angle={-90}
+                          position="insideLeft"
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </YAxis>
+                      <Tooltip
+                        formatter={(value, name, props) => [
+                          `Salary : ${value} Lakhs`,
+                        ]}
+                      />
+
+                      <Line
+                        type="monotone"
+                        dataKey="salary"
+                        name="Salary"
+                        stroke="#8884d8"
+                        dot={false} // Disable data points
+                      />
+                    </LineChart>
+                  </div>
+                  <div className="mb-3 text-center">
+                    <h5 className="mb-3">Profit After Tax vs Salary</h5>
+                    <LineChart
+                      width={800}
+                      height={400}
+                      data={sortedByPAT}
+                      style={{ pageBreakInside: "avoid" }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis tick={null} dataKey="PAT_2022">
+                        <Label
+                          value={`Profit After Tax`}
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </XAxis>
+                      <YAxis>
+                        <Label
+                          value="Salary (Lakhs)"
+                          angle={-90}
+                          position="insideLeft"
+                          style={{
+                            textAnchor: "middle",
+                            fontSize: "14px",
+                            fill: "blue",
+                            fontFamily: "Arial, sans-serif", // Adjust the font family here
+                          }}
+                        />
+                      </YAxis>
+                      <Tooltip
+                        formatter={(value, name, props) => [
+                          `Salary : ${value} Lakhs`,
+                        ]}
+                      />
+
+                      <Line
+                        type="monotone"
+                        dataKey="salary"
+                        name="Salary"
+                        stroke="#8884d8"
+                        dot={false} // Disable data points
+                      />
+                    </LineChart>
                   </div>
                 </div>
               </div>

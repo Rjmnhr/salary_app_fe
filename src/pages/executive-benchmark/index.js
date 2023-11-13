@@ -1,142 +1,22 @@
 import React, { useEffect, useState } from "react";
 
 import AxiosInstance from "../../components/axios";
-import { Select } from "antd";
+
 import NavBar from "../../components/nav-bar";
-import { useNavigate } from "react-router-dom";
-import HandSelectedPeers from "../../components/hand-selected-peers";
 
-const indexNames = [
-  "NSE500",
-  "NIFTY SMALLCAP 250",
-  "NIFTY MNC",
-  "NIFTY MICROCAP 250",
-  "NIFTY MIDCAP 100",
-  "NIFTY PHARMA",
-  "NIFTY HEALTHCARE INDEX",
-  "NIFTY INFRASTRUCTURE",
-  "NIFTY ENERGY",
-  "NIFTY SERVICES SECTOR",
-  "NIFTY METAL",
-  "NIFTY OIL & GAS",
-  "NIFTY CONSUMER DURABLES",
-  "NIFTY AUTO",
-  "NIFTY BANK",
-  "NIFTY FINANCIAL SERVICES",
-  "NIFTY PRIVATE BANK",
-  "NIFTY PSU BANK",
-  "NIFTY REALTY",
-  "NIFTY FMCG",
-  "NIFTY IT",
-  "NIFTY MEDIA",
-];
+import HandSelectedPeers from "../../components/benchmark-options/hand-selected-peers";
+import BasedOnIndex from "../../components/benchmark-options/based-on-index";
+import HandSelectedCompanies from "../../components/benchmark-options/hand-selected-companies";
 
-export function formatColumnName(columnName) {
-  // Replace spaces and slashes with underscores
-  columnName = columnName.replace(/[\s/]+/g, "_").toLowerCase();
-
-  // Remove any characters other than letters, numbers, and underscores
-  columnName = columnName.replace(/[^a-zA-Z0-9_]/g, "");
-
-  // Replace consecutive underscores with a single underscore
-  columnName = columnName.replace(/_+/g, "_");
-  return columnName;
-}
-
-export const BasedOnIndex = ({ industries }) => {
-  const navigate = useNavigate();
-  const [selectedIndustries, setSelectedIndustries] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState("");
-
-  const handleSubmit = () => {
-    const formData = new FormData();
-
-    formData.append("industries", selectedIndustries?.join(","));
-    formData.append("index", formatColumnName(selectedIndex));
-
-    AxiosInstance.post("/api/benchmark/companies-index", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (res) => {
-        const response = await res.data;
-
-        const companiesList = response.map((item) => Object.values(item)[0]);
-
-        // Create a new Set to store unique values
-        const uniqueSet = new Set(companiesList);
-
-        // Convert the Set back to an array, sort it, and remove "unclassified" if present
-        const uniqueArray = Array.from(uniqueSet).sort();
-
-        sessionStorage.setItem("companies", JSON.stringify(uniqueArray));
-        sessionStorage.setItem("option", "index");
-        sessionStorage.setItem("index", selectedIndex);
-        navigate("/role-information");
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const handleChangeIndexes = (value) => {
-    setSelectedIndex(value);
-  };
-
-  const handleChange = (value) => {
-    setSelectedIndustries(value);
-  };
+const DefaultComponent = () => {
   return (
     <div className="container-fluid p-0 p-lg-3">
       <div
         className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
       >
-        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
-          <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Indexes </label>
-            <Select
-              className="border"
-              style={{
-                width: "100%",
-              }}
-              placeholder="Please select"
-              onChange={handleChangeIndexes}
-              options={(indexNames || []).map((d) => ({
-                value: d,
-                label: d,
-              }))}
-            />
-          </div>
-        </div>
-
-        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
-          <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Industries </label>
-            <Select
-              mode="multiple"
-              allowClear
-              className="border"
-              style={{
-                width: "100%",
-              }}
-              placeholder="Please select"
-              onChange={handleChange}
-              options={(industries || []).map((d) => ({
-                value: d,
-                label: d,
-              }))}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="mb-3">
-        <button
-          onClick={handleSubmit}
-          type="submit"
-          className="btn btn-primary mt-3 w-25"
-        >
-          Next
-        </button>
+        <h3>No options are chose </h3>
+        <h>Please select one</h>
       </div>
     </div>
   );
@@ -144,24 +24,28 @@ export const BasedOnIndex = ({ industries }) => {
 
 function ExecutiveBenchmark() {
   const [selectedOption, setSelectedOption] = useState("HandSelectedPeers");
-  const [industries, setIndustries] = useState(null);
+  const [sectors, setSectors] = useState(null);
 
   useEffect(() => {
-    AxiosInstance.get("/api/benchmark/industries")
+    AxiosInstance.get("/api/benchmark/sectors")
       .then(async (res) => {
         const response = await res.data;
 
-        const industryGroupValues = response.map(
+        const sectorGroupValues = response.map(
           (item) => Object.values(item)[0]
         );
 
+        // Filter out null and blank values
+        const filteredValues = sectorGroupValues.filter(
+          (value) => value !== null && value.trim() !== ""
+        );
         // Create a new Set to store unique values
-        const uniqueSet = new Set(industryGroupValues);
+        const uniqueSet = new Set(filteredValues);
 
         // Convert the Set back to an array
         const uniqueArray = Array.from(uniqueSet);
         uniqueArray.sort();
-        setIndustries(uniqueArray);
+        setSectors(uniqueArray);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -198,13 +82,28 @@ function ExecutiveBenchmark() {
               />
               <label>Based on index</label>
             </div>
+            <div>
+              <input
+                type="radio"
+                value="HandSelectedCompanies"
+                checked={selectedOption === "HandSelectedCompanies"}
+                onChange={handleRadioChange}
+                style={{ marginRight: "8px" }}
+              />
+              <label>Hand selected Companies</label>
+            </div>
           </div>
         </div>
 
         {selectedOption === "HandSelectedPeers" ? (
-          <HandSelectedPeers industries={industries} />
+          <HandSelectedPeers sectors={sectors} />
+        ) : selectedOption === "BasedOnIndex" ? (
+          <BasedOnIndex sectors={sectors} />
+        ) : selectedOption === "HandSelectedCompanies" ? (
+          <HandSelectedCompanies sectors={sectors} />
         ) : (
-          <BasedOnIndex industries={industries} />
+          // Default case, you can render a default component or handle it as needed
+          <DefaultComponent />
         )}
       </div>
     </>
