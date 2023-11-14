@@ -137,8 +137,8 @@ import {
 } from "recharts";
 
 const calculateStatisticsSalary = (data) => {
-  const salaries = data.map((result) => result.salary / 100000);
-  const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
+  const salaries = data?.map((result) => result.salary / 100000);
+  const nonZeroSalaries = salaries?.filter((salary) => salary !== 0);
   const allZeros = nonZeroSalaries.length === 0;
 
   const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
@@ -159,11 +159,11 @@ const calculateStatisticsSalary = (data) => {
 };
 
 const SalaryTrendGraph2 = ({ dataWithYear2021, dataWithYear2022 }) => {
-  const filteredData2021 = dataWithYear2021.filter(
+  const filteredData2021 = dataWithYear2021?.filter(
     (item) => item.salary !== 0 && item.salary !== null
   );
 
-  const filteredData2022 = dataWithYear2022.filter(
+  const filteredData2022 = dataWithYear2022?.filter(
     (item) => item.salary !== 0 && item.salary !== null
   );
   const statisticalData2021 = calculateStatisticsSalary(filteredData2021);

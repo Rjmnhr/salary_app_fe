@@ -21,7 +21,7 @@ const SalaryTrendChart = ({ resultData2021, resultData2022 }) => {
 
   // Function to calculate the median of an array
   const calculateMedian = (arr) => {
-    const sortedArr = arr.slice().sort((a, b) => a - b);
+    const sortedArr = arr?.slice().sort((a, b) => a - b);
     const middle = Math.floor(sortedArr.length / 2);
     return sortedArr.length % 2 === 0
       ? (sortedArr[middle - 1] + sortedArr[middle]) / 2
@@ -30,7 +30,7 @@ const SalaryTrendChart = ({ resultData2021, resultData2022 }) => {
 
   // Function to calculate median salary for a year
   const calculateMedianSalary = (data) => {
-    const salaries = data.map((item) => parseInt(item.salary, 10) / 100000);
+    const salaries = data?.map((item) => parseInt(item.salary, 10) / 100000);
     return calculateMedian(salaries);
   };
 
