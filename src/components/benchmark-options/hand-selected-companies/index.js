@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "antd";
+import { Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import { availableRoles } from "../../role-information";
@@ -9,6 +9,31 @@ const HandSelectedCompanies = ({ sectors }) => {
   const [role, setRole] = useState("");
   const [companies, setCompanies] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
+
+  const [selectedCompaniesList, setSelectedCompaniesList] = useState([]);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const handleRowClick = (selectedCompany) => {
+    // Remove selected company from companies array
+    const updatedCompanies = companies.filter(
+      (company) => company !== selectedCompany
+    );
+    setCompanies(updatedCompanies);
+
+    // Add selected company to selectedCompaniesList
+    setSelectedCompaniesList((prevSelected) => [
+      ...prevSelected,
+      selectedCompany,
+    ]);
+  };
 
   useEffect(() => {
     AxiosInstance.get("api/benchmark/distinct-companies")
@@ -31,7 +56,7 @@ const HandSelectedCompanies = ({ sectors }) => {
         setCompanies(uniqueArray);
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   const handleChange = (value) => {
     setRole(value);
@@ -43,6 +68,11 @@ const HandSelectedCompanies = ({ sectors }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (selectedCompanies.length < 10) {
+      showModal();
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("role", role);
@@ -118,6 +148,55 @@ const HandSelectedCompanies = ({ sectors }) => {
         >
           Next
         </button>
+      </div>
+
+      <div className="row">
+        <div className="col-6">
+          <table
+            className="table text-left scrollable-container"
+            style={{ height: "80vh", overflowY: "scroll" }}
+          >
+            <thead>
+              <tr>
+                <th>List of companies</th>
+              </tr>
+            </thead>
+            <tbody>
+              {companies.map((item, index) => (
+                <tr key={index} onClick={() => handleRowClick(item)}>
+                  <td style={{ padding: "0", cursor: "pointer" }}>{item}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div
+          className="col-6 scrollable-container"
+          style={{ height: "80vh", overflowY: "scroll" }}
+        >
+          <table className="table text-left ">
+            <thead>
+              <tr>
+                <th>Selected Companies</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedCompaniesList.map((item, index) => (
+                <tr key={index}>
+                  <td style={{ padding: "0", cursor: "pointer" }}>{item}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Modal
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null} // To remove footer buttons
+          centered
+        >
+          <h5>Please select at least 10 companies for meaningful analysis</h5>
+        </Modal>
       </div>
     </div>
   );

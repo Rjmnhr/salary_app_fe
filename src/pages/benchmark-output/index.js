@@ -18,6 +18,8 @@ import {
   Tooltip,
   Label,
 } from "recharts";
+import SalaryTrendChart from "../../components/trend-graph";
+import SalaryTrendGraph2 from "../../components/trend-graph/trend-graph-2";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,6 +37,52 @@ const decimalFix = (number) => {
   return trimmed;
 };
 
+export const calculateStatisticsSalary = (data) => {
+  // Calculate average salary
+  const salaries = data.map((result) => result.salary / 100000);
+
+  // Remove zeros from the salaries array
+  const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
+
+  // Check if all values are zero
+  const allZeros = nonZeroSalaries.length === 0;
+
+  const totalSalary = allZeros
+    ? 0
+    : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
+  const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
+
+  // Calculate median salary
+  const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
+  const middleIndex = Math.floor(sortedSalaries.length / 2);
+  const medianSalary = allZeros
+    ? 0
+    : sortedSalaries.length % 2 === 0
+    ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+    : sortedSalaries[middleIndex];
+
+  // Calculate minimum and maximum salary
+  const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
+  const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
+
+  // Calculate 25th and 75th percentile values
+  const percentile25 = allZeros
+    ? 0
+    : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+  const percentile75 = allZeros
+    ? 0
+    : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
+
+  return {
+    averageSalary,
+    medianSalary,
+    minSalary,
+    maxSalary,
+    percentile25,
+    percentile75,
+  };
+};
+
 function CompaniesList({ data }) {
   return (
     <div>
@@ -47,6 +95,11 @@ function CompaniesList({ data }) {
 }
 const BenchmarkOutput = () => {
   const resultData = JSON.parse(sessionStorage.getItem("result-data"));
+  const resultData2021 = JSON.parse(sessionStorage.getItem("result-data_2021"));
+  console.log(
+    "🚀 ~ file: index.js:53 ~ BenchmarkOutput ~ resultData2021:",
+    resultData2021
+  );
   const [expanded, setExpanded] = React.useState(false);
   const role = sessionStorage.getItem("role");
   const storedOption = sessionStorage.getItem("option");
@@ -85,51 +138,6 @@ const BenchmarkOutput = () => {
   // Sort based on PAT_2022
   const sortedByPAT = [...dataInLakhs].sort((a, b) => a.PAT_2022 - b.PAT_2022);
   // const sortedResult = [...dataInLakhs].sort((a, b) => a.salary - b.salary);
-  function calculateStatisticsSalary(data) {
-    // Calculate average salary
-    const salaries = data.map((result) => result.salary / 100000);
-
-    // Remove zeros from the salaries array
-    const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
-
-    // Check if all values are zero
-    const allZeros = nonZeroSalaries.length === 0;
-
-    const totalSalary = allZeros
-      ? 0
-      : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
-    const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
-
-    // Calculate median salary
-    const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
-    const middleIndex = Math.floor(sortedSalaries.length / 2);
-    const medianSalary = allZeros
-      ? 0
-      : sortedSalaries.length % 2 === 0
-      ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-      : sortedSalaries[middleIndex];
-
-    // Calculate minimum and maximum salary
-    const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
-    const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
-
-    // Calculate 25th and 75th percentile values
-    const percentile25 = allZeros
-      ? 0
-      : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-    const percentile75 = allZeros
-      ? 0
-      : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
-
-    return {
-      averageSalary,
-      medianSalary,
-      minSalary,
-      maxSalary,
-      percentile25,
-      percentile75,
-    };
-  }
 
   function calculateStatisticsFees(data) {
     // Calculate average salary
@@ -710,6 +718,14 @@ const BenchmarkOutput = () => {
                       </div>
                     </div>
                   </div>
+                  <SalaryTrendChart
+                    resultData2022={resultData}
+                    resultData2021={resultData2021}
+                  />
+                  <SalaryTrendGraph2
+                    dataWithYear2022={resultData}
+                    dataWithYear2021={resultData2021}
+                  />
                   <div className="mb-3 text-center">
                     <h5 className="mb-3"> Market Capitalization vs Salary</h5>
                     <LineChart

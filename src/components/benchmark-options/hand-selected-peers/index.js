@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Fraction from "fraction.js";
 
-import { Select } from "antd";
+import { Divider, Modal, Select } from "antd";
 import CurrencyInput from "react-currency-input-field";
 import "./style.css";
 
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
+import MatchCountComponent from "../../match-counts";
 
 const HandSelectedPeers = ({ sectors }) => {
   const [marketCap, setMarketCap] = useState(0);
@@ -31,11 +32,22 @@ const HandSelectedPeers = ({ sectors }) => {
   const [maxAssets, setMaxAssets] = useState(0);
   const [maxSales, setMaxSales] = useState(0);
   const [maxPAT, setMaxPAT] = useState(0);
-  const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(null);
+  const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(0);
   const [distinctCompaniesCountMetrics, setDistinctCompaniesCountMetrics] =
-    useState(null);
+    useState(0);
+  const [distinctCompaniesCountTogether, setDistinctCompaniesCountTogether] =
+    useState(0);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleMarketCapChange = (data) => {
     const newValue = data?.replace(/[$,]/g, "");
@@ -119,6 +131,35 @@ const HandSelectedPeers = ({ sectors }) => {
   };
 
   const handleSubmit = () => {
+    let threshold;
+
+    // Check the conditions and set the threshold accordingly
+    if (distinctCompaniesCount > 0 && distinctCompaniesCountMetrics > 0) {
+      // Case 1: distinctCompaniesCount and distinctCompaniesCountMetrics are above zero
+      threshold = distinctCompaniesCountTogether;
+    } else if (
+      distinctCompaniesCount > 0 &&
+      distinctCompaniesCountMetrics === 0
+    ) {
+      // Case 2: distinctCompaniesCount is above zero and others are zero
+      threshold = distinctCompaniesCount;
+    } else if (
+      distinctCompaniesCountMetrics > 0 &&
+      distinctCompaniesCount === 0
+    ) {
+      // Case 3: distinctCompaniesCountMetrics is above zero and others are zero
+      threshold = distinctCompaniesCountMetrics;
+    } else {
+      // Handle other cases if needed
+      threshold = 0;
+    }
+
+    // Check if the threshold is above 10 before making the API call
+    if (threshold < 10) {
+      showModal();
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("industries", selectedIndustries?.join(","));
@@ -143,10 +184,10 @@ const HandSelectedPeers = ({ sectors }) => {
       .then(async (res) => {
         const response = await res.data;
 
-        const companiesList = response.map((item) => Object.values(item)[0]);
+        // const companiesList = response.map((item) => Object.values(item)[0]);
 
         // Create a new Set to store unique values
-        const uniqueSet = new Set(companiesList);
+        const uniqueSet = new Set(response);
 
         // Convert the Set back to an array, sort it, and remove "unclassified" if present
         const uniqueArray = Array.from(uniqueSet).sort();
@@ -165,8 +206,15 @@ const HandSelectedPeers = ({ sectors }) => {
 
   const handleChange = (value) => {
     setSelectedIndustries(value);
+
     getCompaniesCount(value);
   };
+
+  useEffect(() => {
+    if (selectedIndustries.length === 0) {
+      setDistinctCompaniesCount(0);
+    }
+  }, [selectedIndustries]);
   const handleSectorChange = (value) => {
     setSelectedSectors(value);
     getIndustries(value);
@@ -226,6 +274,8 @@ const HandSelectedPeers = ({ sectors }) => {
   useEffect(() => {
     if (marketCap || totalAssets || sales || pat) {
       getCompaniesCountByMetrics();
+    } else {
+      setDistinctCompaniesCountMetrics(0);
     }
     //eslint-disable-next-line
   }, [marketCap, totalAssets, sales, pat]);
@@ -266,282 +316,380 @@ const HandSelectedPeers = ({ sectors }) => {
     }
   }, [selectedSectors]);
 
+  useEffect(() => {
+    if (
+      selectedIndustries.length > 0 &&
+      (marketCap || totalAssets || sales || pat)
+    ) {
+      getCompaniesCountByTogether();
+    } else {
+      setDistinctCompaniesCountTogether(0);
+    }
+    //eslint-disable-next-line
+  }, [marketCap, totalAssets, sales, pat, selectedIndustries]);
+
+  const getCompaniesCountByTogether = () => {
+    const formData = new FormData();
+    formData.append("industries", selectedIndustries?.join(","));
+
+    formData.append("minMarketCap", minMarketCap);
+    formData.append("maxMarketCap", maxMarketCap);
+
+    formData.append("minAssets", minAssets);
+    formData.append("maxAssets", maxAssets);
+
+    formData.append("minSales", minSales);
+    formData.append("maxSales", maxSales);
+
+    formData.append("minPAT", minPAT);
+    formData.append("maxPAT", maxPAT);
+
+    AxiosInstance.post("api/benchmark/companies-hand/count", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+
+        setDistinctCompaniesCountTogether(response[0].distinct_company_count);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const dividerStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "rgba(0, 0, 0, 0.45)",
+    fontWeight: "bold",
+  };
   return (
     <div className="container-fluid p-0 p-lg-3">
       <div
-        className="w-100 mt-3"
-        style={{ display: "grid", placeItems: "center" }}
+        className="scrollable-container"
+        style={{ height: "70vh", overflowY: "scroll" }}
       >
-        <p className="text-primary">Select desired range for each entry</p>
         <div
-          style={{ transition: "all 0.5s ease" }}
-          className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+          className="w-100 mt-3"
+          style={{ display: "grid", placeItems: "center" }}
         >
-          <div className="d-lg-flex">
+          <p className="text-primary">Select desired range for each entry</p>
+          <div
+            style={{ transition: "all 0.5s ease" }}
+            className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+          >
+            <div className="d-lg-flex">
+              <div class=" d-flex col-lg-9 col-12 form-group">
+                <label className="w-100">Market Capitalization</label>
+                <CurrencyInput
+                  className="currency-input"
+                  class="form-control"
+                  placeholder="Enter"
+                  style={{
+                    width: "100%",
+                    paddingLeft: "10px",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                  }}
+                  // prefix="₹"
+                  onValueChange={handleMarketCapChange}
+                  decimalsLimit={0}
+                />{" "}
+              </div>
+              <div class=" d-flex col-lg-3 col-12 form-group">
+                <label className="w-100 d-block d-lg-none">Range </label>
+
+                <select
+                  required
+                  type="number"
+                  name="market-range"
+                  class="form-control"
+                  id="market-range"
+                  placeholder="Enter"
+                  value={marketRange}
+                  onChange={handleMarketRangeChange}
+                  style={{ outline: "none" }}
+                >
+                  <option value="1/2 - 2">1/2 - 2</option>
+                  <option value="1/3 - 3">1/3 - 3</option>
+                  <option value="1/4 - 4">1/4 - 4</option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
+                minMarketCap === 0 || !minMarketCap ? "d-none" : "d-block"
+              }`}
+            >
+              <label style={{ margin: "0", fontSize: "14px" }}>
+                Value range : {formatCurrency(minMarketCap)} -{" "}
+                {formatCurrency(maxMarketCap)}
+              </label>
+            </div>
+          </div>
+          <div style={dividerStyle}>
+            <Divider />
+            <span style={{ padding: "0 8px" }}>OR</span>
+            <Divider />
+          </div>
+
+          <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+            <div className="d-lg-flex">
+              <div class=" d-flex col-lg-9 col-12 form-group">
+                <label className="w-100">Total Assets </label>
+                <CurrencyInput
+                  className="currency-input"
+                  class="form-control"
+                  placeholder="Enter"
+                  style={{
+                    width: "100%",
+                    paddingLeft: "10px",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                  }}
+                  // prefix="₹"
+                  onValueChange={handleAssetsChange}
+                  decimalsLimit={0}
+                />{" "}
+              </div>
+
+              <div class=" d-flex col-lg-3 col-12 form-group">
+                <label className="w-100 d-block d-lg-none">Range </label>
+                <select
+                  required
+                  type="number"
+                  name="market-range"
+                  class="form-control"
+                  id="market-range"
+                  placeholder="Enter"
+                  value={assetsRange}
+                  onChange={handleAssetsRangeChange}
+                >
+                  <option value="1/2 - 2">1/2 - 2</option>
+                  <option value="1/3 - 3">1/3 - 3</option>
+                  <option value="1/4 - 4">1/4 - 4</option>
+                </select>
+              </div>
+            </div>
+            <div
+              className={`text-right col-12 pb-2 pb-lg-0 form-group mb-0 ${
+                minAssets === 0 || !minAssets ? "d-none" : "d-block"
+              }`}
+            >
+              <label style={{ margin: "0", fontSize: "14px" }}>
+                Value range : {formatCurrency(minAssets)} -{" "}
+                {formatCurrency(maxAssets)}
+              </label>
+            </div>
+          </div>
+          <div style={dividerStyle}>
+            <Divider />
+            <span style={{ padding: "0 8px" }}>OR</span>
+            <Divider />
+          </div>
+
+          <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+            <div className="d-lg-flex">
+              <div class=" d-flex col-lg-9 col-12 form-group">
+                <label className="w-100">Sales </label>
+                <CurrencyInput
+                  className="currency-input"
+                  class="form-control"
+                  placeholder="Enter"
+                  style={{
+                    width: "100%",
+                    paddingLeft: "10px",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                  }}
+                  // prefix="₹"
+                  onValueChange={handleSalesChange}
+                  decimalsLimit={0}
+                />{" "}
+              </div>
+
+              <div class=" d-flex col-lg-3 col-12 form-group">
+                <label className="w-100 d-block d-lg-none">Range </label>
+                <select
+                  required
+                  type="number"
+                  name="market-range"
+                  class="form-control"
+                  id="market-range"
+                  placeholder="Enter"
+                  value={salesRange}
+                  onChange={handleSalesRangeChange}
+                >
+                  <option value="1/2 - 2">1/2 - 2</option>
+                  <option value="1/3 - 3">1/3 - 3</option>
+                  <option value="1/4 - 4">1/4 - 4</option>
+                </select>
+              </div>
+            </div>
+            <div
+              className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
+                minSales === 0 || !minSales ? "d-none" : "d-block"
+              }`}
+            >
+              <label style={{ margin: "0", fontSize: "14px" }}>
+                Value range : {formatCurrency(minSales)} -{" "}
+                {formatCurrency(maxSales)}
+              </label>
+            </div>
+          </div>
+          <div style={dividerStyle}>
+            <Divider />
+            <span style={{ padding: "0 8px" }}>OR</span>
+            <Divider />
+          </div>
+
+          <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+            <div className="d-lg-flex">
+              <div class=" d-flex col-lg-9 col-12 form-group">
+                <label className="w-100">Profit After Tax </label>
+                <CurrencyInput
+                  className="currency-input"
+                  class="form-control"
+                  placeholder="Enter"
+                  style={{
+                    width: "100%",
+                    paddingLeft: "10px",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                  }}
+                  // prefix="₹"
+                  onValueChange={handlePATChange}
+                  decimalsLimit={0}
+                />{" "}
+              </div>
+
+              <div class=" d-flex col-lg-3 col-12 form-group">
+                <label className="w-100 d-block d-lg-none">Range </label>
+                <select
+                  required
+                  type="number"
+                  name="market-range"
+                  class="form-control"
+                  id="market-range"
+                  placeholder="Enter"
+                  value={patRange}
+                  onChange={handlePATRangeChange}
+                >
+                  <option value="1/2 - 2">1/2 - 2</option>
+                  <option value="1/3 - 3">1/3 - 3</option>
+                  <option value="1/4 - 4">1/4 - 4</option>
+                </select>
+              </div>
+            </div>
+            <div
+              className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
+                minPAT === 0 || !minPAT ? "d-none" : "d-block"
+              }`}
+            >
+              <label style={{ margin: "0", fontSize: "14px" }}>
+                Value range : {formatCurrency(minPAT)} -{" "}
+                {formatCurrency(maxPAT)}
+              </label>
+            </div>
+          </div>
+
+          <div style={dividerStyle}>
+            <Divider />
+
+            <Divider />
+          </div>
+
+          <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
             <div class=" d-flex col-lg-9 col-12 form-group">
-              <label className="w-100">Market Capitalization</label>
-              <CurrencyInput
-                className="currency-input"
-                class="form-control"
-                placeholder="Enter"
+              <label className="w-100">Sectors </label>
+              <Select
+                mode="multiple"
+                className="select-antd" // Add a custom class for styling
                 style={{
                   width: "100%",
-                  paddingLeft: "10px",
                   border: "1px solid #ced4da",
-                  borderRadius: "0.25rem",
-                  outline: "none",
                 }}
-                // prefix="₹"
-                onValueChange={handleMarketCapChange}
-                decimalsLimit={0}
-              />{" "}
+                placeholder="Please select"
+                onChange={handleSectorChange}
+                options={(sectors || []).map((d) => ({
+                  value: d,
+                  label: d,
+                }))}
+              />
             </div>
-            <div class=" d-flex col-lg-3 col-12 form-group">
-              <label className="w-100 d-block d-lg-none">Range </label>
-
-              <select
-                required
-                type="number"
-                name="market-range"
-                class="form-control"
-                id="market-range"
-                placeholder="Enter"
-                value={marketRange}
-                onChange={handleMarketRangeChange}
-                style={{ outline: "none" }}
-              >
-                <option value="1/2 - 2">1/2 - 2</option>
-                <option value="1/3 - 3">1/3 - 3</option>
-                <option value="1/4 - 4">1/4 - 4</option>
-              </select>
-            </div>
-          </div>
-
-          <div
-            className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
-              minMarketCap === 0 || !minMarketCap ? "d-none" : "d-block"
-            }`}
-          >
-            <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {formatCurrency(minMarketCap)} -{" "}
-              {formatCurrency(maxMarketCap)}
-            </label>
-          </div>
-        </div>
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
-          <div className="d-lg-flex">
             <div class=" d-flex col-lg-9 col-12 form-group">
-              <label className="w-100">Total Assets </label>
-              <CurrencyInput
-                className="currency-input"
-                class="form-control"
-                placeholder="Enter"
+              <label className="w-100">Industries </label>
+              <Select
+                mode="multiple"
+                className="select-antd" // Add a custom class for styling
                 style={{
                   width: "100%",
-                  paddingLeft: "10px",
                   border: "1px solid #ced4da",
-                  borderRadius: "0.25rem",
-                  outline: "none",
                 }}
-                // prefix="₹"
-                onValueChange={handleAssetsChange}
-                decimalsLimit={0}
-              />{" "}
-            </div>
-
-            <div class=" d-flex col-lg-3 col-12 form-group">
-              <label className="w-100 d-block d-lg-none">Range </label>
-              <select
-                required
-                type="number"
-                name="market-range"
-                class="form-control"
-                id="market-range"
-                placeholder="Enter"
-                value={assetsRange}
-                onChange={handleAssetsRangeChange}
-              >
-                <option value="1/2 - 2">1/2 - 2</option>
-                <option value="1/3 - 3">1/3 - 3</option>
-                <option value="1/4 - 4">1/4 - 4</option>
-              </select>
+                placeholder="Please select"
+                value={selectedIndustries}
+                onChange={handleChange}
+                options={(industries || []).map((d) => ({
+                  value: d,
+                  label: d,
+                }))}
+                disabled={isSelectIndustriesDisabled}
+              />
             </div>
           </div>
-          <div
-            className={`text-right col-12 pb-2 pb-lg-0 form-group mb-0 ${
-              minAssets === 0 || !minAssets ? "d-none" : "d-block"
-            }`}
+        </div>
+        <div className="mb-3">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="btn btn-primary mt-3 w-25"
           >
-            <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {formatCurrency(minAssets)} -{" "}
-              {formatCurrency(maxAssets)}
-            </label>
-          </div>
+            Next
+          </button>
         </div>
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
-          <div className="d-lg-flex">
-            <div class=" d-flex col-lg-9 col-12 form-group">
-              <label className="w-100">Sales </label>
-              <CurrencyInput
-                className="currency-input"
-                class="form-control"
-                placeholder="Enter"
-                style={{
-                  width: "100%",
-                  paddingLeft: "10px",
-                  border: "1px solid #ced4da",
-                  borderRadius: "0.25rem",
-                  outline: "none",
-                }}
-                // prefix="₹"
-                onValueChange={handleSalesChange}
-                decimalsLimit={0}
-              />{" "}
-            </div>
-
-            <div class=" d-flex col-lg-3 col-12 form-group">
-              <label className="w-100 d-block d-lg-none">Range </label>
-              <select
-                required
-                type="number"
-                name="market-range"
-                class="form-control"
-                id="market-range"
-                placeholder="Enter"
-                value={salesRange}
-                onChange={handleSalesRangeChange}
-              >
-                <option value="1/2 - 2">1/2 - 2</option>
-                <option value="1/3 - 3">1/3 - 3</option>
-                <option value="1/4 - 4">1/4 - 4</option>
-              </select>
-            </div>
-          </div>
-          <div
-            className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
-              minSales === 0 || !minSales ? "d-none" : "d-block"
-            }`}
-          >
-            <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {formatCurrency(minSales)} -{" "}
-              {formatCurrency(maxSales)}
-            </label>
-          </div>
-        </div>
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
-          <div className="d-lg-flex">
-            <div class=" d-flex col-lg-9 col-12 form-group">
-              <label className="w-100">Profit After Tax </label>
-              <CurrencyInput
-                className="currency-input"
-                class="form-control"
-                placeholder="Enter"
-                style={{
-                  width: "100%",
-                  paddingLeft: "10px",
-                  border: "1px solid #ced4da",
-                  borderRadius: "0.25rem",
-                  outline: "none",
-                }}
-                // prefix="₹"
-                onValueChange={handlePATChange}
-                decimalsLimit={0}
-              />{" "}
-            </div>
-
-            <div class=" d-flex col-lg-3 col-12 form-group">
-              <label className="w-100 d-block d-lg-none">Range </label>
-              <select
-                required
-                type="number"
-                name="market-range"
-                class="form-control"
-                id="market-range"
-                placeholder="Enter"
-                value={patRange}
-                onChange={handlePATRangeChange}
-              >
-                <option value="1/2 - 2">1/2 - 2</option>
-                <option value="1/3 - 3">1/3 - 3</option>
-                <option value="1/4 - 4">1/4 - 4</option>
-              </select>
-            </div>
-          </div>
-          <div
-            className={`text-right col-12 pb-2 pb-lg-0  form-group mb-0 ${
-              minPAT === 0 || !minPAT ? "d-none" : "d-block"
-            }`}
-          >
-            <label style={{ margin: "0", fontSize: "14px" }}>
-              Value range : {formatCurrency(minPAT)} - {formatCurrency(maxPAT)}
-            </label>
-          </div>
-        </div>
-        {distinctCompaniesCountMetrics &&
-        (marketCap || totalAssets || sales || pat) ? (
-          <label style={{ margin: "0", fontSize: "14px" }}>
-            Distinct companies matched on Financial metrics :{" "}
-            {distinctCompaniesCountMetrics}
-          </label>
-        ) : (
-          ""
-        )}
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
-          <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Sectors </label>
-            <Select
-              mode="multiple"
-              className="select-antd" // Add a custom class for styling
-              style={{
-                width: "100%",
-                border: "1px solid #ced4da",
-              }}
-              placeholder="Please select"
-              onChange={handleSectorChange}
-              options={(sectors || []).map((d) => ({
-                value: d,
-                label: d,
-              }))}
-            />
-          </div>
-          <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Industries </label>
-            <Select
-              mode="multiple"
-              className="select-antd" // Add a custom class for styling
-              style={{
-                width: "100%",
-                border: "1px solid #ced4da",
-              }}
-              placeholder="Please select"
-              value={selectedIndustries}
-              onChange={handleChange}
-              options={(industries || []).map((d) => ({
-                value: d,
-                label: d,
-              }))}
-              disabled={isSelectIndustriesDisabled}
-            />
-          </div>
-        </div>
-        {distinctCompaniesCount && selectedIndustries.length > 0 ? (
-          <label style={{ margin: "0", fontSize: "14px" }}>
-            Distinct companies matched on selected industries :{" "}
-            {distinctCompaniesCount}
-          </label>
-        ) : (
-          ""
-        )}
       </div>
-      <div className="mb-3">
-        <button
-          onClick={handleSubmit}
-          type="submit"
-          className="btn btn-primary mt-3 w-25"
-        >
-          Next
-        </button>
+      <div
+        style={{
+          height: "80vh",
+          position: "absolute",
+          right: "0",
+          top: "0",
+          marginTop: "80px",
+          display: "grid",
+          justifyItems: "center",
+          alignContent: "center",
+          width: "25%",
+        }}
+      >
+        <MatchCountComponent
+          marketCap={marketCap}
+          totalAssets={totalAssets}
+          sales={sales}
+          pat={pat}
+          selectedIndustries={selectedIndustries}
+          together={distinctCompaniesCountTogether}
+          financial={distinctCompaniesCountMetrics}
+          industries={distinctCompaniesCount}
+        />
       </div>
+
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null} // To remove footer buttons
+        centered
+      >
+        <h5>
+          Please make sure at least 10 companies have matched for
+          meaningful analysis
+        </h5>
+      </Modal>
     </div>
   );
 };

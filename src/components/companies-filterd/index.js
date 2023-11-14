@@ -58,7 +58,7 @@ const TableComponent = () => {
   ];
 
   const formattedData = data.map((element, index) => {
-    return { key: index, companies: element };
+    return { key: index, companies: element.company_name };
   });
 
   const onSelectChange = (newSelectedRowKeys) => {
