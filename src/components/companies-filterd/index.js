@@ -93,8 +93,7 @@ const TableComponent = () => {
             <h3>List of companies based on your selection </h3>
             <p>
               You have the option to deselect any company that you do not wish
-              to include in the analysis. Your thoughtful consideration is
-              appreciated
+              to include in the analysis.
             </p>
             <div className="col-lg-10 col-12 " style={{ minHeight: "40vh" }}>
               <Table

@@ -18,11 +18,11 @@ const HandSelectedPeers = ({ sectors }) => {
   const [salesRange, setSalesRange] = useState("1/2 - 2");
   const [patRange, setPatRange] = useState("1/2 - 2");
   const [marketRange, setMarketRange] = useState("1/2 - 2");
-  const [industries, setIndustries] = useState([]);
+  // const [industries, setIndustries] = useState([]);
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedSectors, setSelectedSectors] = useState([]);
-  const [isSelectIndustriesDisabled, setIsSelectIndustriesDisabled] =
-    useState(true);
+  // const [isSelectIndustriesDisabled, setIsSelectIndustriesDisabled] =
+  //   useState(true);
   const [minAssets, setMinAssets] = useState(0);
   const [minSales, setMinSales] = useState(0);
   const [minPAT, setMinPAT] = useState(0);
@@ -204,17 +204,23 @@ const HandSelectedPeers = ({ sectors }) => {
       .catch((err) => console.log(err));
   };
 
-  const handleChange = (value) => {
-    setSelectedIndustries(value);
+  // const handleChange = (value) => {
+  //   setSelectedIndustries(value);
 
-    getCompaniesCount(value);
-  };
+  // };
 
   useEffect(() => {
     if (selectedIndustries.length === 0) {
       setDistinctCompaniesCount(0);
     }
   }, [selectedIndustries]);
+
+  useEffect(() => {
+    if (selectedSectors.length === 0) {
+      setSelectedIndustries([]);
+    }
+  }, [selectedSectors]);
+
   const handleSectorChange = (value) => {
     setSelectedSectors(value);
     getIndustries(value);
@@ -259,7 +265,12 @@ const HandSelectedPeers = ({ sectors }) => {
         // Convert the Set back to an array
         const uniqueArray = Array.from(uniqueSet);
         uniqueArray.sort();
-        setIndustries(uniqueArray);
+        // setIndustries(uniqueArray);
+
+        setSelectedIndustries(uniqueArray);
+        if (data.length > 0) {
+          getCompaniesCount(uniqueArray);
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -307,14 +318,14 @@ const HandSelectedPeers = ({ sectors }) => {
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    if (selectedSectors.length > 0) {
-      setIsSelectIndustriesDisabled(false);
-    } else {
-      setIsSelectIndustriesDisabled(true);
-      setSelectedIndustries([]);
-    }
-  }, [selectedSectors]);
+  // useEffect(() => {
+  //   if (selectedSectors.length > 0) {
+  //     setIsSelectIndustriesDisabled(false);
+  //   } else {
+  //     setIsSelectIndustriesDisabled(true);
+  //     setSelectedIndustries([]);
+  //   }
+  // }, [selectedSectors]);
 
   useEffect(() => {
     if (
@@ -623,7 +634,7 @@ const HandSelectedPeers = ({ sectors }) => {
                 }))}
               />
             </div>
-            <div class=" d-flex col-lg-9 col-12 form-group">
+            {/* <div class=" d-flex col-lg-9 col-12 form-group">
               <label className="w-100">Industries </label>
               <Select
                 mode="multiple"
@@ -641,7 +652,7 @@ const HandSelectedPeers = ({ sectors }) => {
                 }))}
                 disabled={isSelectIndustriesDisabled}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="mb-3">

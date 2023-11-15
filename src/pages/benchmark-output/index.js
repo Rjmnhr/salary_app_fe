@@ -95,7 +95,10 @@ function CompaniesList({ data }) {
 }
 const BenchmarkOutput = () => {
   const resultData = JSON.parse(sessionStorage.getItem("result-data"));
-  const resultData2021 = JSON.parse(sessionStorage.getItem("result-data_2021"));
+  const resultData2021 =
+    JSON.parse(sessionStorage.getItem("result-data_2021")) || [];
+  const resultData2022 =
+    JSON.parse(sessionStorage.getItem("result-data_2022")) || [];
   console.log(
     "🚀 ~ file: index.js:53 ~ BenchmarkOutput ~ resultData2021:",
     resultData2021
@@ -112,7 +115,14 @@ const BenchmarkOutput = () => {
     }));
   };
 
-  const filteredResultData = resultData.filter((data) => data.salary !== 0);
+  const filteredResultData = resultData.filter(
+    (data) => data.salary !== null && data.salary !== 0
+  );
+
+  console.log(
+    "🚀 ~ file: index.js:116 ~ BenchmarkOutput ~ filteredResultData:",
+    filteredResultData
+  );
   // Convert salary values to lakhs
   const dataInLakhs = filteredResultData.map((item) => {
     return {
@@ -120,23 +130,23 @@ const BenchmarkOutput = () => {
       salary: item.salary / 100000, // Convert salary to lakhs
     };
   });
-  // Sort based on market_capitalisation_2022
+  // Sort based on market_capitalisation_2023
   const sortedByMarketCapitalisation = [...dataInLakhs].sort(
-    (a, b) => a.market_capitalisation_2022 - b.market_capitalisation_2022
+    (a, b) => a.market_capitalisation_2023 - b.market_capitalisation_2023
   );
 
-  // Sort based on total_assets_2022
+  // Sort based on total_assets_2023
   const sortedByTotalAssets = [...dataInLakhs].sort(
-    (a, b) => a.total_assets_2022 - b.total_assets_2022
+    (a, b) => a.total_assets_2023 - b.total_assets_2023
   );
 
-  // Sort based on sales_2022
+  // Sort based on sales_2023
   const sortedBySales = [...dataInLakhs].sort(
-    (a, b) => a.sales_2022 - b.sales_2022
+    (a, b) => a.sales_2023 - b.sales_2023
   );
 
-  // Sort based on PAT_2022
-  const sortedByPAT = [...dataInLakhs].sort((a, b) => a.PAT_2022 - b.PAT_2022);
+  // Sort based on PAT_2023
+  const sortedByPAT = [...dataInLakhs].sort((a, b) => a.PAT_2023 - b.PAT_2023);
   // const sortedResult = [...dataInLakhs].sort((a, b) => a.salary - b.salary);
 
   function calculateStatisticsFees(data) {
@@ -719,12 +729,14 @@ const BenchmarkOutput = () => {
                     </div>
                   </div>
                   <SalaryTrendChart
-                    resultData2022={resultData}
+                    resultData2023={resultData}
                     resultData2021={resultData2021}
+                    resultData2022={resultData2022}
                   />
                   <SalaryTrendGraph2
-                    dataWithYear2022={resultData}
+                    dataWithYear2023={resultData}
                     dataWithYear2021={resultData2021}
+                    dataWithYear2022={resultData2022}
                   />
                   <div className="mb-3 text-center">
                     <h5 className="mb-3"> Market Capitalization vs Salary</h5>
@@ -735,7 +747,7 @@ const BenchmarkOutput = () => {
                       style={{ pageBreakInside: "avoid" }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="market_capitalisation_2022">
+                      <XAxis tick={null} dataKey="market_capitalisation_2023">
                         <Label
                           value={`Market Capitalization `}
                           style={{
@@ -783,7 +795,7 @@ const BenchmarkOutput = () => {
                       style={{ pageBreakInside: "avoid" }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="total_assets_2022">
+                      <XAxis tick={null} dataKey="total_assets_2023">
                         <Label
                           value={`Total Assets`}
                           style={{
@@ -831,7 +843,7 @@ const BenchmarkOutput = () => {
                       style={{ pageBreakInside: "avoid" }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="sales_2022">
+                      <XAxis tick={null} dataKey="sales_2023">
                         <Label
                           value={`Sales`}
                           style={{
@@ -879,7 +891,7 @@ const BenchmarkOutput = () => {
                       style={{ pageBreakInside: "avoid" }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="PAT_2022">
+                      <XAxis tick={null} dataKey="PAT_2023">
                         <Label
                           value={`Profit After Tax`}
                           style={{

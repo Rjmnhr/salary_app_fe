@@ -70,7 +70,7 @@ function ExecutiveBenchmark() {
                 onChange={handleRadioChange}
                 style={{ marginRight: "8px" }}
               />
-              <label>Hand selected peers</label>
+              <label>Based on size and sector</label>
             </div>
             <div>
               <input

@@ -8,10 +8,12 @@ import NavBar from "../../components/nav-bar/index";
 import DownloadSamplePDF from "../../components/download-sample-pdf";
 import AxiosInstance from "../../components/axios";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { useApplicationContext } from "../../context/app-context";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [activateDashboard, setActivateDashboard] = useState(false);
+  const { setIsSignIn } = useApplicationContext();
 
   useEffect(() => {
     const userID = localStorage.getItem("user_id");
@@ -250,9 +252,15 @@ const LandingPage = () => {
                   <ul>
                     <li>1 Salary Report</li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                  <div
+                    onClick={() => {
+                      console.log("clicked");
+                      setIsSignIn(false);
+                    }}
+                    class="btn-wrap"
+                  >
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>
@@ -272,9 +280,9 @@ const LandingPage = () => {
                     <li>5 Salary Reports </li>
                     <li>PDF Downloads </li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                  <div onClick={() => setIsSignIn(false)} class="btn-wrap">
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>
@@ -290,9 +298,9 @@ const LandingPage = () => {
                     <li>Unlimited Salary Reports </li>
                     <li>PDF Downloads </li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                  <div onClick={() => setIsSignIn(false)} class="btn-wrap">
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>

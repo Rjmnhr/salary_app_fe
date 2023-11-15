@@ -20,7 +20,7 @@ const SalesIncentive = () => {
                   <div class="col-lg-5 mb-7 mb-lg-0">
                     <div class="pe-lg-5">
                       <div class="mb-5" data-aos="fade-up">
-                        <h2>Who are you?</h2>
+                        <h2>Typical clients we help</h2>
                         <h4>
                           All organizations that have a sales team and want to
                           improve their performance and productivity to hire and

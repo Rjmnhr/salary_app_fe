@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
+import MatchCountComponentIndex from "../../match-counts-index";
 
 const indexNames = [
   "NSE500",
@@ -44,11 +45,15 @@ const BasedOnIndex = ({ sectors }) => {
   const navigate = useNavigate();
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState("");
-  const [industries, setIndustries] = useState([]);
+  // const [industries, setIndustries] = useState([]);
   const [selectedSectors, setSelectedSectors] = useState([]);
-  const [isSelectIndustriesDisabled, setIsSelectIndustriesDisabled] =
-    useState(true);
+  // const [isSelectIndustriesDisabled, setIsSelectIndustriesDisabled] =
+  //   useState(true);
   const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(null);
+  const [distinctCompaniesCountIndices, setDistinctCompaniesCountIndices] =
+    useState(null);
+  const [distinctCompaniesCountTogether, setDistinctCompaniesCountTogether] =
+    useState(0);
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -64,10 +69,8 @@ const BasedOnIndex = ({ sectors }) => {
       .then(async (res) => {
         const response = await res.data;
 
-        const companiesList = response.map((item) => Object.values(item)[0]);
-
         // Create a new Set to store unique values
-        const uniqueSet = new Set(companiesList);
+        const uniqueSet = new Set(response);
 
         // Convert the Set back to an array, sort it, and remove "unclassified" if present
         const uniqueArray = Array.from(uniqueSet).sort();
@@ -81,19 +84,26 @@ const BasedOnIndex = ({ sectors }) => {
   };
 
   const handleChangeIndexes = (value) => {
+    console.log("entered");
     setSelectedIndex(value);
+    getCompaniesCountIndices(value);
   };
 
-  const handleChange = (value) => {
-    setSelectedIndustries(value);
-    getCompaniesCount(value);
-  };
+  // const handleChange = (value) => {
+  //   setSelectedIndustries(value);
 
+  // };
+
+  useEffect(() => {
+    if (selectedSectors.length === 0) {
+      setSelectedIndustries([]);
+    }
+  }, [selectedSectors]);
   const getCompaniesCount = (data) => {
     const formData = new FormData();
 
     formData.append("industries", data?.join(","));
-    AxiosInstance.post("api/benchmark/companies-count", formData, {
+    AxiosInstance.post("api/benchmark/companies-count-index", formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -101,6 +111,53 @@ const BasedOnIndex = ({ sectors }) => {
       .then(async (res) => {
         const response = await res.data;
         setDistinctCompaniesCount(response[0].distinct_company_count);
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    if (
+      selectedSectors.length > 0 &&
+      selectedIndex &&
+      selectedIndustries.length > 0
+    ) {
+      getCompaniesCountByTogether();
+    } else {
+      setDistinctCompaniesCountTogether(0);
+    }
+    //eslint-disable-next-line
+  }, [selectedIndex, selectedSectors, selectedIndustries]);
+  const getCompaniesCountIndices = (data) => {
+    const formData = new FormData();
+
+    formData.append("index", formatColumnName(data));
+
+    AxiosInstance.post("api/benchmark/companies-count-indices", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        setDistinctCompaniesCountIndices(response[0].distinct_company_count);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getCompaniesCountByTogether = () => {
+    const formData = new FormData();
+
+    formData.append("industries", selectedIndustries?.join(","));
+    formData.append("index", formatColumnName(selectedIndex));
+
+    AxiosInstance.post("/api/benchmark/companies-index/count", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+
+        setDistinctCompaniesCountTogether(response[0].distinct_company_count);
       })
       .catch((err) => console.log(err));
   };
@@ -113,7 +170,7 @@ const BasedOnIndex = ({ sectors }) => {
     const formData = new FormData();
 
     formData.append("sectors", data?.join(","));
-    AxiosInstance.post("api/benchmark/industries", formData, {
+    AxiosInstance.post("api/benchmark/industries-index", formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -134,19 +191,30 @@ const BasedOnIndex = ({ sectors }) => {
         // Convert the Set back to an array
         const uniqueArray = Array.from(uniqueSet);
         uniqueArray.sort();
-        setIndustries(uniqueArray);
+        // setIndustries(uniqueArray);
+        setSelectedIndustries(uniqueArray);
+        if (data.length > 0) {
+          getCompaniesCount(uniqueArray);
+        } else {
+          setDistinctCompaniesCount(0);
+        }
       })
       .catch((err) => console.log(err));
   };
-
   useEffect(() => {
-    if (selectedSectors.length > 0) {
-      setIsSelectIndustriesDisabled(false);
-    } else {
-      setIsSelectIndustriesDisabled(true);
+    if (selectedSectors.length === 0) {
       setSelectedIndustries([]);
+      setDistinctCompaniesCount(0);
     }
   }, [selectedSectors]);
+  // useEffect(() => {
+  //   if (selectedSectors.length > 0) {
+  //     setIsSelectIndustriesDisabled(false);
+  //   } else {
+  //     setIsSelectIndustriesDisabled(true);
+  //     setSelectedIndustries([]);
+  //   }
+  // }, [selectedSectors]);
   return (
     <div className="container-fluid p-0 p-lg-3">
       <div
@@ -155,7 +223,7 @@ const BasedOnIndex = ({ sectors }) => {
       >
         <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
           <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Indexes </label>
+            <label className="w-100">Indices </label>
             <Select
               className="select-antd" // Add a custom class for styling
               style={{
@@ -194,7 +262,7 @@ const BasedOnIndex = ({ sectors }) => {
               }))}
             />
           </div>
-          <div class=" d-flex col-lg-9 col-12 form-group">
+          {/* <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Industries </label>
             <Select
               mode="multiple"
@@ -213,16 +281,8 @@ const BasedOnIndex = ({ sectors }) => {
               }))}
               disabled={isSelectIndustriesDisabled}
             />
-          </div>
+          </div> */}
         </div>
-        {distinctCompaniesCount && selectedIndustries.length > 0 ? (
-          <label style={{ margin: "0", fontSize: "14px" }}>
-            Distinct companies matched on selected industries :{" "}
-            {distinctCompaniesCount}
-          </label>
-        ) : (
-          ""
-        )}
       </div>
       <div className="mb-3">
         <button
@@ -232,6 +292,28 @@ const BasedOnIndex = ({ sectors }) => {
         >
           Next
         </button>
+      </div>
+      <div
+        style={{
+          height: "80vh",
+          position: "absolute",
+          right: "0",
+          top: "0",
+          marginTop: "80px",
+          display: "grid",
+          justifyItems: "center",
+          alignContent: "center",
+          width: "25%",
+        }}
+      >
+        <MatchCountComponentIndex
+          selectedIndustries={selectedIndustries}
+          selectedSectors={selectedSectors}
+          selectedIndex={selectedIndex}
+          together={distinctCompaniesCountTogether}
+          indices={distinctCompaniesCountIndices}
+          industries={distinctCompaniesCount}
+        />
       </div>
     </div>
   );
