@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { Avatar, Dropdown } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import logo from "../../icons/logo192.png";
 
 const CapitalizeFirstLetter = (data) => {
   // Split the string into words
@@ -119,7 +120,17 @@ const NavBar = ({ scrollToContact }) => {
         >
           <div class="container d-flex align-items-center">
             <h1 class="logo me-auto">
-              <a href="/">Equipay Partners</a>
+              <a href="/">
+                {" "}
+                <img
+                  style={{ marginRight: "8px" }}
+                  src={logo}
+                  alt=""
+                  height={35}
+                  width={35}
+                />
+                Equipay Partners
+              </a>
             </h1>
 
             <nav

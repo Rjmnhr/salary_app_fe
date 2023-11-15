@@ -309,8 +309,8 @@ const LandingPage = () => {
                     <li>1 Salary Report</li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>
@@ -331,8 +331,8 @@ const LandingPage = () => {
                     <li>PDF Downloads </li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>
@@ -349,8 +349,8 @@ const LandingPage = () => {
                     <li>PDF Downloads </li>
                   </ul>
                   <div class="btn-wrap">
-                    <a href="/contact" class="btn-buy">
-                      Contact now
+                    <a href="/login-app" class="btn-buy">
+                      Get started
                     </a>
                   </div>
                 </div>
