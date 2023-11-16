@@ -108,7 +108,7 @@ const NavBar = ({ scrollToContact }) => {
           class="mobile-nav-toggle d-lg-none"
           onClick={handleMenuToggle}
         >
-          <i class="icofont-navigation-menu"></i>
+          <i style={{ color: "black" }} class="icofont-navigation-menu"></i>
         </button>
         <header
           id="header"

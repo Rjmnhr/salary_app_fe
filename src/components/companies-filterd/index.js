@@ -2,7 +2,7 @@ import { Table } from "antd";
 
 import React, { useEffect, useState } from "react";
 import { CompaniesFilteredStyled } from "./style";
-
+import NavBar from "../nav-bar";
 import HandSelectedPeers from "../benchmark-options/hand-selected-peers";
 import AxiosInstance from "../axios";
 import BasedOnIndex from "../benchmark-options/based-on-index";
@@ -83,48 +83,54 @@ const TableComponent = () => {
   };
 
   return (
-    <div>
-      <CompaniesFilteredStyled>
-        {data?.length > 0 ? (
-          <div
-            className="p-3 "
-            style={{ display: "grid", justifyItems: "center" }}
-          >
-            <h3>List of companies based on your selection </h3>
-            <p>
-              You have the option to deselect any company that you do not wish
-              to include in the analysis.
-            </p>
-            <div className="col-lg-10 col-12 " style={{ minHeight: "40vh" }}>
-              <Table
-                rowSelection={rowSelection}
-                columns={columns}
-                dataSource={formattedData}
-              />
-            </div>
-
-            <button onClick={handleContinue} className="btn btn-primary mt-3">
-              Continue
-            </button>
-          </div>
-        ) : (
-          <>
+    <>
+      <NavBar />
+      <div style={{ marginTop: "80px" }}>
+        <CompaniesFilteredStyled>
+          {data?.length > 0 ? (
             <div
               className="p-3 "
               style={{ display: "grid", justifyItems: "center" }}
             >
-              <h3>No companies has selected based on your selection </h3>
-              <p>Try giving different inputs</p>
-              {storeOption === "index" ? (
-                <BasedOnIndex sectors={sectors} />
-              ) : (
-                <HandSelectedPeers sectors={sectors} />
-              )}
+              <h3>List of companies based on your selection </h3>
+              <p>
+                You have the option to deselect any company that you do not wish
+                to include in the analysis.
+              </p>
+              <div className="col-lg-10 col-12 " style={{ minHeight: "40vh" }}>
+                <Table
+                  rowSelection={rowSelection}
+                  columns={columns}
+                  dataSource={formattedData}
+                />
+              </div>
+
+              <button
+                onClick={handleContinue}
+                className="btn w-25 btn-primary mt-3"
+              >
+                Continue
+              </button>
             </div>
-          </>
-        )}
-      </CompaniesFilteredStyled>
-    </div>
+          ) : (
+            <>
+              <div
+                className="p-3 "
+                style={{ display: "grid", justifyItems: "center" }}
+              >
+                <h3>No companies has selected based on your selection </h3>
+                <p>Try giving different inputs</p>
+                {storeOption === "index" ? (
+                  <BasedOnIndex sectors={sectors} />
+                ) : (
+                  <HandSelectedPeers sectors={sectors} />
+                )}
+              </div>
+            </>
+          )}
+        </CompaniesFilteredStyled>
+      </div>
+    </>
   );
 };
 

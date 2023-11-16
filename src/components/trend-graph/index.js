@@ -6,13 +6,15 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
+  Label,
 } from "recharts";
 
 const SalaryTrendChart = ({
   resultData2021,
   resultData2022,
   resultData2023,
+  chartWidth,
+  chartHeight,
 }) => {
   // Assuming resultData2021 and resultData2022 are arrays of objects with a 'salary' property
   const filteredData2021 = resultData2021?.filter(
@@ -45,26 +47,53 @@ const SalaryTrendChart = ({
   const medianSalary2023 = calculateMedianSalary(filteredData2023);
 
   const data = [
-    { year: "2021", medianSalary: medianSalary2021 },
-    { year: "2022", medianSalary: medianSalary2022 },
-    { year: "2023", medianSalary: medianSalary2023 },
+    { year: "2021", medianSalary: medianSalary2021?.toFixed(2) },
+    { year: "2022", medianSalary: medianSalary2022?.toFixed(2) },
+    { year: "2023", medianSalary: medianSalary2023?.toFixed(2) },
   ];
 
   return (
-    <LineChart width={800} height={400} data={data}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="year" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line
-        type="monotone"
-        dataKey="medianSalary"
-        name="Median Salaries"
-        stroke="rgba(75,192,192,1)"
-        activeDot={{ r: 8 }}
-      />
-    </LineChart>
+    <>
+      <LineChart width={chartWidth} height={chartHeight} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="year"></XAxis>
+        <YAxis>
+          <Label
+            value="Median Salary (Lakhs)"
+            angle={-90}
+            position="insideLeft"
+            style={{
+              textAnchor: "middle",
+              fontSize: "14px",
+              fill: "blue",
+              fontFamily: "Arial, sans-serif", // Adjust the font family here
+            }}
+          />
+        </YAxis>
+        <Tooltip
+          formatter={(value, name, props) => [`Median Salary : ${value} Lakhs`]}
+        />
+
+        <Line
+          type="monotone"
+          dataKey="medianSalary"
+          name="Median Salaries"
+          stroke="rgba(75,192,192,1)"
+          activeDot={{ r: 8 }}
+        />
+      </LineChart>
+      {/* <p
+        style={{
+          margin: "0",
+          padding: "0",
+          color: "blue",
+          fontFamily: "Arial, sans-serif",
+          fontSize: "14px",
+        }}
+      >
+        Years
+      </p> */}
+    </>
   );
 };
 

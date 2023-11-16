@@ -180,17 +180,8 @@ const ReportsPage = ({ userPlan }) => {
   useEffect(() => {
     let createdArray = "";
     if (location.pathname === "/reports-dashboard") {
-      console.log(
-        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:",
-        location.pathname
-      );
-
       createdArray = "";
     } else {
-      console.log(
-        "🚀 ~ file: index.js:187 ~ useEffect ~ location.pathname:else",
-        location.pathname
-      );
       createdArray = CreateArr();
     }
 
