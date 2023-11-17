@@ -276,7 +276,13 @@ const BasedOnIndex = ({ sectors }) => {
         className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
       >
-        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+        <div
+          style={{
+            transition: "all 0.5s ease",
+            boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+          }}
+          className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2"
+        >
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Indices </label>
             <Select
@@ -298,7 +304,13 @@ const BasedOnIndex = ({ sectors }) => {
           </div>
         </div>
 
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+        <div
+          style={{
+            transition: "all 0.5s ease",
+            boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+          }}
+          className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+        >
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Sectors </label>
             <Select

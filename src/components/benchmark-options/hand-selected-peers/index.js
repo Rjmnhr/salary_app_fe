@@ -411,7 +411,10 @@ const HandSelectedPeers = ({ sectors }) => {
                 Select desired range for each entry
               </p>
               <div
-                style={{ transition: "all 0.5s ease" }}
+                style={{
+                  transition: "all 0.5s ease",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+                }}
                 className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
               >
                 <div className="d-lg-flex">
@@ -471,7 +474,13 @@ const HandSelectedPeers = ({ sectors }) => {
                 <Divider />
               </div>
 
-              <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+              <div
+                style={{
+                  transition: "all 0.5s ease",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+                }}
+                className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+              >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
                     <label className="w-100">Total Assets </label>
@@ -527,7 +536,13 @@ const HandSelectedPeers = ({ sectors }) => {
                 <Divider />
               </div>
 
-              <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+              <div
+                style={{
+                  transition: "all 0.5s ease",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+                }}
+                className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+              >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
                     <label className="w-100">Sales </label>
@@ -583,7 +598,13 @@ const HandSelectedPeers = ({ sectors }) => {
                 <Divider />
               </div>
 
-              <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+              <div
+                style={{
+                  transition: "all 0.5s ease",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+                }}
+                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+              >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
                     <label className="w-100">Profit After Tax </label>
@@ -640,9 +661,17 @@ const HandSelectedPeers = ({ sectors }) => {
                 <Divider />
               </div>
 
-              <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
-                <div class=" d-flex col-lg-9 col-12 form-group">
-                  <label className="w-100">Sectors </label>
+              <div
+                style={{
+                  transition: "all 0.5s ease",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+                }}
+                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+              >
+                <div class=" d-flex col-lg-12 col-12 form-group">
+                  <label style={{ width: `${isMobile ? "100%" : "55%"}` }}>
+                    Sectors{" "}
+                  </label>
                   <Select
                     mode="multiple"
                     className="select-antd" // Add a custom class for styling

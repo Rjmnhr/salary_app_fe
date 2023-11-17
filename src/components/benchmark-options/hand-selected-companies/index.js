@@ -258,7 +258,7 @@ const HandSelectedCompanies = ({ sectors }) => {
         </Modal>
       </div>
       <div className="w-100 " style={{ display: "grid", placeItems: "center" }}>
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+        <div className="mb-3 p-0 p-lg-3 mt-3  col-12 col-lg-6 text-left bg-light pt-2">
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Role </label>
             <Select

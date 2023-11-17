@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../../icons/logo192.png";
 
 import { Avatar, Dropdown } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -39,8 +40,8 @@ const NavBar = ({ scrollToContact }) => {
         return "price-a-job";
       case "/landing":
         return "price-a-job";
-      case "/executive-reports":
-        return "executive-reports";
+      case "/landing-executive":
+        return "/landing-executive";
       case "/training":
         return "training";
       case "/sales":
@@ -119,7 +120,17 @@ const NavBar = ({ scrollToContact }) => {
         >
           <div class="container d-flex align-items-center">
             <h1 class="logo me-auto">
-              <a href="/">Equipay Partners</a>
+              <a href="/">
+                {" "}
+                <img
+                  style={{ marginRight: "8px" }}
+                  src={logo}
+                  alt=""
+                  height={35}
+                  width={35}
+                />
+                Equipay Partners
+              </a>
             </h1>
 
             <nav
@@ -137,9 +148,11 @@ const NavBar = ({ scrollToContact }) => {
                   <a href="/landing">Price a Job</a>
                 </li>
                 <li
-                  className={activeLink === "executive-reports" ? "active" : ""}
+                  className={
+                    activeLink === "/landing-executive" ? "active" : ""
+                  }
                 >
-                  <a href="/executive-reports">
+                  <a href="/landing-executive">
                     Executive Compensation Benchmarking
                   </a>
                 </li>
