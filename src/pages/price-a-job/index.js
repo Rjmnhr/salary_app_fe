@@ -178,28 +178,6 @@ const PriceAJob = () => {
   }, []);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    fetch("https://backend.equipaypartners.com/api/token/verify", {
-      headers: {
-        token: `Bearer ${accessToken}`,
-      },
-    })
-      .then(async (response) => {
-        console.log(response.status);
-        if (response.status === 200) {
-          console.log("user is valid");
-        } else {
-          navigate("/login-app");
-        }
-      })
-
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [navigate]);
-
-  useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       const fetchResponses = async () => {
         const retrievedSkillsData = await Promise.all(

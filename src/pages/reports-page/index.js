@@ -936,7 +936,7 @@ const ReportsPage = ({ userPlan }) => {
                           </div>
 
                           <CardActions disableSpacing>
-                            <p>See More</p>
+                            <p style={{ margin: "0" }}>See More</p>
                             <ExpandMore
                               expand={expanded[index] || false}
                               onClick={() => handleExpandClick(index)}

@@ -7,6 +7,13 @@
   pointer-events: none;
 }
 
+.scrollable-container::-webkit-scrollbar{
+  display: none;
+}
+
+table td:hover{
+  background-color: rgb(228, 228, 228);
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

@@ -82,7 +82,9 @@ const HomePage = () => {
     <>
       <NavBar scrollToContact={scrollToContact} />
       <ParallaxComponent
-        img={coverImg}
+        img={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1699627708/piasi2ni1hph7gaaqr0a.webp"
+        }
         content={
           <section class="d-flex align-items-center">
             <div class="container" data-aos="zoom-out" data-aos-delay="100">

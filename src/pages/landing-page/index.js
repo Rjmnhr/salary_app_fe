@@ -8,6 +8,7 @@ import NavBar from "../../components/nav-bar/index";
 import DownloadSamplePDF from "../../components/download-sample-pdf";
 import AxiosInstance from "../../components/axios";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { useApplicationContext } from "../../context/app-context";
 
 const LandingPage = () => {
   const navigate = useNavigate();

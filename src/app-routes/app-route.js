@@ -15,7 +15,7 @@ import RegistrationPricing from "../pages/registration-pricing";
 import SuccessRegistration from "../components/payment_checkout/success-registration";
 import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
 import ProtectedRoute from "./protected-route";
-import ExecutiveReports from "../pages/executive-reports";
+// import ExecutiveReports from "../pages/executive-reports";
 import ForgotPasswordPage from "../pages/forgot-password-page";
 import UserAccount from "../pages/user-account-page";
 import ChangeEmail from "../components/change-email";
@@ -24,6 +24,10 @@ import ChangePlan from "../components/change-plan";
 import SuccessRegistrationBasic from "../components/payment_checkout/success-registration-basic";
 import Contact from "../components/contact";
 import VerifyPlanRoute from "./verifyPlan";
+import ExecutiveBenchmark from "../pages/executive-benchmark";
+import RoleInformation from "../components/role-information";
+import BenchmarkOutput from "../pages/benchmark-output";
+import TableComponent from "../components/companies-filterd";
 import WebinarComponent from "../components/webinar-component";
 
 const AppRoute = () => {
@@ -73,7 +77,7 @@ const AppRoute = () => {
           path="/executive-reports"
           element={
             <>
-              <ExecutiveReports />
+              <ExecutiveBenchmark />
             </>
           }
         />
@@ -215,6 +219,30 @@ const AppRoute = () => {
           element={
             <>
               <ForgotPasswordPage />
+            </>
+          }
+        />
+        <Route
+          path="/role-information"
+          element={
+            <>
+              <RoleInformation />
+            </>
+          }
+        />
+        <Route
+          path="/companies-filtered"
+          element={
+            <>
+              <TableComponent />
+            </>
+          }
+        />
+        <Route
+          path="/output"
+          element={
+            <>
+              <BenchmarkOutput />
             </>
           }
         />
