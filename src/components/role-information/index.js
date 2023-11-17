@@ -14,11 +14,6 @@ export const availableRoles = [
   "Chairperson",
   "Nominee Director",
   "CEO - Chief Executive Officer",
-  "Others",
-  "Chairperson Emeritus / Mentor",
-  "COO - Chief Operating Officer",
-  "Finance",
-  "Compliance Officer",
 ];
 
 const RoleInformation = () => {

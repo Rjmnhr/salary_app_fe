@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -9,17 +9,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AimOutlined } from "@ant-design/icons";
 import "../reports-page/style.css";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Label,
-} from "recharts";
-import SalaryTrendChart from "../../components/trend-graph";
-import SalaryTrendGraph2 from "../../components/trend-graph/trend-graph-2";
+import AxiosInstance from "../../components/axios";
+
+import GenerateBenchmarkReport from "../../components/generate-benchmark-report";
+import { Skeleton } from "antd";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,81 +25,87 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const decimalFix = (number) => {
-  const trimmed = Math.floor(number * 100) / 100;
-  return trimmed;
-};
-
-export const calculateStatisticsSalary = (data) => {
-  // Calculate average salary
-  const salaries = data.map((result) => result.salary / 100000);
-
-  // Remove zeros from the salaries array
-  const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
-
-  // Check if all values are zero
-  const allZeros = nonZeroSalaries.length === 0;
-
-  const totalSalary = allZeros
-    ? 0
-    : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
-  const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
-
-  // Calculate median salary
-  const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
-  const middleIndex = Math.floor(sortedSalaries.length / 2);
-  const medianSalary = allZeros
-    ? 0
-    : sortedSalaries.length % 2 === 0
-    ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-    : sortedSalaries[middleIndex];
-
-  // Calculate minimum and maximum salary
-  const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
-  const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
-
-  // Calculate 25th and 75th percentile values
-  const percentile25 = allZeros
-    ? 0
-    : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-  const percentile75 = allZeros
-    ? 0
-    : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
-
-  return {
-    averageSalary,
-    medianSalary,
-    minSalary,
-    maxSalary,
-    percentile25,
-    percentile75,
-  };
-};
-
 function CompaniesList({ data }) {
+  const companyNames = data.map((company) => company.company_name);
+
   return (
     <div>
       <p>
         <span>Companies :</span>{" "}
-        <span style={{ fontSize: "14px" }}> {data.join(", ")}</span>
+        <span style={{ fontSize: "14px" }}> {companyNames.join(", ")}</span>
       </p>
     </div>
   );
 }
+
 const BenchmarkOutput = () => {
-  const resultData = JSON.parse(sessionStorage.getItem("result-data"));
-  const resultData2021 =
-    JSON.parse(sessionStorage.getItem("result-data_2021")) || [];
-  const resultData2022 =
-    JSON.parse(sessionStorage.getItem("result-data_2022")) || [];
-  console.log(
-    "🚀 ~ file: index.js:53 ~ BenchmarkOutput ~ resultData2021:",
-    resultData2021
-  );
+  const [resultData, setResultData] = useState([]);
+  const [resultData2021, setResultData2021] = useState([]);
+  const [resultData2022, setResultData2022] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const role = sessionStorage.getItem("role");
   const storedOption = sessionStorage.getItem("option");
-  const storedCompanies = JSON.parse(sessionStorage.getItem("companies"));
+  const storedCompanies = JSON.parse(
+    sessionStorage.getItem("companies-selected")
+  );
+  const filteredCompanyList = storedCompanies.map((data) => data.company_name);
+
+  useEffect(() => {
+    const formData = new FormData();
+
+    formData.append("role", role);
+    formData.append("companies", filteredCompanyList?.join(","));
+    AxiosInstance.post("api/benchmark/data", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        get2021Data();
+        get2022Data();
+        setResultData(response);
+      })
+      .catch((err) => console.log(err));
+    //eslint-disable-next-line
+  }, []);
+
+  const get2021Data = () => {
+    const filteredSymbolList = storedCompanies.map((data) => data.nse_symbol);
+    const formData = new FormData();
+
+    formData.append("role", role);
+    formData.append("symbols", filteredSymbolList?.join(","));
+    formData.append("companies", filteredCompanyList?.join(","));
+    AxiosInstance.post("api/benchmark/data/2021", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        setResultData2021(response);
+      })
+      .catch((err) => console.log(err));
+  };
+  const get2022Data = () => {
+    const filteredSymbolList = storedCompanies.map((data) => data.nse_symbol);
+    const formData = new FormData();
+
+    formData.append("role", role);
+    formData.append("symbols", filteredSymbolList?.join(","));
+    formData.append("companies", filteredCompanyList?.join(","));
+    AxiosInstance.post("api/benchmark/data/2022", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        setResultData2022(response);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleExpandClick = (index) => {
     setExpanded((prevExpanded) => ({
@@ -115,173 +114,137 @@ const BenchmarkOutput = () => {
     }));
   };
 
-  const filteredResultData = resultData.filter(
-    (data) => data.salary !== null && data.salary !== 0
-  );
-
-  console.log(
-    "🚀 ~ file: index.js:116 ~ BenchmarkOutput ~ filteredResultData:",
-    filteredResultData
-  );
-  // Convert salary values to lakhs
-  const dataInLakhs = filteredResultData.map((item) => {
-    return {
-      ...item,
-      salary: item.salary / 100000, // Convert salary to lakhs
-    };
-  });
-  // Sort based on market_capitalisation_2023
-  const sortedByMarketCapitalisation = [...dataInLakhs].sort(
-    (a, b) => a.market_capitalisation_2023 - b.market_capitalisation_2023
-  );
-
-  // Sort based on total_assets_2023
-  const sortedByTotalAssets = [...dataInLakhs].sort(
-    (a, b) => a.total_assets_2023 - b.total_assets_2023
-  );
-
-  // Sort based on sales_2023
-  const sortedBySales = [...dataInLakhs].sort(
-    (a, b) => a.sales_2023 - b.sales_2023
-  );
-
-  // Sort based on PAT_2023
-  const sortedByPAT = [...dataInLakhs].sort((a, b) => a.PAT_2023 - b.PAT_2023);
-  // const sortedResult = [...dataInLakhs].sort((a, b) => a.salary - b.salary);
-
-  function calculateStatisticsFees(data) {
-    // Calculate average salary
-    const salaries = data.map(
-      (result) => result.directors_sitting_fees / 100000
-    );
-
-    // Remove zeros from the salaries array
-    const nonZeroSalaries = salaries.filter((salary) => salary !== 0);
-
-    // Check if all values are zero
-    const allZeros = nonZeroSalaries.length === 0;
-
-    const totalSalary = allZeros
-      ? 0
-      : nonZeroSalaries.reduce((acc, val) => acc + val, 0);
-    const averageSalary = allZeros ? 0 : totalSalary / nonZeroSalaries.length;
-
-    // Calculate median salary
-    const sortedSalaries = [...nonZeroSalaries].sort((a, b) => a - b);
-    const middleIndex = Math.floor(sortedSalaries.length / 2);
-    const medianSalary = allZeros
-      ? 0
-      : sortedSalaries.length % 2 === 0
-      ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-      : sortedSalaries[middleIndex];
-
-    // Calculate minimum and maximum salary
-    const minSalary = allZeros ? 0 : Math.min(...nonZeroSalaries);
-    const maxSalary = allZeros ? 0 : Math.max(...nonZeroSalaries);
-
-    // Calculate 25th and 75th percentile values
-    const percentile25 = allZeros
-      ? 0
-      : sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-    const percentile75 = allZeros
-      ? 0
-      : sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
-
-    return {
-      averageSalary,
-      medianSalary,
-      minSalary,
-      maxSalary,
-      percentile25,
-      percentile75,
-    };
-  }
-
-  // Calculate statistics for jobsData
-  const statisticsForSalary = calculateStatisticsSalary(resultData);
-  const statisticsForFees = calculateStatisticsFees(resultData);
-
   return (
     <>
       <NavBar />
-      <div
-        className="container-fluid  d-lg-flex justify-content-center align-items-start 
-         "
-        style={{ padding: "0", marginTop: "90px" }}
-      >
+      {resultData.length > 0 ? (
         <div
-          className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
-          style={{
-            overflowY: "scroll",
-            maxHeight: "100vh",
-            transform: "transition 0.3s all ease",
-          }}
+          className="container-fluid  d-lg-flex justify-content-center align-items-start 
+         "
+          style={{ padding: "0", marginTop: "90px" }}
         >
-          <Card
-            className={`card selectable-tab p-2 px-3 text-left mb-3 selected-tab
+          <div
+            className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
+            style={{
+              overflowY: "scroll",
+              maxHeight: "100vh",
+              transform: "transition 0.3s all ease",
+            }}
+          >
+            <Card
+              className={`card selectable-tab p-2 px-3 text-left mb-3 selected-tab
                          
                           `}
-            style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer" }}
+            >
+              <p style={{ fontWeight: "500" }} className="fw-b text-primary">
+                {role}
+              </p>
+
+              {storedOption === "index" ? (
+                <p
+                  className="border-right px-2"
+                  style={{
+                    borderRight: "1px solid",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "3px",
+                  }}
+                >
+                  <AimOutlined /> Based on index
+                </p>
+              ) : storedOption === "size" ? (
+                <p
+                  className="border-right px-2"
+                  style={{
+                    borderRight: "1px solid",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "3px",
+                  }}
+                >
+                  <AimOutlined /> Based on size and sector
+                </p>
+              ) : (
+                <p
+                  className="border-right px-2"
+                  style={{
+                    borderRight: "1px solid",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "3px",
+                  }}
+                >
+                  <AimOutlined /> Hand selected
+                </p>
+              )}
+
+              <CardActions disableSpacing>
+                <p style={{ margin: "0" }}>See More</p>
+                <ExpandMore
+                  expand={expanded[0] || false}
+                  onClick={() => handleExpandClick(0)}
+                  aria-expanded={expanded[0] || false}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </ExpandMore>
+              </CardActions>
+              <Collapse in={expanded[0] || false} timeout="auto" unmountOnExit>
+                <div>
+                  <CompaniesList data={storedCompanies} />
+                </div>
+              </Collapse>
+            </Card>
+          </div>
+
+          <div
+            className="container-fluid col-12 col-lg-9  d-grid "
+            style={{
+              background: "rgba(0, 0, 0, 0.02)",
+              height: "100vh",
+              justifyItems: "center",
+            }}
           >
-            <p style={{ fontWeight: "500" }} className="fw-b text-primary">
-              {role}
-            </p>
-
-            {storedOption === "index" ? (
-              <p
-                className=" border-right px-2"
-                style={{
-                  borderRight: "1px solid",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                }}
-              >
-                <AimOutlined /> Based on index
-              </p>
-            ) : (
-              <p
-                className=" border-right px-2"
-                style={{
-                  borderRight: "1px solid",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "3px",
-                }}
-              >
-                <AimOutlined /> Hand selected
-              </p>
-            )}
-
-            <CardActions disableSpacing>
-              <p style={{ margin: "0" }}>See More</p>
-              <ExpandMore
-                expand={expanded[0] || false}
-                onClick={() => handleExpandClick(0)}
-                aria-expanded={expanded[0] || false}
-                aria-label="show more"
-              >
-                <ExpandMoreIcon />
-              </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded[0] || false} timeout="auto" unmountOnExit>
-              <div>
-                <CompaniesList data={storedCompanies} />
-              </div>
-            </Collapse>
-          </Card>
+            <GenerateBenchmarkReport
+              resultData={resultData}
+              resultData2021={resultData2021}
+              resultData2022={resultData2022}
+              role={role}
+            />
+          </div>
         </div>
-
-        <div
-          className="container-fluid col-12 col-lg-9  d-grid "
-          style={{
-            background: "rgba(0, 0, 0, 0.02)",
-            height: "100vh",
-            justifyItems: "center",
-          }}
-        >
-          <>
-            {resultData.length > 1 ? (
+      ) : (
+        <>
+          <div
+            className="container-fluid  d-lg-flex justify-content-center align-items-start 
+         "
+            style={{ padding: "0", marginTop: "90px" }}
+          >
+            <div
+              className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
+              style={{
+                overflowY: "scroll",
+                maxHeight: "100vh",
+                transform: "transition 0.3s all ease",
+              }}
+            >
+              <div>
+                <Card>
+                  <div className="p-2">
+                    <Skeleton active />
+                  </div>
+                </Card>
+              </div>
+            </div>
+            <div
+              className="container-fluid col-12 col-lg-9  d-grid "
+              style={{
+                background: "rgba(0, 0, 0, 0.02)",
+                height: "100vh",
+                justifyItems: "center",
+              }}
+            >
               <div
                 className="container  col-lg-11 col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
                 style={{
@@ -290,681 +253,14 @@ const BenchmarkOutput = () => {
                   overflowY: "scroll",
                 }}
               >
-                <div className="p-lg-3 p-1">
-                  <h3>{role} Benchmark Report</h3>
-                  <div className="mt-3 mb-3">
-                    <h5 className="mb-2">Average Salary </h5>
-                    <p className="fs-3">
-                      ₹ {decimalFix(statisticsForSalary.averageSalary)} Lakhs{" "}
-                    </p>
-                  </div>
-                  <div className="mt-3 mb-3">
-                    <h5 className="mb-2">Average Fees </h5>
-                    <p className="fs-3">
-                      ₹ {decimalFix(statisticsForFees.averageSalary)} Lakhs{" "}
-                    </p>
-                  </div>
-                  <h5 className="mb-3">Salary details</h5>
-                  <div className="d-flex mb-3 mt-3">
-                    <div style={{ height: "100px", width: "10%" }}>
-                      <svg height="30" width="100%">
-                        <defs>
-                          <linearGradient
-                            id="default-bar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop style={{ stopColor: "#fff" }} />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#e9e9ec" }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-bar')"
-                        ></rect>
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 text-start mt-2">
-                        <p
-                          className="stripe-text"
-                          style={{
-                            fontWeight: "bold",
-                            margin: "0",
-                            color: "gray",
-                          }}
-                        >
-                          Min
-                        </p>
-                        <p
-                          className="stripe-text"
-                          style={{ fontWeight: "bold", color: "gray" }}
-                        >
-                          {decimalFix(statisticsForSalary.minSalary)} Lakhs
-                        </p>
-                      </div>
-                    </div>
-                    <div style={{ height: "100px", width: "15%" }}>
-                      <div
-                        style={{
-                          height: "30px",
-                          width: "100%",
-                          background: "#00aaa4",
-                        }}
-                      ></div>
-                    </div>
-                    ​{" "}
-                    <div style={{ height: "100px", width: "50%" }}>
-                      <svg height="30" width="100%">
-                        <defs>
-                          <linearGradient
-                            id="default-middleBar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop
-                              offset="0%"
-                              style={{ stopColor: "#18969b", stopOpacity: 1 }}
-                            />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-middleBar')"
-                        />
-                        {/* Vertical dotted line in the middle */}
-                        <line
-                          x1="50%"
-                          y1="0"
-                          x2="50%"
-                          y2="100%"
-                          stroke="#fff"
-                          strokeWidth="2"
-                          strokeDasharray="4 4"
-                        />
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 d-flex justify-content-between">
-                        <div className="w-100 text-start mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            25th Percentile
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForSalary.percentile25)} Lakhs
-                          </p>
-                        </div>
-                        <div className="w-100 text-center mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            MEDIAN
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForSalary.medianSalary)} Lakhs
-                          </p>
-                        </div>
-                        <div className="w-100 text-right mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            75th Percentile
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForSalary.percentile75)} Lakhs
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ height: "100px", width: "15%" }}>
-                      <div
-                        style={{
-                          height: "30px",
-                          width: "100%",
-                          background: "#3b7dd8",
-                        }}
-                      ></div>
-                    </div>
-                    <div style={{ height: "100px", width: "10%" }}>
-                      <svg
-                        height="30"
-                        width="100%"
-                        style={{ transform: "rotate(180deg)" }}
-                      >
-                        <defs>
-                          <linearGradient
-                            id="default-bar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop style={{ stopColor: "#fff" }} />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#e9e9ec" }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-bar')"
-                        ></rect>
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 text-right mt-2">
-                        <p
-                          className="stripe-text"
-                          style={{
-                            fontWeight: "bold",
-                            margin: "0",
-                            color: "gray",
-                          }}
-                        >
-                          Max
-                        </p>
-                        <p
-                          className="stripe-text"
-                          style={{ fontWeight: "bold", color: "gray" }}
-                        >
-                          {decimalFix(statisticsForSalary.maxSalary)} Lakhs
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <h5 className="mb-3">Fees details</h5>
-                  <div className="d-flex mb-3 mt-3">
-                    <div style={{ height: "100px", width: "10%" }}>
-                      <svg height="30" width="100%">
-                        <defs>
-                          <linearGradient
-                            id="default-bar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop style={{ stopColor: "#fff" }} />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#e9e9ec" }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-bar')"
-                        ></rect>
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 text-start mt-2">
-                        <p
-                          className="stripe-text"
-                          style={{
-                            fontWeight: "bold",
-                            margin: "0",
-                            color: "gray",
-                          }}
-                        >
-                          Min
-                        </p>
-                        <p
-                          className="stripe-text"
-                          style={{ fontWeight: "bold", color: "gray" }}
-                        >
-                          {decimalFix(statisticsForFees.minSalary)} Lakhs
-                        </p>
-                      </div>
-                    </div>
-                    <div style={{ height: "100px", width: "15%" }}>
-                      <div
-                        style={{
-                          height: "30px",
-                          width: "100%",
-                          background: "#00aaa4",
-                        }}
-                      ></div>
-                    </div>
-                    ​{" "}
-                    <div style={{ height: "100px", width: "50%" }}>
-                      <svg height="30" width="100%">
-                        <defs>
-                          <linearGradient
-                            id="default-middleBar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop
-                              offset="0%"
-                              style={{ stopColor: "#18969b", stopOpacity: 1 }}
-                            />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#2d67b9", stopOpacity: 1 }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-middleBar')"
-                        />
-                        {/* Vertical dotted line in the middle */}
-                        <line
-                          x1="50%"
-                          y1="0"
-                          x2="50%"
-                          y2="100%"
-                          stroke="#fff"
-                          strokeWidth="2"
-                          strokeDasharray="4 4"
-                        />
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 d-flex justify-content-between">
-                        <div className="w-100 text-start mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            25th Percentile
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForFees.percentile25)} Lakhs
-                          </p>
-                        </div>
-                        <div className="w-100 text-center mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            MEDIAN
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForFees.medianSalary)} Lakhs
-                          </p>
-                        </div>
-                        <div className="w-100 text-right mt-2">
-                          <p
-                            className="stripe-text"
-                            style={{
-                              fontWeight: "bold",
-                              margin: "0",
-                              color: "gray",
-                            }}
-                          >
-                            75th Percentile
-                          </p>
-                          <p
-                            className="stripe-text"
-                            style={{ fontWeight: "bold", color: "gray" }}
-                          >
-                            {decimalFix(statisticsForFees.percentile75)} Lakhs
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ height: "100px", width: "15%" }}>
-                      <div
-                        style={{
-                          height: "30px",
-                          width: "100%",
-                          background: "#3b7dd8",
-                        }}
-                      ></div>
-                    </div>
-                    <div style={{ height: "100px", width: "10%" }}>
-                      <svg
-                        height="30"
-                        width="100%"
-                        style={{ transform: "rotate(180deg)" }}
-                      >
-                        <defs>
-                          <linearGradient
-                            id="default-bar"
-                            x1="0%"
-                            y1="0%"
-                            x2="100%"
-                            y2="0%"
-                          >
-                            <stop style={{ stopColor: "#fff" }} />
-                            <stop
-                              offset="100%"
-                              style={{ stopColor: "#e9e9ec" }}
-                            />
-                          </linearGradient>
-                        </defs>
-                        <rect
-                          x="0"
-                          y="0"
-                          width="100%"
-                          height="100%"
-                          fill="url('#default-bar')"
-                        ></rect>
-                        Sorry, your browser does not support inline SVG.
-                      </svg>
-                      <div className="w-100 text-right mt-2">
-                        <p
-                          className="stripe-text"
-                          style={{
-                            fontWeight: "bold",
-                            margin: "0",
-                            color: "gray",
-                          }}
-                        >
-                          Max
-                        </p>
-                        <p
-                          className="stripe-text"
-                          style={{ fontWeight: "bold", color: "gray" }}
-                        >
-                          {decimalFix(statisticsForFees.maxSalary)} Lakhs
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <SalaryTrendChart
-                    resultData2023={resultData}
-                    resultData2021={resultData2021}
-                    resultData2022={resultData2022}
-                  />
-                  <SalaryTrendGraph2
-                    dataWithYear2023={resultData}
-                    dataWithYear2021={resultData2021}
-                    dataWithYear2022={resultData2022}
-                  />
-                  <div className="mb-3 text-center">
-                    <h5 className="mb-3"> Market Capitalization vs Salary</h5>
-                    <LineChart
-                      width={800}
-                      height={400}
-                      data={sortedByMarketCapitalisation}
-                      style={{ pageBreakInside: "avoid" }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="market_capitalisation_2023">
-                        <Label
-                          value={`Market Capitalization `}
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </XAxis>
-                      <YAxis>
-                        <Label
-                          value="Salary (Lakhs)"
-                          angle={-90}
-                          position="insideLeft"
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </YAxis>
-                      <Tooltip
-                        formatter={(value, name, props) => [
-                          `Salary : ${value} Lakhs`,
-                        ]}
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="salary"
-                        name="Salary"
-                        stroke="#8884d8"
-                        dot={false} // Disable data points
-                      />
-                    </LineChart>
-                  </div>
-                  <div className="mb-3 text-center">
-                    <h5 className="mb-3">Total Assets vs Salary</h5>
-                    <LineChart
-                      width={800}
-                      height={400}
-                      data={sortedByTotalAssets}
-                      style={{ pageBreakInside: "avoid" }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="total_assets_2023">
-                        <Label
-                          value={`Total Assets`}
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </XAxis>
-                      <YAxis>
-                        <Label
-                          value="Salary (Lakhs)"
-                          angle={-90}
-                          position="insideLeft"
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </YAxis>
-                      <Tooltip
-                        formatter={(value, name, props) => [
-                          `Salary : ${value} Lakhs`,
-                        ]}
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="salary"
-                        name="Salary"
-                        stroke="#8884d8"
-                        dot={false} // Disable data points
-                      />
-                    </LineChart>
-                  </div>
-                  <div className="mb-3 text-center">
-                    <h5 className="mb-3">Sales vs Salary</h5>
-                    <LineChart
-                      width={800}
-                      height={400}
-                      data={sortedBySales}
-                      style={{ pageBreakInside: "avoid" }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="sales_2023">
-                        <Label
-                          value={`Sales`}
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </XAxis>
-                      <YAxis>
-                        <Label
-                          value="Salary (Lakhs)"
-                          angle={-90}
-                          position="insideLeft"
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </YAxis>
-                      <Tooltip
-                        formatter={(value, name, props) => [
-                          `Salary : ${value} Lakhs`,
-                        ]}
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="salary"
-                        name="Salary"
-                        stroke="#8884d8"
-                        dot={false} // Disable data points
-                      />
-                    </LineChart>
-                  </div>
-                  <div className="mb-3 text-center">
-                    <h5 className="mb-3">Profit After Tax vs Salary</h5>
-                    <LineChart
-                      width={800}
-                      height={400}
-                      data={sortedByPAT}
-                      style={{ pageBreakInside: "avoid" }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis tick={null} dataKey="PAT_2023">
-                        <Label
-                          value={`Profit After Tax`}
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </XAxis>
-                      <YAxis>
-                        <Label
-                          value="Salary (Lakhs)"
-                          angle={-90}
-                          position="insideLeft"
-                          style={{
-                            textAnchor: "middle",
-                            fontSize: "14px",
-                            fill: "blue",
-                            fontFamily: "Arial, sans-serif", // Adjust the font family here
-                          }}
-                        />
-                      </YAxis>
-                      <Tooltip
-                        formatter={(value, name, props) => [
-                          `Salary : ${value} Lakhs`,
-                        ]}
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="salary"
-                        name="Salary"
-                        stroke="#8884d8"
-                        dot={false} // Disable data points
-                      />
-                    </LineChart>
-                  </div>
-                </div>
+                <Skeleton active />
+                <Skeleton active />
+                <Skeleton active />
               </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  justifyItems: "start",
-                  textAlign: "start",
-                }}
-                className="mt-1 mt-lg-3"
-              >
-                <div
-                  className="d-lg-flex justify-content-lg-start justify-content-center align-items-center p-3 text-lg-left text-center"
-                  style={{ background: "#fff" }}
-                >
-                  <div>
-                    <h2>Your report was unsuccessful</h2>
-                    <p>
-                      Sorry! We haven't collected enough data yet to generate
-                      this report. Check back soon
-                    </p>
-                  </div>
-
-                  <img
-                    src="https://www.payscale.com/content/market-worth-promo@2x.png"
-                    alt=""
-                    height={200}
-                    width={300}
-                  />
-                </div>
-              </div>
-            )}
-          </>
-        </div>
-      </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

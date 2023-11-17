@@ -392,7 +392,7 @@ const HandSelectedPeers = ({ sectors }) => {
           >
             <div className="d-lg-flex">
               <div class=" d-flex col-lg-9 col-12 form-group">
-                <label className="w-100">Market Capitalization</label>
+                <label className="w-100">Market Capitalization (Crore)</label>
                 <CurrencyInput
                   className="currency-input"
                   class="form-control"
@@ -450,7 +450,7 @@ const HandSelectedPeers = ({ sectors }) => {
           <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
             <div className="d-lg-flex">
               <div class=" d-flex col-lg-9 col-12 form-group">
-                <label className="w-100">Total Assets </label>
+                <label className="w-100">Total Assets (Crore)</label>
                 <CurrencyInput
                   className="currency-input"
                   class="form-control"
@@ -506,7 +506,7 @@ const HandSelectedPeers = ({ sectors }) => {
           <div className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
             <div className="d-lg-flex">
               <div class=" d-flex col-lg-9 col-12 form-group">
-                <label className="w-100">Sales </label>
+                <label className="w-100">Sales (Crore)</label>
                 <CurrencyInput
                   className="currency-input"
                   class="form-control"
@@ -562,7 +562,7 @@ const HandSelectedPeers = ({ sectors }) => {
           <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
             <div className="d-lg-flex">
               <div class=" d-flex col-lg-9 col-12 form-group">
-                <label className="w-100">Profit After Tax </label>
+                <label className="w-100">Profit After Tax (Crore)</label>
                 <CurrencyInput
                   className="currency-input"
                   class="form-control"
