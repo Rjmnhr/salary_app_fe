@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "antd";
+import { Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import MatchCountComponentIndex from "../../match-counts-index";
@@ -42,20 +42,58 @@ export function formatColumnName(columnName) {
 }
 
 const BasedOnIndex = ({ sectors }) => {
-  const navigate = useNavigate();
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState("");
   // const [industries, setIndustries] = useState([]);
   const [selectedSectors, setSelectedSectors] = useState([]);
   // const [isSelectIndustriesDisabled, setIsSelectIndustriesDisabled] =
   //   useState(true);
-  const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(null);
+  const [distinctCompaniesCount, setDistinctCompaniesCount] = useState(0);
   const [distinctCompaniesCountIndices, setDistinctCompaniesCountIndices] =
-    useState(null);
+    useState(0);
   const [distinctCompaniesCountTogether, setDistinctCompaniesCountTogether] =
     useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   const handleSubmit = () => {
+    let threshold;
+
+    // Check the conditions and set the threshold accordingly
+    if (distinctCompaniesCount > 0 && distinctCompaniesCountIndices > 0) {
+      // Case 1: distinctCompaniesCount and distinctCompaniesCountMetrics are above zero
+      threshold = distinctCompaniesCountTogether;
+    } else if (
+      distinctCompaniesCount > 0 &&
+      distinctCompaniesCountIndices === 0
+    ) {
+      // Case 2: distinctCompaniesCount is above zero and others are zero
+      threshold = distinctCompaniesCount;
+    } else if (
+      distinctCompaniesCountIndices > 0 &&
+      distinctCompaniesCount === 0
+    ) {
+      // Case 3: distinctCompaniesCountMetrics is above zero and others are zero
+      threshold = distinctCompaniesCountIndices;
+    } else {
+      // Handle other cases if needed
+      threshold = 0;
+    }
+
+    // Check if the threshold is above 10 before making the API call
+    if (threshold < 10) {
+      showModal();
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append("industries", selectedIndustries?.join(","));
@@ -215,13 +253,36 @@ const BasedOnIndex = ({ sectors }) => {
   //     setSelectedIndustries([]);
   //   }
   // }, [selectedSectors]);
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <div className="container-fluid p-0 p-lg-3">
       <div
         className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
       >
-        <div className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2">
+        <div
+          style={{
+            transition: "all 0.5s ease",
+            boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+          }}
+          className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2"
+        >
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Indices </label>
             <Select
@@ -243,7 +304,13 @@ const BasedOnIndex = ({ sectors }) => {
           </div>
         </div>
 
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+        <div
+          style={{
+            transition: "all 0.5s ease",
+            boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
+          }}
+          className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+        >
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Sectors </label>
             <Select
@@ -293,28 +360,139 @@ const BasedOnIndex = ({ sectors }) => {
           Next
         </button>
       </div>
-      <div
-        style={{
-          height: "80vh",
-          position: "absolute",
-          right: "0",
-          top: "0",
-          marginTop: "80px",
-          display: "grid",
-          justifyItems: "center",
-          alignContent: "center",
-          width: "25%",
-        }}
+      {isMobile ? (
+        selectedSectors.length > 0 || selectedIndex ? (
+          <div
+            style={{
+              position: "absolute",
+              left: "0",
+              bottom: "0",
+              background: "black",
+              display: "flex",
+              justifyContent: "space-between", // Corrected property name
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            {distinctCompaniesCountIndices && selectedIndex ? (
+              <div class="col-lg-12 col-md-6 mt-lg-5  mt-md-0">
+                <div
+                  style={{
+                    boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)",
+                    padding: "8px",
+                    color: "white",
+                  }}
+                >
+                  <span
+                    style={{ fontWeight: "bolder", fontSize: "35px" }}
+                    data-toggle="counter-up"
+                  >
+                    {distinctCompaniesCountIndices}
+                  </span>
+                  <p style={{ fontSize: "10px", margin: "0" }}>
+                    {" "}
+                    Companies match on indices
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {selectedSectors.length > 0 && selectedIndex ? (
+              <div class="col-lg-12 col-md-6 mt-lg-3 mt-md-0">
+                <div
+                  style={{
+                    boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)",
+                    padding: "8px",
+                    color: "white",
+                  }}
+                >
+                  <span
+                    style={{ fontWeight: "bolder", fontSize: "35px" }}
+                    className="text-primary"
+                    data-toggle="counter-up"
+                  >
+                    {distinctCompaniesCountTogether}
+                  </span>
+                  <p
+                    style={{
+                      fontSize: "10px",
+                      margin: "0",
+                      color: "#e8edea",
+                    }}
+                  >
+                    Companies match on both indices and sectors
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {distinctCompaniesCount && selectedSectors.length > 0 ? (
+              <div class="col-lg-12 col-md-6 mt-lg-3 mt-md-0">
+                <div
+                  style={{
+                    boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)",
+                    padding: "8px",
+                    color: "white",
+                  }}
+                >
+                  <span
+                    style={{ fontWeight: "bolder", fontSize: "35px" }}
+                    data-toggle="counter-up"
+                  >
+                    {distinctCompaniesCount}
+                  </span>
+                  <p style={{ fontSize: "10px", margin: "0" }}>
+                    {" "}
+                    Companies match on selected sectors{" "}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )
+      ) : (
+        <div
+          style={{
+            height: "80vh",
+            position: "absolute",
+            right: "0",
+            top: "0",
+            marginTop: "80px",
+            display: "grid",
+            justifyItems: "center",
+            alignContent: "center",
+            width: "25%",
+          }}
+        >
+          <MatchCountComponentIndex
+            selectedIndustries={selectedIndustries}
+            selectedSectors={selectedSectors}
+            selectedIndex={selectedIndex}
+            together={distinctCompaniesCountTogether}
+            indices={distinctCompaniesCountIndices}
+            industries={distinctCompaniesCount}
+          />
+        </div>
+      )}
+
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null} // To remove footer buttons
+        centered
       >
-        <MatchCountComponentIndex
-          selectedIndustries={selectedIndustries}
-          selectedSectors={selectedSectors}
-          selectedIndex={selectedIndex}
-          together={distinctCompaniesCountTogether}
-          indices={distinctCompaniesCountIndices}
-          industries={distinctCompaniesCount}
-        />
-      </div>
+        <h5>
+          Please make sure at least 10 companies have matched for
+          meaningful analysis
+        </h5>
+      </Modal>
     </div>
   );
 };

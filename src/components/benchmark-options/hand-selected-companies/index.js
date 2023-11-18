@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input, Modal, Select } from "antd";
+import { Input, Modal, Select, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import { availableRoles } from "../../role-information";
@@ -10,9 +10,9 @@ const HandSelectedCompanies = ({ sectors }) => {
   const [companies, setCompanies] = useState([]);
 
   const [initialCompaniesOrder, setInitialCompaniesOrder] = useState([]);
-
+  const [isMobile, setIsMobile] = useState(false);
   const [selectedCompaniesList, setSelectedCompaniesList] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filterText, setFilterText] = useState("");
 
@@ -60,6 +60,7 @@ const HandSelectedCompanies = ({ sectors }) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     AxiosInstance.get("api/benchmark/distinct-companies")
       .then(async (res) => {
         const response = await res.data;
@@ -82,6 +83,7 @@ const HandSelectedCompanies = ({ sectors }) => {
 
         // Set the companies state for display
         setCompanies(uniqueArray);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -109,14 +111,31 @@ const HandSelectedCompanies = ({ sectors }) => {
       .then(async (res) => {
         const response = await res.data;
         sessionStorage.setItem("result-data", JSON.stringify(response));
+        sessionStorage.setItem("option", "hand");
         sessionStorage.setItem("role", role);
         navigate("/output");
       })
       .catch((err) => console.log(err));
   };
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
-    <div className="container-fluid p-0 p-lg-3">
+    <div className="container p-0 p-lg-3">
       <div className="row mt-3">
         <div
           className="col-6"
@@ -132,8 +151,11 @@ const HandSelectedCompanies = ({ sectors }) => {
                   List of companies
                   <Input
                     type="text"
-                    style={{ width: "25%", border: "1px solid #ced4da" }}
-                    className="mr-2"
+                    style={{
+                      border: "1px solid #ced4da",
+                      width: `${isMobile ? "100%" : "50%"}`,
+                    }}
+                    className="mr-2  mt-1 mt-lg-0 !important"
                     placeholder="Search companies"
                     value={filterText}
                     onChange={(e) => setFilterText(e.target.value)}
@@ -142,19 +164,34 @@ const HandSelectedCompanies = ({ sectors }) => {
               </tr>
             </thead>
             <tbody>
-              {filteredCompanies.map((item, index) => (
-                <tr
-                  style={{ width: "100%" }}
-                  key={index}
-                  onClick={() => handleRowClick(item)}
+              {isLoading ? (
+                <div
+                  style={{
+                    display: "grid",
+                    height: "30vh",
+                    justifyItems: "center",
+                    alignContent: "center",
+                  }}
                 >
-                  <td
-                    style={{ padding: "0", cursor: "pointer", width: "100%" }}
+                  <Spin size="large" />
+
+                  <p>Loadiing...</p>
+                </div>
+              ) : (
+                filteredCompanies.map((item, index) => (
+                  <tr
+                    style={{ width: "100%" }}
+                    key={index}
+                    onClick={() => handleRowClick(item)}
                   >
-                    {item}
-                  </td>
-                </tr>
-              ))}
+                    <td
+                      style={{ padding: "0", cursor: "pointer", width: "100%" }}
+                    >
+                      {item}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -178,14 +215,21 @@ const HandSelectedCompanies = ({ sectors }) => {
               {selectedCompaniesList.length > 0 ? (
                 selectedCompaniesList.map((item, index) => (
                   <tr key={index}>
-                    <td style={{ padding: "0", cursor: "pointer" }}>
+                    <td
+                      style={{
+                        padding: "0",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       {item}
                       {/* Add a remove button or cross button */}
                       <button
                         className="btn btn-link btn-sm"
                         onClick={() => handleRemoveCompany(item)}
                       >
-                        Remove
+                        {isMobile ? "x" : "Remove"}
                       </button>
                     </td>
                   </tr>
@@ -214,7 +258,7 @@ const HandSelectedCompanies = ({ sectors }) => {
         </Modal>
       </div>
       <div className="w-100 " style={{ display: "grid", placeItems: "center" }}>
-        <div className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2">
+        <div className="mb-3 p-0 p-lg-3 mt-3  col-12 col-lg-6 text-left bg-light pt-2">
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Role </label>
             <Select

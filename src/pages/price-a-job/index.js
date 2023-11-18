@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import logo from "../../icons/logo192.png";
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 import {
@@ -465,7 +465,17 @@ const PriceAJob = () => {
         >
           <div class="container d-flex align-items-center">
             <h1 class="logo me-auto">
-              <a href="/">Equipay Partners</a>
+              <a href="/">
+                {" "}
+                <img
+                  style={{ marginRight: "8px" }}
+                  src={logo}
+                  alt=""
+                  height={35}
+                  width={35}
+                />
+                Equipay Partners
+              </a>
             </h1>
 
             <nav
@@ -482,9 +492,9 @@ const PriceAJob = () => {
                 <li class="active">
                   <a href="/landing">Price a Job</a>
                 </li>
-                <li>
-                  <a href="/executive-reports">
-                    Executive Compensation Reports
+                <li className="active">
+                  <a href="/landing-executive">
+                    Executive Compensation Benchmarking
                   </a>
                 </li>
 

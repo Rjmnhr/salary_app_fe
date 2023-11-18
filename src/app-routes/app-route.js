@@ -29,7 +29,7 @@ import RoleInformation from "../components/role-information";
 import BenchmarkOutput from "../pages/benchmark-output";
 import TableComponent from "../components/companies-filterd";
 import WebinarComponent from "../components/webinar-component";
-
+import LandingExecutivePage from "../pages/landing-executive-page";
 const AppRoute = () => {
   return (
     <BrowserRouter>
@@ -47,6 +47,14 @@ const AppRoute = () => {
           element={
             <>
               <LandingPage />
+            </>
+          }
+        />
+        <Route
+          path="/landing-executive"
+          element={
+            <>
+              <LandingExecutivePage />
             </>
           }
         />
@@ -74,7 +82,7 @@ const AppRoute = () => {
           }
         /> */}
         <Route
-          path="/executive-reports"
+          path="/executive-benchmark"
           element={
             <>
               <ExecutiveBenchmark />
