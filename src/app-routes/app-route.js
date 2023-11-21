@@ -70,6 +70,18 @@ const AppRoute = () => {
             />
           }
         />
+        <Route
+          path="/executive-benchmark"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ExecutiveBenchmark />
+                </>
+              }
+            />
+          }
+        />
 
         <Route path="/reports" element={<VerifyPlanRoute />} />
         <Route path="/reports-dashboard" element={<VerifyPlanRoute />} />
@@ -81,14 +93,6 @@ const AppRoute = () => {
             </>
           }
         /> */}
-        <Route
-          path="/executive-benchmark"
-          element={
-            <>
-              <ExecutiveBenchmark />
-            </>
-          }
-        />
 
         <Route
           path="/login"
@@ -233,27 +237,40 @@ const AppRoute = () => {
         <Route
           path="/role-information"
           element={
-            <>
-              <RoleInformation />
-            </>
+            <ProtectedRoute
+              element={
+                <>
+                  <RoleInformation />
+                </>
+              }
+            />
           }
         />
         <Route
           path="/companies-filtered"
           element={
-            <>
-              <TableComponent />
-            </>
+            <ProtectedRoute
+              element={
+                <>
+                  <TableComponent />
+                </>
+              }
+            />
           }
         />
         <Route
           path="/output"
           element={
-            <>
-              <BenchmarkOutput />
-            </>
+            <ProtectedRoute
+              element={
+                <>
+                  <BenchmarkOutput />
+                </>
+              }
+            />
           }
         />
+
         <Route
           path="/webinars"
           element={

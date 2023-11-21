@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
 import { Select } from "antd";
-
 import NavBar from "../../components/nav-bar";
 import { useNavigate } from "react-router-dom";
 
@@ -14,26 +12,36 @@ export const availableRoles = [
   "Chairperson",
   "Nominee Director",
   "CEO - Chief Executive Officer",
-  "Others",
-  "Chairperson Emeritus / Mentor",
-  "COO - Chief Operating Officer",
-  "Finance",
-  "Compliance Officer",
 ];
+
+const roleTypeMap = {
+  "CMD - Chairperson & Managing Director": "Executive",
+  "Managing Director": "Executive",
+  "Other Director": "Non-executive",
+  "CFO - Chief Financial Officer": "Executive",
+  "Company Secretary": "Executive",
+  Chairperson: "Non-executive",
+  "Nominee Director": "Non-executive",
+  "CEO - Chief Executive Officer": "Executive",
+};
 
 const RoleInformation = () => {
   const [role, setRole] = useState("");
+  const [roleType, setRoleType] = useState(""); // New state for role type
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     sessionStorage.setItem("role", role);
+    sessionStorage.setItem("roleType", roleType); // Store the role type in session storage
     navigate("/output");
   };
 
   const handleChange = (value) => {
     setRole(value);
+    // Set the corresponding role type based on the selected role
+    setRoleType(roleTypeMap[value]);
   };
 
   return (
@@ -48,7 +56,7 @@ const RoleInformation = () => {
         }}
       >
         <div
-          class="container text-left p-5 mt-lg-5 mt-2"
+          className="container text-left p-5 mt-lg-5 mt-2"
           style={{ display: "grid", justifyItems: "center" }}
         >
           <h4 className="mb-3 col-12 col-lg-6 pl-0 text-left">
@@ -56,7 +64,7 @@ const RoleInformation = () => {
           </h4>
           <form
             onSubmit={handleSubmit}
-            class="php-email-form col-12 col-lg-6 p-0"
+            className="php-email-form col-12 col-lg-6 p-0"
           >
             <Select
               placeholder="Select"

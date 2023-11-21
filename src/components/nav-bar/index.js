@@ -6,23 +6,23 @@ import { Avatar, Dropdown } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import logo from "../../icons/logo192.png";
 
-const CapitalizeFirstLetter = (data) => {
-  // Split the string into words
-  const words = data?.split(" ");
-  // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words?.map((word) => {
-    if (word.charAt(0) === word.charAt(0).toUpperCase()) {
-      // If the first letter is already capitalized, keep it as is
-      return word;
-    } else {
-      // Otherwise, capitalize the first letter and make the rest lowercase
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }
-  });
+// const CapitalizeFirstLetter = (data) => {
+//   // Split the string into words
+//   const words = data?.split(" ");
+//   // Capitalize the first letter of each word and make the rest lowercase
+//   const capitalizedWords = words?.map((word) => {
+//     if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+//       // If the first letter is already capitalized, keep it as is
+//       return word;
+//     } else {
+//       // Otherwise, capitalize the first letter and make the rest lowercase
+//       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+//     }
+//   });
 
-  // Join the words back together with spaces
-  return capitalizedWords?.join(" ");
-};
+//   // Join the words back together with spaces
+//   return capitalizedWords?.join(" ");
+// };
 
 const NavBar = ({ scrollToContact }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -77,7 +77,6 @@ const NavBar = ({ scrollToContact }) => {
     setMenuOpen(!menuOpen);
   };
   const isLoggedIn = localStorage.getItem("isLoggedIn");
-  const userName = localStorage.getItem("user_name");
 
   //eslint-disable-next-line
   const handleLogOut = () => {
@@ -181,8 +180,6 @@ const NavBar = ({ scrollToContact }) => {
                           gap: "8px",
                         }}
                       >
-                        <a href="#profile">{CapitalizeFirstLetter(userName)}</a>
-
                         <Avatar
                           size="small"
                           style={{

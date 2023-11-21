@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import CheckoutComponent from "../../components/payment_checkout/Checkout";
-import { CheckCircleTwoTone } from "@ant-design/icons";
+
 import { Steps } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../components/axios";
@@ -124,26 +124,14 @@ const RegistrationPricing = () => {
                     </div> */}
                     </div>
 
-                    <div class="row tex">
-                      <div
-                        class="col-sm-12  "
-                        style={{ display: "grid", placeItems: "center" }}
-                      >
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          One Job Report
-                        </p>
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 invisible "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          PDF Download
-                        </p>
-                      </div>
+                    <div class="row pricing">
+                      <ul>
+                        <li>One Job Report</li>
+
+                        <li>One Executive Compensation Report</li>
+
+                        <li className="invisible">PDF Download</li>
+                      </ul>
                     </div>
                     <button
                       onClick={() => navigate("/success-registration-basic")}
@@ -179,25 +167,12 @@ const RegistrationPricing = () => {
                     </div>
 
                     <div class="row ">
-                      <div
-                        class="col-sm-12 d "
-                        style={{ display: "grid", placeItems: "center" }}
-                      >
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          Up to Five Job Reports
-                        </p>
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          PDF Download
-                        </p>
-                      </div>
+                      <ul>
+                        <li> Up to Five Job Reports</li>
+
+                        <li>PDF Download</li>
+                        <li> Up to Five Executive Compensation Report</li>
+                      </ul>
                     </div>
                     <CheckoutComponent
                       action={"Register"}
@@ -231,25 +206,12 @@ const RegistrationPricing = () => {
                     </div>
 
                     <div class="row">
-                      <div
-                        class="col-sm-12  "
-                        style={{ display: "grid", placeItems: "center" }}
-                      >
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          Unlimited Job Reports
-                        </p>
-                        <p
-                          style={{ fontSize: "18px", textAlign: "start" }}
-                          className="d-flex justify-content-start align-items-center gap-2 "
-                        >
-                          <CheckCircleTwoTone style={{ marginRight: "8px" }} />{" "}
-                          PDF Download
-                        </p>
-                      </div>
+                      <ul>
+                        <li> Unlimited Job Reports</li>
+
+                        <li>PDF Download</li>
+                        <li> Unlimited Executive Compensation Report</li>
+                      </ul>
                     </div>
                     <CheckoutComponent
                       action={"Register"}

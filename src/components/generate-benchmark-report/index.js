@@ -12,8 +12,11 @@ const decimalFix = (number) => {
 };
 
 export const calculateStatisticsSalary = (data) => {
+  const roleType = sessionStorage.getItem("roleType");
+  const valueType =
+    roleType === "Non-executive" ? "directors_sitting_fees" : "salary";
   // Calculate average salary
-  const salaries = data.map((result) => result.salary / 100000);
+  const salaries = data.map((result) => result[valueType] / 100000);
 
   // Remove zeros from the salaries array
   const nonZeroSalaries = salaries.filter(
@@ -59,9 +62,9 @@ export const calculateStatisticsSalary = (data) => {
   };
 };
 
-function calculateStatisticsFees(data) {
+function calculateStatisticsTotal(data) {
   // Calculate average salary
-  const salaries = data.map((result) => result.directors_sitting_fees / 100000);
+  const salaries = data.map((result) => result.total_remuneration / 100000);
 
   // Remove zeros from the salaries array
   const nonZeroSalaries = salaries.filter(
@@ -120,8 +123,13 @@ const GenerateBenchmarkReport = ({
   const [isLoading, setIsLoading] = useState(false);
   const elementRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const roleType = sessionStorage.getItem("roleType");
+
+  const valueType =
+    roleType === "Non-executive" ? "directors_sitting_fees" : "salary";
+
   const filteredResultData = resultData.filter(
-    (data) => data.salary !== null && data.salary !== 0
+    (data) => data[valueType] !== null && data[valueType] !== 0
   );
 
   // Convert salary values to lakhs
@@ -129,6 +137,7 @@ const GenerateBenchmarkReport = ({
     return {
       ...item,
       salary: item.salary / 100000, // Convert salary to lakhs
+      directors_sitting_fees: item.directors_sitting_fees / 100000,
     };
   });
   // Sort based on market_capitalisation_2023
@@ -152,7 +161,7 @@ const GenerateBenchmarkReport = ({
 
   // Calculate statistics for jobsData
   const statisticsForSalary = calculateStatisticsSalary(resultData);
-  const statisticsForFees = calculateStatisticsFees(resultData);
+  const statisticsForFees = calculateStatisticsTotal(resultData);
 
   useEffect(() => {
     const updateChartSize = () => {
@@ -296,18 +305,22 @@ const GenerateBenchmarkReport = ({
           <div className="p-lg-3 p-1 ">
             <h3>{role} Benchmark Report</h3>
             <div className="mt-3 mb-3">
-              <h5 className="mb-2">Average Salary </h5>
+              <h5 className="mb-2">
+                Average {roleType === "Non-executive" ? "Fees" : "Salary"}{" "}
+              </h5>
               <p className="fs-3">
                 ₹ {decimalFix(statisticsForSalary.averageSalary)} Lakhs{" "}
               </p>
             </div>
             <div className="mt-3 mb-3">
-              <h5 className="mb-2">Average Fees </h5>
+              <h5 className="mb-2">Average Total Remuneration </h5>
               <p className="fs-3">
                 ₹ {decimalFix(statisticsForFees.averageSalary)} Lakhs{" "}
               </p>
             </div>
-            <h5 className="mb-3">Salary details</h5>
+            <h5 className="mb-3">
+              {roleType === "Non-executive" ? "Fees" : "Salary"} details
+            </h5>
             <div className="d-flex mb-3 mt-3">
               <div style={{ height: "100px", width: "10%" }}>
                 <svg height="30" width="100%">
@@ -513,7 +526,7 @@ const GenerateBenchmarkReport = ({
                 </div>
               </div>
             </div>
-            <h5 className="mb-3">Fees details</h5>
+            <h5 className="mb-3">Total Remuneration details</h5>
             <div className="d-flex mb-3 mt-3">
               <div style={{ height: "100px", width: "10%" }}>
                 <svg height="30" width="100%">
@@ -727,7 +740,10 @@ const GenerateBenchmarkReport = ({
               }}
               className="mb-3 text-center"
             >
-              <h5 className="mb-3">Median Salary Trends : 2021 - 2023 </h5>
+              <h5 className="mb-3">
+                Median {roleType === "Non-executive" ? "Fees" : "Salary"} Trends
+                : 2021 - 2023{" "}
+              </h5>
               <SalaryTrendChart
                 resultData2023={resultData}
                 resultData2021={resultData2021}
@@ -745,7 +761,8 @@ const GenerateBenchmarkReport = ({
               className="mb-3 text-center"
             >
               <h5 className="mb-3">
-                Salary Distribution Trends : 2021 - 2023{" "}
+                {roleType === "Non-executive" ? "Fees" : "Salary"} Distribution
+                Trends : 2021 - 2023{" "}
               </h5>
               <SalaryTrendGraph2
                 dataWithYear2023={resultData}
@@ -763,7 +780,11 @@ const GenerateBenchmarkReport = ({
               }}
               className="mb-3 text-center"
             >
-              <h5 className="mb-3"> Market Capitalization vs Salary</h5>
+              <h5 className="mb-3">
+                {" "}
+                Market Capitalization vs{" "}
+                {roleType === "Non-executive" ? "Fees" : "Salary"}{" "}
+              </h5>
               <BenchmarkLineCharts
                 data={sortedByMarketCapitalisation}
                 xAxisDataKey={"market_capitalisation_2023"}
@@ -780,7 +801,10 @@ const GenerateBenchmarkReport = ({
               }}
               className="mb-3 text-center"
             >
-              <h5 className="mb-3">Total Assets vs Salary</h5>
+              <h5 className="mb-3">
+                Total Assets vs{" "}
+                {roleType === "Non-executive" ? "Fees" : "Salary"}{" "}
+              </h5>
               <BenchmarkLineCharts
                 data={sortedByTotalAssets}
                 xAxisDataKey={"total_assets_2023"}
@@ -797,7 +821,9 @@ const GenerateBenchmarkReport = ({
               }}
               className="mb-3 text-center"
             >
-              <h5 className="mb-3">Sales vs Salary</h5>
+              <h5 className="mb-3">
+                Sales vs {roleType === "Non-executive" ? "Fees" : "Salary"}{" "}
+              </h5>
               <BenchmarkLineCharts
                 data={sortedBySales}
                 xAxisDataKey={"sales_2023"}
@@ -814,7 +840,10 @@ const GenerateBenchmarkReport = ({
               }}
               className="mb-3 text-center"
             >
-              <h5 className="mb-3">Profit After Tax vs Salary</h5>
+              <h5 className="mb-3">
+                Profit After Tax vs{" "}
+                {roleType === "Non-executive" ? "Fees" : "Salary"}
+              </h5>
               <BenchmarkLineCharts
                 data={sortedByPAT}
                 xAxisDataKey={"PAT_2023"}

@@ -10,7 +10,10 @@ import {
 } from "recharts";
 
 const calculateStatisticsSalary = (data) => {
-  const salaries = data?.map((result) => result.salary / 100000);
+  const roleType = sessionStorage.getItem("roleType");
+  const valueType =
+    roleType === "Non-executive" ? "directors_sitting_fees" : "salary";
+  const salaries = data?.map((result) => result[valueType] / 100000);
   const nonZeroSalaries = salaries?.filter((salary) => salary !== 0);
   const allZeros = nonZeroSalaries?.length === 0;
 
@@ -36,6 +39,8 @@ const SalaryTrendGraph2 = ({
   chartHeight,
   chartWidth,
 }) => {
+  const roleType = sessionStorage.getItem("roleType");
+
   const statisticalData2021 = calculateStatisticsSalary(dataWithYear2021);
   const statisticalData2022 = calculateStatisticsSalary(dataWithYear2022);
   const statisticalData2023 = calculateStatisticsSalary(dataWithYear2023);
@@ -72,7 +77,7 @@ const SalaryTrendGraph2 = ({
       <XAxis dataKey="year"></XAxis>
       <YAxis>
         <Label
-          value="Salary (Lakhs)"
+          value={` ${roleType === "Non-executive" ? "Fees" : "Salary"} (Lakhs)`}
           angle={-90}
           position="insideLeft"
           style={{

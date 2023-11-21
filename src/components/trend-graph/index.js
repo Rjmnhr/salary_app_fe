@@ -16,16 +16,19 @@ const SalaryTrendChart = ({
   chartHeight,
   chartWidth,
 }) => {
+  const roleType = sessionStorage.getItem("roleType");
+  const valueType =
+    roleType === "Non-executive" ? "directors_sitting_fees" : "salary";
   // Assuming resultData2021 and resultData2022 are arrays of objects with a 'salary' property
   const filteredData2021 = resultData2021?.filter(
-    (item) => item.salary !== 0 && item.salary !== null
+    (item) => item[valueType] !== 0 && item[valueType] !== null
   );
 
   const filteredData2022 = resultData2022?.filter(
-    (item) => item.salary !== 0 && item.salary !== null
+    (item) => item[valueType] !== 0 && item[valueType] !== null
   );
   const filteredData2023 = resultData2023?.filter(
-    (item) => item.salary !== 0 && item.salary !== null
+    (item) => item[valueType] !== 0 && item[valueType] !== null
   );
 
   // Function to calculate the median of an array
@@ -39,7 +42,9 @@ const SalaryTrendChart = ({
 
   // Function to calculate median salary for a year
   const calculateMedianSalary = (data) => {
-    const salaries = data?.map((item) => parseInt(item.salary, 10) / 100000);
+    const salaries = data?.map(
+      (item) => parseInt(item[valueType], 10) / 100000
+    );
     return calculateMedian(salaries);
   };
 
@@ -60,7 +65,9 @@ const SalaryTrendChart = ({
 
       <YAxis>
         <Label
-          value="Median Salary (Lakhs)"
+          value={`Median ${
+            roleType === "Non-executive" ? "Fees" : "Salary"
+          } (Lakhs)`}
           angle={-90}
           position="insideLeft"
           style={{
@@ -72,7 +79,11 @@ const SalaryTrendChart = ({
         />
       </YAxis>
       <Tooltip
-        formatter={(value, name, props) => [`Median Salary : ${value} Lakhs`]}
+        formatter={(value, name, props) => [
+          `Median ${
+            roleType === "Non-executive" ? "Fees" : "Salary"
+          } : ${value} Lakhs`,
+        ]}
       />
 
       <Bar dataKey="medianSalary" fill="#8884d8" name="Median Salaries" />

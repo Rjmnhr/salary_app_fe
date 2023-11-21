@@ -16,6 +16,7 @@ const BenchmarkLineCharts = ({
   chartWidth,
   chartHeight,
 }) => {
+  const roleType = sessionStorage.getItem("roleType");
   return (
     <div>
       <LineChart
@@ -38,7 +39,9 @@ const BenchmarkLineCharts = ({
         </XAxis>
         <YAxis>
           <Label
-            value="Salary (Lakhs)"
+            value={` ${
+              roleType === "Non-executive" ? "Fees" : "Salary"
+            } (Lakhs)`}
             angle={-90}
             position="insideLeft"
             style={{
@@ -50,13 +53,19 @@ const BenchmarkLineCharts = ({
           />
         </YAxis>
         <Tooltip
-          formatter={(value, name, props) => [`Salary : ${value} Lakhs`]}
+          formatter={(value, name, props) => [
+            `${
+              roleType === "Non-executive" ? "Fees" : "Salary"
+            } : ${value} Lakhs`,
+          ]}
         />
 
         <Line
+          dataKey={`${
+            roleType === "Non-executive" ? "directors_sitting_fees" : "salary"
+          }`}
           type="monotone"
-          dataKey="salary"
-          name="Salary"
+          name={`${roleType === "Non-executive" ? "Fees" : "Salary"}`}
           stroke="none"
           dot={{ stroke: "#8884d8", strokeWidth: 2, fill: "#fff" }}
         />

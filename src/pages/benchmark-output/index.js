@@ -45,6 +45,7 @@ const BenchmarkOutput = () => {
   const [expanded, setExpanded] = React.useState(false);
   const role = sessionStorage.getItem("role");
   const storedOption = sessionStorage.getItem("option");
+  const roleType = sessionStorage.getItem("roleType");
   const storedCompanies = JSON.parse(
     sessionStorage.getItem("companies-selected")
   );
@@ -113,7 +114,6 @@ const BenchmarkOutput = () => {
       [index]: !prevExpanded[index],
     }));
   };
-
   return (
     <>
       <NavBar />
@@ -178,6 +178,8 @@ const BenchmarkOutput = () => {
                   <AimOutlined /> Hand selected
                 </p>
               )}
+
+              <p className="px-2">{roleType}</p>
 
               <CardActions disableSpacing>
                 <p style={{ margin: "0" }}>See More</p>

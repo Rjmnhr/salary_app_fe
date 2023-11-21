@@ -42,23 +42,23 @@ export const cities = [
 
 cities.sort();
 
-const CapitalizeFirstLetter = (data) => {
-  // Split the string into words
-  const words = data?.split(" ");
-  // Capitalize the first letter of each word and make the rest lowercase
-  const capitalizedWords = words?.map((word) => {
-    if (word.charAt(0) === word.charAt(0).toUpperCase()) {
-      // If the first letter is already capitalized, keep it as is
-      return word;
-    } else {
-      // Otherwise, capitalize the first letter and make the rest lowercase
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }
-  });
+// const CapitalizeFirstLetter = (data) => {
+//   // Split the string into words
+//   const words = data?.split(" ");
+//   // Capitalize the first letter of each word and make the rest lowercase
+//   const capitalizedWords = words?.map((word) => {
+//     if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+//       // If the first letter is already capitalized, keep it as is
+//       return word;
+//     } else {
+//       // Otherwise, capitalize the first letter and make the rest lowercase
+//       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+//     }
+//   });
 
-  // Join the words back together with spaces
-  return capitalizedWords?.join(" ");
-};
+//   // Join the words back together with spaces
+//   return capitalizedWords?.join(" ");
+// };
 export function formatColumnName(columnName) {
   // Replace spaces and slashes with underscores
   columnName = columnName.replace(/[\s/]+/g, "_").toLowerCase();
@@ -90,7 +90,6 @@ const PriceAJob = () => {
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
 
-  const userName = localStorage.getItem("user_name");
   const { Option } = Select;
   // const [displayedSkills, setDisplayedSkills] = useState(6);
 
@@ -492,7 +491,7 @@ const PriceAJob = () => {
                 <li class="active">
                   <a href="/landing">Price a Job</a>
                 </li>
-                <li className="active">
+                <li>
                   <a href="/landing-executive">
                     Executive Compensation Benchmarking
                   </a>
@@ -522,8 +521,6 @@ const PriceAJob = () => {
                           gap: "8px",
                         }}
                       >
-                        <a href="#profile">{CapitalizeFirstLetter(userName)}</a>
-
                         <Avatar
                           size="small"
                           style={{

@@ -8,7 +8,7 @@ import NavBar from "../../components/nav-bar/index";
 import DownloadSamplePDF from "../../components/download-sample-pdf";
 import AxiosInstance from "../../components/axios";
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { useApplicationContext } from "../../context/app-context";
+
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -294,32 +294,32 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        <section id="pricing" class="pricing section-bg">
-          <div class="container" data-aos="fade-up">
-            <div class="section-title">
+        <section id="pricing" className="pricing section-bg">
+          <div className="container" data-aos="fade-up">
+            <div className="section-title">
               <h2>Pricing</h2>
               <p>We offer our services in the following 3 packages</p>
             </div>
 
-            <div class="row">
-              <div class="col-lg-4 col-md-6">
-                <div class="box" data-aos="fade-up" data-aos-delay="100">
+            <div className="row">
+              <div className="col-lg-4 col-md-6">
+                <div className="box" data-aos="fade-up" data-aos-delay="100">
                   <h3>Basic</h3>
                   <h4>Free</h4>
                   <ul>
                     <li>1 Salary Report</li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/login-app" class="btn-buy">
+                  <div className="btn-wrap">
+                    <a href="/login-app" className="btn-buy">
                       Get started
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+              <div className="col-lg-4 col-md-6 mt-4 mt-md-0">
                 <div
-                  class="box featured"
+                  className="box featured"
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
@@ -331,16 +331,16 @@ const LandingPage = () => {
                     <li>5 Salary Reports </li>
                     <li>PDF Downloads </li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/login-app" class="btn-buy">
+                  <div className="btn-wrap">
+                    <a href="/login-app" className="btn-buy">
                       Get started
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
-                <div class="box" data-aos="fade-up" data-aos-delay="300">
+              <div className="col-lg-4 col-md-6 mt-4 mt-lg-0">
+                <div className="box" data-aos="fade-up" data-aos-delay="300">
                   <h3>Premium</h3>
                   <h4>
                     <sup>₹</sup>1,20,000
@@ -349,8 +349,8 @@ const LandingPage = () => {
                     <li>Unlimited Salary Reports </li>
                     <li>PDF Downloads </li>
                   </ul>
-                  <div class="btn-wrap">
-                    <a href="/login-app" class="btn-buy">
+                  <div className="btn-wrap">
+                    <a href="/login-app" className="btn-buy">
                       Get started
                     </a>
                   </div>
