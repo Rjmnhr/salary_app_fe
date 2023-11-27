@@ -35,6 +35,25 @@ table td:hover{
   color: #61dafb;
 }
 
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-text {
+  display: inline-block;
+  animation: marqueeAnimation 30s linear infinite;
+  animation-delay: 2s; /* Delay before the animation starts */
+}
+@keyframes marqueeAnimation {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
