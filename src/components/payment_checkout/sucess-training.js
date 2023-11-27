@@ -15,6 +15,8 @@ const SuccessTraining = () => {
   const storedCompany = sessionStorage.getItem("userCompany");
   const storedTitle = sessionStorage.getItem("userTitle");
   const storedProduct = sessionStorage.getItem("training");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [seconds, setSeconds] = useState(5);
 
   let training = "";
   let timing = "";
@@ -90,7 +92,26 @@ const SuccessTraining = () => {
         await res.data;
       })
       .catch((err) => console.log(err));
+
+    setIsSuccess(true);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      const countdown = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
+        } else {
+          clearInterval(countdown);
+          navigate("/training");
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(countdown);
+      };
+    }
+  }, [seconds, navigate, isSuccess]);
 
   return (
     <>
@@ -122,7 +143,6 @@ const SuccessTraining = () => {
                   height={50}
                 />{" "}
               </div>
-
               <h5>
                 Your payment was successful, and we appreciate your interest in
                 our training programs
@@ -131,14 +151,11 @@ const SuccessTraining = () => {
                 Your have registered for the{" "}
                 <span className="text-primary">{training}</span>
               </h5>
-
               <h5>On December 3rd, {timing} </h5>
-
               <h5>
                 {" "}
                 we'll send you a reminder 1 or 2 days before the training.
               </h5>
-
               <p>
                 if you have any questions or encounter any issues, please don't
                 hesitate to contact our customer support team at
@@ -149,7 +166,9 @@ const SuccessTraining = () => {
                 or <span className="text-primary"> +91 6361421365.</span>
               </p>
               <p>Thank you for choosing Equipay Partners.</p>
-
+              <p className="mt-3">
+                You will be redirecting automatically in {seconds} seconds
+              </p>{" "}
               <button
                 onClick={() => navigate("/")}
                 style={{
@@ -163,7 +182,7 @@ const SuccessTraining = () => {
                 <span>
                   <ArrowLeftOutlined />
                 </span>
-                Go to Home
+                Go back
               </button>
             </div>
           </div>

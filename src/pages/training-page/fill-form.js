@@ -37,8 +37,37 @@ const FillForm = () => {
       priceTag = "price_1OH3gCDNZni9rE7FzIch3bL8";
     }
   } else if (storedTraining.length === 3) {
-    priceTag = "price_1OH3g1DNZni9rE7FOdfyAlGQ";
+    priceTag = "price_1OH69SDNZni9rE7FQC4ke93L";
   }
+
+  // if (storedTraining.length === 1) {
+  //   if (storedTraining.includes("Executive")) {
+  //     priceTag = "price_1OH0RzDNZni9rE7FKgdBDH9v";
+  //   } else if (storedTraining.includes("Short")) {
+  //     priceTag = "price_1OH2lLDNZni9rE7FpDPcwFyk";
+  //   } else if (storedTraining.includes("Long")) {
+  //     priceTag = "price_1OH2nsDNZni9rE7FFSF5ZoIQ";
+  //   }
+  // } else if (storedTraining.length === 2) {
+  //   if (
+  //     storedTraining.includes("Executive") &&
+  //     storedTraining.includes("Short")
+  //   ) {
+  //     priceTag = "price_1OH30GDNZni9rE7FqFEVXjxc";
+  //   } else if (
+  //     storedTraining.includes("Executive") &&
+  //     storedTraining.includes("Long")
+  //   ) {
+  //     priceTag = "price_1OH2zlDNZni9rE7FjteOV7Yh";
+  //   } else if (
+  //     storedTraining.includes("Short") &&
+  //     storedTraining.includes("Long")
+  //   ) {
+  //     priceTag = "price_1OH2z1DNZni9rE7Fzd7p8P1c";
+  //   }
+  // } else if (storedTraining.length === 3) {
+  //   priceTag = "price_1OH6AjDNZni9rE7Fpi7NR9gU";
+  // }
 
   useEffect(() => {
     if (email && phone && company && title) {
