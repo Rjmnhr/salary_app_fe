@@ -83,6 +83,10 @@ const TrainingPage = () => {
   const [selectedTrainings, setSelectedTrainings] = useState([]);
 
   const toggleTrainingSelection = (training) => {
+    console.log(
+      "🚀 ~ file: index.js:86 ~ toggleTrainingSelection ~ training:",
+      training
+    );
     if (selectedTrainings.includes(training)) {
       setSelectedTrainings(selectedTrainings.filter((t) => t !== training));
     } else {
@@ -156,12 +160,16 @@ const TrainingPage = () => {
             ></div>
 
             <div class="training-options text-left  ">
-              <div class="training-card col-lg-3 col-12">
+              <div
+                class="training-card col-lg-3 col-12"
+                onClick={() => toggleTrainingSelection("Executive")}
+              >
                 <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="training-checkbox"
                     onChange={() => toggleTrainingSelection("Executive")}
+                    checked={selectedTrainings.includes("Executive")}
                   />
                 </div>
                 <h2>Executive Compensation</h2>
@@ -177,12 +185,16 @@ const TrainingPage = () => {
                 <p style={{ fontWeight: "bold" }}>₹2,500 + 10% GST</p>
               </div>
 
-              <div class="training-card col-lg-3 col-12">
+              <div
+                class="training-card col-lg-3 col-12"
+                onClick={() => toggleTrainingSelection("Short")}
+              >
                 <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="training-checkbox"
                     onChange={() => toggleTrainingSelection("Short")}
+                    checked={selectedTrainings.includes("Short")}
                   />
                 </div>
                 <h2>Short Term Incentive</h2>
@@ -197,12 +209,16 @@ const TrainingPage = () => {
                 <p style={{ fontWeight: "bold" }}>₹2,500 + 10% GST</p>
               </div>
 
-              <div class="training-card col-lg-3 col-12">
+              <div
+                class="training-card col-lg-3 col-12"
+                onClick={() => toggleTrainingSelection("Long")}
+              >
                 <div className="checkbox-container">
                   <input
                     type="checkbox"
                     className="training-checkbox"
                     onChange={() => toggleTrainingSelection("Long")}
+                    checked={selectedTrainings.includes("Long")}
                   />
                 </div>
                 <h2>Long Term Incentive</h2>

@@ -141,52 +141,72 @@ const HomePage = () => {
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1699627708/piasi2ni1hph7gaaqr0a.webp"
         }
         content={
-          <section class="d-flex align-items-center">
-            <div class="container" data-aos="zoom-out" data-aos-delay="100">
-              <div class="row">
-                <div class="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
-                  <h1
-                    style={{
-                      textAlign: "start",
-                      fontSize: "70px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    YOUR PARTNERS IN ALL
-                    <span className="text-primary"> MATTERS</span> PAY
-                  </h1>
-
-                  <div
-                    className="mb-3"
-                    style={{
-                      width: "100%",
-                      textAlign: "start",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <button
-                      onClick={() => navigate("/webinars")}
+          <>
+            <div
+              style={{
+                padding: "5px 10px",
+                background: "powderblue",
+                fontWeight: "bold",
+                marginTop: "100px",
+              }}
+              class="marquee-container"
+            >
+              <div class="marquee-text">
+                <p>
+                  🚀 Upcoming Trainings on December 3: Executive Compensation,
+                  Short Term Incentive, Long Term Incentive! 🌟 Don't miss the
+                  opportunity to enhance your knowledge and skills. Register
+                  now!
+                </p>
+              </div>
+            </div>
+            <section class="d-flex align-items-center">
+              <div class="container" data-aos="zoom-out" data-aos-delay="100">
+                <div class="row">
+                  <div class="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
+                    <h1
                       style={{
-                        fontSize: "20px",
-                        marginTop: "10px",
-                        background: "linear-gradient(90deg,#2d67b9,#235090)",
-                        color: "white",
+                        textAlign: "start",
+                        fontSize: "70px",
+                        fontWeight: "bold",
                       }}
-                      className="btn "
                     >
-                      See past webinars
-                    </button>
+                      YOUR PARTNERS IN ALL
+                      <span className="text-primary"> MATTERS</span> PAY
+                    </h1>
 
-                    {/* <a href="#contact" className="btn-get-started scrollto">
-                    Use Free Profile Evaluator
-                  </a> */}
+                    <div
+                      className="mb-3"
+                      style={{
+                        width: "100%",
+                        textAlign: "start",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <button
+                        onClick={() => navigate("/webinars")}
+                        style={{
+                          fontSize: "20px",
+                          marginTop: "10px",
+                          background: "linear-gradient(90deg,#2d67b9,#235090)",
+                          color: "white",
+                        }}
+                        className="btn "
+                      >
+                        See past webinars
+                      </button>
+
+                      {/* <a href="#contact" className="btn-get-started scrollto">
+                  Use Free Profile Evaluator
+                </a> */}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </>
         }
       />
 
