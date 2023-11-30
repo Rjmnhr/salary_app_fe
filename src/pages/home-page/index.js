@@ -153,10 +153,10 @@ const HomePage = () => {
             >
               <div class="marquee-text">
                 <p>
-                  🚀 Upcoming Trainings on December 3: Executive Compensation,
-                  Short Term Incentive, Long Term Incentive! 🌟 Don't miss the
-                  opportunity to enhance your knowledge and skills. Register
-                  now!
+                  🚀 Upcoming Trainings on December 3 and December 9: Executive
+                  Compensation, Short Term Incentive, Long Term Incentive! 🌟
+                  Don't miss the opportunity to enhance your knowledge and
+                  skills. Register now!
                 </p>
               </div>
             </div>

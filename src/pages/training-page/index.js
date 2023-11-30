@@ -22,6 +22,7 @@ const TrainingPage = () => {
   const userID = localStorage.getItem("user_id");
   const [startTime, setStartTime] = useState(Date.now());
   const videoId = "GQbg_Ris93Y";
+  const [selectedOption, setSelectedOption] = useState("3");
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -83,10 +84,6 @@ const TrainingPage = () => {
   const [selectedTrainings, setSelectedTrainings] = useState([]);
 
   const toggleTrainingSelection = (training) => {
-    console.log(
-      "🚀 ~ file: index.js:86 ~ toggleTrainingSelection ~ training:",
-      training
-    );
     if (selectedTrainings.includes(training)) {
       setSelectedTrainings(selectedTrainings.filter((t) => t !== training));
     } else {
@@ -95,9 +92,14 @@ const TrainingPage = () => {
   };
 
   const registerSelected = () => {
+    sessionStorage.setItem("training", JSON.stringify(selectedTrainings));
+    sessionStorage.setItem("date", selectedOption);
     navigate("/fill-form");
     // Implement your registration logic here
-    sessionStorage.setItem("training", JSON.stringify(selectedTrainings));
+  };
+
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value);
   };
   return (
     <>
@@ -122,9 +124,10 @@ const TrainingPage = () => {
           >
             <div class="marquee-text">
               <p>
-                🚀 Upcoming Trainings on December 3: Executive Compensation,
-                Short Term Incentive, Long Term Incentive! 🌟 Don't miss the
-                opportunity to enhance your knowledge and skills. Register now!
+                🚀 Upcoming Trainings on December 3 and December 9: Executive
+                Compensation, Short Term Incentive, Long Term Incentive! 🌟
+                Don't miss the opportunity to enhance your knowledge and skills.
+                Register now!
               </p>
             </div>
           </div>
@@ -133,7 +136,7 @@ const TrainingPage = () => {
             <div className="col-12 section-title ">
               <h2 class="training-title">
                 Upcoming Trainings - December{" "}
-                <span
+                {/* <span
                   style={{
                     fontSize: "32px",
                     fontWeight: "bold",
@@ -141,10 +144,35 @@ const TrainingPage = () => {
                   }}
                 >
                   3
-                </span>
+                </span> */}
               </h2>
             </div>
-
+            <h5>Choose the date</h5>
+            <div
+              style={{ gap: "15px" }}
+              className="w-100 mt-3 d-flex justify-content-center col-lg-12"
+            >
+              <div className="mb-3">
+                <input
+                  type="radio"
+                  value={"3"}
+                  checked={selectedOption === "3"}
+                  onChange={handleRadioChange}
+                  style={{ marginRight: "8px" }}
+                />
+                <label>On December 3rd</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  value={"9"}
+                  checked={selectedOption === "9"}
+                  onChange={handleRadioChange}
+                  style={{ marginRight: "8px" }}
+                />
+                <label>On December 9th</label>
+              </div>
+            </div>
             <p
               style={{
                 fontSize: "18px",
@@ -236,12 +264,13 @@ const TrainingPage = () => {
             </div>
             <button
               className=" btn btn-primary btn-lg mt-3"
-              onClick={registerSelected}
+              onClick={() => registerSelected()}
               disabled={selectedTrainings.length > 0 ? false : true}
             >
               Register Now!
             </button>
           </div>
+
           <div className="col-12 section-title ">
             <h2 style={{ width: "100%" }} className="col-12 ">
               Your Training Partner

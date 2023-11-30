@@ -15,6 +15,7 @@ const SuccessTraining = () => {
   const storedCompany = sessionStorage.getItem("userCompany");
   const storedTitle = sessionStorage.getItem("userTitle");
   const storedProduct = sessionStorage.getItem("training");
+  const storedDate = sessionStorage.getItem("date");
   const [isSuccess, setIsSuccess] = useState(false);
   const [seconds, setSeconds] = useState(5);
 
@@ -81,6 +82,7 @@ const SuccessTraining = () => {
         company: storedCompany,
         title: storedTitle,
         phone: storedPhone,
+        date: storedDate,
       },
       {
         headers: {
@@ -151,7 +153,9 @@ const SuccessTraining = () => {
                 Your have registered for the{" "}
                 <span className="text-primary">{training}</span>
               </h5>
-              <h5>On December 3rd, {timing} </h5>
+              <h5>
+                On December {storedDate}, {timing}{" "}
+              </h5>
               <h5>
                 {" "}
                 we'll send you a reminder 1 or 2 days before the training.
