@@ -22,7 +22,7 @@ const TrainingPage = () => {
   const userID = localStorage.getItem("user_id");
   const [startTime, setStartTime] = useState(Date.now());
   const videoId = "GQbg_Ris93Y";
-  const [selectedOption, setSelectedOption] = useState("3");
+  // const [selectedOption, setSelectedOption] = useState("3");
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -93,14 +93,14 @@ const TrainingPage = () => {
 
   const registerSelected = () => {
     sessionStorage.setItem("training", JSON.stringify(selectedTrainings));
-    sessionStorage.setItem("date", selectedOption);
+    sessionStorage.setItem("date", 9);
     navigate("/fill-form");
     // Implement your registration logic here
   };
 
-  const handleRadioChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  // const handleRadioChange = (event) => {
+  //   setSelectedOption(event.target.value);
+  // };
   return (
     <>
       <NavBar />
@@ -124,10 +124,9 @@ const TrainingPage = () => {
           >
             <div class="marquee-text">
               <p>
-                🚀 Upcoming Trainings on December 3 and December 9: Executive
-                Compensation, Short Term Incentive, Long Term Incentive! 🌟
-                Don't miss the opportunity to enhance your knowledge and skills.
-                Register now!
+                🚀 Upcoming Trainings on December 9: Executive Compensation,
+                Short Term Incentive, Long Term Incentive! 🌟 Don't miss the
+                opportunity to enhance your knowledge and skills. Register now!
               </p>
             </div>
           </div>
@@ -135,7 +134,7 @@ const TrainingPage = () => {
           <div class="training-section ">
             <div className="col-12 section-title ">
               <h2 class="training-title">
-                Upcoming Trainings - December{" "}
+                Upcoming Trainings - December 9th
                 {/* <span
                   style={{
                     fontSize: "32px",
@@ -147,7 +146,7 @@ const TrainingPage = () => {
                 </span> */}
               </h2>
             </div>
-            <h5>Choose the date</h5>
+            {/* <h5>Choose the date</h5>
             <div
               style={{ gap: "15px" }}
               className="w-100 mt-3 d-flex justify-content-center col-lg-12"
@@ -172,7 +171,7 @@ const TrainingPage = () => {
                 />
                 <label>On December 9th</label>
               </div>
-            </div>
+            </div> */}
             <p
               style={{
                 fontSize: "18px",

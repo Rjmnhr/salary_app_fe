@@ -142,24 +142,6 @@ const HomePage = () => {
         }
         content={
           <>
-            <div
-              style={{
-                padding: "5px 10px",
-                background: "powderblue",
-                fontWeight: "bold",
-                marginTop: "100px",
-              }}
-              class="marquee-container"
-            >
-              <div class="marquee-text">
-                <p>
-                  🚀 Upcoming Trainings on December 3 and December 9: Executive
-                  Compensation, Short Term Incentive, Long Term Incentive! 🌟
-                  Don't miss the opportunity to enhance your knowledge and
-                  skills. Register now!
-                </p>
-              </div>
-            </div>
             <section class="d-flex align-items-center">
               <div class="container" data-aos="zoom-out" data-aos-delay="100">
                 <div class="row">
