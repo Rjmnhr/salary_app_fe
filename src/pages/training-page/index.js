@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import AxiosInstance from "../../components/axios";
-import YouTube from "react-youtube";
+// import YouTube from "react-youtube";
 import { TrainingPageStyled } from "./style";
 import { useNavigate } from "react-router-dom";
 
-export const VideoPlayer = ({ videoId }) => {
-  const opts = {
-    height: "390",
-    width: "640",
-    playerVars: {
-      autoplay: 0, // 1 for autoplay
-    },
-  };
+// export const VideoPlayer = ({ videoId }) => {
+//   const opts = {
+//     height: "390",
+//     width: "640",
+//     playerVars: {
+//       autoplay: 0, // 1 for autoplay
+//     },
+//   };
 
-  return <YouTube videoId={videoId} opts={opts} />;
-};
+//   return <YouTube videoId={videoId} opts={opts} />;
+// };
 
 const TrainingPage = () => {
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
   const [startTime, setStartTime] = useState(Date.now());
-  const videoId = "GQbg_Ris93Y";
+  // const videoId = "GQbg_Ris93Y";
   // const [selectedOption, setSelectedOption] = useState("3");
 
   const navigate = useNavigate();
@@ -331,7 +331,7 @@ const TrainingPage = () => {
               There are multiple training programs we run. Please enquire with
               us to discuss your specific needs.
             </h5>
-            <div class="container col-12 container-fluid   bg-light rounded-3  p-3 p-lg-5 mt-3 ">
+            <div class="container col-12 container-fluid   bg-light rounded-3 mb-3 p-3 p-lg-5 mt-3 ">
               <ul style={{ fontWeight: "bold" }}>
                 <li className="mb-2">Compensation masterclass</li>
                 <li className="mb-2">Long Term Incentive design</li>
@@ -343,7 +343,7 @@ const TrainingPage = () => {
               </ul>
             </div>
           </div>
-          <div className="col-12 mt-3 section-title ">
+          {/* <div className="col-12 mt-3 section-title ">
             <h2 style={{ width: "100%" }} className="col-12 ">
               Training Videos
             </h2>
@@ -355,7 +355,7 @@ const TrainingPage = () => {
             <div className="col-6 mb-3">
               <VideoPlayer videoId={"jISQ7nHLzms"} />
             </div>
-          </div>
+          </div> */}
         </div>
       </TrainingPageStyled>
     </>

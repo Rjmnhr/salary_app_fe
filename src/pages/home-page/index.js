@@ -6,69 +6,12 @@ import secondCoverImg from "../../icons/cover-2.jpg";
 
 import ParallaxComponent from "../../components/react-parallax";
 import NavBar from "../../components/nav-bar";
-import { Carousel, Modal } from "antd";
+import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
-import { useNavigate } from "react-router-dom";
 
-const TrainingPopup = () => {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    // Set a timeout to show the popup after 3 seconds
-    const timeoutId = setTimeout(() => {
-      // Check if the popup has been closed or the user has navigated to the training page
-      const shouldShowPopup =
-        sessionStorage.getItem("showTrainingPopup") !== "false";
-
-      if (shouldShowPopup) {
-        // Set the visibility to true when the timeout is reached
-        setVisible(true);
-      }
-    }, 3000);
-
-    // Clear the timeout if the component unmounts or the popup is closed
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  const handleCancel = () => {
-    // Set sessionStorage to indicate that the popup has been closed
-    sessionStorage.setItem("showTrainingPopup", "false");
-    setVisible(false);
-  };
-
-  const handleNavigateToTraining = () => {
-    // Set sessionStorage to indicate that the user has navigated to the training page
-    sessionStorage.setItem("showTrainingPopup", "false");
-    setVisible(false);
-
-    // Navigate to the training page (you can replace this with your actual route)
-    window.location.href = "/training";
-  };
-
-  return (
-    <Modal visible={visible} onCancel={handleCancel} footer={null}>
-      <div className="p-3">
-        <h2 className="text-primary">Upcoming Training Sessions</h2>
-        <h5>
-          Don't miss our upcoming training sessions on Executive Compensation,
-          Short-Term Incentive, and Long-Term Incentive! Click "Go to Training"
-          to learn more.
-        </h5>
-        <button
-          key="navigate"
-          className="btn btn-primary btn-lg"
-          onClick={handleNavigateToTraining}
-        >
-          Check now!
-        </button>
-      </div>
-    </Modal>
-  );
-};
 const HomePage = () => {
   const contactRef = useRef(null);
-  const navigate = useNavigate();
 
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
@@ -167,19 +110,6 @@ const HomePage = () => {
                         gap: "5px",
                       }}
                     >
-                      <button
-                        onClick={() => navigate("/webinars")}
-                        style={{
-                          fontSize: "20px",
-                          marginTop: "10px",
-                          background: "linear-gradient(90deg,#2d67b9,#235090)",
-                          color: "white",
-                        }}
-                        className="btn "
-                      >
-                        See past webinars
-                      </button>
-
                       {/* <a href="#contact" className="btn-get-started scrollto">
                   Use Free Profile Evaluator
                 </a> */}
@@ -409,7 +339,7 @@ const HomePage = () => {
 
             <div class="testimonial-wrap">
               <div class="testimonial-item">
-                <h3>Sara Jacobson</h3>
+                <h3>Dany Jason</h3>
                 {/* <h4>Entreprenuer, Sydney</h4> */}
                 <p>
                   <i class="bx bxs-quote-alt-left quote-icon-left"></i>
@@ -434,7 +364,6 @@ const HomePage = () => {
       <a href="#l" class="back-to-top">
         <i class="icofont-simple-up"></i>
       </a>
-      <TrainingPopup />
     </>
   );
 };

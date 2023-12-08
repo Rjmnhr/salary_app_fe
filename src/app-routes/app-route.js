@@ -28,7 +28,6 @@ import ExecutiveBenchmark from "../pages/executive-benchmark";
 import RoleInformation from "../components/role-information";
 import BenchmarkOutput from "../pages/benchmark-output";
 import TableComponent from "../components/companies-filterd";
-import WebinarComponent from "../components/webinar-component";
 import LandingExecutivePage from "../pages/landing-executive-page";
 import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
@@ -281,14 +280,6 @@ const AppRoute = () => {
           }
         />
 
-        <Route
-          path="/webinars"
-          element={
-            <>
-              <WebinarComponent />
-            </>
-          }
-        />
         <Route
           path="/fill-form"
           element={
