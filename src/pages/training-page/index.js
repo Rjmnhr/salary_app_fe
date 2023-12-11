@@ -3,7 +3,6 @@ import NavBar from "../../components/nav-bar";
 import AxiosInstance from "../../components/axios";
 // import YouTube from "react-youtube";
 import { TrainingPageStyled } from "./style";
-import { useNavigate } from "react-router-dom";
 
 // export const VideoPlayer = ({ videoId }) => {
 //   const opts = {
@@ -24,7 +23,6 @@ const TrainingPage = () => {
   // const videoId = "GQbg_Ris93Y";
   // const [selectedOption, setSelectedOption] = useState("3");
 
-  const navigate = useNavigate();
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,
@@ -81,22 +79,22 @@ const TrainingPage = () => {
     //eslint-disable-next-line
   }, [location, userID]);
 
-  const [selectedTrainings, setSelectedTrainings] = useState([]);
+  // const [selectedTrainings, setSelectedTrainings] = useState([]);
 
-  const toggleTrainingSelection = (training) => {
-    if (selectedTrainings.includes(training)) {
-      setSelectedTrainings(selectedTrainings.filter((t) => t !== training));
-    } else {
-      setSelectedTrainings([...selectedTrainings, training]);
-    }
-  };
+  // const toggleTrainingSelection = (training) => {
+  //   if (selectedTrainings.includes(training)) {
+  //     setSelectedTrainings(selectedTrainings.filter((t) => t !== training));
+  //   } else {
+  //     setSelectedTrainings([...selectedTrainings, training]);
+  //   }
+  // };
 
-  const registerSelected = () => {
-    sessionStorage.setItem("training", JSON.stringify(selectedTrainings));
-    sessionStorage.setItem("date", 9);
-    navigate("/fill-form");
-    // Implement your registration logic here
-  };
+  // const registerSelected = () => {
+  //   sessionStorage.setItem("training", JSON.stringify(selectedTrainings));
+  //   sessionStorage.setItem("date", 9);
+  //   navigate("/fill-form");
+  //   // Implement your registration logic here
+  // };
 
   // const handleRadioChange = (event) => {
   //   setSelectedOption(event.target.value);
@@ -114,7 +112,7 @@ const TrainingPage = () => {
             marginTop: "100px",
           }}
         >
-          <div
+          {/* <div
             style={{
               padding: "5px 10px",
               background: "powderblue",
@@ -129,13 +127,13 @@ const TrainingPage = () => {
                 opportunity to enhance your knowledge and skills. Register now!
               </p>
             </div>
-          </div>
+          </div> */}
 
-          <div class="training-section ">
+          {/* <div class="training-section ">
             <div className="col-12 section-title ">
               <h2 class="training-title">
                 Upcoming Trainings - December 9th
-                {/* <span
+                <span
                   style={{
                     fontSize: "32px",
                     fontWeight: "bold",
@@ -143,10 +141,10 @@ const TrainingPage = () => {
                   }}
                 >
                   3
-                </span> */}
+                </span> 
               </h2>
             </div>
-            {/* <h5>Choose the date</h5>
+           <h5>Choose the date</h5>
             <div
               style={{ gap: "15px" }}
               className="w-100 mt-3 d-flex justify-content-center col-lg-12"
@@ -171,7 +169,7 @@ const TrainingPage = () => {
                 />
                 <label>On December 9th</label>
               </div>
-            </div> */}
+            </div>
             <p
               style={{
                 fontSize: "18px",
@@ -268,7 +266,7 @@ const TrainingPage = () => {
             >
               Register Now!
             </button>
-          </div>
+          </div> */}
 
           <div className="col-12 section-title ">
             <h2 style={{ width: "100%" }} className="col-12 ">

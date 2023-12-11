@@ -238,6 +238,21 @@ const GeneratedReport = ({
     salary: job.mapped_average_sal,
   }));
 
+  // const filteredChartData = lineChartData.reduce((acc, current) => {
+  //   const existingItem = acc.find(
+  //     (item) => item.experience === current.experience
+  //   );
+
+  //   if (!existingItem) {
+  //     // If the experience is not already in the accumulator, add the current item
+  //     acc.push(current);
+  //   } else {
+  //     // If the experience is already in the accumulator, update the salary if the current salary is greater
+  //     existingItem.salary = Math.max(existingItem.salary, current.salary);
+  //   }
+
+  //   return acc;
+  // }, []);
   useEffect(() => {
     const updateChartSize = () => {
       const screenWidth = window.innerWidth;
@@ -354,6 +369,10 @@ const GeneratedReport = ({
 
   const sortedJobsDataByRole = [...jobsDataByRole].sort(
     (a, b) => a.mapped_average_sal - b.mapped_average_sal
+  );
+
+  const sortedLineChartDataNoExp = [...lineChartData].sort(
+    (a, b) => a.salary - b.salary
   );
 
   return (
@@ -957,7 +976,7 @@ const GeneratedReport = ({
                 <LineChart
                   width={chartWidth}
                   height={chartHeight}
-                  data={lineChartData}
+                  data={sortedLineChartDataNoExp}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
@@ -1072,6 +1091,9 @@ const GeneratedReport = ({
                 data={jobsDataByRole}
                 skills={JSON.parse(selectedSkills)}
               />
+              <p style={{ fontSize: "14px" }} className="my-3 text-center">
+                End of the report
+              </p>
             </div>
           </div>
           <div className="d-none">
@@ -1690,7 +1712,7 @@ const GeneratedReport = ({
                   <LineChart
                     width={chartWidth}
                     height={chartHeight}
-                    data={lineChartData}
+                    data={sortedLineChartDataNoExp}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -1698,7 +1720,7 @@ const GeneratedReport = ({
                       type="number"
                       name="Experience"
                     ></XAxis>
-                    <YAxis dataKey="salary" type="number" height={40}>
+                    <YAxis dataKey="salary">
                       <Label
                         value="Average Salary (LPA)"
                         angle={-90}

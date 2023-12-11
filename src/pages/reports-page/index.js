@@ -626,9 +626,13 @@ const ReportsPage = ({ userPlan }) => {
       salaryDataByRole.length > 0 &&
       salaryDataNoExp.length > 0 ? (
         <div
-          className="container-fluid  d-lg-flex justify-content-center align-items-start 
+          className="container-fluid   d-lg-flex justify-content-center align-items-start 
          "
-          style={{ padding: "0", marginTop: "90px" }}
+          style={{
+            padding: "0",
+            marginTop: "90px",
+            borderTop: "1px solid #dee2e6",
+          }}
         >
           <div
             className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
@@ -654,7 +658,11 @@ const ReportsPage = ({ userPlan }) => {
               </p>
             )}
 
-            <Modal visible={isModalVisible} footer={modalFooter}>
+            <Modal
+              closable={false}
+              visible={isModalVisible}
+              footer={modalFooter}
+            >
               <div>
                 {/* <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Job title : </label>

@@ -543,7 +543,7 @@ const PriceAJob = () => {
         </header>
       </body>
 
-      {jobsData.length > 0 ? (
+      {jobsDataFetched.length > 0 ? (
         <>
           {" "}
           <div className="container-fluid">
