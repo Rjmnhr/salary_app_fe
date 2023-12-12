@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const location = useLocation();
+  const path = location.pathname;
 
   const VerifyToken = async () => {
     try {
@@ -36,7 +38,7 @@ const ProtectedRoute = ({ element }) => {
     } else {
       // Redirect to the login page if not authenticated
 
-      return <Navigate to="/login-app" />;
+      return <Navigate to={`/login-app?p=${path}`} />;
     }
   }
 };

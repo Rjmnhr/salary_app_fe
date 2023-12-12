@@ -219,15 +219,18 @@ const BenchmarkOutput = () => {
       ) : (
         <>
           <div
-            className="container-fluid  d-lg-flex justify-content-center align-items-start 
-         "
-            style={{ padding: "0", marginTop: "90px" }}
+            className="container-fluid  d-lg-flex justify-content-center align-items-start"
+            style={{
+              padding: "0",
+              marginTop: "100px",
+              borderTop: "1px solid #dee2e6",
+            }}
           >
             <div
               className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
               style={{
                 overflowY: "scroll",
-                maxHeight: "100vh",
+                height: "90vh",
                 transform: "transition 0.3s all ease",
               }}
             >

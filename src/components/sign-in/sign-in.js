@@ -17,6 +17,8 @@ const SignIn = () => {
 
   const navigate = useNavigate();
   const Location = useLocation();
+
+  const path = Location.search.replace("?p=", "");
   const { setIsSignIn, setIsLoggedIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -69,11 +71,7 @@ const SignIn = () => {
 
       setEmail("");
       setPassword("");
-      if (Location.pathname === "/login-app") {
-        navigate("/price-a-job");
-      } else {
-        navigate("/");
-      }
+      navigate(path);
     } catch (err) {
       error("Something Wrong");
       console.log(err);

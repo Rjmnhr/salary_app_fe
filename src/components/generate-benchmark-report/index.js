@@ -11,6 +11,41 @@ const decimalFix = (number) => {
   return trimmed;
 };
 
+const AverageBoardMeetings = (data) => {
+  // Calculate the total sum of board_meetings_attended_nos
+  const totalBoardMeetings = data.reduce(
+    (sum, obj) => sum + obj.board_meetings_attended_nos,
+    0
+  );
+
+  // Calculate the average
+  const averageBoardMeetings = totalBoardMeetings / data.length;
+  return Math.round(averageBoardMeetings);
+};
+const AverageCommitteePositions = (data) => {
+  // Calculate the total sum of no_of_committee_pos_held_nos
+  const totalCommitteePositions = data.reduce(
+    (sum, obj) => sum + obj.no_of_committee_pos_held_nos,
+    0
+  );
+
+  // Calculate the average
+  const averageCommitteePositions = totalCommitteePositions / data.length;
+
+  return Math.round(averageCommitteePositions);
+};
+const AverageOtherCosDirectors = (data) => {
+  // Calculate the total sum of no_of_oth_cos_director_nos
+  const totalOtherCosDirectors = data.reduce(
+    (sum, obj) => sum + obj.no_of_oth_cos_director_nos,
+    0
+  );
+
+  // Calculate the average
+  const averageOtherCosDirectors = totalOtherCosDirectors / data.length;
+  return Math.round(averageOtherCosDirectors);
+};
+
 export const calculateStatisticsSalary = (data) => {
   const roleType = sessionStorage.getItem("roleType");
   const valueType =
@@ -318,6 +353,7 @@ const GenerateBenchmarkReport = ({
                 ₹ {decimalFix(statisticsForFees.averageSalary)} Lakhs{" "}
               </p>
             </div>
+
             <h5 className="mb-3">
               {roleType === "Non-executive" ? "Fees" : "Salary"} details
             </h5>
@@ -732,6 +768,48 @@ const GenerateBenchmarkReport = ({
                 </div>
               </div>
             </div>
+
+            <section id="counts" className="counts">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-4 col-md-6">
+                    <div className="count-box">
+                      <i className="icofont-calendar"></i>
+                      <span>{AverageBoardMeetings(filteredResultData)}</span>
+                      <p>Average Board Meetings attended</p>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-6 mt-5 mt-md-0">
+                    <div className="count-box">
+                      <i className="icofont-users"></i>
+                      <span data-toggle="counter-up">
+                        {AverageOtherCosDirectors(filteredResultData)}
+                      </span>
+                      <p>Average Other COS Board Directors</p>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-6 mt-5 mt-lg-0">
+                    <div className="count-box">
+                      <i className="icofont-briefcase"></i>
+                      <span data-toggle="counter-up">
+                        {AverageCommitteePositions(filteredResultData)}
+                      </span>
+                      <p>
+                        Average Committee Positions
+                        <span
+                          className="invisible"
+                          style={{ fontSize: "14px", fontWeight: "normal" }}
+                        >
+                          extra
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
             <div
               style={{
                 display: "grid",
@@ -870,6 +948,12 @@ const GenerateBenchmarkReport = ({
                 <h5 className="mb-2">Average Fees </h5>
                 <p className="fs-3">
                   ₹ {decimalFix(statisticsForFees.averageSalary)} Lakhs{" "}
+                </p>
+              </div>
+              <div className="mt-3 mb-3">
+                <h5 className="mb-2">Board Meetings attended </h5>
+                <p className="fs-3">
+                  {filteredResultData?.board_meetings_attended_nos}
                 </p>
               </div>
               <h5 className="mb-3">Salary details</h5>

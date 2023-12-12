@@ -85,10 +85,14 @@ const HomePage = () => {
         }
         content={
           <>
-            <section class="d-flex align-items-center">
-              <div class="container" data-aos="zoom-out" data-aos-delay="100">
-                <div class="row">
-                  <div class="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
+            <section className="d-flex align-items-center">
+              <div
+                className="container"
+                data-aos="zoom-out"
+                data-aos-delay="100"
+              >
+                <div className="row">
+                  <div className="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
                     <h1
                       style={{
                         textAlign: "start",
@@ -122,9 +126,9 @@ const HomePage = () => {
         }
       />
 
-      <section id="service" class="service ">
-        <div class="container" data-aos="fade-up">
-          <div class="content col-xl-12 d-flex align-items-stretch">
+      <section id="service" className="service ">
+        <div className="container" data-aos="fade-up">
+          <div className="content col-xl-12 d-flex align-items-stretch">
             <div className="col-12 section-title">
               <h2 style={{ width: "100%" }} className="col-12 ">
                 Services We Offer
@@ -139,11 +143,11 @@ const HomePage = () => {
               }}
             ></div>
           </div>
-          <div class="col-xl-12 d-flex align-items-stretch">
-            <div class="icon-boxes d-flex flex-column justify-content-center">
-              <div class="row">
+          <div className="col-xl-12 d-flex align-items-stretch">
+            <div className="icon-boxes d-flex flex-column justify-content-center">
+              <div className="row">
                 <div
-                  class="col-md-6 icon-box"
+                  className="col-md-6 icon-box"
                   data-aos="fade-up"
                   data-aos-delay="100"
                 >
@@ -160,7 +164,7 @@ const HomePage = () => {
                 </div>
 
                 <div
-                  class="col-md-6 icon-box"
+                  className="col-md-6 icon-box"
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
@@ -177,7 +181,7 @@ const HomePage = () => {
                   </p>
                 </div>
                 <div
-                  class="col-md-6 icon-box"
+                  className="col-md-6 icon-box"
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
@@ -193,7 +197,7 @@ const HomePage = () => {
                   </p>
                 </div>
                 <div
-                  class="col-md-6 icon-box"
+                  className="col-md-6 icon-box"
                   data-aos="fade-up"
                   data-aos-delay="400"
                 >
@@ -219,58 +223,58 @@ const HomePage = () => {
         img={secondCoverImg}
         content={
           <section>
-            <div class="overflow-hidden">
-              <div class="container content-space-t-3">
-                <div class="row justify-content-lg-between align-items-md-center">
-                  <div class="col-md-6 col-lg-5 mb-5 mb-lg-0">
+            <div className="overflow-hidden">
+              <div className="container content-space-t-3">
+                <div className="row justify-content-lg-between align-items-md-center">
+                  <div className="col-md-6 col-lg-5 mb-5 mb-lg-0">
                     <h1
-                      class="display-4 mb-5"
+                      className="display-4 mb-5"
                       data-aos="zoom-out"
                       data-aos-delay="100"
                     >
                       Start your journey with{" "}
-                      <span class="text-primary">Equipay Partners</span>
+                      <span className="text-primary">Equipay Partners</span>
                     </h1>
 
                     <div
-                      class="border-top border-2 my-5"
+                      className="border-top border-2 my-5"
                       style={{ maxWidth: "5rem" }}
                     ></div>
                   </div>
 
-                  <div class="col-md-6 col-lg-5 d-none d-md-block">
+                  <div className="col-md-6 col-lg-5 d-none d-md-block">
                     <div
-                      class="row gx-3 me-lg-n10"
+                      className="row gx-3 me-lg-n10"
                       data-aos="fade-up"
                       data-aos-delay="200"
                     >
-                      <div class="col-3 offset-1 align-self-end mb-3">
+                      <div className="col-3 offset-1 align-self-end mb-3">
                         <img
-                          class="img-fluid"
+                          className="img-fluid"
                           src="./assets/svg/components/dots-warning.svg"
                           alt="ImageDescription"
                         />
                       </div>
 
-                      <div class="col-8 mb-3">
+                      <div className="col-8 mb-3">
                         <img
-                          class="img-fluid rounded-3"
+                          className="img-fluid rounded-3"
                           src="./assets/img/950x950/img4.jpg"
                           alt="ImageDescription"
                         />
                       </div>
 
-                      <div class="col-6">
+                      <div className="col-6">
                         <img
-                          class="img-fluid rounded-3"
+                          className="img-fluid rounded-3"
                           src="./assets/img/950x950/img5.jpg"
                           alt="ImageDescription"
                         />
                       </div>
 
-                      <div class="col-5">
+                      <div className="col-5">
                         <img
-                          class="img-fluid"
+                          className="img-fluid"
                           src="./assets/svg/components/card-11.svg"
                           alt="ImageDescription"
                         />
@@ -284,70 +288,70 @@ const HomePage = () => {
         }
       />
 
-      <section id="testimonials" class="testimonials">
-        <div class="container" data-aos="fade-up">
-          <div class="section-title">
+      <section id="testimonials" className="testimonials">
+        <div className="container" data-aos="fade-up">
+          <div className="section-title">
             <h2>Testimonials</h2>
             <p>Following are some of our student testimonials</p>
           </div>
 
           <Carousel autoplay>
-            <div class="testimonial-wrap">
-              <div class="testimonial-item">
+            <div className="testimonial-wrap">
+              <div className="testimonial-item">
                 <h3>John Lennox</h3>
                 {/* <h4>CEO &amp; Founder, Brisbane</h4> */}
                 <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>I
+                  <i className="bx bxs-quote-alt-left quote-icon-left"></i>I
                   attended their training session on pay benchmarking, and it
                   was a game-changer for our HR team. The insights and knowledge
                   I gained have empowered us to make data-driven decisions.
                   Highly recommended!
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  <i className="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
             </div>
 
-            <div class="testimonial-wrap">
-              <div class="testimonial-item">
+            <div className="testimonial-wrap">
+              <div className="testimonial-item">
                 <h3>John Lennox</h3>
                 {/* <h4>CEO &amp; Founder, Brisbane</h4> */}
                 <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>The
+                  <i className="bx bxs-quote-alt-left quote-icon-left"></i>The
                   advisory services provided by this team are exceptional. They
                   helped us structure our incentive programs and remuneration
                   framework, leading to improved employee satisfaction and
                   productivity. Their expertise is unmatched.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  <i className="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
             </div>
 
-            <div class="testimonial-wrap">
-              <div class="testimonial-item">
+            <div className="testimonial-wrap">
+              <div className="testimonial-item">
                 <h3>Sara Jacobson</h3>
                 {/* <h4>Entreprenuer, Sydney</h4> */}
                 <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  <i className="bx bxs-quote-alt-left quote-icon-left"></i>
                   We rely on their custom salary surveys for our business
                   expansion. Their comprehensive remuneration data across
                   different regions and roles has been invaluable. A must-have
                   resource for any organization
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  <i className="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
             </div>
 
-            <div class="testimonial-wrap">
-              <div class="testimonial-item">
+            <div className="testimonial-wrap">
+              <div className="testimonial-item">
                 <h3>Dany Jason</h3>
                 {/* <h4>Entreprenuer, Sydney</h4> */}
                 <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  <i className="bx bxs-quote-alt-left quote-icon-left"></i>
                   Partnering with them to design our sales incentive program was
                   a brilliant decision. They collaborated closely with us to
                   align incentives with our goals. Our sales team's performance
                   has soared since implementing their strategies
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  <i className="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
               </div>
             </div>
@@ -361,8 +365,8 @@ const HomePage = () => {
 
       <Contact />
 
-      <a href="#l" class="back-to-top">
-        <i class="icofont-simple-up"></i>
+      <a href="#l" className="back-to-top">
+        <i className="icofont-simple-up"></i>
       </a>
     </>
   );
