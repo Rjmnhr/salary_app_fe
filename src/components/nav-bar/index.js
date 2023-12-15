@@ -151,9 +151,7 @@ const NavBar = ({ scrollToContact }) => {
                     activeLink === "/landing-executive" ? "active" : ""
                   }
                 >
-                  <a href="/landing-executive">
-                    Executive Compensation Benchmarking
-                  </a>
+                  <a href="/landing-executive">Executive Compensation</a>
                 </li>
 
                 <li className={activeLink === "training" ? "active" : ""}>
@@ -161,6 +159,9 @@ const NavBar = ({ scrollToContact }) => {
                 </li>
                 <li className={activeLink === "sales" ? "active" : ""}>
                   <a href="/sales">Sales Incentive</a>
+                </li>
+                <li className={activeLink === "sales" ? "active" : ""}>
+                  <a href="/blog">Blog</a>
                 </li>
 
                 {isLoggedIn === "true" ? (

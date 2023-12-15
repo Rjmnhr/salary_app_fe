@@ -31,6 +31,7 @@ import TableComponent from "../components/companies-filterd";
 import LandingExecutivePage from "../pages/landing-executive-page";
 import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
+import BlogPage from "../pages/blog-page.js";
 const AppRoute = () => {
   return (
     <BrowserRouter>
@@ -285,6 +286,14 @@ const AppRoute = () => {
           element={
             <>
               <FillForm />
+            </>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <>
+              <BlogPage />
             </>
           }
         />
