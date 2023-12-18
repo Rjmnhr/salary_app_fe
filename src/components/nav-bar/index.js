@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { Avatar, Dropdown } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import {  Dropdown } from "antd";
+
 import logo from "../../icons/logo192.png";
 
 // const CapitalizeFirstLetter = (data) => {
@@ -174,21 +174,11 @@ const NavBar = ({ scrollToContact }) => {
                       arrow
                     >
                       <li
-                        style={{
-                          paddingTop: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
+                        
+                    style={{cursor:"pointer"}}
                       >
-                        <Avatar
-                          size="small"
-                          style={{
-                            background:
-                              "linear-gradient(90deg, rgb(45, 103, 185), rgb(35, 80, 144))",
-                          }}
-                          icon={<UserOutlined />}
-                        />
+                        {/*eslint-disable-next-line*/}
+                        <a>Account</a>
                       </li>
                     </Dropdown>
                   </>

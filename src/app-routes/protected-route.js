@@ -10,7 +10,8 @@ const ProtectedRoute = ({ element }) => {
   const VerifyToken = async () => {
     try {
       const res = await fetch(
-        "https://backend.equipaypartners.com/api/token/verify",
+         "https://backend.equipaypartners.com/api/token/verify",
+        // "http://localhost:8003/api/token/verify",
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -37,8 +38,11 @@ const ProtectedRoute = ({ element }) => {
       return element;
     } else {
       // Redirect to the login page if not authenticated
-
-      return <Navigate to={`/login-app?p=${path}`} />;
+localStorage.removeItem("isLoggedIn")
+      return (
+        <Navigate to={`/login-app?p=${path}`} />
+      )
+      ;
     }
   }
 };

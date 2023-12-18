@@ -17,8 +17,8 @@ const SignIn = () => {
 
   const navigate = useNavigate();
   const Location = useLocation();
-
-  const path = Location.search.replace("?p=", "");
+  const searchParams = new URLSearchParams(Location.search);
+  const path = searchParams.has("p") ? searchParams.get("p") : "/";
   const { setIsSignIn, setIsLoggedIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 

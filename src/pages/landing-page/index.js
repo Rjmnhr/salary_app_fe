@@ -175,8 +175,9 @@ const LandingPage = () => {
                         Dashboard
                       </button>
                     ) : (
-                      <DownloadSamplePDF />
+                     ""
                     )}
+                     <DownloadSamplePDF />
 
                     {/* <a href="#contact" className="btn-get-started scrollto">
                     Use Free Profile Evaluator

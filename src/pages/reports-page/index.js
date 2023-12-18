@@ -323,8 +323,10 @@ const ReportsPage = ({ userPlan }) => {
 
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
+      console.log("🚀 ~ file: index.js:326 ~ useEffect ~ dataArray:", dataArray)
       setIsReportReady(false);
       const fetchResponse = async (index) => {
+        console.log("🚀 ~ file: index.js:328 ~ fetchResponse ~ index:", index)
         if (index >= 0 && index < dataArray.length) {
           const data = dataArray[index];
           const response = await AxiosInstance.post(
@@ -341,6 +343,7 @@ const ReportsPage = ({ userPlan }) => {
               },
             }
           );
+          console.log("🚀 ~ file: index.js:344 ~ fetchResponse ~ response:", response.data)
           return { data: response.data.data, bool: response.data.bool };
         } else {
           return null; // Handle out-of-bounds index
@@ -356,6 +359,8 @@ const ReportsPage = ({ userPlan }) => {
           setFilteredThroughSkill(bool);
           setIsReportReady(true);
           setSalaryData(data);
+          console.log("🚀 ~ file: index.js:360 ~ fetchDataForActiveIndex ~ data:", data)
+
         }
       };
 
@@ -1098,5 +1103,6 @@ const ReportsPage = ({ userPlan }) => {
     </>
   );
 };
+
 
 export default ReportsPage;

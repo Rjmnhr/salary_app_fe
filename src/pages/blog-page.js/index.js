@@ -5,9 +5,10 @@ const BlogPage = () => {
   return (
     <>
       <NavBar />
+      <div  style={{ marginTop: "100px" ,borderTop:"1px solid black pb-3"}} className="container-fluid">
       <div
-        style={{ marginTop: "100px" }}
-        className="container p-2 p-lg-3 text-left"
+       
+        className="container p-2 p-lg-3 text-left mt-3"
       >
         {/* Section 1: Demysti fying Job Compensation */}
         <h2 className="mb-3">
@@ -111,20 +112,24 @@ const BlogPage = () => {
           standards. Gain valuable insights into best practices for compensating
           leadership roles.
         </p>
+        <img style={{width:"75%", height:"75%"}} src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1702877358/k1wqeq3m583y4y78pbno.png"
+ alt="executive compensation" />
+       
 
         {/* Section 3: Training */}
-        <h2>
+        <h2 className="mt-3">
           {" "}
           <strong>Training</strong>
         </h2>
-
-        {/* Services We Offer: Training */}
-        <h4>Services We Offer: Training</h4>
         <p>
           Equipay Partners conducts monthly training sessions covering essential
           aspects of pay, including benchmarking, incentives, and paylines.
           Elevate your team's knowledge with our insightful training programs.
         </p>
+
+        <img style={{width:"75%", height:"75%"}} src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1702877849/wls8mwhobwxrcmgvrwkq.jpg"
+ alt="executive compensation" />
+        
 
         {/* Section 4: Sales Incentive */}
         <h2>
@@ -156,6 +161,10 @@ const BlogPage = () => {
           structures for executives and CEOs. Explore trends in management
           compensation and CEO packages.
         </p>
+        <img style={{width:"75%", height:"75%"}} src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1702879181/wacdbvxglh0mfataif1h.png"
+
+ alt="executive compensation" />
+        
 
         {/* Section 6: Financial Analyst and Account Executive Compensation */}
         <h2>
@@ -179,20 +188,11 @@ const BlogPage = () => {
           marketing domain.
         </p>
 
-        {/* Contact Us */}
-        <h2>
-          {" "}
-          <strong>Contact Us</strong>
-        </h2>
-        <p>
-          Ready to elevate your organization's approach to compensation? Contact
-          Equipay Partners in Bangalore, India, at{" "}
-          <a href="mailto:partner@equipaypartners.com">
-            partner@equipaypartners.com
-          </a>
-          . Begin your journey toward pay excellence today.
-        </p>
+       
+       
       </div>
+      </div>
+   
     </>
   );
 };
