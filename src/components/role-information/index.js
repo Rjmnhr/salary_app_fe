@@ -47,12 +47,16 @@ const RoleInformation = () => {
   return (
     <>
       <NavBar />
+      <div style={{ marginTop: "100px",
+          background:"#5783db",
+          color:"white",
+          height: "90vh",}}>
       <div
         style={{
           display: "grid",
           placeItems: "center",
           height: "50vh",
-          marginTop: "100px",
+         
         }}
       >
         <div
@@ -75,6 +79,7 @@ const RoleInformation = () => {
                 paddingLeft: "10px",
                 outline: "none",
                 background: "white",
+                height:"50px"
               }}
               onChange={handleChange}
               options={(availableRoles || []).map((d) => ({
@@ -84,14 +89,15 @@ const RoleInformation = () => {
             />
             <br />
             {role ? (
-              <button type="submit" className="btn w-50 mt-3 btn-primary">
+              <button style={{background:"white"}} type="submit" className="btn w-50 mt-3 btn-lg ">
                 Next
               </button>
             ) : (
               <button
+              style={{background:"white"}}
                 disabled
                 type="submit"
-                className="btn w-50 mt-3 btn-primary"
+                className="btn w-50 mt-3 btn-lg"
               >
                 Next
               </button>
@@ -99,6 +105,8 @@ const RoleInformation = () => {
           </form>
         </div>
       </div>
+      </div>
+   
     </>
   );
 };

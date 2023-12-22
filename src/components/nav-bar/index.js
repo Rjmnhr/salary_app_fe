@@ -101,7 +101,7 @@ const NavBar = ({ scrollToContact }) => {
   ];
 
   return (
-    <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
+    <body className={`${menuOpen ? "mobile-nav-active" : ""} `} >
       <NavBarStyled>
         <button
           type="button"
@@ -111,10 +111,11 @@ const NavBar = ({ scrollToContact }) => {
           <i style={{ color: "black" }} class="icofont-navigation-menu"></i>
         </button>
         <header
+
           id="header"
           className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
           style={{
-            background: ` ${scrolled ? "#fff" : "transparent"}`,
+            background: "white",
           }}
         >
           <div class="container d-flex align-items-center">

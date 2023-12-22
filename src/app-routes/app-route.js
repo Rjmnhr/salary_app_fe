@@ -27,12 +27,33 @@ import VerifyPlanRoute from "./verifyPlan";
 import ExecutiveBenchmark from "../pages/executive-benchmark";
 import RoleInformation from "../components/role-information";
 import BenchmarkOutput from "../pages/benchmark-output";
-import TableComponent from "../components/companies-filterd";
+import TableComponent, {
+  TableComponentMobile,
+} from "../components/companies-filterd";
 import LandingExecutivePage from "../pages/landing-executive-page";
 import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
 import BlogPage from "../pages/blog-page.js";
+import { useEffect, useState } from "react";
 const AppRoute = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -261,9 +282,7 @@ const AppRoute = () => {
           element={
             <ProtectedRoute
               element={
-                <>
-                  <TableComponent />
-                </>
+                <>{isMobile ? <TableComponentMobile /> : <TableComponent />}</>
               }
             />
           }

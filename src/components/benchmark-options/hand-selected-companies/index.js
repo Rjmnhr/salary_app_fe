@@ -3,7 +3,8 @@ import { Input, Modal, Select, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import { availableRoles } from "../../role-information";
-
+import { ArrowForward} from "@mui/icons-material";
+import emptyBox from "../../../icons/empty-box.png";
 const HandSelectedCompanies = ({ sectors }) => {
   const navigate = useNavigate();
   const [role, setRole] = useState("");
@@ -135,17 +136,17 @@ const HandSelectedCompanies = ({ sectors }) => {
     };
   }, []);
   return (
-    <div className="container p-0 p-lg-3">
-      <div className="row mt-3">
+    <div className="container p-0 p-lg-3" style={{color:"white"}}>
+      <div className="d-lg-flex mt-3">
         <div
-          className="col-6"
+          className="col-12 col-lg-6 border p-0 mx-lg-2 mb-3 mb-lg-0"
           style={{
             height: "50vh", // Adjust the height as needed
             overflowY: "scroll",
           }}
         >
-          <table className="table text-left scrollable-container">
-            <thead style={{ position: "sticky", top: 0, background: "white" }}>
+          <table className="table  text-left scrollable-container   p-0" >
+            <thead style={{ position: "sticky", top: 0, background:"white",color:"black" }}>
               <tr>
                 <th className="d-md-flex flex-wrap justify-content-between align-items-center ">
                   List of companies
@@ -185,7 +186,7 @@ const HandSelectedCompanies = ({ sectors }) => {
                     onClick={() => handleRowClick(item)}
                   >
                     <td
-                      style={{ padding: "0", cursor: "pointer", width: "100%" }}
+                      style={{ padding: "5px 10px", cursor: "pointer", width: "100%" }}
                     >
                       {item}
                     </td>
@@ -196,13 +197,13 @@ const HandSelectedCompanies = ({ sectors }) => {
           </table>
         </div>
         <div
-          className="col-6 scrollable-container"
+          className="col-12 col-lg-6 scrollable-container  border p-0"
           style={{ height: "50vh", overflowY: "scroll" }}
         >
-          <table className="table text-left ">
-            <thead>
-              <tr>
-                <th>
+          <table className="table  text-left scrollable-container ">
+            <thead style={{ position: "sticky", top: 0, background:"white",color:"black",}} >
+              <tr >
+                <th className="p-3">
                   Selected Companies (
                   <span className="text-primary">
                     {selectedCompaniesList.length}
@@ -217,15 +218,17 @@ const HandSelectedCompanies = ({ sectors }) => {
                   <tr key={index}>
                     <td
                       style={{
-                        padding: "0",
+                        padding: "5px 10px",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
+                        justifyContent:"space-between"
                       }}
                     >
                       {item}
                       {/* Add a remove button or cross button */}
                       <button
+                      style={{color:"black"}}
                         className="btn btn-link btn-sm"
                         onClick={() => handleRemoveCompany(item)}
                       >
@@ -236,14 +239,15 @@ const HandSelectedCompanies = ({ sectors }) => {
                 ))
               ) : (
                 <div
-                  style={{
-                    display: "grid",
-                    height: "30vh",
-                    placeItems: "center",
-                  }}
-                >
-                  <p>No companies selected</p>
-                </div>
+                        style={{
+                          display: "grid",
+                          height: "30vh",
+                          placeItems: "center",
+                        }}
+                      >
+                        <img src={emptyBox} alt="" height={100} width={100} />
+                        <p>No companies selected</p>
+                      </div>
               )}
             </tbody>
           </table>
@@ -257,8 +261,8 @@ const HandSelectedCompanies = ({ sectors }) => {
           <h5>Please select at least 10 companies for meaningful analysis</h5>
         </Modal>
       </div>
-      <div className="w-100 " style={{ display: "grid", placeItems: "center" }}>
-        <div className="mb-3 p-0 p-lg-3 mt-3  col-12 col-lg-6 text-left bg-light pt-2">
+      <div className="w-100 mt-3 d-lg-flex pl-lg-2" style={{  justifyContent: "space-between",alignItems:"center" }}>
+        <div className="mb-3 p-0 p-lg-3 mt-3  col-12 col-lg-6 text-left border pt-2 mr-lg-5">
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Role </label>
             <Select
@@ -279,27 +283,31 @@ const HandSelectedCompanies = ({ sectors }) => {
             />
           </div>
         </div>
-      </div>
-      <div className="mb-3">
+        <div className="mb-3 ">
         {selectedCompaniesList.length > 0 && role ? (
+          
           <button
-            onClick={handleSubmit}
-            type="submit"
-            className="btn btn-primary mt-3 w-25"
-          >
-            Next
-          </button>
+          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "520px"}` ,height: `${isMobile ? "100%" : "80px"}`}}
+          onClick={handleSubmit}
+          type="submit"
+          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+        >
+          Next  <ArrowForward/>
+        </button>
         ) : (
           <button
-            disabled
-            onClick={handleSubmit}
-            type="submit"
-            className="btn btn-primary mt-3 w-25"
-          >
-            Next
-          </button>
+          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "520px"}` ,height: `${isMobile ? "100%" : "80px"}`}}
+          onClick={handleSubmit}
+          type="submit"
+          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+          disabled
+        >
+          Next  <ArrowForward/>
+        </button>
         )}
       </div>
+      </div>
+     
     </div>
   );
 };

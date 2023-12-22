@@ -19,7 +19,7 @@ const MatchCountComponent = ({
         style={{
           margin: "0",
           padding: "0",
-          background: "white",
+          background: "transparent",
           width: "100%",
         }}
       >
@@ -37,7 +37,7 @@ const MatchCountComponent = ({
                     padding: "8px",
                   }}
                 >
-                  <span data-toggle="counter-up">{financial}</span>
+                  <span data-toggle="counter-up" style={{color:"white"}}>{financial}</span>
                   <p style={{ fontSize: "10px" }}>
                     {" "}
                     Companies match on Financial metrics
@@ -48,9 +48,9 @@ const MatchCountComponent = ({
               <div class="col-lg-12 col-md-6 mt-lg-5  mt-md-0">
                 <div
                   class="count-box mb-3"
-                  style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
+                  style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" , color:"white"}}
                 >
-                  <span data-toggle="counter-up">{financial}</span>
+                  <span  style={{color:"white"}} data-toggle="counter-up">{financial}</span>
                   <p>Distinct companies matched on Financial metrics</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@ const MatchCountComponent = ({
                     padding: "8px",
                   }}
                 >
-                  <span data-toggle="counter-up">{industries}</span>
+                  <span data-toggle="counter-up" style={{color:"white"}}>{industries}</span>
                   <p style={{ fontSize: "10px" }}>
                     {" "}
                     Companies match on selected sectors{" "}
@@ -82,7 +82,7 @@ const MatchCountComponent = ({
                   class="count-box mb-3"
                   style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
                 >
-                  <span data-toggle="counter-up">{industries}</span>
+                  <span data-toggle="counter-up" style={{color:"white"}}>{industries}</span>
                   <p> Distinct companies matched on selected sectors </p>
                 </div>
               </div>
@@ -116,7 +116,7 @@ const MatchCountComponent = ({
                   class="count-box mb-3"
                   style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
                 >
-                  <span className="text-primary" data-toggle="counter-up">
+                  <span   data-toggle="counter-up">
                     {together}
                   </span>
                   <p>

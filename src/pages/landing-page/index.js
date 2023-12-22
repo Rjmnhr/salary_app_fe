@@ -153,16 +153,18 @@ const LandingPage = () => {
                   </a> */}
                   </div>
                   <div
+                  className="d-lg-flex "
                     style={{
                       width: "100%",
                       textAlign: "start",
-                      display: "flex",
+                
                       alignItems: "center",
                       gap: "5px",
                     }}
                   >
                     {activateDashboard ? (
                       <button
+                     
                         onClick={() => navigate("/reports-dashboard")}
                         style={{
                           fontSize: "20px",
@@ -170,7 +172,7 @@ const LandingPage = () => {
                           background: "rgb(0, 128, 128)",
                           color: "white",
                         }}
-                        className="btn "
+                        className="btn mb-3 m-lg-0"
                       >
                         Dashboard
                       </button>

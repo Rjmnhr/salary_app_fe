@@ -8,6 +8,7 @@ import AxiosInstance from "../axios";
 import BasedOnIndex from "../benchmark-options/based-on-index";
 import { useNavigate } from "react-router-dom";
 import emptyBox from "../../icons/empty-box.png";
+import { ArrowForward } from "@mui/icons-material";
 export const TableComponentMobile = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
@@ -83,35 +84,74 @@ export const TableComponentMobile = () => {
     navigate("/role-information");
   };
 
+  const tableScroll = {
+    y: "55vh", // Set the height at which the body will start scrolling
+  };
+  const [filters, setFilters] = useState({});
+//eslint-disable-next-line
+  const handleFilterChange = (columnKey, value) => {
+    // Update the filter state
+    setFilters({
+      ...filters,
+      [columnKey]: value,
+    });
+  };
+
+  const getColumnSearchProps = (dataIndex, columnTitle) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          placeholder={`Search ${columnTitle}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
+        />
+      </div>
+    ),
+    onFilter: (value, record) => {
+      return record[dataIndex].toString().toLowerCase().includes(value.toLowerCase());
+    },
+  });
+  
+  const columnsWithFilter = columns.map((column) => ({
+    ...column,
+    ...getColumnSearchProps(column.dataIndex, column.title),
+  }));
+  
+
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "80px" }}>
+      <div style={{ marginTop: "70px" ,background:"#5783db", minHeight:"92vh",color:"white"}}>
         <CompaniesFilteredStyled>
           {data?.length > 0 ? (
             <div
               className="p-3 "
-              style={{ display: "grid", justifyItems: "center" }}
+              style={{ display: "grid", justifyItems: "center",  }}
             >
-              <h3>List of companies based on your selection </h3>
+              <h3 >List of companies based on your selection </h3>
               <p>
                 You have the option to deselect any company that you do not wish
                 to include in the analysis.
               </p>
-              <div className="col-lg-10 col-12 " style={{ minHeight: "40vh" }}>
-                <Table
-                  rowSelection={rowSelection}
-                  columns={columns}
-                  dataSource={formattedData}
-                />
+              <div className="col-lg-10 col-12 " >
+              <Table
+      rowSelection={rowSelection}
+      columns={columnsWithFilter}  // <-- Replace this line
+      dataSource={formattedData}
+      pagination={false}
+      scroll={tableScroll}
+    />
               </div>
 
               <button
-                onClick={handleContinue}
-                className="btn w-25 btn-primary mt-3"
-              >
-                Continue
-              </button>
+          style={{ width:"90%" }}
+          onClick={handleContinue}
+          type="submit"
+          className="btn  btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+        >
+         Continue  <ArrowForward/>
+        </button>
             </div>
           ) : (
             <>
@@ -147,7 +187,25 @@ const TableComponent = () => {
   const navigate = useNavigate();
   const storeOption = sessionStorage.getItem("option");
   const data = JSON.parse(sessionStorage.getItem("companies"));
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -271,25 +329,26 @@ const TableComponent = () => {
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "80px" }}>
+      <div style={{ marginTop: "80px" ,background:"#5783db", minHeight:"100vh",display:"grid",justifyItems:"center",alignContent:"center"}}>
         {data?.length > 0 ? (
-          <div className="container p-0 p-lg-3">
-            <h3>List of companies based on your selection </h3>
+          <div  className="container p-0 p-lg-3" >
+            <h3 className="mb-3" style={{color:"white"}}>List of companies based on your selection </h3>
+            <p>Add the companies you want to include in the analysis</p>
             {/* <p>
                 You have the option to deselect and select any company that you do not wish
                 to include in the analysis.
               </p> */}
-            <div className="row mt-3">
-              <div
-                className="col-6"
-                style={{
-                  height: "50vh", // Adjust the height as needed
-                  overflowY: "scroll",
-                }}
-              >
+       <div className="d-lg-flex mt-3">
+       <div
+          className="col-12 col-lg-6 border p-0 mx-lg-2 mb-3 mb-lg-0"
+          style={{
+            height: "50vh", // Adjust the height as needed
+            overflowY: "scroll",
+          }}
+        >
                 <table className="table text-left scrollable-container">
                   <thead
-                    style={{ position: "sticky", top: 0, background: "white" }}
+                    style={{ position: "sticky", top: 0, background: "white",color:"black" }}
                   >
                     <tr>
                       <th className="d-md-flex flex-wrap justify-content-between align-items-center ">
@@ -353,12 +412,8 @@ const TableComponent = () => {
                           onClick={() => handleRowClick(item)}
                         >
                           <td
-                            style={{
-                              padding: "0",
-                              cursor: "pointer",
-                              width: "100%",
-                            }}
-                          >
+                      style={{ padding: "5px 10px", cursor: "pointer", width: "100%" }}
+                    >
                             {item.company_name}
                           </td>
                         </tr>
@@ -368,13 +423,13 @@ const TableComponent = () => {
                 </table>
               </div>
               <div
-                className="col-6 scrollable-container"
-                style={{ height: "50vh", overflowY: "scroll" }}
-              >
-                <table className="table text-left ">
-                  <thead>
+          className="col-12 col-lg-6 scrollable-container  border p-0"
+          style={{ height: "50vh", overflowY: "scroll" }}
+        >
+                <table className="table  text-left ">
+                <thead style={{ position: "sticky", top: 0, background:"white",color:"black",}} >
                     <tr>
-                      <th>
+                      <th className="p-3"> 
                         Selected Companies (
                         <span className="text-primary">
                           {selectedCompaniesList.length}
@@ -387,22 +442,24 @@ const TableComponent = () => {
                     {selectedCompaniesList.length > 0 ? (
                       selectedCompaniesList.map((item, index) => (
                         <tr key={index}>
-                          <td
-                            style={{
-                              padding: "0",
-                              cursor: "pointer",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
+                           <td
+                      style={{
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent:"space-between"
+                      }}
+                    >
                             {item.company_name}
                             {/* Add a remove button or cross button */}
                             <button
-                              className="btn btn-link btn-sm"
-                              onClick={() => handleRemoveCompany(item)}
-                            >
-                              Remove
-                            </button>
+                      style={{color:"black"}}
+                        className="btn btn-link btn-sm"
+                        onClick={() => handleRemoveCompany(item)}
+                      >
+                        {isMobile ? "x" : "Remove"}
+                      </button>
                           </td>
                         </tr>
                       ))
@@ -432,12 +489,16 @@ const TableComponent = () => {
                 </Modal>
               </div>
             </div>
+            <div className="mb-3 mt-3 d-flex justify-content-center">
             <button
-              onClick={handleContinue}
-              className="btn w-25 btn-primary mt-3"
-            >
-              Continue
-            </button>
+          style={{ marginBottom: `${isMobile ? "200px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
+          onClick={handleContinue}
+          type="submit"
+          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+        >
+          Next  <ArrowForward/>
+        </button>
+        </div>
           </div>
         ) : (
           <>

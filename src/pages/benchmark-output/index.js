@@ -26,7 +26,7 @@ const ExpandMore = styled((props) => {
 }));
 
 function CompaniesList({ data }) {
-  const companyNames = data.map((company) => company.company_name);
+  const companyNames = data?.map((company) => company.company_name);
 
   return (
     <div>
@@ -49,7 +49,7 @@ const BenchmarkOutput = () => {
   const storedCompanies = JSON.parse(
     sessionStorage.getItem("companies-selected")
   );
-  const filteredCompanyList = storedCompanies.map((data) => data.company_name);
+  const filteredCompanyList = storedCompanies?.map((data) => data.company_name);
 
   useEffect(() => {
     const formData = new FormData();
@@ -72,7 +72,7 @@ const BenchmarkOutput = () => {
   }, []);
 
   const get2021Data = () => {
-    const filteredSymbolList = storedCompanies.map((data) => data.nse_symbol);
+    const filteredSymbolList = storedCompanies?.map((data) => data.nse_symbol);
     const formData = new FormData();
 
     formData.append("role", role);
@@ -90,7 +90,7 @@ const BenchmarkOutput = () => {
       .catch((err) => console.log(err));
   };
   const get2022Data = () => {
-    const filteredSymbolList = storedCompanies.map((data) => data.nse_symbol);
+    const filteredSymbolList = storedCompanies?.map((data) => data.nse_symbol);
     const formData = new FormData();
 
     formData.append("role", role);

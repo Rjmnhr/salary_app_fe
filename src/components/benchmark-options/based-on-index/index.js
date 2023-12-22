@@ -3,6 +3,7 @@ import { Modal, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import MatchCountComponentIndex from "../../match-counts-index";
+import { ArrowForward } from "@mui/icons-material";
 
 const indexNames = [
   "NSE500",
@@ -271,7 +272,7 @@ const BasedOnIndex = ({ sectors }) => {
     };
   }, []);
   return (
-    <div className="container-fluid p-0 p-lg-3">
+    <div style={{ color: "white" }} className="container-fluid p-0 p-lg-3">
       <div
         className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
@@ -281,10 +282,12 @@ const BasedOnIndex = ({ sectors }) => {
             transition: "all 0.5s ease",
             boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
           }}
-          className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left bg-light pt-2"
+          className="mb-3 p-0 p-lg-3 d-lg-flex col-12 col-lg-6 text-left border pt-2"
         >
           <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Indices </label>
+            <label className="w-100" style={{ fontWeight: "bold" }}>
+              Indices{" "}
+            </label>
             <Select
               className="select-antd" // Add a custom class for styling
               style={{
@@ -309,10 +312,12 @@ const BasedOnIndex = ({ sectors }) => {
             transition: "all 0.5s ease",
             boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
           }}
-          className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+          className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
         >
           <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Sectors </label>
+            <label className="w-100" style={{ fontWeight: "bold" }}>
+              Sectors{" "}
+            </label>
             <Select
               mode="multiple"
               className="select-antd" // Add a custom class for styling
@@ -330,7 +335,7 @@ const BasedOnIndex = ({ sectors }) => {
             />
           </div>
           {/* <div class=" d-flex col-lg-9 col-12 form-group">
-            <label className="w-100">Industries </label>
+            <label className="w-100" style={{fontWeight:"bold"}}>Industries </label>
             <Select
               mode="multiple"
               className="select-antd" // Add a custom class for styling
@@ -351,15 +356,17 @@ const BasedOnIndex = ({ sectors }) => {
           </div> */}
         </div>
       </div>
-      <div className="mb-3">
-        <button
+      <div className="mb-3 d-flex justify-content-center">
+         
+              <button
+          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
           onClick={handleSubmit}
           type="submit"
-          className="btn btn-primary mt-3 w-25"
+          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
         >
-          Next
+          Next  <ArrowForward/>
         </button>
-      </div>
+        </div>
       {isMobile ? (
         selectedSectors.length > 0 || selectedIndex ? (
           <div

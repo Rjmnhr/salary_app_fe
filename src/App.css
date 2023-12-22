@@ -10,9 +10,16 @@
 .scrollable-container::-webkit-scrollbar{
   display: none;
 }
+.table{
+  color:white !important
 
+}
+.table td{
+  border: none;
+}
 table td:hover{
   background-color: rgb(228, 228, 228);
+  color: black !important;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

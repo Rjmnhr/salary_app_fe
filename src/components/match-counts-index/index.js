@@ -10,7 +10,7 @@ const MatchCountComponentIndex = ({
 }) => {
   return (
     <div>
-      <section id="counts" class="counts" style={{ margin: "0" }}>
+      <section id="counts" class="counts" style={{ margin: "0" ,color:"white"}}>
         <div class="container " data-aos="fade-up">
           {indices && selectedIndex ? (
             <div class="col-lg-12 col-md-6 mt-5 mt-md-0">
@@ -18,7 +18,7 @@ const MatchCountComponentIndex = ({
                 class="count-box mb-3"
                 style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
               >
-                <span data-toggle="counter-up">{indices}</span>
+                <span style={{color:"white"}}  data-toggle="counter-up">{indices}</span>
                 <p>Distinct companies matched on selected indices </p>
               </div>
             </div>
@@ -32,7 +32,7 @@ const MatchCountComponentIndex = ({
                 class="count-box mb-3"
                 style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
               >
-                <span data-toggle="counter-up">{industries}</span>
+                <span style={{color:"white"}}   data-toggle="counter-up">{industries}</span>
                 <p> Distinct companies matched on selected sectors </p>
               </div>
             </div>
@@ -46,7 +46,7 @@ const MatchCountComponentIndex = ({
                 class="count-box mb-3"
                 style={{ boxShadow: " 0px 3px 3px 0px rgba(0, 0, 0, 0.08)" }}
               >
-                <span className="text-primary" data-toggle="counter-up">
+                <span data-toggle="counter-up">
                   {together}
                 </span>
                 <p>

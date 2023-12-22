@@ -51,7 +51,7 @@ export const calculateStatisticsSalary = (data) => {
   const valueType =
     roleType === "Non-executive" ? "directors_sitting_fees" : "salary";
   // Calculate average salary
-  const salaries = data.map((result) => result[valueType] / 100000);
+  const salaries = data?.map((result) => result[valueType] / 100000);
 
   // Remove zeros from the salaries array
   const nonZeroSalaries = salaries.filter(
@@ -99,7 +99,7 @@ export const calculateStatisticsSalary = (data) => {
 
 function calculateStatisticsTotal(data) {
   // Calculate average salary
-  const salaries = data.map((result) => result.total_remuneration / 100000);
+  const salaries = data?.map((result) => result.total_remuneration / 100000);
 
   // Remove zeros from the salaries array
   const nonZeroSalaries = salaries.filter(
@@ -168,7 +168,7 @@ const GenerateBenchmarkReport = ({
   );
 
   // Convert salary values to lakhs
-  const dataInLakhs = filteredResultData.map((item) => {
+  const dataInLakhs = filteredResultData?.map((item) => {
     return {
       ...item,
       salary: item.salary / 100000, // Convert salary to lakhs

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
 import MatchCountComponent from "../../match-counts";
 import { HandSelectedPeersStyled } from "./style";
+import { ArrowForward } from "@mui/icons-material";
 
 const HandSelectedPeers = ({ sectors }) => {
   const [marketCap, setMarketCap] = useState(0);
@@ -398,7 +399,7 @@ const HandSelectedPeers = ({ sectors }) => {
   return (
     <>
       <HandSelectedPeersStyled>
-        <div className="container-fluid p-0 p-lg-3">
+        <div style={{color:"white"}} className="container-fluid p-0 p-lg-3">
           <div
             className="scrollable-container"
             style={{ height: "70vh", overflowY: "scroll" }}
@@ -407,7 +408,7 @@ const HandSelectedPeers = ({ sectors }) => {
               className="w-100 mt-3"
               style={{ display: "grid", placeItems: "center" }}
             >
-              <p className="text-primary">
+              <p className="text-dark">
                 Select desired range for each entry
               </p>
               <div
@@ -415,11 +416,11 @@ const HandSelectedPeers = ({ sectors }) => {
                   transition: "all 0.5s ease",
                   boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
                 }}
-                className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+                className=" p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100">Market Capitalization</label>
+                    <label className="w-100" style={{fontWeight:"bold"}}>Market Capitalization</label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -479,11 +480,11 @@ const HandSelectedPeers = ({ sectors }) => {
                   transition: "all 0.5s ease",
                   boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
                 }}
-                className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+                className=" p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100">Total Assets </label>
+                    <label className="w-100" style={{fontWeight:"bold"}}>Total Assets </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -541,11 +542,11 @@ const HandSelectedPeers = ({ sectors }) => {
                   transition: "all 0.5s ease",
                   boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
                 }}
-                className=" p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+                className=" p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100">Sales </label>
+                    <label className="w-100" style={{fontWeight:"bold"}}>Sales </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -603,11 +604,11 @@ const HandSelectedPeers = ({ sectors }) => {
                   transition: "all 0.5s ease",
                   boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
                 }}
-                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100">Profit After Tax </label>
+                    <label className="w-100" style={{fontWeight:"bold"}}>Profit After Tax </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -666,7 +667,7 @@ const HandSelectedPeers = ({ sectors }) => {
                   transition: "all 0.5s ease",
                   boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 3px 0px",
                 }}
-                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left bg-light pt-2"
+                className="mb-3 p-0 p-lg-3  col-12 col-lg-6 text-left border pt-2"
               >
                 <div class=" d-flex col-lg-12 col-12 form-group">
                   <label style={{ width: `${isMobile ? "100%" : "55%"}` }}>
@@ -688,7 +689,7 @@ const HandSelectedPeers = ({ sectors }) => {
                   />
                 </div>
                 {/* <div class=" d-flex col-lg-9 col-12 form-group">
-              <label className="w-100">Industries </label>
+              <label className="w-100" style={{fontWeight:"bold"}}>Industries </label>
               <Select
                 mode="multiple"
                 className="select-antd" // Add a custom class for styling
@@ -708,15 +709,16 @@ const HandSelectedPeers = ({ sectors }) => {
             </div> */}
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 d-flex justify-content-center">
+         
               <button
-                style={{ marginBottom: `${isMobile ? "80px" : ""}` }}
-                onClick={handleSubmit}
-                type="submit"
-                className="btn btn-primary mt-3 w-25"
-              >
-                Next
-              </button>
+          style={{ marginBottom: `${isMobile ? "200px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
+          onClick={handleSubmit}
+          type="submit"
+          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+        >
+          Next  <ArrowForward/>
+        </button>
             </div>
           </div>
           {isMobile ? (

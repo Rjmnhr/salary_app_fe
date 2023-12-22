@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import AxiosInstance from "../../components/axios";
-
+import welcomeImg from "../../icons/welcome-image.png"
 import secondCoverImg from "../../icons/cover-2.jpg";
 // import eagle from "../../eagle.jpg";
 
@@ -9,10 +9,12 @@ import NavBar from "../../components/nav-bar";
 import { Carousel } from "antd";
 import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
+import { HomePageStyled } from "./style";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const contactRef = useRef(null);
-
+const navigate = useNavigate();
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -79,52 +81,47 @@ const HomePage = () => {
   return (
     <>
       <NavBar scrollToContact={scrollToContact} />
-      <ParallaxComponent
-        img={
-          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1699627708/piasi2ni1hph7gaaqr0a.webp"
-        }
-        content={
-          <>
-            <section className="d-flex align-items-center">
+      <HomePageStyled>
+      <section style={{background:"#5783db"}}  className="d-flex align-items-center vh-100">
               <div
                 className="container"
                 data-aos="zoom-out"
                 data-aos-delay="100"
               >
-                <div className="row">
+                <div className="d-lg-flex justify-content-center align-items-center">
+                  <img className="mb-3 m-lg-0" style={{width:"60%",height:"60%"}} src={welcomeImg} alt="Equipay partners" />
                   <div className="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
                     <h1
+                    className="text-light"
                       style={{
-                        textAlign: "start",
-                        fontSize: "70px",
+                        textAlign: "center",
+                        fontSize: "50px",
                         fontWeight: "bold",
+                      
                       }}
                     >
                       YOUR PARTNERS IN ALL
-                      <span className="text-primary"> MATTERS</span> PAY
+                      <span className="text-light"> MATTERS</span> PAY
                     </h1>
-
+                  
                     <div
-                      className="mb-3"
+                      className="mb-3 mt-5 d-lg-flex"
                       style={{
-                        width: "100%",
-                        textAlign: "start",
-                        display: "flex",
+                        
+                        textAlign: "center",
+                
                         alignItems: "center",
-                        gap: "5px",
+                        justifyContent:"center",
+                        gap: "8px",
                       }}
                     >
-                      {/* <a href="#contact" className="btn-get-started scrollto">
-                  Use Free Profile Evaluator
-                </a> */}
+                <button   onClick={() => navigate("/landing")}  style={{color:'white',}} className="custom-button btn border btn-lg mb-3 m-lg-0">Price a Job</button>
+                <button onClick={()=> navigate("/landing-executive")}  style={{color:'white'}} className="custom-button btn border btn-lg">Executive Compensation</button>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
-          </>
-        }
-      />
 
       <section id="service" className="service ">
         <div className="container" data-aos="fade-up">
@@ -368,6 +365,7 @@ const HomePage = () => {
       <a href="#l" className="back-to-top">
         <i className="icofont-simple-up"></i>
       </a>
+      </HomePageStyled>
     </>
   );
 };
