@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import {  Dropdown } from "antd";
+import { Dropdown } from "antd";
 
 import logo from "../../icons/logo192.png";
 
@@ -24,7 +24,7 @@ import logo from "../../icons/logo192.png";
 //   return capitalizedWords?.join(" ");
 // };
 
-const NavBar = ({ scrollToContact }) => {
+const NavBar = ({ bgInput }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -34,18 +34,22 @@ const NavBar = ({ scrollToContact }) => {
     switch (path) {
       case "/":
         return "home";
-      case "/price-a-job":
+      case "/price-a-job-add-details":
         return "price-a-job";
       case "/reports":
         return "price-a-job";
-      case "/landing":
+      case "/price-a-job":
         return "price-a-job";
-      case "/landing-executive":
-        return "/landing-executive";
+      case "/executive-compensation":
+        return "/executive-compensation";
       case "/training":
         return "training";
       case "/sales":
         return "sales";
+        case "/blog":
+        return "blog";
+        case "/account":
+        return "account";
       // Add more cases for other routes
       default:
         return "";
@@ -101,7 +105,7 @@ const NavBar = ({ scrollToContact }) => {
   ];
 
   return (
-    <body className={`${menuOpen ? "mobile-nav-active" : ""} `} >
+    <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
       <NavBarStyled>
         <button
           type="button"
@@ -111,11 +115,10 @@ const NavBar = ({ scrollToContact }) => {
           <i style={{ color: "black" }} class="icofont-navigation-menu"></i>
         </button>
         <header
-
           id="header"
           className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
           style={{
-            background: "white",
+            background: bgInput ? bgInput : "white",
           }}
         >
           <div class="container d-flex align-items-center">
@@ -145,14 +148,14 @@ const NavBar = ({ scrollToContact }) => {
                   <a href="/">Home</a>
                 </li>
                 <li className={activeLink === "price-a-job" ? "active" : ""}>
-                  <a href="/landing">Price a Job</a>
+                  <a href="/price-a-job">Price a Job</a>
                 </li>
                 <li
                   className={
-                    activeLink === "/landing-executive" ? "active" : ""
+                    activeLink === "/executive-compensation" ? "active" : ""
                   }
                 >
-                  <a href="/landing-executive">Executive Compensation</a>
+                  <a href="/executive-compensation">Executive Compensation</a>
                 </li>
 
                 <li className={activeLink === "training" ? "active" : ""}>
@@ -161,7 +164,7 @@ const NavBar = ({ scrollToContact }) => {
                 <li className={activeLink === "sales" ? "active" : ""}>
                   <a href="/sales">Sales Incentive</a>
                 </li>
-                <li className={activeLink === "sales" ? "active" : ""}>
+                <li className={activeLink === "blog" ? "active" : ""}>
                   <a href="/blog">Blog</a>
                 </li>
 
@@ -174,10 +177,7 @@ const NavBar = ({ scrollToContact }) => {
                       placement="bottomRight"
                       arrow
                     >
-                      <li
-                        
-                    style={{cursor:"pointer"}}
-                      >
+                      <li style={{ cursor: "pointer" }} className={activeLink === "account" ? "active" : ""}>
                         {/*eslint-disable-next-line*/}
                         <a>Account</a>
                       </li>

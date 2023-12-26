@@ -1,10 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home-page/index";
-
 import LandingPage from "../pages/landing-page";
-
 import PriceAJob from "../pages/price-a-job";
-
 import LoginPage from "../pages/login-page";
 import OtpVerification from "../pages/otp-verification";
 import Success from "../components/payment_checkout/Success";
@@ -15,7 +12,6 @@ import RegistrationPricing from "../pages/registration-pricing";
 import SuccessRegistration from "../components/payment_checkout/success-registration";
 import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
 import ProtectedRoute from "./protected-route";
-// import ExecutiveReports from "../pages/executive-reports";
 import ForgotPasswordPage from "../pages/forgot-password-page";
 import UserAccount from "../pages/user-account-page";
 import ChangeEmail from "../components/change-email";
@@ -35,6 +31,7 @@ import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
 import BlogPage from "../pages/blog-page.js";
 import { useEffect, useState } from "react";
+
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -66,7 +63,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/landing"
+          path="/price-a-job"
           element={
             <>
               <LandingPage />
@@ -74,7 +71,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/landing-executive"
+          path="/executive-compensation"
           element={
             <>
               <LandingExecutivePage />
@@ -82,7 +79,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/price-a-job"
+          path="/price-a-job-add-details"
           element={
             <ProtectedRoute
               element={
@@ -94,7 +91,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/executive-benchmark"
+          path="/executive-compensation-add-details"
           element={
             <ProtectedRoute
               element={

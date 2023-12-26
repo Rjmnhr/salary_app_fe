@@ -153,7 +153,7 @@ const SuccessUpgrade = () => {
               {" "}
               <h1>Your Account is Upgraded </h1>{" "}
               <p>You will be redirecting automatically in {seconds} seconds</p>{" "}
-              or <a href="/price-a-job">Click here</a>{" "}
+              or <a href="/account">Click here</a>{" "}
             </>
           ) : (
             <div className="d-flex align-items-center justify-content-center gap-2 mb-3">

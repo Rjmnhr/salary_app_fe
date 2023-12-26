@@ -7,7 +7,9 @@ function App() {
   return (
     <div className="App">
       <AppContextProvider>
-        <AppRoute />
+
+          <AppRoute />
+   
       </AppContextProvider>
     </div>
   );

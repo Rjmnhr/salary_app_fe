@@ -489,10 +489,10 @@ const PriceAJob = () => {
                   <a href="/">Home</a>
                 </li>
                 <li class="active">
-                  <a href="/landing">Price a Job</a>
+                  <a href="/price-a-job">Price a Job</a>
                 </li>
                 <li>
-                  <a href="/landing-executive">
+                  <a href="/executive-compensation">
                     Executive Compensation Benchmarking
                   </a>
                 </li>

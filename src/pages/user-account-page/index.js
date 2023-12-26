@@ -1,7 +1,7 @@
 import { Divider } from "antd";
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../../components/axios";
-
+import NavBar from "../../components/nav-bar"
 const UserAccount = () => {
   const [userInfo, setUserInfo] = useState(null);
 
@@ -75,7 +75,9 @@ const UserAccount = () => {
       .catch((err) => console.log(err));
   }, []);
   return (
-    <div className="container p-3 min-vh-100 mt-2 mt-lg-5">
+    <>
+    <NavBar />
+     <div style={{marginTop:"80px"}} className="container p-3 min-vh-100 ">
       <div
         className="d-flex justify-content-between align-items-center "
         style={{ gap: "10px" }}
@@ -119,6 +121,8 @@ const UserAccount = () => {
         </div>
       </div>
     </div>
+    </>
+   
   );
 };
 

@@ -7,6 +7,7 @@ import loginBG from "../../icons/salary-wave.png";
 import { LoginPagestyled } from "./style";
 import { useEffect, useState } from "react";
 import AxiosInstance from "../../components/axios";
+import { Helmet } from "react-helmet";
 
 const LoginPage = () => {
   const { isSignIn } = useApplicationContext();
@@ -70,8 +71,20 @@ const LoginPage = () => {
   }, [location, userID]);
   return (
     <>
+         <Helmet>
+        <title>Login | Equipay Partners</title>
+        <meta
+      name="description"
+      content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
+    />
+    <meta
+      property="og:description"
+      content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
+    />
+        {/* Add other meta tags, link tags, etc. as needed */}
+      </Helmet>
       <LoginPagestyled>
-        <NavBar />
+        <NavBar bgInput={"transparent"} />
 
         <div className="main-container" style={{ height: "100vh" }}>
           <div

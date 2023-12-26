@@ -85,7 +85,7 @@ const SuccessRegistrationBasic = () => {
           setSeconds(seconds - 1);
         } else {
           clearInterval(countdown);
-          navigate("/price-a-job");
+          navigate("/price-a-job-add-details");
         }
       }, 1000);
 
@@ -184,7 +184,7 @@ const SuccessRegistrationBasic = () => {
                 <p>
                   You will be redirecting automatically in {seconds} seconds
                 </p>{" "}
-                or <a href="/price-a-job">Click here</a>{" "}
+                or <a href="/price-a-job-add-details">Click here</a>{" "}
               </>
             ) : (
               <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
