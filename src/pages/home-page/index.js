@@ -34,6 +34,7 @@ const navigate = useNavigate();
       .then(async (response) => {
         //eslint-disable-next-line
         const data = await response.data;
+        console.log("🚀 ~ file: index.js:37 ~ .then ~ data:", data)
       })
       .catch((err) => console.log(err));
 
