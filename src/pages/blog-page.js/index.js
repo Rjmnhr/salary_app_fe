@@ -43,7 +43,7 @@ const BlogPage = () => {
 
             <img
               className="mb-3"
-              style={{ width: "70%", height: "70%" }}
+              
               src={blogImage}
               alt="job compensation"
             />
