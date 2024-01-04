@@ -29,8 +29,10 @@ import TableComponent, {
 import LandingExecutivePage from "../pages/landing-executive-page";
 import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
-import BlogPage from "../pages/blog-page.js";
+
 import { useEffect, useState } from "react";
+
+import BlogPage from "../pages/blog-page.js/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
