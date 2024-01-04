@@ -6,8 +6,8 @@ export const BlogPageStyled = styled.div`
   }
 
   img {
-    width: 50% !important;
-    height: 50% !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   @media (max-width: 718px) {

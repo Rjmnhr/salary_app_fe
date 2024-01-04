@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import { Helmet } from "react-helmet";
 import blogImage from "../../icons/data science.png";
 import { BlogPageStyled } from "./style";
 const BlogPage = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
       <Helmet>
@@ -22,44 +40,57 @@ const BlogPage = () => {
       <BlogPageStyled>
         <div
           style={{ marginTop: "100px", borderTop: "1px solid black pb-3" }}
-          className="container-fluid"
+          className="container-fluid "
         >
-          <div className="container p-2 p-lg-3 text-left mt-3">
-            {/* Section 1: Demysti fying Job Compensation */}
-            <h2 className="mb-3">
-              {" "}
-              <strong>How much is a Data Scientist worth? </strong>
-            </h2>
+          <div className="d-lg-flex container">
+            <div className="container col-lg-6 p-2 p-lg-3 text-left mt-3">
+              <h2 className="mb-3">
+                {" "}
+                <strong>How much is a Data Scientist worth? </strong>
+              </h2>
 
-            <h5 className="mb-3">
-              Gone are the days of salary surveys or Glassdoor. How do you know
-              how much to pay a Data Scientist and what skills demand more
-              money?
-            </h5>
-            <p className="mb-3">
-              The below is what a Data Scientist job with 2 years’ experience is
-              typically looking for in Bangalore.
-            </p>
+              <h5 className="mb-3">
+                Gone are the days of salary surveys or Glassdoor. How do you
+                know how much to pay a Data Scientist and what skills demand
+                more money?
+              </h5>
+              <p className="mb-3">
+                The is what a Data Scientist job with 2 years’ experience is
+                typically looking for in Bangalore.
+              </p>
 
-            <img
-              className="mb-3"
-              
-              src={blogImage}
-              alt="job compensation"
-            />
-            <p>It also demonstrates how much each skillset is worth. </p>
-            <p>
-              The data is real-time based on location and can be drilled down to
-              any skillsets.{" "}
-            </p>
-            <p style={{ fontWeight: "bold" }}>
-              To try a sample role, simply register and try out our salary tool
-              for free.{" "}
-            </p>
+              <p>It also demonstrates how much each skillset is worth. </p>
+              <p>
+                The data is real-time based on location and can be drilled down
+                to any skillsets.{" "}
+              </p>
+              {isMobile ? (
+                <div className="col-lg-6">
+                  <img
+                    className="mb-3"
+                    src={blogImage}
+                    alt="job compensation"
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              <p style={{ fontWeight: "bold" }}>
+                To try a sample role, simply register and try out our salary
+                tool for free.{" "}
+              </p>
 
-            <a href="/price-a-job">
-              <button className="btn btn-lg btn-primary">Click here</button>
-            </a>
+              <a href="/price-a-job">
+                <button className="btn btn-lg btn-primary">Click here</button>
+              </a>
+            </div>
+            {isMobile ? (
+              ""
+            ) : (
+              <div className="col-lg-6">
+                <img className="mb-3" src={blogImage} alt="job compensation" />
+              </div>
+            )}
           </div>
         </div>
       </BlogPageStyled>
