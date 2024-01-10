@@ -33,6 +33,9 @@ import SuccessTraining from "../components/payment_checkout/sucess-training";
 import { useEffect, useState } from "react";
 
 import BlogPage from "../pages/blog-page.js/index.js";
+import SalarySurveyPage from "../pages/salary-survey/index.js";
+import SurveyExcel from "../components/survey-excel/index.js";
+import SurveyComplete from "../components/survey-complete/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -312,6 +315,30 @@ const AppRoute = () => {
           element={
             <>
               <BlogPage />
+            </>
+          }
+        />
+        <Route
+          path="/salary-survey"
+          element={
+            <>
+              <SalarySurveyPage />
+            </>
+          }
+        />
+        <Route
+          path="/survey-details"
+          element={
+            <>
+              <SurveyExcel />
+            </>
+          }
+        />
+        <Route
+          path="/survey-complete"
+          element={
+            <>
+              <SurveyComplete />
             </>
           }
         />

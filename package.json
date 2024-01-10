@@ -21,6 +21,7 @@
     "axios": "^1.5.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^2.30.0",
+    "file-saver": "^2.0.5",
     "fraction.js": "^4.3.7",
     "html2pdf.js": "^0.10.1",
     "install": "^0.13.0",
@@ -43,7 +44,8 @@
     "react-youtube": "^10.1.0",
     "recharts": "^2.8.0",
     "styled-components": "^6.0.8",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

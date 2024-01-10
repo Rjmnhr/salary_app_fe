@@ -2,17 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../icons/logo192.png";
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import {
-  Avatar,
-  Input,
-  InputNumber,
-  Select,
-  Tag,
-  Dropdown,
-  Skeleton,
-} from "antd";
-
-import { UserOutlined } from "@ant-design/icons";
+import { Input, InputNumber, Select, Tag, Dropdown, Skeleton } from "antd";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 import AxiosInstance from "../../components/axios";
@@ -462,7 +452,7 @@ const PriceAJob = () => {
             borderBottom: "1px solid gray",
           }}
         >
-          <div class="container d-flex align-items-center">
+          <div class="container-fluid px-5 d-flex align-items-center">
             <h1 class="logo me-auto">
               <a href="/">
                 {" "}
@@ -485,23 +475,26 @@ const PriceAJob = () => {
               } `}
             >
               <ul>
-                <li>
+              <li >
                   <a href="/">Home</a>
                 </li>
-                <li class="active">
+                <li className="active">
                   <a href="/price-a-job">Price a Job</a>
                 </li>
                 <li>
-                  <a href="/executive-compensation">
-                    Executive Compensation Benchmarking
-                  </a>
+                  <a href="/executive-compensation">Executive Compensation</a>
                 </li>
-
+                <li>
+                  <a href="/salary-survey">Salary survey</a>
+                </li>
                 <li>
                   <a href="/training">Training</a>
                 </li>
                 <li>
                   <a href="/sales">Sales Incentive</a>
+                </li>
+                <li>
+                  <a href="/blog">Blog</a>
                 </li>
 
                 {isLoggedIn === "true" ? (
@@ -513,22 +506,9 @@ const PriceAJob = () => {
                       placement="bottomRight"
                       arrow
                     >
-                      <li
-                        style={{
-                          paddingTop: "5px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <Avatar
-                          size="small"
-                          style={{
-                            background:
-                              "linear-gradient(90deg, rgb(45, 103, 185), rgb(35, 80, 144))",
-                          }}
-                          icon={<UserOutlined />}
-                        />
+                      <li style={{ cursor: "pointer" }}>
+                        {/*eslint-disable-next-line*/}
+                        <a>Account</a>
                       </li>
                     </Dropdown>
                   </>

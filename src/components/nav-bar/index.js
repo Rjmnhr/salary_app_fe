@@ -46,9 +46,9 @@ const NavBar = ({ bgInput }) => {
         return "training";
       case "/sales":
         return "sales";
-        case "/blog":
+      case "/blog":
         return "blog";
-        case "/account":
+      case "/account":
         return "account";
       // Add more cases for other routes
       default:
@@ -119,9 +119,10 @@ const NavBar = ({ bgInput }) => {
           className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
           style={{
             background: bgInput ? bgInput : "white",
+            boxShadow: "0px 2px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div class="container d-flex align-items-center">
+          <div class="container-fluid px-5 d-flex align-items-center">
             <h1 class="logo me-auto">
               <a href="/">
                 {" "}
@@ -157,7 +158,9 @@ const NavBar = ({ bgInput }) => {
                 >
                   <a href="/executive-compensation">Executive Compensation</a>
                 </li>
-
+                <li className={activeLink === "survey" ? "active" : ""}>
+                  <a href="/salary-survey">Salary survey</a>
+                </li>
                 <li className={activeLink === "training" ? "active" : ""}>
                   <a href="/training">Training</a>
                 </li>
@@ -177,7 +180,10 @@ const NavBar = ({ bgInput }) => {
                       placement="bottomRight"
                       arrow
                     >
-                      <li style={{ cursor: "pointer" }} className={activeLink === "account" ? "active" : ""}>
+                      <li
+                        style={{ cursor: "pointer" }}
+                        className={activeLink === "account" ? "active" : ""}
+                      >
                         {/*eslint-disable-next-line*/}
                         <a>Account</a>
                       </li>
