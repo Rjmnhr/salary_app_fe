@@ -109,12 +109,11 @@ const HomePage = () => {
                 </h1>
 
                 <div
-                  className="mb-3 mt-5 d-lg-flex"
+                  className="mb-3 mt-5 d-lg-flex flex-wrap offset-lg-1 "
                   style={{
                     textAlign: "center",
-
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "start",
                     gap: "8px",
                   }}
                 >
@@ -125,6 +124,7 @@ const HomePage = () => {
                   >
                     Price a Job
                   </button>
+                  <br/>
                   <button
                     onClick={() => navigate("/executive-compensation")}
                     style={{ color: "white" }}
@@ -132,14 +132,26 @@ const HomePage = () => {
                   >
                     Executive Compensation
                   </button>
-                </div>
-                <button
+                  <button
                   onClick={() => navigate("/salary-survey")}
                   style={{ color: "white" }}
-                  className="custom-button btn border btn-lg mb-3 m-lg-0"
+                  className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3"
                 >
                   Salary Survey
                 </button>
+                </div>
+                <div
+                  className="mb-3 mt-5 d-lg-flex"
+                  style={{
+                    textAlign: "center",
+
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                  }}>
+               
+                  </div>
+               
               </div>
             </div>
           </div>
