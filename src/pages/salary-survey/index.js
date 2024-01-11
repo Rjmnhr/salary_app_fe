@@ -18,42 +18,54 @@ const SalarySurveyPage = () => {
         <div
           className="container-fluid p-0 "
           style={{
-            marginTop: "80px",
+            marginTop: "70px",
           }}
         >
           <section id="about" className="about ">
             <div className="container" data-aos="fade-up">
+              <h2 style={{fontWeight:"normal"}} className="text-left custom-font">
+                This salary survey is different from any other salary surveys.
+                Our salarytool captures salaries in all advertised jobs in
+                real-time and we will provide you data from both participating
+                companies as well as real-time salary data
+              </h2>
               <div className="row no-gutters">
                 <div className="content col-xl-7 d-flex align-items-stretch text-left">
-                  <div className="content">
-                    <h1
+                  <div className="">
+                    <h3
                       style={{
                         textAlign: "start",
-                        fontWeight: "bold",
+                        fontSize:"32px",
+                        fontWeight:"normal"
                       }}
                       className="mb-3"
                     >
                       Expression of Interest
-                    </h1>
-                    <p style={{ fontSize: "20px" }}>
+                    </h3>
+                    <p>
                       Our salary surveys will be open from{" "}
                       <span className="text-primary">1st February</span> and
                       will remain open till{" "}
                       <span className="text-primary">29th February</span>. We
                       will then collate all data and send you general market
-                      result by 15th March.
+                      result by 15th March. Participation in the salary survey
+                      is free and each participant will get a general market
+                      salary result free of cost. For more customised and
+                      tailored salary data, there will be an access fee. Before
+                      our survey is open, we are seeking expressions of
+                      interest.
                     </p>
-                    <p style={{ fontSize: "20px" }}>
-                      Participation in the salary survey is free and each
-                      participant will get a general market salary result free
-                      of cost. For more customised and tailored salary data,
-                      there will be an access fee. Before our survey is open, we
-                      are seeking expressions of interest.
-                    </p>
-                    <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+
+                    <p style={{ fontWeight: "bold" }}>
                       Please fill in the form to express your interest. We will
                       let you know when the survey is open
                     </p>
+                    <p style={{ fontWeight: "bold" }}>
+                      The kinds of data we will be collecting and reporting on
+                      can be found in the excel template below. Feel free to
+                      download to check if this survey would work for you
+                    </p>
+                    <TemplateDownloadComponent />
                   </div>
                 </div>
                 <div className="col-xl-5 d-flex align-items-stretch">
@@ -63,6 +75,18 @@ const SalarySurveyPage = () => {
                 </div>
               </div>
             </div>
+            {/* <section className="">
+              <div className=" container">
+                <h3>
+                  The kinds of data we will be collecting and reporting on can
+                  be found in the excel template below. Feel free to download to
+                  check if this survey would work for you
+                </h3>
+                <div className="mt-5">
+                  <TemplateDownloadComponent />
+                </div>
+              </div>
+            </section> */}
           </section>
           <section id="about" className="about col-md-12 bg-light ">
             <div className="col-xl-12 d-flex align-items-stretch ">
@@ -185,18 +209,7 @@ const SalarySurveyPage = () => {
               </div>
             </div>
           </section>
-          <section className="">
-            <div className=" container">
-              <h3>
-                The kinds of data we will be collecting and reporting on can be
-                found in the excel template below. Feel free to download to
-                check if this survey would work for you
-              </h3>
-              <div className="mt-5">
-                <TemplateDownloadComponent />
-              </div>
-            </div>
-          </section>
+
           <section
             id="about"
             style={{
