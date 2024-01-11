@@ -4,6 +4,7 @@ import { EXCEL_FILE_BASE64 } from "./constant";
 import FileUploader from "./file-uploader";
 import NavBar from "../nav-bar";
 import { CloudDownloadOutlined } from "@mui/icons-material";
+import AxiosInstance from "../axios";
 
 export const TemplateDownloadComponent = () => {
   const handleDownload = () => {
@@ -23,6 +24,12 @@ export const TemplateDownloadComponent = () => {
     }
     let blob = new Blob(bytesArray, { type: "application/vnd.ms-excel" });
     FileSaver.saveAs(new Blob([blob], {}), "downloaded_survey_data.xlsx");
+
+    AxiosInstance.get("/api/survey/template-download")
+      .then(() => {
+        console.log("Mail sent");
+      })
+      .catch((err) => console.log("error notifying", err));
   };
   return (
     <>
