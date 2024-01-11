@@ -3,7 +3,9 @@ import FileSaver from "file-saver";
 import { EXCEL_FILE_BASE64 } from "./constant";
 import FileUploader from "./file-uploader";
 import NavBar from "../nav-bar";
-const SurveyExcel = () => {
+import { CloudDownloadOutlined } from "@mui/icons-material";
+
+export const TemplateDownloadComponent = () => {
   const handleDownload = () => {
     let sliceSize = 1024;
     let byteCharacters = atob(EXCEL_FILE_BASE64);
@@ -22,7 +24,15 @@ const SurveyExcel = () => {
     let blob = new Blob(bytesArray, { type: "application/vnd.ms-excel" });
     FileSaver.saveAs(new Blob([blob], {}), "downloaded_survey_data.xlsx");
   };
-
+  return (
+    <>
+      <button onClick={handleDownload} className="btn btn-lg btn-dark">
+        Download Template <CloudDownloadOutlined className="ml-2" />
+      </button>
+    </>
+  );
+};
+const SurveyExcel = () => {
   return (
     <>
       <NavBar />
@@ -32,11 +42,8 @@ const SurveyExcel = () => {
           Download the survey template Excel sheet by clicking the button below.
           Fill in the required details in the downloaded file.
         </p>
-        <button onClick={handleDownload} className="btn btn-lg btn-dark">
-          Download Template
-        </button>
-
-        <hr />
+        <TemplateDownloadComponent />
+        <br />
 
         <h2>Submit Survey</h2>
         <p>

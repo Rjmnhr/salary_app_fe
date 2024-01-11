@@ -6,38 +6,41 @@ const SurveyComplete = () => {
   const navigate = useNavigate();
   return (
     <>
-      <NavBar/>
-    <div
-      className="SurveyCompleter container p-3 "
-      style={{ display: "grid", justifyItems: "center",alignContent:"center",height:"100vh" }}
-    >
-      <div className="survey-container ">
-        <img
-        width={100}
+      <NavBar />
+      <div
+        className="SurveyCompleter container p-3 "
+        style={{
+          display: "grid",
+          justifyItems: "center",
+          alignContent: "center",
+          height: "100vh",
+        }}
+      >
+        <div className="survey-container ">
+          <img
+            width={100}
+            className="mb-3"
+            src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1704898405/xad03vnvqtkswznqasgd.png"
+            alt="salary survey"
+          />
+          <h1>Thank you for expressing your interest with us</h1>
+          <h3>We will let you know as soon as the survey opens</h3>
+        </div>
 
-          className="mb-3"
-          src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1704898405/xad03vnvqtkswznqasgd.png"
-          alt="salary survey"
-        />
-        <h1>Thank you for completing the survey!</h1>
-        <h3>Your feedback is valuable to us.</h3>
+        <div style={{ gap: "10px" }} className="d-lg-flex mt-5">
+          <button onClick={() => navigate("/")} className="btn btn-lg border">
+            Home
+          </button>
+          <button
+            onClick={() => navigate("/salary-survey")}
+            className="btn btn-lg border"
+          >
+            Go Back
+          </button>
+        </div>
       </div>
-
-      <div style={{ gap: "10px" }} className="d-lg-flex mt-5">
-        <button onClick={() => navigate("/")} className="btn btn-lg border">
-          Home
-        </button>
-        <button
-          onClick={() => navigate("/salary-survey")}
-          className="btn btn-lg border"
-        >
-          Go Back
-        </button>
-      </div>
-    </div>
     </>
   );
-  
 };
 
 export default SurveyComplete;

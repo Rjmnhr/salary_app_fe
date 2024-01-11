@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AxiosInstance from "../axios";
-import { Select } from "antd";
+import { Select, message } from "antd";
 
 import { LoadingOutlined } from "@ant-design/icons";
 import CurrencyInput from "react-currency-input-field";
@@ -12,6 +12,7 @@ const SurveyRegisterComponent = () => {
   const [title, setTitle] = useState("");
   const [sector, setSector] = useState("");
   const [revenue, setRevenue] = useState("");
+  const [geographies, setGeographies] = useState("");
   const { Option } = Select;
   const [organization, setOrganization] = useState("");
   const [email, setEmail] = useState("");
@@ -77,8 +78,29 @@ const SurveyRegisterComponent = () => {
     //eslint-disable-next-line
   }, [location, userID]);
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const alertMessage = (content) => {
+    messageApi.open({
+      type: "error",
+      content: content,
+    });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!revenue) {
+      alertMessage("Revenue is required");
+      document.querySelector(".revenue-input").style.border = "1px solid red";
+      return;
+    }
+
+    if (phone?.length !== 10) {
+      alertMessage("Phone number is invalid");
+      document.querySelector(".phone-input").style.border = "1px solid red";
+      return;
+    }
+
     setIsLoading(true);
 
     const formData = new FormData();
@@ -90,6 +112,7 @@ const SurveyRegisterComponent = () => {
     formData.append("title", title);
     formData.append("sector", sector);
     formData.append("revenue", revenue);
+    formData.append("geographies", geographies);
 
     AxiosInstance.post("/api/survey/register", formData, {
       headers: {
@@ -99,7 +122,7 @@ const SurveyRegisterComponent = () => {
       .then(async (response) => {
         //eslint-disable-next-line
         const data = await response.data;
-        navigate("/survey-details");
+        navigate("/survey-complete");
         setIsLoading(false);
       })
       .catch((err) => {
@@ -117,6 +140,7 @@ const SurveyRegisterComponent = () => {
 
   return (
     <div>
+      {contextHolder}
       <section id="contact" class="contact p-0">
         <div class="container" data-aos="fade-up">
           <div class="row" data-aos="fade-up" data-aos-delay="100">
@@ -130,7 +154,7 @@ const SurveyRegisterComponent = () => {
                       name="name"
                       class="form-control"
                       id="name"
-                      placeholder="Your Name"
+                      placeholder="Name"
                       data-rule="minlen:4"
                       data-msg="Please enter at least 4 chars"
                       onChange={(e) => setName(e.target.value)}
@@ -144,7 +168,7 @@ const SurveyRegisterComponent = () => {
                       class="form-control"
                       name="email"
                       id="email"
-                      placeholder="Your Email"
+                      placeholder="Email"
                       data-rule="email"
                       data-msg="Please enter a valid email"
                       onChange={(e) => setEmail(e.target.value)}
@@ -158,7 +182,7 @@ const SurveyRegisterComponent = () => {
                       required
                       type="text"
                       name="Phone"
-                      class="form-control"
+                      className="form-control phone-input"
                       id="Phone"
                       placeholder="Phone number"
                       data-rule="minlen:4"
@@ -174,7 +198,7 @@ const SurveyRegisterComponent = () => {
                       class="form-control"
                       name="Title"
                       id="Title"
-                      placeholder="Your Title"
+                      placeholder="Title"
                       data-rule="Title"
                       data-msg="Please enter a valid Title"
                       onChange={(e) => setTitle(e.target.value)}
@@ -187,7 +211,12 @@ const SurveyRegisterComponent = () => {
                     className="text-left rounded-1"
                     required
                     showSearch
-                    style={{ width: "100%", height: "42px", outline: "none" }}
+                    style={{
+                      width: "100%",
+                      height: "42px",
+                      outline: "none",
+                      placeholder: "red",
+                    }}
                     placeholder="Sector"
                     optionFilterProp="children"
                     onChange={(value) => setSector(value)}
@@ -239,8 +268,7 @@ const SurveyRegisterComponent = () => {
                 <div class="row">
                   <div class="col form-group">
                     <CurrencyInput
-                      className="currency-input"
-                      class="form-control"
+                      className="revenue-input form-control"
                       placeholder="Revenue"
                       style={{
                         width: "100%",
@@ -249,18 +277,31 @@ const SurveyRegisterComponent = () => {
                         borderRadius: "0.25rem",
                         outline: "none",
                       }}
-                      // prefix="₹"
+                      prefix="₹"
                       onValueChange={handleRevenueChange}
                       decimalsLimit={0}
                     />{" "}
                     <div class="validate"></div>
                   </div>
                 </div>
-
+                <div class="form-group">
+                  <input
+                    required
+                    type="text"
+                    class="form-control"
+                    name="geographies"
+                    id="geographies"
+                    placeholder="Which geographies do you have employees in?"
+                    data-rule="minlen:4"
+                    data-msg="Please enter at least 8 chars of geographies"
+                    onChange={(e) => setGeographies(e.target.value)}
+                  />
+                  <div class="validate"></div>
+                </div>
                 <div class="text-center mt-3">
                   <button className="w-75" type="submit">
                     {" "}
-                    {isLoading ? <LoadingOutlined /> : "Register"}
+                    {isLoading ? <LoadingOutlined /> : "Submit"}
                   </button>
                 </div>
               </form>
