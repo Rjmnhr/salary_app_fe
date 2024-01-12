@@ -25,7 +25,7 @@ const SalarySurveyPage = () => {
             <div className="container" data-aos="fade-up">
               <h3
                 style={{ fontWeight: "normal" }}
-                className="text-justify custom-font "
+                className="text-left custom-font "
               >
                 This salary survey is different from any other salary surveys.
                 Our salarytool captures salaries in all advertised jobs in
@@ -35,7 +35,13 @@ const SalarySurveyPage = () => {
               <div className="row no-gutters">
                 <div className="content pt-5 col-xl-7 d-flex align-items-stretch text-justify">
                   <div className="">
-                    <p style={{ lineHeight: "1.7", fontSize: "18px",wordSpacing:"0" }}>
+                    <p
+                      style={{
+                        lineHeight: "1.7",
+                        fontSize: "18px",
+                        wordSpacing: "0",
+                      }}
+                    >
                       Our salary surveys will be open from{" "}
                       <span className="text-primary">1st February</span> and
                       will remain open till{" "}
