@@ -23,37 +23,30 @@ const SalarySurveyPage = () => {
         >
           <section id="about" className="about ">
             <div className="container" data-aos="fade-up">
-              <h2 style={{fontWeight:"normal"}} className="text-left custom-font">
+              <h3
+                style={{ fontWeight: "normal" }}
+                className="text-justify custom-font "
+              >
                 This salary survey is different from any other salary surveys.
                 Our salarytool captures salaries in all advertised jobs in
                 real-time and we will provide you data from both participating
                 companies as well as real-time salary data
-              </h2>
+              </h3>
               <div className="row no-gutters">
-                <div className="content col-xl-7 d-flex align-items-stretch text-left">
+                <div className="content pt-5 col-xl-7 d-flex align-items-stretch text-justify">
                   <div className="">
-                    <h3
-                      style={{
-                        textAlign: "start",
-                        fontSize:"32px",
-                        fontWeight:"normal"
-                      }}
-                      className="mb-3"
-                    >
-                      Expression of Interest
-                    </h3>
-                    <p>
+                    <p style={{ lineHeight: "1.7", fontSize: "18px",wordSpacing:"0" }}>
                       Our salary surveys will be open from{" "}
                       <span className="text-primary">1st February</span> and
                       will remain open till{" "}
                       <span className="text-primary">29th February</span>. We
                       will then collate all data and send you general market
-                      result by 15th March. Participation in the salary survey
-                      is free and each participant will get a general market
-                      salary result free of cost. For more customised and
-                      tailored salary data, there will be an access fee. Before
-                      our survey is open, we are seeking expressions of
-                      interest.
+                      result by <span className="text-primary">15th March</span>
+                      . Participation in the salary survey is free and each
+                      participant will get a general market salary result free
+                      of cost. For more customised and tailored salary data,
+                      there will be an access fee. Before our survey is open, we
+                      are seeking expressions of interest.
                     </p>
 
                     <p style={{ fontWeight: "bold" }}>
@@ -68,8 +61,18 @@ const SalarySurveyPage = () => {
                     <TemplateDownloadComponent />
                   </div>
                 </div>
-                <div className="col-xl-5 d-flex align-items-stretch">
-                  <div className="icon-boxes d-flex flex-column justify-content-center">
+                <div className="col-xl-5 d-flex align-items-start ">
+                  <div className="icon-boxes  d-flex flex-column justify-content-center">
+                    <h3
+                      style={{
+                        textAlign: "center",
+                        fontSize: "30px",
+                        fontWeight: "normal",
+                      }}
+                      className="mb-3 text-primary"
+                    >
+                      Expression of Interest
+                    </h3>
                     <SurveyRegisterComponent />
                   </div>
                 </div>

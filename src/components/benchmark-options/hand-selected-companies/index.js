@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Input, Modal, Select, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../axios";
-import { availableRoles } from "../../role-information";
-import { ArrowForward} from "@mui/icons-material";
+import { availableRoles, roleTypeMap } from "../../role-information";
+import { ArrowForward } from "@mui/icons-material";
 import emptyBox from "../../../icons/empty-box.png";
 const HandSelectedCompanies = ({ sectors }) => {
   const navigate = useNavigate();
   const [role, setRole] = useState("");
   const [companies, setCompanies] = useState([]);
-
+  const [roleType, setRoleType] = useState(""); // New state for role type
   const [initialCompaniesOrder, setInitialCompaniesOrder] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCompaniesList, setSelectedCompaniesList] = useState([]);
@@ -91,6 +91,7 @@ const HandSelectedCompanies = ({ sectors }) => {
 
   const handleChange = (value) => {
     setRole(value);
+    setRoleType(roleTypeMap[value]);
   };
 
   const handleSubmit = (e) => {
@@ -99,24 +100,15 @@ const HandSelectedCompanies = ({ sectors }) => {
       showModal();
       return;
     }
+    sessionStorage.setItem(
+      "companies-selected",
+      JSON.stringify(selectedCompaniesList)
+    );
 
-    const formData = new FormData();
-
-    formData.append("role", role);
-    formData.append("companies", selectedCompaniesList?.join(","));
-    AxiosInstance.post("api/benchmark/data", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (res) => {
-        const response = await res.data;
-        sessionStorage.setItem("result-data", JSON.stringify(response));
-        sessionStorage.setItem("option", "hand");
-        sessionStorage.setItem("role", role);
-        navigate("/output");
-      })
-      .catch((err) => console.log(err));
+    sessionStorage.setItem("option", "hand");
+    sessionStorage.setItem("role", role);
+    sessionStorage.setItem("roleType", roleType); // Store the role type in session storage
+    navigate("/output");
   };
   useEffect(() => {
     // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
@@ -136,7 +128,7 @@ const HandSelectedCompanies = ({ sectors }) => {
     };
   }, []);
   return (
-    <div className="container p-0 p-lg-3" style={{color:"white"}}>
+    <div className="container p-0 p-lg-3" style={{ color: "white" }}>
       <div className="d-lg-flex mt-3">
         <div
           className="col-12 col-lg-6 border p-0 mx-lg-2 mb-3 mb-lg-0"
@@ -145,8 +137,15 @@ const HandSelectedCompanies = ({ sectors }) => {
             overflowY: "scroll",
           }}
         >
-          <table className="table  text-left scrollable-container   p-0" >
-            <thead style={{ position: "sticky", top: 0, background:"white",color:"black" }}>
+          <table className="table  text-left scrollable-container   p-0">
+            <thead
+              style={{
+                position: "sticky",
+                top: 0,
+                background: "white",
+                color: "black",
+              }}
+            >
               <tr>
                 <th className="d-md-flex flex-wrap justify-content-between align-items-center ">
                   List of companies
@@ -186,7 +185,11 @@ const HandSelectedCompanies = ({ sectors }) => {
                     onClick={() => handleRowClick(item)}
                   >
                     <td
-                      style={{ padding: "5px 10px", cursor: "pointer", width: "100%" }}
+                      style={{
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                        width: "100%",
+                      }}
                     >
                       {item}
                     </td>
@@ -201,8 +204,15 @@ const HandSelectedCompanies = ({ sectors }) => {
           style={{ height: "50vh", overflowY: "scroll" }}
         >
           <table className="table  text-left scrollable-container ">
-            <thead style={{ position: "sticky", top: 0, background:"white",color:"black",}} >
-              <tr >
+            <thead
+              style={{
+                position: "sticky",
+                top: 0,
+                background: "white",
+                color: "black",
+              }}
+            >
+              <tr>
                 <th className="p-3">
                   Selected Companies (
                   <span className="text-primary">
@@ -222,13 +232,13 @@ const HandSelectedCompanies = ({ sectors }) => {
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent:"space-between"
+                        justifyContent: "space-between",
                       }}
                     >
                       {item}
                       {/* Add a remove button or cross button */}
                       <button
-                      style={{color:"black"}}
+                        style={{ color: "black" }}
                         className="btn btn-link btn-sm"
                         onClick={() => handleRemoveCompany(item)}
                       >
@@ -239,15 +249,15 @@ const HandSelectedCompanies = ({ sectors }) => {
                 ))
               ) : (
                 <div
-                        style={{
-                          display: "grid",
-                          height: "30vh",
-                          placeItems: "center",
-                        }}
-                      >
-                        <img src={emptyBox} alt="" height={100} width={100} />
-                        <p>No companies selected</p>
-                      </div>
+                  style={{
+                    display: "grid",
+                    height: "30vh",
+                    placeItems: "center",
+                  }}
+                >
+                  <img src={emptyBox} alt="" height={100} width={100} />
+                  <p>No companies selected</p>
+                </div>
               )}
             </tbody>
           </table>
@@ -261,7 +271,10 @@ const HandSelectedCompanies = ({ sectors }) => {
           <h5>Please select at least 10 companies for meaningful analysis</h5>
         </Modal>
       </div>
-      <div className="w-100 mt-3 d-lg-flex pl-lg-2" style={{  justifyContent: "space-between",alignItems:"center" }}>
+      <div
+        className="w-100 mt-3 d-lg-flex pl-lg-2"
+        style={{ justifyContent: "space-between", alignItems: "center" }}
+      >
         <div className="mb-3 p-0 p-lg-3 mt-3  col-12 col-lg-6 text-left border pt-2 mr-lg-5">
           <div class=" d-flex col-lg-9 col-12 form-group">
             <label className="w-100">Role </label>
@@ -284,30 +297,36 @@ const HandSelectedCompanies = ({ sectors }) => {
           </div>
         </div>
         <div className="mb-3 ">
-        {selectedCompaniesList.length > 0 && role ? (
-          
-          <button
-          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "520px"}` ,height: `${isMobile ? "100%" : "80px"}`}}
-          onClick={handleSubmit}
-          type="submit"
-          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
-        >
-          Next  <ArrowForward/>
-        </button>
-        ) : (
-          <button
-          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "520px"}` ,height: `${isMobile ? "100%" : "80px"}`}}
-          onClick={handleSubmit}
-          type="submit"
-          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
-          disabled
-        >
-          Next  <ArrowForward/>
-        </button>
-        )}
+          {selectedCompaniesList.length > 0 && role ? (
+            <button
+              style={{
+                marginBottom: `${isMobile ? "80px" : ""}`,
+                width: `${isMobile ? "100%" : "520px"}`,
+                height: `${isMobile ? "100%" : "80px"}`,
+              }}
+              onClick={handleSubmit}
+              type="submit"
+              className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+            >
+              Next <ArrowForward />
+            </button>
+          ) : (
+            <button
+              style={{
+                marginBottom: `${isMobile ? "80px" : ""}`,
+                width: `${isMobile ? "100%" : "520px"}`,
+                height: `${isMobile ? "100%" : "80px"}`,
+              }}
+              onClick={handleSubmit}
+              type="submit"
+              className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+              disabled
+            >
+              Next <ArrowForward />
+            </button>
+          )}
+        </div>
       </div>
-      </div>
-     
     </div>
   );
 };

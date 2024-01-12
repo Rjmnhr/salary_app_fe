@@ -63,6 +63,7 @@ const BenchmarkOutput = () => {
     })
       .then(async (res) => {
         const response = await res.data;
+        console.log("🚀 ~ .then ~ response:", response)
         get2021Data();
         get2022Data();
         setResultData(response);

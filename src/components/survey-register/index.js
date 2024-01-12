@@ -206,6 +206,21 @@ const SurveyRegisterComponent = () => {
                     <div class="validate"></div>
                   </div>
                 </div>
+              
+                <div class="form-group">
+                  <input
+                    required
+                    type="text"
+                    class="form-control"
+                    name="organization"
+                    id="organization"
+                    placeholder="Organization"
+                    data-rule="minlen:4"
+                    data-msg="Please enter at least 8 chars of organization"
+                    onChange={(e) => setOrganization(e.target.value)}
+                  />
+                  <div class="validate"></div>
+                </div>
                 <div className="col form-group border ">
                   <Select
                     className="text-left rounded-1"
@@ -250,20 +265,6 @@ const SurveyRegisterComponent = () => {
                     <Option value="Other">Other</Option>
                   </Select>
                   <div className="validate"></div>
-                </div>
-                <div class="form-group">
-                  <input
-                    required
-                    type="text"
-                    class="form-control"
-                    name="organization"
-                    id="organization"
-                    placeholder="Organization"
-                    data-rule="minlen:4"
-                    data-msg="Please enter at least 8 chars of organization"
-                    onChange={(e) => setOrganization(e.target.value)}
-                  />
-                  <div class="validate"></div>
                 </div>
                 <div class="row">
                   <div class="col form-group">
