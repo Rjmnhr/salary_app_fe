@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/nav-bar";
 import { Helmet } from "react-helmet";
-import blogImage from "../../icons/data science.png";
 import { BlogPageStyled } from "./style";
-const BlogPage = () => {
+import { useLocation } from "react-router-dom";
+import { BlogContentArr } from "./blog-content-array";
+
+const IndividualBlogPage = () => {
+  const location = useLocation();
+  const [selectedBlog, setSelectedBlog] = useState(null);
+
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
@@ -22,6 +27,31 @@ const BlogPage = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    // Get the blog name from the query parameter
+    const blogName = location.search.replace("?blog=", "");
+
+    console.log("🚀 ~ useEffect ~ blogName:", blogName);
+
+    if (blogName) {
+      // Find the blog object in the array based on the blog name
+      const decodedBlogName = decodeURIComponent(blogName);
+      console.log("🚀 ~ useEffect ~ decodedBlogName:", decodedBlogName);
+      const blog = BlogContentArr.find((item) => item.main === decodedBlogName);
+
+      if (blog) {
+        setSelectedBlog(blog);
+      }
+    }
+    //eslint-disable-next-line
+  }, []);
+
+  if (!selectedBlog) {
+    // Handle case where the blog is not found
+    return <div>Blog not found!</div>;
+  }
+
   return (
     <>
       <Helmet>
@@ -46,39 +76,26 @@ const BlogPage = () => {
             <div className="container col-lg-6 p-2 p-lg-3 text-left mt-3">
               <h2 className="mb-3">
                 {" "}
-                <strong>How much is a Data Scientist worth? </strong>
+                <strong>{selectedBlog.main} </strong>
               </h2>
 
-              <h5 className="mb-3">
-                Gone are the days of salary surveys or Glassdoor. How do you
-                know how much to pay a Data Scientist and what skills demand
-                more money?
-              </h5>
-              <p className="mb-3">
-                The is what a Data Scientist job with 2 years’ experience is
-                typically looking for in Bangalore.
-              </p>
+              <h5 className="mb-3">{selectedBlog.subMain}</h5>
+              {selectedBlog.subContent.map((item) => (
+                <p className="mb-3">{item.content}</p>
+              ))}
 
-              <p>It also demonstrates how much each skillset is worth. </p>
-              <p>
-                The data is real-time based on location and can be drilled down
-                to any skillsets.{" "}
-              </p>
               {isMobile ? (
                 <div className="col-lg-6">
                   <img
                     className="mb-3"
-                    src={blogImage}
+                    src={selectedBlog.mainImg}
                     alt="job compensation"
                   />
                 </div>
               ) : (
                 ""
               )}
-              <p style={{ fontWeight: "bold" }}>
-                To try a sample role, simply register and try out our salary
-                tool for free.{" "}
-              </p>
+              <p style={{ fontWeight: "bold" }}>{selectedBlog.footer}</p>
 
               <a href="/price-a-job">
                 <button className="btn btn-lg btn-primary">Click here</button>
@@ -88,7 +105,11 @@ const BlogPage = () => {
               ""
             ) : (
               <div className="col-lg-6">
-                <img className="mb-3" src={blogImage} alt="job compensation" />
+                <img
+                  className="mb-3"
+                  src={selectedBlog.mainImg}
+                  alt="job compensation"
+                />
               </div>
             )}
           </div>
@@ -183,8 +204,8 @@ const BlogPage = () => {
           <div class="me-md-auto text-center text-md-left"></div>
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
             {/* <a href="/#" class="twitter">
-              <i class="bx bxl-twitter"></i>
-            </a> */}
+                  <i class="bx bxl-twitter"></i>
+                </a> */}
             <a
               href="https://www.facebook.com/profile.php?id=61554618998649"
               class="facebook"
@@ -194,11 +215,11 @@ const BlogPage = () => {
               <i class="bx bxl-facebook"></i>
             </a>
             {/* <a href="/#" class="instagram">
-              <i class="bx bxl-instagram"></i>
-            </a>
-            <a href="/#" class="google-plus">
-              <i class="bx bxl-skype"></i>
-            </a> */}
+                  <i class="bx bxl-instagram"></i>
+                </a>
+                <a href="/#" class="google-plus">
+                  <i class="bx bxl-skype"></i>
+                </a> */}
             <a
               href="https://www.linkedin.com/company/equipay-partners"
               class="linkedin"
@@ -214,4 +235,4 @@ const BlogPage = () => {
   );
 };
 
-export default BlogPage;
+export default IndividualBlogPage;

@@ -29,13 +29,12 @@ import TableComponent, {
 import LandingExecutivePage from "../pages/landing-executive-page";
 import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
-
 import { useEffect, useState } from "react";
-
-import BlogPage from "../pages/blog-page.js/index.js";
 import SalarySurveyPage from "../pages/salary-survey/index.js";
 import SurveyExcel from "../components/survey-excel/index.js";
 import SurveyComplete from "../components/survey-complete/index.js";
+import BlogsMainPage from "../pages/blog-page.js/main.js";
+import IndividualBlogPage from "../pages/blog-page.js/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -314,7 +313,7 @@ const AppRoute = () => {
           path="/blog"
           element={
             <>
-              <BlogPage />
+              <BlogsMainPage />
             </>
           }
         />
@@ -339,6 +338,14 @@ const AppRoute = () => {
           element={
             <>
               <SurveyComplete />
+            </>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <>
+              <IndividualBlogPage />
             </>
           }
         />
