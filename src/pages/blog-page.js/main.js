@@ -34,16 +34,22 @@ const BlogsMainPage = () => {
                         <div class="card-body">
                           <h4 class="card-title">
                             <strong>
-                              <a class="text-dark" href={`/post?blog=${blog.main}`}>
+                              <a
+                                class="text-dark"
+                                href={`/post?blog=${blog.main}`}
+                              >
                                 {blog.main}
                               </a>
                             </strong>
                           </h4>
 
                           <p class="card-text">{blog.subMain}</p>
-                          <button className="btn  btn-primary w-25">
-                            Read More
-                          </button>
+                          <a href={`/post?blog=${blog.main}`}>
+                            {" "}
+                            <button className="btn  btn-primary w-25">
+                              Read More
+                            </button>
+                          </a>
                         </div>
                       </div>
                     </div>
