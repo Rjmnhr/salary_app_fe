@@ -14,9 +14,9 @@ const KPIReportComponent = ({ resultData }) => {
             className="border bg-dark"
           >
             <tr>
-              <th>Individual KPIs</th>
+              <th>Individual KPI</th>
 
-              <th>Weighting</th>
+              <th> Typical Weighting</th>
             </tr>
           </thead>
           <tbody>
