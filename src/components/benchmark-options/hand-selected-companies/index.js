@@ -96,13 +96,19 @@ const HandSelectedCompanies = ({ sectors }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (selectedCompaniesList.length < 10) {
       showModal();
       return;
     }
+
+    const modifiedCompanyList = selectedCompaniesList.map((company) => ({
+      company_name: company,
+    }));
+  
     sessionStorage.setItem(
       "companies-selected",
-      JSON.stringify(selectedCompaniesList)
+      JSON.stringify(modifiedCompanyList)
     );
 
     sessionStorage.setItem("option", "hand");

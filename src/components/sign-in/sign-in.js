@@ -116,7 +116,7 @@ const SignIn = () => {
             <form class="php-email-form" onSubmit={handleSubmit}>
               <div class="col form-group">
                 <Input
-                  style={{ borderRadius: "0" }}
+                  style={{ borderRadius: "0",height:"50px " }}
                   type="email"
                   name="email"
                   id="email-login"
@@ -129,6 +129,7 @@ const SignIn = () => {
               </div>
               <div className="mb-3 col-12 col-lg-12">
                 <Input.Password
+                style={{height:"50px"}}
                   placeholder="Password"
                   iconRender={(visible) =>
                     visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />

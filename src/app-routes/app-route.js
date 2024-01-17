@@ -35,6 +35,8 @@ import SurveyExcel from "../components/survey-excel/index.js";
 import SurveyComplete from "../components/survey-complete/index.js";
 import BlogsMainPage from "../pages/blog-page.js/main.js";
 import IndividualBlogPage from "../pages/blog-page.js/index.js";
+import KPIClientPage from "../pages/KPI-client-page/index.js";
+import KPIClientOutput from "../pages/KPI-report/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -346,6 +348,22 @@ const AppRoute = () => {
           element={
             <>
               <IndividualBlogPage />
+            </>
+          }
+        />
+        <Route
+          path="/kpi-client"
+          element={
+            <>
+              <KPIClientPage />
+            </>
+          }
+        />
+        <Route
+          path="/kpi-client-report"
+          element={
+            <>
+              <KPIClientOutput />
             </>
           }
         />

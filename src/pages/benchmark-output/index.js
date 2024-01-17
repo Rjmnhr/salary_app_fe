@@ -40,8 +40,11 @@ function CompaniesList({ data }) {
 
 const BenchmarkOutput = () => {
   const [resultData, setResultData] = useState([]);
+  console.log("🚀 ~ BenchmarkOutput ~ resultData:", resultData)
   const [resultData2021, setResultData2021] = useState([]);
+  console.log("🚀 ~ BenchmarkOutput ~ resultData2021:", resultData2021)
   const [resultData2022, setResultData2022] = useState([]);
+  console.log("🚀 ~ BenchmarkOutput ~ resultData2022:", resultData2022)
   const [expanded, setExpanded] = React.useState(false);
   const role = sessionStorage.getItem("role");
   const storedOption = sessionStorage.getItem("option");
@@ -49,7 +52,9 @@ const BenchmarkOutput = () => {
   const storedCompanies = JSON.parse(
     sessionStorage.getItem("companies-selected")
   );
+  console.log("🚀 ~ BenchmarkOutput ~ storedCompanies:", storedCompanies)
   const filteredCompanyList = storedCompanies?.map((data) => data.company_name);
+  console.log("🚀 ~ BenchmarkOutput ~ filteredCompanyList:", filteredCompanyList)
 
   useEffect(() => {
     const formData = new FormData();
@@ -63,7 +68,7 @@ const BenchmarkOutput = () => {
     })
       .then(async (res) => {
         const response = await res.data;
-        console.log("🚀 ~ .then ~ response:", response)
+        console.log("🚀 ~ .then ~ response:", response);
         get2021Data();
         get2022Data();
         setResultData(response);
@@ -120,8 +125,7 @@ const BenchmarkOutput = () => {
       <NavBar />
       {resultData.length > 0 ? (
         <div
-          className="container-fluid  d-lg-flex justify-content-center align-items-start 
-         "
+          className="container-fluid  d-lg-flex justify-content-center align-items-start"
           style={{ padding: "0", marginTop: "90px" }}
         >
           <div
@@ -224,7 +228,6 @@ const BenchmarkOutput = () => {
             style={{
               padding: "0",
               marginTop: "100px",
-              borderTop: "1px solid #dee2e6",
             }}
           >
             <div

@@ -50,6 +50,8 @@ const NavBar = ({ bgInput }) => {
         return "blog";
       case "/account":
         return "account";
+      case "/kpi-client":
+        return "kpi";
       // Add more cases for other routes
       default:
         return "";
@@ -145,9 +147,6 @@ const NavBar = ({ bgInput }) => {
               } `}
             >
               <ul>
-                <li className={activeLink === "home" ? "active" : ""}>
-                  <a href="/">Home</a>
-                </li>
                 <li className={activeLink === "price-a-job" ? "active" : ""}>
                   <a href="/price-a-job">Price a Job</a>
                 </li>
@@ -160,6 +159,9 @@ const NavBar = ({ bgInput }) => {
                 </li>
                 <li className={activeLink === "survey" ? "active" : ""}>
                   <a href="/salary-survey">Salary survey</a>
+                </li>
+                <li className={activeLink === "kpi" ? "active" : ""}>
+                  <a href="/kpi-client">KPI Client</a>
                 </li>
                 <li className={activeLink === "training" ? "active" : ""}>
                   <a href="/training">Training</a>
