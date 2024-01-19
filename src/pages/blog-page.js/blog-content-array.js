@@ -63,4 +63,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "How much is a Software Engineer worth?",
+    subMain:
+      "Forget traditional salary surveys or outdated platforms. Determining the right compensation for a Software Engineer can be challenging. This snapshot illustrates what a Software Engineer with 2 years of experience typically seeks in Bangalore",
+    mainImg:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1705648419/le5k1ymofpk7zy6pjctj.jpg",
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1705648683/qeferwpiftiyt7fe4gga.jpg",
+    subContent: [
+      {
+        no: 1,
+        content:
+          "It not only reveals the expected salary but also breaks down the value of each skill set",
+      },
+      {
+        no: 2,
+        content:
+          "The data is constantly updated based on location and can be tailored to various skill sets",
+      },
+      {
+        no: 3,
+        content: "",
+      },
+    ],
+    footer:
+      "To explore a sample role, register now and experience our salary tool for free. It's your gateway to understanding the real-time salary landscape for Software Engineers",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
