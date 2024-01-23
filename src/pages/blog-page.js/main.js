@@ -38,7 +38,7 @@ const BlogsMainPage = () => {
                                 class="text-dark"
                                 href={`/post?blog=${blog.main}`}
                               >
-                                {blog.main}
+                                {blog.main}?
                               </a>
                             </strong>
                           </h4>

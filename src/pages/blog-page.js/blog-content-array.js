@@ -2,7 +2,7 @@ import dataScientistImg from "../../icons/data science.png";
 import dataScientistImgPreview from "../../icons/data-science-preview.png";
 export const BlogContentArr = [
   {
-    main: "How much is a Data Scientist worth?",
+    main: "How much is a Data Scientist worth",
     subMain:
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Scientist and what skills demand more money?",
     mainImg: dataScientistImg,
@@ -32,7 +32,7 @@ export const BlogContentArr = [
     ),
   },
   {
-    main: "How much is a Data Analyst worth?",
+    main: "How much is a Data Analyst worth",
     subMain:
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Analyst and what skills demand more money?",
     mainImg:
@@ -64,7 +64,7 @@ export const BlogContentArr = [
     ),
   },
   {
-    main: "How much is a Software Engineer worth?",
+    main: "How much is a Software Engineer worth",
     subMain:
       "Forget traditional salary surveys or outdated platforms. Determining the right compensation for a Software Engineer can be challenging. This snapshot illustrates what a Software Engineer with 2 years of experience typically seeks in Bangalore",
     mainImg:

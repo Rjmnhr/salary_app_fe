@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
-import BgVideo from "../../video/demo-benchmark.mkv";
-
+import BgVideo from "../../video/demo-benchmark.mp4";
 import NavBar from "../../components/nav-bar/index";
 import DownloadSamplePDF from "../../components/download-sample-pdf";
 import AxiosInstance from "../../components/axios";
 import { ArrowRightOutlined } from "@ant-design/icons";
-
 import trendIcon from "../../icons/trend.png";
 import { LandingExecutivePageStyled } from "./style";
 import { Helmet } from "react-helmet";

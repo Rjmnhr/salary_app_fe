@@ -76,7 +76,7 @@ const IndividualBlogPage = () => {
             <div className="container col-lg-6 p-2 p-lg-3 text-left mt-3">
               <h2 className="mb-3">
                 {" "}
-                <strong>{selectedBlog.main} </strong>
+                <strong>{selectedBlog.main}? </strong>
               </h2>
 
               <h5 className="mb-3">{selectedBlog.subMain}</h5>
