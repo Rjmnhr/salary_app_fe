@@ -5,10 +5,10 @@ export const BlogPageStyled = styled.div`
     font-size: 18px !important;
   }
 
-  img {
+  /* img {
     width: 100% !important;
     height: 100% !important;
-  }
+  } */
 
   @media (max-width: 718px) {
     img {

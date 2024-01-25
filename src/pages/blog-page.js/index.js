@@ -86,11 +86,7 @@ const IndividualBlogPage = () => {
 
               {isMobile ? (
                 <div className="col-lg-6">
-                  <img
-                    className="mb-3"
-                    src={selectedBlog.mainImg}
-                    alt="job compensation"
-                  />
+                 {selectedBlog.mainImg}
                 </div>
               ) : (
                 ""
@@ -105,11 +101,7 @@ const IndividualBlogPage = () => {
               ""
             ) : (
               <div className="col-lg-6">
-                <img
-                  className="mb-3"
-                  src={selectedBlog.mainImg}
-                  alt="job compensation"
-                />
+             {selectedBlog.mainImg}
               </div>
             )}
           </div>
