@@ -31,7 +31,6 @@ import FillForm from "../pages/training-page/fill-form";
 import SuccessTraining from "../components/payment_checkout/sucess-training";
 import { useEffect, useState } from "react";
 import SalarySurveyPage from "../pages/salary-survey/index.js";
-import SurveyExcel from "../components/survey-excel/index.js";
 import SurveyComplete from "../components/survey-complete/index.js";
 import BlogsMainPage from "../pages/blog-page.js/main.js";
 import IndividualBlogPage from "../pages/blog-page.js/index.js";
@@ -39,6 +38,7 @@ import KPIClientPage from "../pages/KPI-client-page/index.js";
 import KPIClientOutput from "../pages/KPI-report/index.js";
 import ExecutiveBenchmarkVideo from "../pages/executive-benchmark-video/index.js";
 import PriceAJobVideo from "../pages/price-a-job-video/index.js";
+import SurveyExcelUploader from "../components/survey-excel/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -330,10 +330,10 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/survey-details"
+          path="/survey-upload"
           element={
             <>
-              <SurveyExcel />
+              <SurveyExcelUploader />
             </>
           }
         />

@@ -23,8 +23,8 @@ const SurveyComplete = () => {
             src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1704898405/xad03vnvqtkswznqasgd.png"
             alt="salary survey"
           />
-          <h1>Thank you for expressing your interest with us</h1>
-          <h3>We will let you know as soon as the survey opens</h3>
+          <h1>Thank you for participating in the salary survey</h1>
+          <h3>We will send you general market result by 15th March</h3>
         </div>
 
         <div style={{ gap: "10px" }} className="d-lg-flex mt-5">

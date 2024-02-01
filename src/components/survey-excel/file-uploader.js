@@ -8,6 +8,14 @@ const { Dragger } = Upload;
 
 const FileUploader = () => {
   const [fileList, setFileList] = useState([]);
+  const name = sessionStorage.getItem("name");
+  const organization = sessionStorage.getItem("organization");
+  const email = sessionStorage.getItem("email");
+  const phone = sessionStorage.getItem("phone");
+  const title = sessionStorage.getItem("title");
+  const revenue = sessionStorage.getItem("revenue");
+  const sector = sessionStorage.getItem("sector");
+  const geographies = sessionStorage.getItem("geographies");
   const navigate = useNavigate();
   const props = {
     name: "file",
@@ -44,7 +52,16 @@ const FileUploader = () => {
 
     // Send the file to the backend
     const formData = new FormData();
+
     formData.append("file", fileList[0]);
+    formData.append("name", name);
+    formData.append("organization", organization);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("title", title);
+    formData.append("revenue", revenue);
+    formData.append("sector", sector);
+    formData.append("geographies", geographies);
 
     AxiosInstance.post("api/survey/upload-excel", formData)
       .then(async (res) => {

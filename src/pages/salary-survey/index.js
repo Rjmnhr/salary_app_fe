@@ -42,7 +42,7 @@ const SalarySurveyPage = () => {
                         wordSpacing: "0",
                       }}
                     >
-                      Our salary surveys will be open from{" "}
+                      Our salary surveys is open from{" "}
                       <span className="text-primary">1st February</span> and
                       will remain open till{" "}
                       <span className="text-primary">29th February</span>. We
@@ -51,13 +51,12 @@ const SalarySurveyPage = () => {
                       . Participation in the salary survey is free and each
                       participant will get a general market salary result free
                       of cost. For more customised and tailored salary data,
-                      there will be an access fee. Before our survey is open, we
-                      are seeking expressions of interest.
+                      there will be an access fee.
                     </p>
 
                     <p style={{ fontWeight: "bold" }}>
-                      Please fill in the form to express your interest. We will
-                      let you know when the survey is open
+                      Please fill in the form to submit your survey. We will
+                      send you general market result
                     </p>
                     <p style={{ fontWeight: "bold" }}>
                       The kinds of data we will be collecting and reporting on
@@ -77,7 +76,7 @@ const SalarySurveyPage = () => {
                       }}
                       className="mb-3 text-primary"
                     >
-                      Expression of Interest
+                      Survey Data Submission
                     </h3>
                     <SurveyRegisterComponent />
                   </div>

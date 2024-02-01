@@ -150,6 +150,7 @@ const PriceAJob = () => {
     AxiosInstance.get("/api/salary/roles")
       .then(async (res) => {
         const response = await res.data;
+        console.log("🚀 ~ .then ~ response:", response);
 
         const jobRoles = response.map((item) => Object.values(item)[0]);
 
@@ -475,7 +476,7 @@ const PriceAJob = () => {
               } `}
             >
               <ul>
-              <li >
+                <li>
                   <a href="/">Home</a>
                 </li>
                 <li className="active">

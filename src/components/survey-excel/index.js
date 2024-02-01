@@ -39,11 +39,12 @@ export const TemplateDownloadComponent = () => {
     </>
   );
 };
-const SurveyExcel = () => {
+const SurveyExcelUploader = () => {
   return (
     <>
       <NavBar />
       <div style={{ marginTop: "100px" }} className="container p-3 ">
+        <div className="mb-5">
         <h2>Survey Template</h2>
         <p>
           Download the survey template Excel sheet by clicking the button below.
@@ -51,6 +52,8 @@ const SurveyExcel = () => {
         </p>
         <TemplateDownloadComponent />
         <br />
+        </div>
+   
 
         <h2>Submit Survey</h2>
         <p>
@@ -64,4 +67,4 @@ const SurveyExcel = () => {
   );
 };
 
-export default SurveyExcel;
+export default SurveyExcelUploader;

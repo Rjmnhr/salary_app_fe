@@ -102,7 +102,16 @@ const SurveyRegisterComponent = () => {
     }
 
     setIsLoading(true);
+    // Assuming formData is an instance of FormData
 
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("organization", organization);
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("phone", phone);
+    sessionStorage.setItem("title", title);
+    sessionStorage.setItem("sector", sector);
+    sessionStorage.setItem("revenue", revenue);
+    sessionStorage.setItem("geographies", geographies);
     const formData = new FormData();
 
     formData.append("name", name);
@@ -114,21 +123,23 @@ const SurveyRegisterComponent = () => {
     formData.append("revenue", revenue);
     formData.append("geographies", geographies);
 
-    AxiosInstance.post("/api/survey/register", formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        //eslint-disable-next-line
-        const data = await response.data;
-        navigate("/survey-complete");
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        alert("Message sending Failed");
-        console.log("error", err);
-      });
+    navigate("/survey-upload");
+
+    // AxiosInstance.post("/api/survey/register", formData, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then(async (response) => {
+    //     //eslint-disable-next-line
+    //     const data = await response.data;
+
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     alert("Message sending Failed");
+    //     console.log("error", err);
+    //   });
   };
 
   const handleRevenueChange = (data) => {
@@ -206,7 +217,7 @@ const SurveyRegisterComponent = () => {
                     <div class="validate"></div>
                   </div>
                 </div>
-              
+
                 <div class="form-group">
                   <input
                     required
