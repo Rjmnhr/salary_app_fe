@@ -40,6 +40,7 @@ import ExecutiveBenchmarkVideo from "../pages/executive-benchmark-video/index.js
 import PriceAJobVideo from "../pages/price-a-job-video/index.js";
 import SurveyExcelUploader from "../components/survey-excel/index.js";
 
+
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -345,6 +346,7 @@ const AppRoute = () => {
             </>
           }
         />
+   
         <Route
           path="/post"
           element={
@@ -353,6 +355,7 @@ const AppRoute = () => {
             </>
           }
         />
+
         <Route
           path="/kpi-client"
           element={

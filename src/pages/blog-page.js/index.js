@@ -32,12 +32,17 @@ const IndividualBlogPage = () => {
     // Get the blog name from the query parameter
     const blogName = location.search.replace("?blog=", "");
 
-    console.log("🚀 ~ useEffect ~ blogName:", blogName);
-
     if (blogName) {
       // Find the blog object in the array based on the blog name
-      const decodedBlogName = decodeURIComponent(blogName);
-      console.log("🚀 ~ useEffect ~ decodedBlogName:", decodedBlogName);
+      let decodedBlogName = decodeURIComponent(blogName);
+
+      if (decodedBlogName === "How much is a Data Scientist worth?") {
+        decodedBlogName = "How much is a Data Scientist worth";
+      }
+      if (decodedBlogName === "How much is a Data Analyst worth?") {
+        decodedBlogName = "How much is a Data Analyst worth";
+      }
+
       const blog = BlogContentArr.find((item) => item.main === decodedBlogName);
 
       if (blog) {
@@ -85,9 +90,7 @@ const IndividualBlogPage = () => {
               ))}
 
               {isMobile ? (
-                <div className="col-lg-6">
-                 {selectedBlog.mainImg}
-                </div>
+                <div className="col-lg-6">{selectedBlog.mainImg}</div>
               ) : (
                 ""
               )}
@@ -100,9 +103,7 @@ const IndividualBlogPage = () => {
             {isMobile ? (
               ""
             ) : (
-              <div className="col-lg-6">
-             {selectedBlog.mainImg}
-              </div>
+              <div className="col-lg-6">{selectedBlog.mainImg}</div>
             )}
           </div>
         </div>
