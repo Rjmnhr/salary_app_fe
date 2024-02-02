@@ -19,18 +19,18 @@ export const BlogContentArr = [
         no: 1,
         subHeading: "",
         content:
-          "The is what a Data Scientist job with 2 years’ experience is typically looking for in Bangalore",
+          "The is what a Data Scientist job with 2 years experience is typically looking for in Bangalore",
       },
       {
         no: 2,
         subHeading: "",
-        content: "It also demonstrates how much each skillset is worth.",
+        content: "It also demonstrates how much each skill set is worth.",
       },
       {
         no: 3,
         subHeading: "",
         content:
-          "The data is real-time based on location and can be drilled down to any skillsets",
+          "The data is real-time based on location and can be drilled down to any skill sets",
       },
     ],
     footer:
@@ -62,18 +62,18 @@ export const BlogContentArr = [
         no: 1,
         subHeading: "",
         content:
-          "The is what a Data Analyst job with 2 years’ experience is typically looking for in Bangalore",
+          "The is what a Data Analyst job with 2 years experience is typically looking for in Bangalore",
       },
       {
         no: 2,
         subHeading: "",
-        content: "It also demonstrates how much each skillset is worth.",
+        content: "It also demonstrates how much each skill set is worth.",
       },
       {
         no: 3,
         subHeading: "",
         content:
-          "The data is real-time based on location and can be drilled down to any skillsets",
+          "The data is real-time based on location and can be drilled down to any skill sets",
       },
     ],
     footer:
@@ -133,7 +133,6 @@ export const BlogContentArr = [
       "Executive compensation is a focal point in corporate dynamics, shaping the leadership landscape. This blog unravels the average pay trends of Chief Executive Officers (CEOs) and Chief Financial Officers (CFOs) over the past five years. From influencing factors to governance implications, this exploration illuminates the evolving nature of executive pay",
     mainImg: (
       <img
-      
         style={{ width: "100%", height: "50%" }}
         className="mb-3 mt-5"
         src={
@@ -202,6 +201,49 @@ export const BlogContentArr = [
     ],
     footer:
       "To explore a sample role, register now and experience our salary tool for free. It's your gateway to understanding the real-time salary landscape for Software Engineers",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
+  {
+    main: "How much is a UI/UX Designer worth",
+    subMain:
+      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a UI/UX Designer and what skills demand more money?",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1706899177/kn82mgllwbsma5b9ceu3.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1706899399/o1yfzuvwmxzf9j9nvhxv.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "The is what a UI/UX Designer job with 4 years experience is typically looking for in Bangalore",
+      },
+      {
+        no: 2,
+        subHeading: "",
+        content: "It also demonstrates how much each skill set is worth.",
+      },
+      {
+        no: 3,
+        subHeading: "",
+        content:
+          "The data is real-time based on location and can be drilled down to any skill sets",
+      },
+    ],
+    footer:
+      "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
       <a href="/price-a-job">
         <button className="btn btn-lg btn-primary">Click here</button>
