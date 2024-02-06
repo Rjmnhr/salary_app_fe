@@ -399,7 +399,7 @@ const HandSelectedPeers = ({ sectors }) => {
   return (
     <>
       <HandSelectedPeersStyled>
-        <div style={{color:"white"}} className="container-fluid p-0 p-lg-3">
+        <div style={{ color: "white" }} className="container-fluid p-0 p-lg-3">
           <div
             className="scrollable-container"
             style={{ height: "70vh", overflowY: "scroll" }}
@@ -408,9 +408,7 @@ const HandSelectedPeers = ({ sectors }) => {
               className="w-100 mt-3"
               style={{ display: "grid", placeItems: "center" }}
             >
-              <p className="text-dark">
-                Select desired range for each entry
-              </p>
+              <p className="text-dark">Select desired range for each entry</p>
               <div
                 style={{
                   transition: "all 0.5s ease",
@@ -420,7 +418,9 @@ const HandSelectedPeers = ({ sectors }) => {
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100" style={{fontWeight:"bold"}}>Market Capitalization</label>
+                    <label className="w-100" style={{ fontWeight: "bold" }}>
+                      Market Capitalization
+                    </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -484,7 +484,9 @@ const HandSelectedPeers = ({ sectors }) => {
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100" style={{fontWeight:"bold"}}>Total Assets </label>
+                    <label className="w-100" style={{ fontWeight: "bold" }}>
+                      Total Assets{" "}
+                    </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -546,7 +548,9 @@ const HandSelectedPeers = ({ sectors }) => {
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100" style={{fontWeight:"bold"}}>Sales </label>
+                    <label className="w-100" style={{ fontWeight: "bold" }}>
+                      Sales{" "}
+                    </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -608,7 +612,9 @@ const HandSelectedPeers = ({ sectors }) => {
               >
                 <div className="d-lg-flex">
                   <div class=" d-flex col-lg-9 col-12 form-group">
-                    <label className="w-100" style={{fontWeight:"bold"}}>Profit After Tax </label>
+                    <label className="w-100" style={{ fontWeight: "bold" }}>
+                      Profit After Tax{" "}
+                    </label>
                     <CurrencyInput
                       className="currency-input"
                       class="form-control"
@@ -710,15 +716,17 @@ const HandSelectedPeers = ({ sectors }) => {
               </div>
             </div>
             <div className="mb-3 d-flex justify-content-center">
-         
               <button
-          style={{ marginBottom: `${isMobile ? "200px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
-          onClick={handleSubmit}
-          type="submit"
-          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
-        >
-          Next  <ArrowForward/>
-        </button>
+                style={{
+                  marginBottom: `${isMobile ? "200px" : ""}`,
+                  width: `${isMobile ? "100%" : "25%"}`,
+                }}
+                onClick={handleSubmit}
+                type="submit"
+                className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+              >
+                Next <ArrowForward />
+              </button>
             </div>
           </div>
           {isMobile ? (

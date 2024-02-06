@@ -10,7 +10,7 @@ import HandSelectedCompanies from "../../components/benchmark-options/hand-selec
 
 const DefaultComponent = () => {
   return (
-    <div className="container-fluid p-0 p-lg-3" >
+    <div className="container-fluid p-0 p-lg-3">
       <div
         className="w-100 mt-3"
         style={{ display: "grid", placeItems: "center" }}
@@ -57,7 +57,15 @@ function ExecutiveBenchmark() {
   return (
     <>
       <NavBar />
-      <div className="container-fluid  p-3 " style={{ marginTop: "50px",   background:"#5783db",color:"white",minHeight:"94vh"}} >
+      <div
+        className="container-fluid  p-3 "
+        style={{
+          marginTop: "50px",
+          background: "#5783db",
+          color: "white",
+          minHeight: "94vh",
+        }}
+      >
         {/* <h2 className="fs-2 mt-3">Peer group creation</h2> */}
         <h3 className="mt-5">Choose any of the options</h3>
         <div style={{ display: "grid", placeItems: "center" }}>

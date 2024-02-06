@@ -88,7 +88,7 @@ export const TableComponentMobile = () => {
     y: "55vh", // Set the height at which the body will start scrolling
   };
   const [filters, setFilters] = useState({});
-//eslint-disable-next-line
+  //eslint-disable-next-line
   const handleFilterChange = (columnKey, value) => {
     // Update the filter state
     setFilters({
@@ -103,55 +103,66 @@ export const TableComponentMobile = () => {
         <Input
           placeholder={`Search ${columnTitle}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
         />
       </div>
     ),
     onFilter: (value, record) => {
-      return record[dataIndex].toString().toLowerCase().includes(value.toLowerCase());
+      return record[dataIndex]
+        .toString()
+        ?.toLowerCase()
+        .includes(value?.toLowerCase());
     },
   });
-  
+
   const columnsWithFilter = columns.map((column) => ({
     ...column,
     ...getColumnSearchProps(column.dataIndex, column.title),
   }));
-  
 
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "70px" ,background:"#5783db", minHeight:"92vh",color:"white"}}>
+      <div
+        style={{
+          marginTop: "70px",
+          background: "#5783db",
+          minHeight: "92vh",
+          color: "white",
+        }}
+      >
         <CompaniesFilteredStyled>
           {data?.length > 0 ? (
             <div
               className="p-3 "
-              style={{ display: "grid", justifyItems: "center",  }}
+              style={{ display: "grid", justifyItems: "center" }}
             >
-              <h3 >List of companies based on your selection </h3>
+              <h3>List of companies based on your selection </h3>
               <p>
                 You have the option to deselect any company that you do not wish
                 to include in the analysis.
               </p>
-              <div className="col-lg-10 col-12 " >
-              <Table
-      rowSelection={rowSelection}
-      columns={columnsWithFilter}  // <-- Replace this line
-      dataSource={formattedData}
-      pagination={false}
-      scroll={tableScroll}
-    />
+              <div className="col-lg-10 col-12 ">
+                <Table
+                  rowSelection={rowSelection}
+                  columns={columnsWithFilter} // <-- Replace this line
+                  dataSource={formattedData}
+                  pagination={false}
+                  scroll={tableScroll}
+                />
               </div>
 
               <button
-          style={{ width:"90%" }}
-          onClick={handleContinue}
-          type="submit"
-          className="btn  btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
-        >
-         Continue  <ArrowForward/>
-        </button>
+                style={{ width: "90%" }}
+                onClick={handleContinue}
+                type="submit"
+                className="btn  btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+              >
+                Continue <ArrowForward />
+              </button>
             </div>
           ) : (
             <>
@@ -261,7 +272,7 @@ const TableComponent = () => {
   }, []);
 
   const filteredCompanies = companies.filter((company) =>
-    company.company_name.toLowerCase().includes(filterText.toLowerCase())
+    company.company_name?.toLowerCase().includes(filterText?.toLowerCase())
   );
 
   const handleRowClick = (selectedCompany) => {
@@ -329,26 +340,42 @@ const TableComponent = () => {
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "80px" ,background:"#5783db", minHeight:"100vh",display:"grid",justifyItems:"center",alignContent:"center"}}>
+      <div
+        style={{
+          marginTop: "80px",
+          background: "#5783db",
+          minHeight: "100vh",
+          display: "grid",
+          justifyItems: "center",
+          alignContent: "center",
+        }}
+      >
         {data?.length > 0 ? (
-          <div  className="container p-0 p-lg-3" >
-            <h3 className="mb-3" style={{color:"white"}}>List of companies based on your selection </h3>
+          <div className="container p-0 p-lg-3">
+            <h3 className="mb-3" style={{ color: "white" }}>
+              List of companies based on your selection{" "}
+            </h3>
             <p>Add the companies you want to include in the analysis</p>
             {/* <p>
                 You have the option to deselect and select any company that you do not wish
                 to include in the analysis.
               </p> */}
-       <div className="d-lg-flex mt-3">
-       <div
-          className="col-12 col-lg-6 border p-0 mx-lg-2 mb-3 mb-lg-0"
-          style={{
-            height: "50vh", // Adjust the height as needed
-            overflowY: "scroll",
-          }}
-        >
+            <div className="d-lg-flex mt-3">
+              <div
+                className="col-12 col-lg-6 border p-0 mx-lg-2 mb-3 mb-lg-0"
+                style={{
+                  height: "50vh", // Adjust the height as needed
+                  overflowY: "scroll",
+                }}
+              >
                 <table className="table text-left scrollable-container">
                   <thead
-                    style={{ position: "sticky", top: 0, background: "white",color:"black" }}
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      background: "white",
+                      color: "black",
+                    }}
                   >
                     <tr>
                       <th className="d-md-flex flex-wrap justify-content-between align-items-center ">
@@ -412,8 +439,12 @@ const TableComponent = () => {
                           onClick={() => handleRowClick(item)}
                         >
                           <td
-                      style={{ padding: "5px 10px", cursor: "pointer", width: "100%" }}
-                    >
+                            style={{
+                              padding: "5px 10px",
+                              cursor: "pointer",
+                              width: "100%",
+                            }}
+                          >
                             {item.company_name}
                           </td>
                         </tr>
@@ -423,13 +454,20 @@ const TableComponent = () => {
                 </table>
               </div>
               <div
-          className="col-12 col-lg-6 scrollable-container  border p-0"
-          style={{ height: "50vh", overflowY: "scroll" }}
-        >
+                className="col-12 col-lg-6 scrollable-container  border p-0"
+                style={{ height: "50vh", overflowY: "scroll" }}
+              >
                 <table className="table  text-left ">
-                <thead style={{ position: "sticky", top: 0, background:"white",color:"black",}} >
+                  <thead
+                    style={{
+                      position: "sticky",
+                      top: 0,
+                      background: "white",
+                      color: "black",
+                    }}
+                  >
                     <tr>
-                      <th className="p-3"> 
+                      <th className="p-3">
                         Selected Companies (
                         <span className="text-primary">
                           {selectedCompaniesList.length}
@@ -442,24 +480,24 @@ const TableComponent = () => {
                     {selectedCompaniesList.length > 0 ? (
                       selectedCompaniesList.map((item, index) => (
                         <tr key={index}>
-                           <td
-                      style={{
-                        padding: "5px 10px",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent:"space-between"
-                      }}
-                    >
+                          <td
+                            style={{
+                              padding: "5px 10px",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             {item.company_name}
                             {/* Add a remove button or cross button */}
                             <button
-                      style={{color:"black"}}
-                        className="btn btn-link btn-sm"
-                        onClick={() => handleRemoveCompany(item)}
-                      >
-                        {isMobile ? "x" : "Remove"}
-                      </button>
+                              style={{ color: "black" }}
+                              className="btn btn-link btn-sm"
+                              onClick={() => handleRemoveCompany(item)}
+                            >
+                              {isMobile ? "x" : "Remove"}
+                            </button>
                           </td>
                         </tr>
                       ))
@@ -490,15 +528,18 @@ const TableComponent = () => {
               </div>
             </div>
             <div className="mb-3 mt-3 d-flex justify-content-center">
-            <button
-          style={{ marginBottom: `${isMobile ? "200px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
-          onClick={handleContinue}
-          type="submit"
-          className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
-        >
-          Next  <ArrowForward/>
-        </button>
-        </div>
+              <button
+                style={{
+                  marginBottom: `${isMobile ? "200px" : ""}`,
+                  width: `${isMobile ? "100%" : "25%"}`,
+                }}
+                onClick={handleContinue}
+                type="submit"
+                className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
+              >
+                Next <ArrowForward />
+              </button>
+            </div>
           </div>
         ) : (
           <>
