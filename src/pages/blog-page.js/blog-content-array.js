@@ -293,4 +293,47 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "How much is a SAP Consultant worth",
+    subMain:
+      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a SAP Consultant and what skills demand more money?",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707480563/yf3djwhxoep34ey7nrbi.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707480859/az4dnkc5qswlautp3zuc.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "The is what a SAP Consultant job with 5 years experience is typically looking for in Bangalore",
+      },
+      {
+        no: 2,
+        subHeading: "",
+        content: "It also demonstrates how much each skill set is worth.",
+      },
+      {
+        no: 3,
+        subHeading: "",
+        content:
+          "The data is real-time based on location and can be drilled down to any skill sets",
+      },
+    ],
+    footer:
+      "To try a sample role, simply register and try out our salary tool for free",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
