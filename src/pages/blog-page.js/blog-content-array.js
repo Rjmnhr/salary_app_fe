@@ -336,4 +336,35 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Graphic Designers Compensation Benchmarking: Determining Their Worth",
+    subMain: "",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707730620/rt1ghfdtwz6yf4o9syrf.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707730620/rt1ghfdtwz6yf4o9syrf.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Discover the salary landscape for Graphic Designers in Bangalore with five years of experience. Our data unveils the earning potential and the Compensation Benchmarking, ranging from 2.5 LPA to 10.5 LPA, with key insights into skill valuation. From Adobe Photoshop mastery to Adobe After Effects expertise, understand how each skill impacts compensation. Stay ahead in the competitive market with real-time salary data tailored to your location and expertise. Explore more with Equipay Partners.",
+      },
+    ],
+    footer:
+      "To access a sample role, sign up and explore our complimentary salary tool for compensation benchmarking",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
