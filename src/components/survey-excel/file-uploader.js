@@ -23,19 +23,30 @@ const FileUploader = () => {
     action: "http://localhost:3001/upload", // Your Node.js backend endpoint
     fileList: fileList,
     beforeUpload(file) {
-      // Clear previous files and add the new file
-      setFileList([file]);
+      const isXLSX =
+        file.type ===
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-      // Return false to prevent default upload behavior
-      return false;
+      if (!isXLSX) {
+        message.error(
+          "You can only upload Microsoft Excel files in .xlsx format!"
+        );
+      }
+
+      // Only allow .xlsx files to be added to the fileList
+      if (isXLSX) {
+        setFileList([file]);
+      }
+
+      // Return false to prevent default upload behavior if the file is not a .xlsx file
+      return isXLSX;
     },
     onChange(info) {
       const { status } = info.file;
 
-      if (status === "done") {
+      if (status === "uploading") {
         message.success(`${info.file.name} file uploaded successfully.`);
       } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
       }
     },
     onDrop(e) {

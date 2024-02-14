@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import NavBar from "../../components/nav-bar";
 import SurveyRegisterComponent from "../../components/survey-register";
 import circleBg from "../../icons/circle-background.jpg";
-import { TemplateDownloadComponent } from "../../components/survey-excel";
 
 const SalarySurveyPage = () => {
   return (
@@ -55,15 +54,16 @@ const SalarySurveyPage = () => {
                     </p>
 
                     <p style={{ fontWeight: "bold" }}>
-                      Please fill in the form to submit your survey. We will
-                      send you general market result
+                      The kinds of data we will be collecting and reporting on
+                      can be found in the excel template.
                     </p>
                     <p style={{ fontWeight: "bold" }}>
-                      The kinds of data we will be collecting and reporting on
-                      can be found in the excel template below. Feel free to
-                      download to check if this survey would work for you
+                      {" "}
+                      After submitting your details, Click on the download
+                      button to access the Excel template. Please fill in the
+                      required information within the downloaded file and
+                      proceed to upload it when completed.
                     </p>
-                    <TemplateDownloadComponent />
                   </div>
                 </div>
                 <div className="col-xl-5 d-flex align-items-start ">

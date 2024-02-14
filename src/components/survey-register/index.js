@@ -123,23 +123,23 @@ const SurveyRegisterComponent = () => {
     formData.append("revenue", revenue);
     formData.append("geographies", geographies);
 
+    AxiosInstance.post("/api/survey/register", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        //eslint-disable-next-line
+        const data = await response.data;
+
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert("Message sending Failed");
+        console.log("error", err);
+      });
+
     navigate("/survey-upload");
-
-    // AxiosInstance.post("/api/survey/register", formData, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then(async (response) => {
-    //     //eslint-disable-next-line
-    //     const data = await response.data;
-
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     alert("Message sending Failed");
-    //     console.log("error", err);
-    //   });
   };
 
   const handleRevenueChange = (data) => {
