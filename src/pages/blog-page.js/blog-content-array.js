@@ -367,4 +367,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Electrical Engineers Compensation Analysis: Unveiling Salary Trends",
+    subMain:
+      "Explore the latest salary insights for Electrical Engineers in Chennai with six years of experience.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707887473/hji4fikstzi7m6umvuxy.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707887473/hji4fikstzi7m6umvuxy.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Our report reveals a comprehensive Compensation Analysis, depicting salaries ranging from 2.75 LPA to 17 LPA, offering valuable insights into skill-based variations. From technical expertise to industry-specific knowledge, grasp the impact of each skill on compensation. Stay informed with real-time salary data customized to your location and experience level. Dive into detailed analysis with Equipay Partners.",
+      },
+    ],
+    footer:
+      "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up today.",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
