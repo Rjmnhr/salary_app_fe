@@ -399,4 +399,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Production Engineers Compensation Insights: Insight into Salary Patterns",
+    subMain:
+      "Explore the latest salary dynamics for Production Engineers in Delhi with three years of experience.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708350389/rg7uivfj3eqdj4lbeevs.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708350514/fijcprpclzcr4svjriez.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Explore the latest salary dynamics for Production Engineers in Delhi with three years of experience. Our comprehensive report provides valuable insights into Compensation Patterns, showcasing salaries ranging from 3.5 LPA to 3.5 LPA. While the data may reflect uniformity in compensation levels, understanding industry trends and skill demand remains crucial. Stay updated with real-time salary data tailored to your location and expertise level. Gain deeper insights into compensation dynamics with Equipay Partners",
+      },
+    ],
+    footer:
+      "Sign up today to access our exclusive salary tool and delve into the intricacies of compensation analysis tailored to your profession. ",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
