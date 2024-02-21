@@ -431,4 +431,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Android Developer Salary Report: Insight into Salary Patterns",
+    subMain:
+      "Explore the latest salary dynamics for Android Developer in Delhi with three years of experience.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708524094/n9a0txibt6mcdhltys8g.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708524094/n9a0txibt6mcdhltys8g.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Explore the latest salary dynamics for Android Developer in Delhi with three years of experience. Our comprehensive report provides valuable insights into Compensation Patterns. While the data may reflect uniformity in compensation levels, understanding industry trends and skill demand remains crucial. Stay updated with real-time salary data tailored to your location and expertise level. Gain deeper insights into compensation dynamics with Equipay Partners",
+      },
+    ],
+    footer:
+      "Sign up today to access our exclusive salary tool and delve into the intricacies of compensation analysis tailored to your profession.",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
