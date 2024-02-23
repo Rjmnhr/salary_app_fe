@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import CheckoutComponent from "../../components/payment_checkout/Checkout";
 
 import { Steps } from "antd";
 import { useNavigate } from "react-router-dom";
-import AxiosInstance from "../../components/axios";
+import AxiosInstance from "../../config/axios";
+import CheckoutComponent from "../../components/payment/Checkout";
+
 
 const items = [
   {

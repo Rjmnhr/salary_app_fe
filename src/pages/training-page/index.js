@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../components/nav-bar";
-import AxiosInstance from "../../components/axios";
+
+
 // import YouTube from "react-youtube";
 import { TrainingPageStyled } from "./style";
 import { Helmet } from "react-helmet";
+import AxiosInstance from "../../config/axios";
+import NavBar from "../../components/layout/nav-bar";
 
 // export const VideoPlayer = ({ videoId }) => {
 //   const opts = {

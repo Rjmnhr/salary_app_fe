@@ -1,13 +1,14 @@
-import SignIn from "../../components/sign-in/sign-in";
 
-import NavBar from "../../components/nav-bar/index";
-import SignUp from "../../components/sign-up/sign-up";
 import { useApplicationContext } from "../../context/app-context";
 import loginBG from "../../icons/salary-wave.png";
 import { LoginPagestyled } from "./style";
 import { useEffect, useState } from "react";
-import AxiosInstance from "../../components/axios";
+
 import { Helmet } from "react-helmet";
+import AxiosInstance from "../../config/axios";
+import NavBar from "../../components/layout/nav-bar";
+import SignIn from "../../components/auth/sign-in";
+import SignUp from "../../components/auth/sign-up";
 
 const LoginPage = () => {
   const { isSignIn } = useApplicationContext();

@@ -1,7 +1,9 @@
 import { Divider } from "antd";
 import React, { useEffect, useState } from "react";
-import AxiosInstance from "../../components/axios";
-import NavBar from "../../components/nav-bar"
+
+
+import AxiosInstance from "../../config/axios";
+import NavBar from "../../components/layout/nav-bar";
 const UserAccount = () => {
   const [userInfo, setUserInfo] = useState(null);
 
@@ -76,53 +78,52 @@ const UserAccount = () => {
   }, []);
   return (
     <>
-    <NavBar />
-     <div style={{marginTop:"80px"}} className="container p-3 min-vh-100 ">
-      <div
-        className="d-flex justify-content-between align-items-center "
-        style={{ gap: "10px" }}
-      >
-        <div className="col-12 section-title ">
-          <h2 style={{ width: "100%" }} className="col-12 ">
-            Account
-          </h2>
-        </div>
-      </div>
-      <Divider />
-
-      <div className="d-lg-flex">
-        <div className="container col-lg-4 col-12 text-left">
-          <h3 className="mb-3">MEMBERSHIP</h3>
-        </div>
-
-        <div className="container col-lg-8 col-12">
-          <div className="d-flex justify-content-between align-items-center mb-3 ">
-            <p style={{ margin: "0" }}>{userInfo?.email}</p>
-            <a href="/change-email">Change email</a>
-          </div>
-
-          <div className="d-flex justify-content-between align-items-center mb-3 ">
-            <p style={{ margin: "0" }}>Password: ********</p>
-            <a href="/change-password">Change password</a>
+      <NavBar />
+      <div style={{ marginTop: "80px" }} className="container p-3 min-vh-100 ">
+        <div
+          className="d-flex justify-content-between align-items-center "
+          style={{ gap: "10px" }}
+        >
+          <div className="col-12 section-title ">
+            <h2 style={{ width: "100%" }} className="col-12 ">
+              Account
+            </h2>
           </div>
         </div>
-      </div>
-      <Divider />
-      <div className="d-lg-flex">
-        <div className="container col-lg-4 col-12 text-left">
-          <h3 className="mb-3">PLAN DETAILS</h3>
-        </div>
+        <Divider />
 
-        <div className="container col-lg-8 col-12">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <p style={{ margin: "0" }}>{userInfo?.plan}</p>
-            <a href="/change-plan">Change plan</a>
+        <div className="d-lg-flex">
+          <div className="container col-lg-4 col-12 text-left">
+            <h3 className="mb-3">MEMBERSHIP</h3>
+          </div>
+
+          <div className="container col-lg-8 col-12">
+            <div className="d-flex justify-content-between align-items-center mb-3 ">
+              <p style={{ margin: "0" }}>{userInfo?.email}</p>
+              <a href="/change-email">Change email</a>
+            </div>
+
+            <div className="d-flex justify-content-between align-items-center mb-3 ">
+              <p style={{ margin: "0" }}>Password: ********</p>
+              <a href="/change-password">Change password</a>
+            </div>
+          </div>
+        </div>
+        <Divider />
+        <div className="d-lg-flex">
+          <div className="container col-lg-4 col-12 text-left">
+            <h3 className="mb-3">PLAN DETAILS</h3>
+          </div>
+
+          <div className="container col-lg-8 col-12">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <p style={{ margin: "0" }}>{userInfo?.plan}</p>
+              <a href="/change-plan">Change plan</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
-   
   );
 };
 

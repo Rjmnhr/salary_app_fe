@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import AxiosInstance from "../axios";
 import { Modal } from "antd";
 import { CheckCircleOutlineRounded } from "@mui/icons-material";
 import { LoadingOutlined } from "@ant-design/icons";
+import AxiosInstance from "../../config/axios";
 
 const Contact = () => {
   const [query, setQuery] = useState("");

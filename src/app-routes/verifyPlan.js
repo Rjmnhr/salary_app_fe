@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import ReportsPage from "../pages/reports-page";
-import AxiosInstance from "../components/axios";
+
+import AxiosInstance from "../config/axios";
+import ReportsPage from "../components/price-a-job/output";
+
 
 const VerifyPlanRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");

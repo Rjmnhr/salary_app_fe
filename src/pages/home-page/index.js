@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
-import AxiosInstance from "../../components/axios";
+
 import welcomeImg from "../../icons/welcome-image.png";
 import secondCoverImg from "../../icons/cover-2.jpg";
 // import eagle from "../../eagle.jpg";
 
-import ParallaxComponent from "../../components/react-parallax";
-import NavBar from "../../components/nav-bar";
+import NavBar from "../../components/layout/nav-bar";
 import { Carousel } from "antd";
-import UnifyComponent from "../../components/unify-component";
 import Contact from "../../components/contact";
 import { HomePageStyled } from "./style";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../config/axios";
+import ParallaxComponent from "../../components/enhancements/parallax-scroll";
 
 const HomePage = () => {
   const contactRef = useRef(null);
@@ -124,7 +124,7 @@ const HomePage = () => {
                   >
                     Price a Job
                   </button>
-                  <br/>
+                  <br />
                   <button
                     onClick={() => navigate("/executive-compensation")}
                     style={{ color: "white" }}
@@ -133,12 +133,12 @@ const HomePage = () => {
                     Executive Compensation
                   </button>
                   <button
-                  onClick={() => navigate("/salary-survey")}
-                  style={{ color: "white" }}
-                  className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3"
-                >
-                  Salary Survey
-                </button>
+                    onClick={() => navigate("/salary-survey")}
+                    style={{ color: "white" }}
+                    className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3"
+                  >
+                    Salary Survey
+                  </button>
                 </div>
                 <div
                   className="mb-3 mt-5 d-lg-flex"
@@ -148,10 +148,8 @@ const HomePage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "8px",
-                  }}>
-               
-                  </div>
-               
+                  }}
+                ></div>
               </div>
             </div>
           </div>
@@ -391,7 +389,106 @@ const HomePage = () => {
         </section>
 
         <section>
-          <UnifyComponent />
+          <div class="container col-12 container-fluid   bg-light rounded-3 p-5 ">
+            <h5>
+              We have consulted organisations across
+              <span className="text-primary">
+                {" "}
+                India, US, UK, Asia Pacific
+              </span>{" "}
+              on strategic pay and performance matters. Some of our projects
+              include
+            </h5>
+
+            <div
+              class="d-lg-flex justify-content-center flex-wrap container-fluid "
+              style={{ marginTop: "30px" }}
+            >
+              <div
+                class="col-lg-4 col-12 mb-4"
+                data-aos="fade-up"
+                data-aos-delay="100"
+              >
+                <div class="card testimonial-wrap card-shadow h-100">
+                  <div
+                    class="card-body"
+                    style={{ display: "grid", placeItems: "center" }}
+                  >
+                    <div class="mb-3">
+                      <i class="bi-emoji-smile fs-2 text-dark"></i>
+                    </div>
+                    <h5 style={{ width: "75%" }}>
+                      {" "}
+                      Design of ESOP/LTI for startups
+                    </h5>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="col-lg-4 mb-4"
+                data-aos="fade-up"
+                data-aos-delay="200"
+              >
+                <div class="card card-shadow h-100">
+                  <div
+                    class="card-body"
+                    style={{ display: "grid", placeItems: "center" }}
+                  >
+                    <div class="mb-3">
+                      <i class="bi-droplet fs-2 text-dark"></i>
+                    </div>
+                    <h5 style={{ width: "75%" }}>
+                      Design of STI plan for large listed organizations
+                    </h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-100"></div>
+
+              <div
+                class="col-lg-4 mb-4 mb-lg-0"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              >
+                <div class="card card-shadow h-100">
+                  <div
+                    class="card-body"
+                    style={{ display: "grid", placeItems: "center" }}
+                  >
+                    <div class="mb-3">
+                      <i class="bi-briefcase fs-2 text-dark"></i>
+                    </div>
+                    <h5 style={{ width: "75%" }}>
+                      Design of Sales Incentive for FMCG and Retail
+                      organizations
+                    </h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div
+                  class="card card-shadow h-100"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  <div
+                    class="card-body"
+                    style={{ display: "grid", placeItems: "center" }}
+                  >
+                    <div class="mb-3">
+                      <i class="bi-speedometer2 fs-2 text-dark"></i>
+                    </div>
+                    <h5 style={{ width: "75%" }}>
+                      Determination of salary for CEO and their executive team
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <Contact />

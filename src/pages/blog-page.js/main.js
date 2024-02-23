@@ -1,7 +1,8 @@
 import React from "react";
 
-import NavBar from "../../components/nav-bar";
+
 import { BlogContentArr } from "./blog-content-array";
+import NavBar from "../../components/layout/nav-bar";
 
 const BlogsMainPage = () => {
   return (

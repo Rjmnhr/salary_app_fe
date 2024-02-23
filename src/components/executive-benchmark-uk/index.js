@@ -5,8 +5,9 @@ import { Divider, Modal, Select } from "antd";
 import CurrencyInput from "react-currency-input-field";
 
 import { useNavigate } from "react-router-dom";
-import AxiosInstance from "../../axios";
+
 import { ArrowForward } from "@mui/icons-material";
+import AxiosInstance from "../../config/axios";
 
 const ExecutiveBenchmarkUK = ({ sectors }) => {
   const [marketCap, setMarketCap] = useState(0);

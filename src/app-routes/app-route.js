@@ -1,44 +1,43 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "../pages/home-page/index";
-import LandingPage from "../pages/landing-page";
-import PriceAJob from "../pages/price-a-job";
-import LoginPage from "../pages/login-page";
-import OtpVerification from "../pages/otp-verification";
-import Success from "../components/payment_checkout/Success";
-import Canceled from "../components/payment_checkout/Canceled";
-import TrainingPage from "../pages/training-page";
-import SalesIncentive from "../pages/sales-incentive-page";
-import RegistrationPricing from "../pages/registration-pricing";
-import SuccessRegistration from "../components/payment_checkout/success-registration";
-import SuccessUpgrade from "../components/payment_checkout/success-upgrade";
-import ProtectedRoute from "./protected-route";
-import ForgotPasswordPage from "../pages/forgot-password-page";
-import UserAccount from "../pages/user-account-page";
-import ChangeEmail from "../components/change-email";
-import ChangePassword from "../components/change-password";
-import ChangePlan from "../components/change-plan";
-import SuccessRegistrationBasic from "../components/payment_checkout/success-registration-basic";
-import Contact from "../components/contact";
-import VerifyPlanRoute from "./verifyPlan";
-import ExecutiveBenchmark from "../pages/executive-benchmark";
-import RoleInformation from "../components/role-information";
-import BenchmarkOutput from "../pages/benchmark-output";
-import TableComponent, {
-  TableComponentMobile,
-} from "../components/companies-filterd";
-import LandingExecutivePage from "../pages/landing-executive-page";
-import FillForm from "../pages/training-page/fill-form";
-import SuccessTraining from "../components/payment_checkout/sucess-training";
+import HomePage from "../pages/home-page/index.js";
+import LandingPage from "../pages/price-a-job-landing/index.js";
 import { useEffect, useState } from "react";
-import SalarySurveyPage from "../pages/salary-survey/index.js";
-import SurveyComplete from "../components/survey-complete/index.js";
+import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
+import ProtectedRoute from "./protected-route.js";
+import PriceAJob from "../components/price-a-job/input.js";
+import ExecutiveBenchmark from "../components/exec-rem/input.js";
+import VerifyPlanRoute from "./verifyPlan.js";
+import LoginPage from "../pages/login-page/index.js";
+import OtpVerification from "../components/auth/otp-verification.js";
+import SalesIncentive from "../pages/sales-incentive-page/index.js";
+import TrainingPage from "../pages/training-page/index.js";
+import RegistrationPricing from "../pages/registration-pricing/index.js";
+import SuccessRegistration from "../components/payment/success-registration.js";
+import SuccessRegistrationBasic from "../components/payment/success-registration-basic.js";
+import SuccessUpgrade from "../components/payment/success-upgrade.js";
+import SuccessTraining from "../components/payment/sucess-training.js";
+import UserAccount from "../pages/user-account-page/index.js";
+import Contact from "../components/contact/index.js";
+import ChangeEmail from "../components/auth/change-email.js";
+import ChangePassword from "../components/auth/change-password.js";
+import ChangePlan from "../components/auth/change-plan.js";
+import ForgotPasswordPage from "../components/auth/forgot-password.js";
+import RoleInformation from "../components/exec-rem/role-info.js";
+import TableComponent, { TableComponentMobile } from "../components/exec-rem/companies-filtered.js";
+import BenchmarkOutput from "../components/exec-rem/output.js";
+import FillForm from "../pages/training-page/fill-form.js";
 import BlogsMainPage from "../pages/blog-page.js/main.js";
+import SalarySurveyPage from "../pages/salary-survey-page/index.js";
+import SurveyExcelUploader from "../components/salary-survey/template-download.js";
+import SurveyComplete from "../components/salary-survey/surve-complete.js";
 import IndividualBlogPage from "../pages/blog-page.js/index.js";
 import KPIClientPage from "../pages/KPI-client-page/index.js";
-import KPIClientOutput from "../pages/KPI-report/index.js";
-import ExecutiveBenchmarkVideo from "../pages/executive-benchmark-video/index.js";
-import PriceAJobVideo from "../pages/price-a-job-video/index.js";
-import SurveyExcelUploader from "../components/survey-excel/index.js";
+import ExecutiveBenchmarkVideo from "../components/exec-rem/demo-video.js";
+import PriceAJobVideo from "../components/price-a-job/demo-video.js";
+import KPIClientOutput from "../components/KPI-client/output.js";
+import Success from "../components/payment/Success.js";
+import Canceled from "../components/payment/Canceled.js";
+
 
 
 const AppRoute = () => {
@@ -223,7 +222,7 @@ const AppRoute = () => {
           path="/contact"
           element={
             <>
-              <Contact />
+              <Contact/>
             </>
           }
         />

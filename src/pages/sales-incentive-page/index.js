@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import NavBar from "../../components/nav-bar";
+
 import pointArrow from "../../icons/right-arrow.png";
-import AxiosInstance from "../../components/axios";
+
 import { Helmet } from "react-helmet";
+import AxiosInstance from "../../config/axios";
+import NavBar from "../../components/layout/nav-bar";
 
 const SalesIncentive = () => {
   const location = window.location.href;

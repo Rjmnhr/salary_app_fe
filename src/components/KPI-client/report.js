@@ -1,5 +1,5 @@
 import React from "react";
-import { KPIReportComponentStyled } from "../../pages/KPI-report/style";
+import { KPIReportComponentStyled } from "./style";
 
 const KPIReportComponent = ({ resultData }) => {
   return (

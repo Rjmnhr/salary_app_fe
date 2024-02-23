@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../../components/nav-bar";
+
 import { Helmet } from "react-helmet";
 import { BlogPageStyled } from "./style";
 import { useLocation } from "react-router-dom";
 import { BlogContentArr } from "./blog-content-array";
+import NavBar from "../../components/layout/nav-bar";
 
 const IndividualBlogPage = () => {
   const location = useLocation();

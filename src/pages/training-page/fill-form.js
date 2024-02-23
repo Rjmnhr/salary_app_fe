@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CheckoutComponent from "../../components/payment_checkout/Checkout";
+import CheckoutComponent from "../../components/payment/Checkout";
+
 
 const FillForm = () => {
   const [title, setTitle] = useState("");

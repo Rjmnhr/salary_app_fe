@@ -1,6 +1,6 @@
 import React from "react";
-import NavBar from "../../components/nav-bar";
-import KPIClientComponent from "../../components/KPI-client";
+import NavBar from "../../components/layout/nav-bar";
+import KPIClientComponent from "../../components/KPI-client/input";
 
 const KPIClientPage = () => {
   return (
