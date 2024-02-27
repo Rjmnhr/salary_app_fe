@@ -67,3 +67,7 @@ display: block;
     transform: scale3d(2);
 }
 
+.custom-shadow{
+
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}

@@ -7,7 +7,6 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 
-
 // import { RadialChart } from "react-vis";
 import { Button, notification } from "antd";
 import "./custom-style.css";
@@ -22,6 +21,7 @@ import LinearSalaryChart from "./charts/linear-salary-chart";
 import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
 import SalaryVsGroupedExpBarChart from "./charts/salary-vs-grouped-bar-chart";
 import ReportUnsuccessful from "../misc/report-unsuccessful";
+import logoImagePath from "../../icons/logo192.png";
 
 const GeneratedReport = ({
   jobsData,
@@ -111,6 +111,28 @@ const GeneratedReport = ({
       placement,
     });
   };
+  // const generatePDF = () => {
+  //   const originalContents = document.body.innerHTML;
+  //   const printContent = printAreaRef.current;
+
+  //   if (printContent) {
+  //     const printContents = printContent.innerHTML;
+
+  //     // Add watermark to the content
+  //     const watermarkedContent = `<div style="position: relative;">${printContents}<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; font-size: 36px; color: red,z-index:99;">Watermark</div></div>`;
+
+  //     document.body.innerHTML = watermarkedContent;
+
+  //     // Print the document
+  //     window.print();
+
+  //     // Restore the original content after printing
+  //     document.body.innerHTML = originalContents;
+  //   } else {
+  //     console.error("Element not found.");
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const generatePDF = () => {
     const originalContents = document.body.innerHTML;
@@ -119,17 +141,140 @@ const GeneratedReport = ({
     if (printContent) {
       const printContents = printContent.innerHTML;
 
-      document.body.innerHTML = printContents;
+      // Create a new div to hold both the print contents, the text watermarks, and the logo
+      const wrapperDiv = document.createElement("div");
+      wrapperDiv.style.position = "relative";
+      wrapperDiv.innerHTML = printContents;
+
+      // Define watermark positions for text (you can customize as needed)
+      const textWatermarkPositions = [
+        { top: "4%", left: "90%", rotation: "0deg" },
+
+        { top: "30%", left: "90%", rotation: "0deg" },
+        { top: "50%", left: "90%", rotation: "0deg" },
+        { top: "70%", left: "90%", rotation: "0deg" },
+        { top: "90%", left: "90%", rotation: "0deg" },
+      ];
+
+      // Define logo position
+      const logoPosition = {
+        top: "80%",
+        left: "20%",
+        width: "50px",
+        height: "50px",
+        margin: "-90px",
+        marginLeft: "-30px",
+      };
+      // Replace with the actual path to your logo image
+
+      // Create text watermarks and position them
+      textWatermarkPositions.forEach((position) => {
+        const textWatermarkDiv = document.createElement("div");
+        textWatermarkDiv.style.position = "absolute";
+        textWatermarkDiv.style.top = position.top;
+        textWatermarkDiv.style.left = position.left;
+        textWatermarkDiv.style.transform = `translate(-50%, -50%) rotate(${position.rotation})`;
+        textWatermarkDiv.style.color = "rgba(0, 0, 0, 0.2)";
+        textWatermarkDiv.style.fontSize = "24px";
+        textWatermarkDiv.innerText = "Equipay Partners";
+
+        const logoImage = document.createElement("img");
+        logoImage.src = logoImagePath;
+        logoImage.style.position = "absolute";
+        logoImage.style.top = position.top;
+        logoImage.style.left = position.left;
+        logoImage.style.width = logoPosition.width;
+        logoImage.style.height = logoPosition.height;
+        logoImage.style.marginTop = logoPosition.margin;
+        logoImage.style.marginLeft = logoPosition.marginLeft;
+
+        wrapperDiv.appendChild(logoImage);
+        // Append each text watermark to the wrapper
+        wrapperDiv.appendChild(textWatermarkDiv);
+        // Append the logo to the wrapper
+      });
+
+      // Apply styles for print media to avoid box-shadow effect
+      const styleSheet = document.createElement("style");
+      styleSheet.type = "text/css";
+      styleSheet.innerText =
+        "@media print { .custom-shadow { box-shadow: none !important; } }";
+      wrapperDiv.appendChild(styleSheet);
+
+      // Replace the body content with the wrapper content
+      document.body.innerHTML = wrapperDiv.outerHTML;
+
+      // Replace the body content with the wrapper content
+      document.body.innerHTML = wrapperDiv.outerHTML;
+
+      // Print the page
       window.print();
+
       // Restore the original content after printing
       document.body.innerHTML = originalContents;
-      
     } else {
       console.error("Element not found.");
 
       setIsLoading(false);
     }
   };
+
+  // const generatePDF = () => {
+  //   const originalContents = document.body.innerHTML;
+  //   const printContent = printAreaRef.current;
+
+  //   if (printContent) {
+  //     const printContents = printContent.innerHTML;
+
+  //     document.body.innerHTML = printContents;
+  //     window.print();
+  //     // Restore the original content after printing
+  //     document.body.innerHTML = originalContents;
+
+  //   } else {
+  //     console.error("Element not found.");
+
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const generatePDF = async () => {
+  //   // const originalContents = document.body.innerHTML;
+  //   const printContent = printAreaRef.current;
+
+  //   if (printContent) {
+  //     const printContents = printContent.innerHTML;
+
+  //     try {
+  //       const response = await AxiosInstance.post(
+  //         "/api/generate-watermark-pdf",
+  //         {
+  //           pdfContent: printContents,
+  //         },
+  //         {
+  //           responseType: "blob", // Specify responseType as 'blob' to handle binary data
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+
+  //       if (response.status === 200) {
+  //         const url = URL.createObjectURL(new Blob([response.data]));
+
+  //         // For example, you can open the PDF in a new window
+  //         window.open(url, "_blank");
+  //       } else {
+  //         console.error("Failed to generate watermarked PDF.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error generating watermarked PDF:", error);
+  //     }
+  //   } else {
+  //     console.error("Element not found.");
+  //   }
+  // };
+
   // Define a function to calculate statistics for a given dataset
 
   // Calculate statistics for jobsData
@@ -402,11 +547,13 @@ const GeneratedReport = ({
                 />
               </div> */}
               <div
-                className="text-center mt-5 card shadow"
+                className="text-center mt-5 card custom-shadow"
                 style={{
                   display: "grid",
                   justifyItems: "center",
                   alignContent: "center",
+                  pageBreakBefore: "auto",
+                  pageBreakInside: "avoid",
                 }}
               >
                 <div className="card-body">
@@ -433,11 +580,13 @@ const GeneratedReport = ({
               </div>
 
               <div
-                className="text-center mt-5 card shadow"
+                className="text-center mt-5 card custom-shadow"
                 style={{
                   display: "grid",
                   justifyItems: "center",
                   alignContent: "center",
+                  pageBreakBefore: "auto",
+                  pageBreakInside: "avoid",
                 }}
               >
                 <div className="card-body">
@@ -456,7 +605,10 @@ const GeneratedReport = ({
               {isMobile ? (
                 ""
               ) : (
-                <div className="mb-5 card shadow mt-5">
+                <div
+                  className="mb-5 card custom-shadow mt-5"
+                  style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
+                >
                   <div className="card-body">
                     <SimplePieChart
                       title={jobsData[0]?.mapped_job_title}
@@ -467,7 +619,10 @@ const GeneratedReport = ({
                   </div>
                 </div>
               )}
-              <div className="card mt-5 shadow">
+              <div
+                className="card mt-5 custom-shadow"
+                style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
+              >
                 <div className="card-body">
                   <MedianSalaryChartForSkills
                     data={jobsDataByRole}
