@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import logo from "../../icons/logo192.png";
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Input, InputNumber, Select, Tag, Dropdown, Skeleton } from "antd";
+import { Input, Select, Tag, Dropdown, Skeleton } from "antd";
 import AxiosInstance from "../../config/axios";
+import { formatColumnName } from "../../utils/price-a-job-helper-functions";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
-
 
 export const cities = [
   "Chandigarh",
@@ -31,36 +31,9 @@ export const cities = [
   "Delhi",
 ];
 
+export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
+
 cities.sort();
-
-// const CapitalizeFirstLetter = (data) => {
-//   // Split the string into words
-//   const words = data?.split(" ");
-//   // Capitalize the first letter of each word and make the rest lowercase
-//   const capitalizedWords = words?.map((word) => {
-//     if (word.charAt(0) === word.charAt(0).toUpperCase()) {
-//       // If the first letter is already capitalized, keep it as is
-//       return word;
-//     } else {
-//       // Otherwise, capitalize the first letter and make the rest lowercase
-//       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-//     }
-//   });
-
-//   // Join the words back together with spaces
-//   return capitalizedWords?.join(" ");
-// };
-export function formatColumnName(columnName) {
-  // Replace spaces and slashes with underscores
-  columnName = columnName.replace(/[\s/]+/g, "_").toLowerCase();
-
-  // Remove any characters other than letters, numbers, and underscores
-  columnName = columnName.replace(/[^a-zA-Z0-9_]/g, "");
-
-  // Replace consecutive underscores with a single underscore
-  columnName = columnName.replace(/_+/g, "_");
-  return columnName;
-}
 
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
@@ -151,8 +124,6 @@ const PriceAJob = () => {
     AxiosInstance.get("/api/salary/roles")
       .then(async (res) => {
         const response = await res.data;
-        console.log("🚀 ~ .then ~ response:", response)
-      
 
         const jobRoles = response.map((item) => Object.values(item)[0]);
 
@@ -256,50 +227,6 @@ const PriceAJob = () => {
         .catch((err) => console.log(err));
     }
   }, [selectedJobTitles]);
-
-  // const skillSet = [...DistinctSkills];
-
-  // useEffect(() => {
-  //   axios
-  //     .post(
-  //       "https://auth.emsicloud.com/connect/token",
-  //       {
-  //         client_id: "bdqzoc3y3d36h59j",
-  //         client_secret: "W4KYdc2L",
-  //         grant_type: "client_credentials",
-  //         scope: "emsi_open",
-  //       },
-  //       {
-  //         headers: {
-  //           "content-type": "application/x-www-form-urlencoded",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       getSkills(response.data.access_token);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
-  // const getSkills = (accessToken) => {
-  //   axios
-  //     .get("https://emsiservices.com/skills/versions/latest/skills", {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       const skillArr = response.data.data;
-  //       const skillNamesArr = skillArr.map((item) => item.name);
-  //       setSkillSet(skillNamesArr);
-  //       setSkillData(skillNamesArr);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // };
 
   // Add a scroll event listener to the window
   useEffect(() => {
@@ -585,15 +512,25 @@ const PriceAJob = () => {
               </div>
 
               <div className="mb-3 col-12 col-lg-6">
-                <InputNumber
+                <Select
                   size={"large"}
+                  style={{
+                    width: "100%",
+                    borderRadius: "0",
+                    textAlign: "start",
+                  }}
+                  className="input border"
+                  type={false}
                   placeholder="Years of experience"
-                  style={{ width: "100%" }}
-                  min={0} // Optional: Set a minimum value
-                  max={100} // Optional: Set a maximum value
-                  step={1} // Optional: Set the step increment/
-                  value={experience}
+                  defaultActiveFirstOption={false}
+                  suffixIcon={null}
+                  filterOption={false}
                   onChange={handleExperience}
+                  notFoundContent={null}
+                  options={(experienceOptions || []).map((e) => ({
+                    value: e,
+                    label: e,
+                  }))}
                 />
               </div>
 

@@ -8,7 +8,6 @@ import {
   SaveOutlined,
 } from "@ant-design/icons";
 
-
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -16,16 +15,15 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-
-import { Button, InputNumber, Modal, Popconfirm, Select, Skeleton } from "antd";
-import { cities, formatColumnName } from "./input";
-
+import { Button, Modal, Popconfirm, Select, Skeleton } from "antd";
+import { cities, experienceOptions } from "./input";
 
 import { useLocation } from "react-router-dom";
 import GeneratedReport from "./report";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
+import { formatColumnName } from "../../utils/price-a-job-helper-functions";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -121,6 +119,7 @@ const ReportsPage = ({ userPlan }) => {
     sessionStorage.getItem("selectedJobTitles")
   );
   const storedExperience = sessionStorage.getItem("experience");
+
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
   const storedManage = sessionStorage.getItem("isManage");
@@ -229,7 +228,7 @@ const ReportsPage = ({ userPlan }) => {
     const newArr = storedJobTitles?.map((jobTitle) => ({
       job_titles: jobTitle,
       location: storedLocation,
-      experience: Number(storedExperience),
+      experience: storedExperience,
       skills: sessionStorage.getItem("selected_skills"),
       manage: storedManage,
       supervise: storedSupervise,
@@ -259,6 +258,7 @@ const ReportsPage = ({ userPlan }) => {
         const data = await response.data;
 
         const reversedData = [...data].reverse();
+
         // Use Set to store distinct objects
         const uniqueObjects = new Set(
           [...createdArray, ...reversedData].map(JSON.stringify)
@@ -634,14 +634,11 @@ const ReportsPage = ({ userPlan }) => {
           style={{
             padding: "0",
             marginTop: "90px",
-            borderTop: "1px solid #dee2e6",
           }}
         >
           <div
-            className="container-fluid p-3 col-12 col-lg-3  reports-list scrollable-container"
+            className="container-fluid p-3 col-12 col-lg-3  reports-list "
             style={{
-              overflowY: "scroll",
-              maxHeight: "100vh",
               transform: "transition 0.3s all ease",
             }}
           >
@@ -719,15 +716,26 @@ const ReportsPage = ({ userPlan }) => {
                 <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Experience : </label>
                   <div className="col-8">
-                    <InputNumber
+                    <Select
                       size={"large"}
+                      style={{
+                        width: "100%",
+                        borderRadius: "0",
+                        textAlign: "start",
+                      }}
+                      className="input border"
+                      type={false}
                       placeholder="Years of experience"
-                      style={{ width: "100%" }}
-                      min={0} // Optional: Set a minimum value
-                      max={100} // Optional: Set a maximum value
-                      step={1} // Optional: Set the step increment/
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      filterOption={false}
                       value={editableExperience}
                       onChange={handleSelectEditableExperience}
+                      notFoundContent={null}
+                      options={(experienceOptions || []).map((e) => ({
+                        value: e,
+                        label: e,
+                      }))}
                     />
                   </div>
                 </div>
@@ -897,103 +905,110 @@ const ReportsPage = ({ userPlan }) => {
             ) : (
               ""
             )}
-
-            {showPreviousReports && (
-              <div>
-                {dataArray &&
-                  dataArray.map((data, index) => {
-                    // Check if the current index is not the first one (index 0)
-                    if (index !== 0) {
-                      return (
-                        <Card
-                          className={`card selectable-tab p-2 px-3 text-left mb-3 ${
-                            activeIndex === index ? "selected-tab" : ""
-                          }`}
-                          key={data.report_id}
-                          onClick={() => {
-                            setActiveIndex(index);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <p
-                            style={{ fontWeight: "500" }}
-                            className="fw-b text-primary"
+            <div
+              className="scrollable-container"
+              style={{
+                overflowY: "scroll",
+                maxHeight: "50vh",
+              }}
+            >
+              {showPreviousReports && (
+                <div>
+                  {dataArray &&
+                    dataArray.map((data, index) => {
+                      // Check if the current index is not the first one (index 0)
+                      if (index !== 0) {
+                        return (
+                          <Card
+                            className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                              activeIndex === index ? "selected-tab" : ""
+                            }`}
+                            key={data.report_id}
+                            onClick={() => {
+                              setActiveIndex(index);
+                            }}
+                            style={{ cursor: "pointer" }}
                           >
-                            {data.job_titles}
-                          </p>
-                          <div className="d-flex justify-content-start align-items-center">
                             <p
-                              className=" border-right px-2"
-                              style={{
-                                borderRight: "1px solid",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "3px",
-                              }}
+                              style={{ fontWeight: "500" }}
+                              className="fw-b text-primary"
                             >
-                              <CalendarOutlined /> {data.experience} years
+                              {data.job_titles}
                             </p>
-                            <p
-                              className=" border-right px-2"
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "3px",
-                              }}
-                            >
-                              {" "}
-                              <EnvironmentOutlined /> {data.location}
-                            </p>
-                          </div>
-
-                          <CardActions disableSpacing>
-                            <p style={{ margin: "0" }}>See More</p>
-                            <ExpandMore
-                              expand={expanded[index] || false}
-                              onClick={() => handleExpandClick(index)}
-                              aria-expanded={expanded[index] || false}
-                              aria-label="show more"
-                            >
-                              <ExpandMoreIcon />
-                            </ExpandMore>
-                          </CardActions>
-                          <Collapse
-                            in={expanded[index] || false}
-                            timeout="auto"
-                            unmountOnExit
-                          >
-                            <div>
-                              <SkillsList skills={JSON.parse(data.skills)} />
-                            </div>
-                            <div>
-                              <p>
-                                Supervise employees :{" "}
-                                <span style={{ fontSize: "14px" }}>
-                                  {data.supervise}
-                                </span>{" "}
+                            <div className="d-flex justify-content-start align-items-center">
+                              <p
+                                className=" border-right px-2"
+                                style={{
+                                  borderRight: "1px solid",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "3px",
+                                }}
+                              >
+                                <CalendarOutlined /> {data.experience} years
                               </p>
-                              <p>
-                                Manage projects :{" "}
-                                <span style={{ fontSize: "14px" }}>
-                                  {data.manage}
-                                </span>{" "}
+                              <p
+                                className=" border-right px-2"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "3px",
+                                }}
+                              >
+                                {" "}
+                                <EnvironmentOutlined /> {data.location}
                               </p>
                             </div>
-                          </Collapse>
-                        </Card>
-                      );
-                    }
-                    // If it's the first element, don't render anything or render something else.
-                    return null; // or any other component/element you want
-                  })}
-              </div>
-            )}
+
+                            <CardActions disableSpacing>
+                              <p style={{ margin: "0" }}>See More</p>
+                              <ExpandMore
+                                expand={expanded[index] || false}
+                                onClick={() => handleExpandClick(index)}
+                                aria-expanded={expanded[index] || false}
+                                aria-label="show more"
+                              >
+                                <ExpandMoreIcon />
+                              </ExpandMore>
+                            </CardActions>
+                            <Collapse
+                              in={expanded[index] || false}
+                              timeout="auto"
+                              unmountOnExit
+                            >
+                              <div>
+                                <SkillsList skills={JSON.parse(data.skills)} />
+                              </div>
+                              <div>
+                                <p>
+                                  Supervise employees :{" "}
+                                  <span style={{ fontSize: "14px" }}>
+                                    {data.supervise}
+                                  </span>{" "}
+                                </p>
+                                <p>
+                                  Manage projects :{" "}
+                                  <span style={{ fontSize: "14px" }}>
+                                    {data.manage}
+                                  </span>{" "}
+                                </p>
+                              </div>
+                            </Collapse>
+                          </Card>
+                        );
+                      }
+                      // If it's the first element, don't render anything or render something else.
+                      return null; // or any other component/element you want
+                    })}
+                </div>
+              )}
+            </div>
           </div>
           <div
             className="container-fluid col-12 col-lg-9  d-grid "
             style={{
               background: "rgba(0, 0, 0, 0.02)",
-              height: "100vh",
+
               justifyItems: "center",
             }}
           >

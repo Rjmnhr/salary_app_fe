@@ -37,6 +37,7 @@ import PriceAJobVideo from "../components/price-a-job/demo-video.js";
 import KPIClientOutput from "../components/KPI-client/output.js";
 import Success from "../components/payment/Success.js";
 import Canceled from "../components/payment/Canceled.js";
+import { exec_rem_input_path, exec_rem_landing_path, home_path, login_app_path, login_path, otp_validation_path, price_a_job_dashboard_path, price_a_job_input_path, price_a_job_landing_path, price_a_job_output_path, sales_incentive_page_path, training_page_path } from "../config/constant.js";
 
 
 
@@ -63,7 +64,7 @@ const AppRoute = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path={home_path}
           element={
             <>
               <HomePage />
@@ -71,7 +72,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/price-a-job"
+          path={price_a_job_landing_path}
           element={
             <>
               <LandingPage />
@@ -79,7 +80,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/executive-compensation"
+          path={exec_rem_landing_path}
           element={
             <>
               <LandingExecutivePage />
@@ -87,7 +88,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/price-a-job-add-details"
+          path={price_a_job_input_path}
           element={
             <ProtectedRoute
               element={
@@ -99,7 +100,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/executive-compensation-add-details"
+          path={exec_rem_input_path}
           element={
             <ProtectedRoute
               element={
@@ -111,8 +112,8 @@ const AppRoute = () => {
           }
         />
 
-        <Route path="/reports" element={<VerifyPlanRoute />} />
-        <Route path="/reports-dashboard" element={<VerifyPlanRoute />} />
+        <Route path={price_a_job_output_path} element={<VerifyPlanRoute />} />
+        <Route path={price_a_job_dashboard_path} element={<VerifyPlanRoute />} />
         {/* <Route
           path="/reports"
           element={
@@ -123,7 +124,15 @@ const AppRoute = () => {
         /> */}
 
         <Route
-          path="/login"
+          path={login_path}
+          element={
+            <>
+              <LoginPage />
+            </>
+          }
+        />
+         <Route
+          path={login_app_path}
           element={
             <>
               <LoginPage />
@@ -131,23 +140,16 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/otp-validation"
+          path={otp_validation_path}
           element={
             <>
               <OtpVerification />
             </>
           }
         />
+       
         <Route
-          path="/login-app"
-          element={
-            <>
-              <LoginPage />
-            </>
-          }
-        />
-        <Route
-          path="/training"
+          path={training_page_path}
           element={
             <>
               <TrainingPage />
@@ -155,7 +157,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/sales"
+          path={sales_incentive_page_path}
           element={
             <>
               <SalesIncentive />
