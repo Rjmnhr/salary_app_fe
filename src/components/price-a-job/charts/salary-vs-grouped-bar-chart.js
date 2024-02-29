@@ -58,9 +58,9 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       type: "gradient",
       gradient: {
         shade: shadeColor,
-        shadeIntensity: 0.6,
-        opacityFrom: 0.5,
-        opacityTo: 0.25,
+        shadeIntensity: 0.1,
+        opacityFrom: 0.7,
+        opacityTo: 0.8,
         stops: [0, 95, 100],
       },
     },

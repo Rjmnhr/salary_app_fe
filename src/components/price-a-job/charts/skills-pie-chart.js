@@ -72,7 +72,7 @@ export const SimplePieChart = ({ title, width, dataWithPercent, data }) => {
         alignContent: "center",
       }}
     >
-      <h5 className="mb-2">Most five common skills for {title} </h5>
+      <h5 className="mb-5">Most five common skills for {title} </h5>
 
       <Chart options={options} series={series} type="pie" width={width} />
     </div>

@@ -71,3 +71,21 @@ display: block;
 
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 }
+
+
+.chart-container {
+    position: "relative";
+
+  }
+  
+  .y-axis-title {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap; /* Prevent text from wrapping */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #a1acb8; /* Adjust color as needed */
+  }
+  

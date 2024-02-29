@@ -1,4 +1,5 @@
 import React from "react";
+import icon from "../../icons/9169253.jpg";
 
 const ReportUnsuccessful = () => {
   return (
@@ -11,7 +12,7 @@ const ReportUnsuccessful = () => {
       className="mt-1 mt-lg-3"
     >
       <div
-        className="d-lg-flex justify-content-lg-start justify-content-center align-items-center p-3 text-lg-left text-center"
+        className="w-100 p-3 text-center"
         style={{ background: "#fff" }}
       >
         <div>
@@ -23,9 +24,10 @@ const ReportUnsuccessful = () => {
         </div>
 
         <img
-          src="https://www.payscale.com/content/market-worth-promo@2x.png"
+          // src="https://www.payscale.com/content/market-worth-promo@2x.png"
+          src={icon}
           alt=""
-          height={200}
+          height={300}
           width={300}
         />
       </div>

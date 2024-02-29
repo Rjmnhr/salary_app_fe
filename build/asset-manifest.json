@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.77fb4dda.css",
-    "main.js": "/static/js/main.b40e365d.js",
+    "main.css": "/static/css/main.2c44527c.css",
+    "main.js": "/static/js/main.9ad438f9.js",
     "static/js/703.02020290.chunk.js": "/static/js/703.02020290.chunk.js",
     "static/js/513.ead06e66.chunk.js": "/static/js/513.ead06e66.chunk.js",
     "static/js/787.4f88162d.chunk.js": "/static/js/787.4f88162d.chunk.js",
@@ -9,6 +9,7 @@
     "static/media/demo.mp4": "/static/media/demo.6daba19d7a79aa3bf9ac.mp4",
     "static/media/sample_report.pdf": "/static/media/sample_report.4899287de4601a596df7.pdf",
     "static/media/cover-2.jpg": "/static/media/cover-2.ac013b95bdc8c202fd42.jpg",
+    "static/media/9169253.jpg": "/static/media/9169253.3725ffc876270c6e1110.jpg",
     "static/media/salary-wave.png": "/static/media/salary-wave.f8b0d60781fd7a0b32ac.png",
     "static/media/welcome-image.png": "/static/media/welcome-image.001f697b4f6eb7ca2233.png",
     "static/media/circle-background.jpg": "/static/media/circle-background.4cf875b683045f974707.jpg",
@@ -25,14 +26,14 @@
     "static/media/trend.png": "/static/media/trend.9716bc588e42aea454a9.png",
     "index.html": "/index.html",
     "static/media/check-soft-bg.svg": "/static/media/check-soft-bg.c08cab036b8a757bccc21c60aa9c85aa.svg",
-    "main.77fb4dda.css.map": "/static/css/main.77fb4dda.css.map",
-    "main.b40e365d.js.map": "/static/js/main.b40e365d.js.map",
+    "main.2c44527c.css.map": "/static/css/main.2c44527c.css.map",
+    "main.9ad438f9.js.map": "/static/js/main.9ad438f9.js.map",
     "703.02020290.chunk.js.map": "/static/js/703.02020290.chunk.js.map",
     "513.ead06e66.chunk.js.map": "/static/js/513.ead06e66.chunk.js.map",
     "787.4f88162d.chunk.js.map": "/static/js/787.4f88162d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.77fb4dda.css",
-    "static/js/main.b40e365d.js"
+    "static/css/main.2c44527c.css",
+    "static/js/main.9ad438f9.js"
   ]
 }

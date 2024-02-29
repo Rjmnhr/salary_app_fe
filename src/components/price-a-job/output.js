@@ -7,23 +7,24 @@ import {
   EditOutlined,
   SaveOutlined,
 } from "@ant-design/icons";
-
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import { Button, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities, experienceOptions } from "./input";
-
 import { useLocation } from "react-router-dom";
 import GeneratedReport from "./report";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
 import { formatColumnName } from "../../utils/price-a-job-helper-functions";
+import {
+  price_a_job_input_path,
+  price_a_job_profile_threshold,
+} from "../../config/constant";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -36,7 +37,6 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-// const GenerateSalaryValue = (originalData, storedExperience) => {
 //   if (originalData.length > 0) {
 //     // Function to calculate the "calculated salary" based on the stored experience
 //     const calculateCalculatedSalary = (
@@ -103,11 +103,6 @@ const ExpandMore = styled((props) => {
 
 const ReportsPage = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
-  // const [calculatedSalaryData, setCalculatedSalaryData] = useState([]);
-  // const [calculatedSalaryDataByRole, setCalculatedSalaryDataByRole] = useState(
-  //   []
-  // );
-
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
   const [duplicateDataArray, setDuplicateDataArray] = useState([]);
@@ -119,17 +114,16 @@ const ReportsPage = ({ userPlan }) => {
     sessionStorage.getItem("selectedJobTitles")
   );
   const storedExperience = sessionStorage.getItem("experience");
-
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
+  const storedSector = sessionStorage.getItem("sector");
   const storedManage = sessionStorage.getItem("isManage");
   const storedUserID = localStorage.getItem("user_id");
-
   const [showPreviousReports, setShowPreviousReports] = useState(false);
-
   const [isEditing, setIsEditing] = useState(false);
   const [editableExperience, setEditableExperience] =
     useState(storedExperience);
+  const [editableSector, setEditableSector] = useState(storedSector);
   const [editableLocation, setEditableLocation] = useState("");
   const [editableJobTitle, setEditableJobTitle] = useState("");
   const [editableSkills, setEditableSkills] = useState([]);
@@ -143,7 +137,7 @@ const ReportsPage = ({ userPlan }) => {
   const { Option } = Select;
   const [isReportReady, setIsReportReady] = useState(false);
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
-
+  const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
   const location = useLocation();
@@ -232,6 +226,7 @@ const ReportsPage = ({ userPlan }) => {
       skills: sessionStorage.getItem("selected_skills"),
       manage: storedManage,
       supervise: storedSupervise,
+      sector: storedSector,
     }));
 
     return newArr;
@@ -305,6 +300,7 @@ const ReportsPage = ({ userPlan }) => {
           formData.append("location ", storedLocation);
           formData.append("manage", storedManage);
           formData.append("supervise", storedSupervise);
+          formData.append("sector", storedSector);
 
           const response = await AxiosInstance.post(
             "/api/report/save",
@@ -336,6 +332,8 @@ const ReportsPage = ({ userPlan }) => {
               job_title: data.job_titles,
               skills: JSON.parse(data.skills),
               experience: data.experience,
+              threshold: price_a_job_profile_threshold,
+              sector: data.sector,
             },
             {
               headers: {
@@ -374,11 +372,13 @@ const ReportsPage = ({ userPlan }) => {
         if (index >= 0 && index < dataArray.length) {
           const data = dataArray[index];
           const response = await AxiosInstance.post(
-            "/api/salary/data/role",
+            "/api/salary/data/no-location",
             {
               job_title: data.job_titles,
               skills: JSON.parse(data.skills),
               experience: data.experience,
+              threshold: price_a_job_profile_threshold,
+              sector: data.sector,
             },
             {
               headers: {
@@ -413,10 +413,12 @@ const ReportsPage = ({ userPlan }) => {
           const data = dataArray[index];
           try {
             const response = await AxiosInstance.post(
-              "/api/salary/data/role/no-experience",
+              "/api/salary/data/no-experience",
               {
                 job_title: data.job_titles,
                 skills: JSON.parse(data.skills),
+                threshold: price_a_job_profile_threshold,
+                sector: data.sector,
               },
               {
                 headers: {
@@ -493,6 +495,7 @@ const ReportsPage = ({ userPlan }) => {
         skills: JSON.stringify(editableSkills),
         manage: storedManage,
         supervise: storedSupervise,
+        sector: editableSector,
       };
 
       // Update the first element of dataArray with the edited report
@@ -504,36 +507,7 @@ const ReportsPage = ({ userPlan }) => {
     }
   };
   // useEffect(() => {
-  //   if (salaryData.length > 0) {
-  //     const data = GenerateSalaryValue(
-  //       salaryData,
-  //       parseInt(dataArray[activeIndex].experience)
-  //     );
-
-  //     setCalculatedSalaryData(data);
-  //   }
-  // }, [salaryData, dataArray, activeIndex]);
-  // useEffect(() => {
-  //   if (salaryDataByRole.length > 0) {
-  //     const data = GenerateSalaryValue(
-  //       salaryDataByRole,
-  //       parseInt(dataArray[activeIndex].experience)
-  //     );
-
-  //     setCalculatedSalaryDataByRole(data);
-  //   }
-  // }, [salaryDataByRole, dataArray, activeIndex]);
-
-  // const handleSelectEditableJob = (value) => {
-  //   setEditableJobTitle(value);
-  // };
-  // const handleJobSearch = (newValue) => {
-  //   const filter = items.filter((data) =>
-  //     data?.toLowerCase().includes(newValue.toLowerCase())
-  //   );
-
-  //   setJobsData(filter);
-  // };
+  
   const handleSearch = (newValue) => {
     const filter = cities.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
@@ -558,6 +532,12 @@ const ReportsPage = ({ userPlan }) => {
     setSkillData(filter);
   };
 
+  const handleEditableSectorSearch = (newValue) => {
+    const filter = sectorsOption.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    sectorsOption(filter);
+  };
   useEffect(() => {
     if (editableJobTitle) {
       AxiosInstance.post(
@@ -609,6 +589,28 @@ const ReportsPage = ({ userPlan }) => {
     }
   }, [editableJobTitle]);
 
+  useEffect(() => {
+    AxiosInstance.post("/api/salary/sectors", {
+      title: storedJobTitles[0],
+    })
+      .then(async (res) => {
+        const response = await res.data;
+
+        const sectors = response.map((item) => Object.values(item)[0]);
+
+        // Create a new Set to store unique values
+        const uniqueSet = new Set(sectors);
+
+        // Convert the Set back to an array, sort it, and remove "unclassified" if present
+        const uniqueArray = Array.from(uniqueSet)
+          .filter((sector) => sector !== "Nan")
+          .sort();
+        setSectorsOption(uniqueArray);
+      })
+      .catch((err) => console.log(err));
+      //eslint-disable-next-line
+  }, []);
+
   const modalFooter = (
     <div>
       <Button type="primary" onClick={handleChangeEdit}>
@@ -625,9 +627,7 @@ const ReportsPage = ({ userPlan }) => {
   return (
     <>
       <NavBar />
-      {salaryData.length > 0 &&
-      salaryDataByRole.length > 0 &&
-      salaryDataNoExp.length > 0 ? (
+      {salaryData && salaryDataByRole && salaryDataNoExp ? (
         <div
           className="container-fluid   d-lg-flex justify-content-center align-items-start 
          "
@@ -664,28 +664,7 @@ const ReportsPage = ({ userPlan }) => {
               footer={modalFooter}
             >
               <div>
-                {/* <div className="mb-3  d-flex align-items-center">
-                  <label className="col-3">Job title : </label>
-                  <div className="col-8">
-                    <Select
-                      size={"large"}
-                      showSearch
-                      value={editableJobTitle}
-                      onChange={handleSelectEditableJob}
-                      onSearch={handleJobSearch}
-                      style={{
-                        width: "100%",
-                        borderRadius: "3px",
-                        textAlign: "start",
-                      }}
-                      options={(jobsData || []).map((item) => ({
-                        value: item,
-                        label: item,
-                      }))}
-                      className="border text-start"
-                    />
-                  </div>
-                </div> */}
+               
 
                 <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Location : </label>
@@ -770,8 +749,43 @@ const ReportsPage = ({ userPlan }) => {
                     </Select>
                   </div>
                 </div>
+                <div className="mb-3 d-flex align-items-center">
+                  <label className="col-3">Sector : </label>
+                  <div className="col-8 d-flex">
+                    <Select
+                      size={"large"}
+                      style={{
+                        width: "100%",
+                        borderRadius: "0",
+                        textAlign: "start",
+                      }}
+                      value={editableSector}
+                      className="input border"
+                      showSearch
+                      placeholder="Sector"
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      filterOption={false}
+                      onSearch={handleEditableSectorSearch}
+                      onChange={(value) => setEditableSector(value)}
+                      notFoundContent={null}
+                      options={(sectorsOption || []).map((d) => ({
+                        value: d,
+                        label: CapitalizeFirstLetter(d),
+                      }))}
+                    />
+                    <p className="bg-primary text-light m-0 text-center ml-1 p-2" style={{cursor:"pointer"}} onClick={() => setEditableSector(null)}>X</p>
+                  </div>
+                </div>
               </div>
             </Modal>
+
+            <a href={price_a_job_input_path}>
+              {" "}
+              <button className="btn btn-dark  w-100 mb-3">
+                Generate more reports
+              </button>
+            </a>
             <div>
               {dataArray && dataArray.length > 0 && (
                 <Card

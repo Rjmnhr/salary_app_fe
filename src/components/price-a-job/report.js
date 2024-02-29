@@ -18,10 +18,11 @@ import {
   decimalFix,
 } from "../../utils/price-a-job-helper-functions";
 import LinearSalaryChart from "./charts/linear-salary-chart";
-import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
 import SalaryVsGroupedExpBarChart from "./charts/salary-vs-grouped-bar-chart";
 import ReportUnsuccessful from "../misc/report-unsuccessful";
 import logoImagePath from "../../icons/logo192.png";
+import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
+import { price_a_job_profile_threshold } from "../../config/constant";
 
 const GeneratedReport = ({
   jobsData,
@@ -35,7 +36,6 @@ const GeneratedReport = ({
   const [chartWidth, setChartWidth] = useState(600);
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
-
   const printAreaRef = useRef(null);
   const [api, contextHolder] = notification.useNotification();
   const [isLoading, setIsLoading] = useState(false);
@@ -111,28 +111,6 @@ const GeneratedReport = ({
       placement,
     });
   };
-  // const generatePDF = () => {
-  //   const originalContents = document.body.innerHTML;
-  //   const printContent = printAreaRef.current;
-
-  //   if (printContent) {
-  //     const printContents = printContent.innerHTML;
-
-  //     // Add watermark to the content
-  //     const watermarkedContent = `<div style="position: relative;">${printContents}<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; font-size: 36px; color: red,z-index:99;">Watermark</div></div>`;
-
-  //     document.body.innerHTML = watermarkedContent;
-
-  //     // Print the document
-  //     window.print();
-
-  //     // Restore the original content after printing
-  //     document.body.innerHTML = originalContents;
-  //   } else {
-  //     console.error("Element not found.");
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const generatePDF = () => {
     const originalContents = document.body.innerHTML;
@@ -209,7 +187,7 @@ const GeneratedReport = ({
 
       // Print the page
       window.print();
-
+      window.location.reload(); // Reload the page
       // Restore the original content after printing
       document.body.innerHTML = originalContents;
     } else {
@@ -219,7 +197,6 @@ const GeneratedReport = ({
     }
   };
 
-  // const generatePDF = () => {
   //   const originalContents = document.body.innerHTML;
   //   const printContent = printAreaRef.current;
 
@@ -438,7 +415,7 @@ const GeneratedReport = ({
   return (
     <>
       {contextHolder}
-      {jobsData.length > 1 ? (
+      {jobsData.length >= price_a_job_profile_threshold ? (
         <div
           className="container  col-lg-11 col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
           style={{
@@ -590,7 +567,7 @@ const GeneratedReport = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-2">
+                  <h5 className="mb-5">
                     {" "}
                     Average Salary vs Grouped Experience Level
                   </h5>
@@ -619,17 +596,10 @@ const GeneratedReport = ({
                   </div>
                 </div>
               )}
-              <div
-                className="card mt-5 custom-shadow"
-                style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
-              >
-                <div className="card-body">
-                  <MedianSalaryChartForSkills
-                    data={jobsDataByRole}
-                    skills={JSON.parse(selectedSkills)}
-                  />
-                </div>
-              </div>
+              <MedianSalaryChartForSkills
+                data={jobsDataByRole}
+                skills={JSON.parse(selectedSkills)}
+              />
 
               <p style={{ fontSize: "14px" }} className="my-3 text-center">
                 End of the report

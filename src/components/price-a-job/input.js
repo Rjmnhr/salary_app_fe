@@ -4,7 +4,10 @@ import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
 import { Input, Select, Tag, Dropdown, Skeleton } from "antd";
 import AxiosInstance from "../../config/axios";
-import { formatColumnName } from "../../utils/price-a-job-helper-functions";
+import {
+  CapitalizeFirstLetter,
+  formatColumnName,
+} from "../../utils/price-a-job-helper-functions";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 
@@ -53,7 +56,8 @@ const PriceAJob = () => {
   const [isManage, setIsManage] = useState("");
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
-
+  const [sectorsOption, setSectorsOption] = useState([]);
+  const [sector, setSector] = useState(null);
   const { Option } = Select;
   // const [displayedSkills, setDisplayedSkills] = useState(6);
 
@@ -121,7 +125,7 @@ const PriceAJob = () => {
   }, [location, userID]);
 
   useEffect(() => {
-    AxiosInstance.get("/api/salary/roles")
+    AxiosInstance.get("/api/salary/titles")
       .then(async (res) => {
         const response = await res.data;
 
@@ -140,6 +144,24 @@ const PriceAJob = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    AxiosInstance.post("/api/salary/sectors", { title: selectedJobTitles[0] })
+      .then(async (res) => {
+        const response = await res.data;
+
+        const sectors = response.map((item) => Object.values(item)[0]);
+
+        // Create a new Set to store unique values
+        const uniqueSet = new Set(sectors);
+
+        // Convert the Set back to an array, sort it, and remove "unclassified" if present
+        const uniqueArray = Array.from(uniqueSet)
+          .filter((sector) => sector !== "Nan")
+          .sort();
+        setSectorsOption(uniqueArray);
+      })
+      .catch((err) => console.log(err));
+  }, [selectedJobTitles]);
   useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       const fetchResponses = async () => {
@@ -292,6 +314,12 @@ const PriceAJob = () => {
     );
     setData(filter);
   };
+  const handleSectorSearch = (newValue) => {
+    const filter = sectorsOption.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setSectorsOption(filter);
+  };
 
   const handleJobSearch = (newValue) => {
     const filter = jobsDataFetched.filter((data) =>
@@ -315,6 +343,7 @@ const PriceAJob = () => {
     sessionStorage.setItem("selected_skills", JSON.stringify(selectedSkills));
     sessionStorage.setItem("isSupervise", isSupervise);
     sessionStorage.setItem("isManage", isManage);
+    sessionStorage.setItem("sector", sector ? sector : "");
 
     navigate("/reports");
   };
@@ -326,6 +355,8 @@ const PriceAJob = () => {
   const handleSelectJob = (value) => {
     setSelectedJobTitles([value]);
     setJobsData(jobsDataFetched);
+    setSector(null);
+    setSelectedSkills([]);
   };
 
   const handleManageSelect = (value) => {
@@ -586,12 +617,38 @@ const PriceAJob = () => {
               </div>
             )} */}
               </div>
+              <div className="mb-3 col-12 col-lg-6">
+                <Select
+                  size={"large"}
+                  style={{
+                    width: "100%",
+                    borderRadius: "0",
+                    textAlign: "start",
+                  }}
+                  value={sector}
+                  className="input border"
+                  showSearch
+                  placeholder="Sector"
+                  defaultActiveFirstOption={false}
+                  suffixIcon={null}
+                  filterOption={false}
+                  onSearch={handleSectorSearch}
+                  onChange={(value) => setSector(value)}
+                  notFoundContent={null}
+                  options={(sectorsOption || []).map((d) => ({
+                    value: d,
+                    label: CapitalizeFirstLetter(d),
+                  }))}
+                />
+              </div>
+
               <div className="mb-3 col-12 col-lg-6 ">
                 <Input
                   placeholder="Any other skills or additional information"
                   allowClear
                 />
               </div>
+
               <div className="mb-3 col-12 col-lg-6">
                 <Select
                   size={"large"}

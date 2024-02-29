@@ -1,14 +1,17 @@
 import React from "react";
-
 import Chart from "react-apexcharts";
-import { axisColor, borderColor, colorConfig, shadeColor } from "../../../config/constant";
-
-
+import {
+  axisColor,
+  borderColor,
+  colorConfig,
+  shadeColor,
+} from "../../../config/constant";
 
 const SalaryVsExpLineChart = ({ title, width, height, data }) => {
   const options = {
     chart: {
       height: 215,
+      margin: -20,
       parentHeightOffset: 0,
       parentWidthOffset: 0,
       type: "area",
@@ -29,6 +32,16 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
     stroke: {
       width: 2,
       curve: "smooth",
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: shadeColor,
+          shadeIntensity: 0.1,
+          opacityFrom: 0.5,
+          opacityTo: 0.25,
+          stops: [0, 95, 100],
+        },
+      },
     },
     legend: {
       show: false,
@@ -54,16 +67,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       },
     },
     colors: [colorConfig.colors.primary],
-    fill: {
-      type: "solid",
-      gradient: {
-        shade: shadeColor,
-        shadeIntensity: 0.1,
-        opacityFrom: 0.5,
-        opacityTo: 0.25,
-        stops: [0, 95, 100],
-      },
-    },
+
     grid: {
       borderColor: borderColor,
       strokeDashArray: 3,
@@ -127,7 +131,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
     },
   ];
   return (
-    <div>
+    <div className="chart-container p-2">
       <Chart
         options={options}
         series={series}

@@ -47,3 +47,5 @@ export const colorConfig = {
 export const axisColor = colorConfig.colors.axisColor;
 export const borderColor = colorConfig.colors.borderColor;
 export const shadeColor = colorConfig.colors.shadeColor;
+
+export const price_a_job_profile_threshold = 10;

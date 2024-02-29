@@ -71,7 +71,6 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       filteredData.map((item) => item.mapped_average_sal)
     );
 
-
     // Check if the median is valid (not NaN or null) before adding it to the array
     if (!isNaN(median) && median !== null) {
       skillMedians.push({
@@ -80,7 +79,6 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       });
     }
   });
-
 
   const options = {
     chart: {
@@ -134,9 +132,9 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       type: "gradient",
       gradient: {
         shade: shadeColor,
-        shadeIntensity: 0.6,
-        opacityFrom: 0.5,
-        opacityTo: 0.25,
+        shadeIntensity: 0.1,
+        opacityFrom: 0.7,
+        opacityTo: 0.8,
         stops: [0, 95, 100],
       },
     },
@@ -154,7 +152,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       title: {
         text: "Skills",
         offsetY: -10,
-        offsetX:-10,
+        offsetX: -10,
       },
       categories: skillMedians.map((d) => d.skill),
       axisBorder: {
@@ -210,26 +208,33 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
     <>
       {skills && skills?.length > 0 && skillMedians.length > 0 ? (
         <div
-          className="text-center mt-3"
-          style={{
-            display: "grid",
-            justifyItems: "center",
-            alignContent: "center",
-          }}
+          className="card mt-5 custom-shadow"
+          style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
         >
-          <h5 className="mb-5">
-            {" "}
-            Average salary for skill(s) you have selected across{" "}
-            <span className="tex-primary">India</span>
-          </h5>
+          <div className="card-body">
+            <div
+              className="text-center mt-3"
+              style={{
+                display: "grid",
+                justifyItems: "center",
+                alignContent: "center",
+              }}
+            >
+              <h5 className="mb-5">
+                {" "}
+                Average salary for skill(s) you have selected across{" "}
+                <span className="tex-primary">India</span>
+              </h5>
 
-          <Chart
-            options={options}
-            series={series}
-            type="bar"
-            width={chartWidth}
-            height={chartHeight}
-          />
+              <Chart
+                options={options}
+                series={series}
+                type="bar"
+                width={chartWidth}
+                height={chartHeight}
+              />
+            </div>
+          </div>
         </div>
       ) : (
         ""
