@@ -507,7 +507,7 @@ const ReportsPage = ({ userPlan }) => {
     }
   };
   // useEffect(() => {
-  
+
   const handleSearch = (newValue) => {
     const filter = cities.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
@@ -591,7 +591,7 @@ const ReportsPage = ({ userPlan }) => {
 
   useEffect(() => {
     AxiosInstance.post("/api/salary/sectors", {
-      title: storedJobTitles[0],
+      title: dataArray[activeIndex]?.job_titles,
     })
       .then(async (res) => {
         const response = await res.data;
@@ -608,7 +608,7 @@ const ReportsPage = ({ userPlan }) => {
         setSectorsOption(uniqueArray);
       })
       .catch((err) => console.log(err));
-      //eslint-disable-next-line
+    //eslint-disable-next-line
   }, []);
 
   const modalFooter = (
@@ -657,15 +657,12 @@ const ReportsPage = ({ userPlan }) => {
                 {Math.max(reportLimit - dataArray.length, 0)}
               </p>
             )}
-
             <Modal
               closable={false}
               visible={isModalVisible}
               footer={modalFooter}
             >
               <div>
-               
-
                 <div className="mb-3  d-flex align-items-center">
                   <label className="col-3">Location : </label>
                   <div className="col-8">
@@ -774,18 +771,24 @@ const ReportsPage = ({ userPlan }) => {
                         label: CapitalizeFirstLetter(d),
                       }))}
                     />
-                    <p className="bg-primary text-light m-0 text-center ml-1 p-2" style={{cursor:"pointer"}} onClick={() => setEditableSector(null)}>X</p>
+                    <p
+                      className="bg-primary text-light m-0 text-center ml-1 p-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setEditableSector(null)}
+                    >
+                      X
+                    </p>
                   </div>
                 </div>
               </div>
             </Modal>
-
             <a href={price_a_job_input_path}>
               {" "}
               <button className="btn btn-dark  w-100 mb-3">
                 Generate more reports
               </button>
             </a>
+
             <div>
               {dataArray && dataArray.length > 0 && (
                 <Card
