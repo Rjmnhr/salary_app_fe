@@ -109,6 +109,7 @@ const ReportsPage = ({ userPlan }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
+
   const storedLocation = sessionStorage.getItem("location");
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
@@ -426,6 +427,8 @@ const ReportsPage = ({ userPlan }) => {
                 },
               }
             );
+           
+
             return response.data;
           } catch (error) {
             console.error("API request failed:", error);

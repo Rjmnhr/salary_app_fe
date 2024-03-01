@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ element }) => {
@@ -10,7 +10,7 @@ const ProtectedRoute = ({ element }) => {
   const VerifyToken = async () => {
     try {
       const res = await fetch(
-         "https://backend.equipaypartners.com/api/token/verify",
+        "https://backend.equipaypartners.com/api/token/verify",
         // "http://localhost:8003/api/token/verify",
         {
           headers: {
@@ -31,18 +31,17 @@ const ProtectedRoute = ({ element }) => {
     }
   };
 
-  VerifyToken();
+  useEffect(() => {
+    VerifyToken();
+  }, []);
 
   if (isAuthenticated !== null) {
     if (isAuthenticated) {
       return element;
     } else {
       // Redirect to the login page if not authenticated
-localStorage.removeItem("isLoggedIn")
-      return (
-        <Navigate to={`/login-app?p=${path}`} />
-      )
-      ;
+      localStorage.removeItem("isLoggedIn");
+      return <Navigate to={`/login-app?p=${path}`} />;
     }
   }
 };

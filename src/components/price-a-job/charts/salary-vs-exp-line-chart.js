@@ -8,6 +8,11 @@ import {
 } from "../../../config/constant";
 
 const SalaryVsExpLineChart = ({ title, width, height, data }) => {
+  const numericSalaries = data
+    .map((d) => d.averageSalary)
+    .filter((salary) => salary !== "NaN");
+  console.log("🚀 ~ SalaryVsExpLineChart ~ numericSalaries:", numericSalaries);
+
   const options = {
     chart: {
       height: 215,
@@ -115,7 +120,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       },
       offsetY: 10, // This offset controls the gap between the Y-axis border and labels
       min: 0, // Adjust the min value based on your data
-      max: Math.max(...data.map((d) => d.averageSalary)), // Adjust the max value based on your data
+      max: Math.max(...numericSalaries), // Adjust the max value based on your data
       tickAmount: 4,
       axisBorder: {
         show: false, // Show the Y-axis border
