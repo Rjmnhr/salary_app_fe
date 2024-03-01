@@ -10,7 +10,7 @@ const ProtectedRoute = ({ element }) => {
   const VerifyToken = async () => {
     try {
       const res = await fetch(
-        "https://backend.equipaypartners.com/api/token/verify",
+        "https://equipaytest-58or5j7k.b4a.run/api/token/verify",
         // "http://localhost:8003/api/token/verify",
         {
           headers: {
