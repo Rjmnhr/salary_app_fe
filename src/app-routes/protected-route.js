@@ -33,6 +33,7 @@ const ProtectedRoute = ({ element }) => {
 
   useEffect(() => {
     VerifyToken();
+    //eslint-disable-next-line
   }, []);
 
   if (isAuthenticated !== null) {
