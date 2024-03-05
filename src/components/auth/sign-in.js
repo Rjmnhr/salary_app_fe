@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
 
-
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,8 +42,8 @@ const SignIn = () => {
 
       setIsLoading(false);
 
-      if (data === 404) {
-        error("Wrong password or username");
+      if (data.status === 404) {
+        error(data.message);
         document.querySelector(".ant-input-affix-wrapper").style.border =
           "1px solid red";
         document.querySelector("#email-login").style.border = "1px solid red";
@@ -54,16 +53,10 @@ const SignIn = () => {
       success();
 
       const accessToken = data.accessToken;
-      const user_id = data.id;
-      const user_name = data.first_name;
-
-      // const plan = data.plan;
 
       if (!accessToken) return error(data);
-      // localStorage.setItem("plan", plan);
-      localStorage.setItem("user_id", user_id);
+
       localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("user_name", user_name);
 
       localStorage.setItem("accessToken", accessToken);
 
@@ -116,7 +109,7 @@ const SignIn = () => {
             <form class="php-email-form" onSubmit={handleSubmit}>
               <div class="col form-group">
                 <Input
-                  style={{ borderRadius: "0",height:"50px " }}
+                  style={{ borderRadius: "0", height: "50px " }}
                   type="email"
                   name="email"
                   id="email-login"
@@ -129,7 +122,7 @@ const SignIn = () => {
               </div>
               <div className="mb-3 col-12 col-lg-12">
                 <Input.Password
-                style={{height:"50px"}}
+                  style={{ height: "50px" }}
                   placeholder="Password"
                   iconRender={(visible) =>
                     visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />

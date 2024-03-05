@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import AxiosInstance from "../config/axios";
 import ReportsPage from "../components/price-a-job/output";
 
-
 const VerifyPlanRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
-  const userID = localStorage.getItem("user_id");
 
   const [userPlan, setUserPlan] = useState(null);
 
@@ -15,7 +13,8 @@ const VerifyPlanRoute = ({ element }) => {
     try {
       const res = await AxiosInstance.post(
         "/api/token/plan",
-        { id: userID },
+        { test: "test" },
+
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -37,7 +36,10 @@ const VerifyPlanRoute = ({ element }) => {
     }
   };
 
-  VerifyToken();
+  useEffect(() => {
+    VerifyToken();
+    //eslint-disable-next-line
+  }, []);
 
   if (userPlan !== null && userPlan !== undefined) {
     if (userPlan) {

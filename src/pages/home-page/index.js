@@ -109,33 +109,33 @@ const HomePage = () => {
                 </h1>
 
                 <div
-                  className="mb-3 mt-5 d-lg-flex flex-wrap offset-lg-1 "
+                  className="mb-3 mt-5 d-lg-flex flex-wrap justify-content-center "
                   style={{
                     textAlign: "center",
                     alignItems: "center",
-                    justifyContent: "start",
+
                     gap: "8px",
                   }}
                 >
                   <button
                     onClick={() => navigate("/price-a-job")}
-                    style={{ color: "white" }}
-                    className="custom-button btn border btn-lg mb-3 m-lg-0"
+ 
+                    className="custom-button btn border btn-lg mb-3 m-lg-0 btn-light"
                   >
                     Price a Job
                   </button>
                   <br />
                   <button
                     onClick={() => navigate("/executive-compensation")}
-                    style={{ color: "white" }}
-                    className="custom-button btn border btn-lg"
+  
+                    className="custom-button btn border btn-lg d-none"
                   >
                     Executive Compensation
                   </button>
                   <button
                     onClick={() => navigate("/salary-survey")}
-                    style={{ color: "white" }}
-                    className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3"
+              
+                    className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3 btn-light"
                   >
                     Salary Survey
                   </button>

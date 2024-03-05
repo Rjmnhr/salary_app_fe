@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import AxiosInstance from "../config/axios";
+import { useApplicationContext } from "../context/app-context";
 
 const ProtectedRoute = ({ element }) => {
-  const accessToken = localStorage.getItem("accessToken");
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const location = useLocation();
   const path = location.pathname;
+  const accessToken = localStorage.getItem("accessToken");
+  const { setFirstName, setLastName, setUserEmail, setUserPlan } =
+    useApplicationContext();
 
   const VerifyToken = async () => {
     try {
-      const res = await fetch(
-        "https://equipaytest-58or5j7k.b4a.run/api/token/verify",
-        // "http://localhost:8003/api/token/verify",
+      const res = await AxiosInstance.get(
+        "/api/user/details",
+
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -19,8 +23,14 @@ const ProtectedRoute = ({ element }) => {
         }
       );
 
+      const data = await res.data;
+
       if (res.status === 200) {
         setIsAuthenticated(true);
+        setFirstName(data.first_name);
+        setLastName(data.last_name);
+        setUserEmail(data.email);
+        setUserPlan(data.plan);
       } else {
         setIsAuthenticated(false);
       }

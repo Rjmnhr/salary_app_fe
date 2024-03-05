@@ -15,13 +15,14 @@ import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button, Modal, Popconfirm, Select, Skeleton } from "antd";
 import { cities, experienceOptions } from "./input";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import GeneratedReport from "./report";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
 import { formatColumnName } from "../../utils/price-a-job-helper-functions";
 import {
+  login_app_path,
   price_a_job_input_path,
   price_a_job_profile_threshold,
 } from "../../config/constant";
@@ -37,69 +38,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-//   if (originalData.length > 0) {
-//     // Function to calculate the "calculated salary" based on the stored experience
-//     const calculateCalculatedSalary = (
-//       experienceRange,
-//       salaryRange,
-//       storedExperience
-//     ) => {
-//       const [experienceStart, experienceEnd] = experienceRange
-//         .split(" ")[0]
-//         .split("-")
-//         .map(Number);
 
-//       const [salaryStart, salaryEnd] = salaryRange
-//         .split(" ")[0]
-//         .split("-")
-//         .map(Number);
-
-//       if (storedExperience === experienceStart) {
-//         return salaryStart;
-//       } else if (storedExperience === experienceEnd) {
-//         return salaryEnd;
-//       } else if (
-//         storedExperience > experienceStart &&
-//         storedExperience < experienceEnd
-//       ) {
-//         const experienceRangeLength = experienceEnd - experienceStart;
-//         const salaryRangeLength = salaryEnd - salaryStart;
-//         const salaryPerYear = salaryRangeLength / experienceRangeLength;
-//         return (
-//           salaryStart + (storedExperience - experienceStart) * salaryPerYear
-//         );
-//       } else {
-
-//         return null; // Handle cases where storedExperience is not within the experience range
-//       }
-//     };
-
-//     // Modify the original 2D array to include "calculated salary"
-
-//     const modifiedData = originalData.map((nestedArray) => {
-//       return nestedArray.map((item) => {
-//         const calculatedSalary = calculateCalculatedSalary(
-//           item.experience,
-//           item.salary,
-//           storedExperience
-//         );
-
-//         if (calculatedSalary !== null) {
-//           return {
-//             ...item,
-//             calculated_salary: calculatedSalary,
-//           };
-//         } else {
-
-//           // Handle cases where storedExperience is not within the experience range
-//           return item;
-//         }
-//       });
-//     });
-
-//     return modifiedData;
-//   }
-// };
 
 const ReportsPage = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
@@ -109,7 +48,6 @@ const ReportsPage = ({ userPlan }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
-
   const storedLocation = sessionStorage.getItem("location");
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
@@ -122,12 +60,12 @@ const ReportsPage = ({ userPlan }) => {
   const storedUserID = localStorage.getItem("user_id");
   const [showPreviousReports, setShowPreviousReports] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editableExperience, setEditableExperience] =
-    useState(storedExperience);
-  const [editableSector, setEditableSector] = useState(storedSector);
+  const [editableExperience, setEditableExperience] = useState("");
+  const [editableSector, setEditableSector] = useState("");
   const [editableLocation, setEditableLocation] = useState("");
   const [editableJobTitle, setEditableJobTitle] = useState("");
   const [editableSkills, setEditableSkills] = useState([]);
+  const [currentReportID, setCurrentReportID] = useState("");
   let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(0);
   // const [jobsData, setJobsData] = useState(items);
@@ -140,11 +78,13 @@ const ReportsPage = ({ userPlan }) => {
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
   const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
-
+  const accessToken = localStorage.getItem("accessToken");
   const location = useLocation();
-
+  const navigate = useNavigate();
   const locationURL = window.location.href;
   const userID = localStorage.getItem("user_id");
+  const pathLocation = useLocation();
+  const path = pathLocation.pathname;
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,
@@ -247,12 +187,15 @@ const ReportsPage = ({ userPlan }) => {
       {
         headers: {
           "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
         },
       }
     )
       .then(async (response) => {
         const data = await response.data;
 
+        if (response.status === 403 || response.status === 401)
+          return navigate(login_app_path+`?p=${path}`);
         const reversedData = [...data].reverse();
 
         // Use Set to store distinct objects
@@ -267,7 +210,10 @@ const ReportsPage = ({ userPlan }) => {
         setDuplicateDataArray(distinctArray);
         setEditableJobTitle(distinctArray[0].job_titles);
         setEditableLocation(distinctArray[0].location);
+        setEditableExperience(distinctArray[0].experience);
         setEditableSkills(JSON.parse(distinctArray[0].skills));
+        setCurrentReportID(distinctArray[0].report_id);
+        setEditableSector(distinctArray[0].sector);
       })
       .catch((err) => console.log(err));
     //eslint-disable-next-line
@@ -278,7 +224,7 @@ const ReportsPage = ({ userPlan }) => {
       return;
     } else {
       if (saveTheReport === "true") {
-        if (storedJobTitles && storedUserID) {
+        if (storedJobTitles) {
           // eslint-disable-next-line react-hooks/exhaustive-deps
           saveTheReport = "false";
           saveReport();
@@ -294,7 +240,7 @@ const ReportsPage = ({ userPlan }) => {
       await Promise.all(
         storedJobTitles.map(async (jobTitle) => {
           const formData = new FormData();
-          formData.append("user_id", storedUserID);
+
           formData.append("job_titles", jobTitle);
           formData.append("experience", storedExperience);
           formData.append("skills", JSON.stringify(storedSkills));
@@ -309,17 +255,40 @@ const ReportsPage = ({ userPlan }) => {
             {
               headers: {
                 "Content-Type": "application/json",
+                token: `Bearer ${accessToken}`,
               },
             }
           );
-          console.log(response.data);
+
+          if (response.status === 403 || response.status === 401)
+            return navigate(login_app_path+`?p=${path}`);
         })
       );
 
       sessionStorage.setItem("saveTheReport", "false"); // Mark report as saved in localStorage
     }
   };
+  const updateReport = () => {
+    const formData = new FormData();
 
+    formData.append("experience", editableExperience);
+    formData.append("skills", JSON.stringify(editableSkills));
+    formData.append("location ", editableLocation);
+    formData.append("sector", editableSector);
+    formData.append("id", currentReportID);
+
+    AxiosInstance.post("api/report/update", formData, {
+      headers: {
+        "Content-Type": "application/json",
+        token: `Bearer ${accessToken}`,
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        console.log("🚀 ~ updateReport ~ response:", response);
+      })
+      .catch((err) => console.log(err));
+  };
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
       setIsReportReady(false);
@@ -339,9 +308,13 @@ const ReportsPage = ({ userPlan }) => {
             {
               headers: {
                 "content-type": "application/json",
+                token: `Bearer ${accessToken}`,
               },
             }
           );
+
+          if (response.status === 403 || response.status === 401)
+            return navigate(login_app_path+`?p=${path}`);
 
           return { data: response.data.data, bool: response.data.bool };
         } else {
@@ -384,9 +357,11 @@ const ReportsPage = ({ userPlan }) => {
             {
               headers: {
                 "content-type": "application/json",
+                token: `Bearer ${accessToken}`,
               },
             }
           );
+          if (response.status !== 200) return navigate(login_app_path+`?p=${path}`);
           return response.data;
         } else {
           return null; // Handle out-of-bounds index
@@ -424,11 +399,12 @@ const ReportsPage = ({ userPlan }) => {
               {
                 headers: {
                   "content-type": "application/json",
+                  token: `Bearer ${accessToken}`,
                 },
               }
             );
-           
-
+            if (response.status === 403 || response.status === 401)
+              return navigate(login_app_path+`?p=${path}`);
             return response.data;
           } catch (error) {
             console.error("API request failed:", error);
@@ -551,11 +527,13 @@ const ReportsPage = ({ userPlan }) => {
         {
           headers: {
             "content-type": "application/json",
+            token: `Bearer ${accessToken}`,
           },
         }
       )
         .then(async (response) => {
           const retrievedSkillsData = await response.data;
+          if (response.status !== 200) return navigate(login_app_path+`?p=${path}`);
           const nestedSkillsData = [retrievedSkillsData];
 
           const uniqueValues = new Set();
@@ -590,33 +568,52 @@ const ReportsPage = ({ userPlan }) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [editableJobTitle]);
+  }, [editableJobTitle, accessToken, navigate,path]);
 
   useEffect(() => {
-    AxiosInstance.post("/api/salary/sectors", {
-      title: dataArray[activeIndex]?.job_titles,
-    })
-      .then(async (res) => {
-        const response = await res.data;
+    if (dataArray.length > 0) {
+      AxiosInstance.post(
+        "/api/salary/sectors",
+        {
+          title: dataArray[activeIndex]?.job_titles,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      )
+        .then(async (res) => {
+          const response = await res.data;
 
-        const sectors = response.map((item) => Object.values(item)[0]);
+          if (res.status === 403 || res.status === 401)
+            return navigate(login_app_path+`?p=${path}`);
+          const sectors = response.map((item) => Object.values(item)[0]);
 
-        // Create a new Set to store unique values
-        const uniqueSet = new Set(sectors);
+          // Create a new Set to store unique values
+          const uniqueSet = new Set(sectors);
+          // Convert the Set back to an array, sort it, and remove "unclassified" if present
+          const uniqueArray = Array.from(uniqueSet)
+            .filter((sector) => sector !== "Nan")
+            .sort();
 
-        // Convert the Set back to an array, sort it, and remove "unclassified" if present
-        const uniqueArray = Array.from(uniqueSet)
-          .filter((sector) => sector !== "Nan")
-          .sort();
-        setSectorsOption(uniqueArray);
-      })
-      .catch((err) => console.log(err));
+          setSectorsOption(uniqueArray);
+        })
+        .catch((err) => console.log(err));
+    }
+
     //eslint-disable-next-line
-  }, []);
+  }, [dataArray]);
 
   const modalFooter = (
     <div>
-      <Button type="primary" onClick={handleChangeEdit}>
+      <Button
+        type="primary"
+        onClick={() => {
+          handleChangeEdit();
+          updateReport();
+        }}
+      >
         Save
       </Button>
     </div>
@@ -645,13 +642,6 @@ const ReportsPage = ({ userPlan }) => {
               transform: "transition 0.3s all ease",
             }}
           >
-            {/* <input className="form-control mb-3" placeholder="search" />
-            <button
-              onClick={() => navigate("/price-a-job")}
-              className="btn btn-primary mb-3 w-100"
-            >
-              Get More Reports
-            </button> */}
             {userPlan === "Premium" ? (
               <p>Unlimited Reports</p>
             ) : (
@@ -769,15 +759,18 @@ const ReportsPage = ({ userPlan }) => {
                       onSearch={handleEditableSectorSearch}
                       onChange={(value) => setEditableSector(value)}
                       notFoundContent={null}
-                      options={(sectorsOption || []).map((d) => ({
-                        value: d,
-                        label: CapitalizeFirstLetter(d),
-                      }))}
+                      options={[
+                        { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
+                        ...(sectorsOption || []).map((d) => ({
+                          value: d,
+                          label: CapitalizeFirstLetter(d),
+                        })),
+                      ]}
                     />
                     <p
                       className="bg-primary text-light m-0 text-center ml-1 p-2"
                       style={{ cursor: "pointer" }}
-                      onClick={() => setEditableSector(null)}
+                      onClick={() => setEditableSector("")}
                     >
                       X
                     </p>

@@ -4,6 +4,7 @@ export const login_app_path = "/login-app";
 export const reset_password_path = "/forgot-password";
 export const user_account_path = "/account";
 export const otp_validation_path = "/otp-validation";
+export const unauthorized_path = "/unauthorized";
 
 export const price_a_job_landing_path = "/price-a-job";
 export const price_a_job_input_path = "/price-a-job-add-details";
@@ -49,3 +50,4 @@ export const borderColor = colorConfig.colors.borderColor;
 export const shadeColor = colorConfig.colors.shadeColor;
 
 export const price_a_job_profile_threshold = 10;
+export const access_token = localStorage.getItem("accessToken");

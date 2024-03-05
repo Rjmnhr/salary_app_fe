@@ -11,7 +11,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
   const numericSalaries = data
     .map((d) => d.averageSalary)
     .filter((salary) => salary !== "NaN");
-  console.log("🚀 ~ SalaryVsExpLineChart ~ numericSalaries:", numericSalaries);
+
 
   const options = {
     chart: {

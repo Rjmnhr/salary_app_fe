@@ -1,34 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import { Dropdown } from "antd";
-
+import { Avatar, Dropdown } from "antd";
 import logo from "../../icons/logo192.png";
-
-// const CapitalizeFirstLetter = (data) => {
-//   // Split the string into words
-//   const words = data?.split(" ");
-//   // Capitalize the first letter of each word and make the rest lowercase
-//   const capitalizedWords = words?.map((word) => {
-//     if (word.charAt(0) === word.charAt(0).toUpperCase()) {
-//       // If the first letter is already capitalized, keep it as is
-//       return word;
-//     } else {
-//       // Otherwise, capitalize the first letter and make the rest lowercase
-//       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-//     }
-//   });
-
-//   // Join the words back together with spaces
-//   return capitalizedWords?.join(" ");
-// };
+import { useApplicationContext } from "../../context/app-context";
+import AxiosInstance from "../../config/axios";
 
 const NavBar = ({ bgInput }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const Location = useLocation();
+  const [initials, setInitials] = useState("");
+  const accessToken = localStorage.getItem("accessToken");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {
+    setFirstName,
+    setLastName,
+    setUserEmail,
+    setUserPlan,
+
+    firstName,
+    lastName,
+  } = useApplicationContext();
+
+  useEffect(() => {
+    AxiosInstance.get("api/user/details", {
+      headers: {
+        token: `Bearer ${accessToken}`,
+      },
+    })
+      .then(async (res) => {
+        const UserData = res.data?.data;
+
+        if (res.status === 200) {
+          setFirstName(UserData.first_name);
+          setLastName(UserData.last_name);
+          setUserEmail(UserData.email);
+          setUserPlan(UserData.plan);
+          setIsLoggedIn(true);
+        }
+      })
+      .catch((err) => console.log(err));
+    //eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    // Ensure firstName and lastName are strings
+    const sanitizedFirstName = String(firstName);
+
+    const sanitizedLastName = String(lastName);
+
+    // Extracting the first letters only if both first and last names have values
+    const initialsValue =
+      sanitizedFirstName && sanitizedLastName
+        ? (sanitizedFirstName[0] + sanitizedLastName[0]).toUpperCase()
+        : "";
+
+    setInitials(initialsValue);
+  }, [firstName, lastName]);
 
   const getActiveLink = (path) => {
     switch (path) {
@@ -82,7 +112,6 @@ const NavBar = ({ bgInput }) => {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
 
   //eslint-disable-next-line
   const handleLogOut = () => {
@@ -94,10 +123,29 @@ const NavBar = ({ bgInput }) => {
   const items = [
     {
       key: "1",
-      label: <a href="/account">My Account</a>,
+      label: (
+        <div className="d-flex justify-content-start align-items-center pb-2 text-start  ">
+          {" "}
+          <p className="m-0">{firstName}</p>
+          <Avatar
+            style={{
+              backgroundColor: "#007bff",
+              verticalAlign: "middle",
+              marginLeft: "10px",
+            }}
+            size="small"
+          >
+            {initials}
+          </Avatar>
+        </div>
+      ),
     },
     {
       key: "2",
+      label: <a href="/account">My Profile</a>,
+    },
+    {
+      key: "3",
       label: (
         <a href="#eq" onClick={handleLogOut}>
           Log out
@@ -151,16 +199,19 @@ const NavBar = ({ bgInput }) => {
                   <a href="/price-a-job">Price a Job</a>
                 </li>
                 <li
-                  className={
-                    activeLink === "/executive-compensation" ? "active" : ""
-                  }
+                  className={`
+                   ${activeLink === "/executive-compensation" ? "active" : ""}
+                   d-none
+                 `}
                 >
                   <a href="/executive-compensation">Executive Compensation</a>
                 </li>
                 <li className={activeLink === "survey" ? "active" : ""}>
                   <a href="/salary-survey">Salary survey</a>
                 </li>
-                <li className={activeLink === "kpi" ? "active" : ""}>
+                <li
+                  className={` d-none ${activeLink === "kpi" ? "active" : ""}`}
+                >
                   <a href="/kpi-client">KPI Client</a>
                 </li>
                 <li className={activeLink === "training" ? "active" : ""}>
@@ -173,21 +224,32 @@ const NavBar = ({ bgInput }) => {
                   <a href="/blog">Blog</a>
                 </li>
 
-                {isLoggedIn === "true" ? (
+                {isLoggedIn ? (
                   <>
                     <Dropdown
                       menu={{
                         items,
                       }}
-                      placement="bottomRight"
-                      arrow
+                      placement="bottomLeft"
                     >
                       <li
                         style={{ cursor: "pointer" }}
-                        className={activeLink === "account" ? "active" : ""}
+                        className={`${
+                          activeLink === "account" ? "active" : ""
+                        } pt-2 pb-0`}
                       >
                         {/*eslint-disable-next-line*/}
-                        <a>Account</a>
+                        <a>
+                          <Avatar
+                            style={{
+                              backgroundColor: "#007bff",
+                              verticalAlign: "middle",
+                            }}
+                            size="medium"
+                          >
+                            {initials}
+                          </Avatar>
+                        </a>
                       </li>
                     </Dropdown>
                   </>

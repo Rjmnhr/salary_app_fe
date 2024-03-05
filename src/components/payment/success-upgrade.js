@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
+import { useApplicationContext } from "../../context/app-context";
+import { login_app_path } from "../../config/constant";
 
 const SuccessUpgrade = () => {
   const [isProfileUpdated, setIsProfileUpdated] = useState(false);
@@ -14,6 +16,7 @@ const SuccessUpgrade = () => {
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
+  const { accessToken } = useApplicationContext();
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,
@@ -82,12 +85,14 @@ const SuccessUpgrade = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            token: `Bearer ${accessToken}`,
           },
         }
       )
         .then(async (response) => {
           //eslint-disable-next-line
           const data = await response.data;
+          if (response.status === 403 || 401) return navigate(login_app_path);
           sessionStorage.removeItem("upgrade_plan");
           setIsProfileUpdated(true);
         })

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import BgVideo from "../../video/demo.mp4";
 
-
 import DownloadSamplePDF from "../../components/price-a-job/download-sample-pdf";
 
 import { ArrowRightOutlined } from "@ant-design/icons";
@@ -18,6 +17,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [activateDashboard, setActivateDashboard] = useState(false);
 
+  const accessToken = localStorage.getItem("accessToken");
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
   useEffect(() => {
@@ -40,30 +40,27 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
-    const userID = localStorage.getItem("user_id");
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    AxiosInstance.post(
+      "/api/report/get",
+      { payload: "payload" },
 
-    if (userID && isLoggedIn === "true") {
-      AxiosInstance.post(
-        "/api/report/get",
-        { user_id: userID },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then(async (response) => {
+        const data = await response.data;
+        if (data?.length > 0) {
+          setActivateDashboard(true);
+        } else {
+          setActivateDashboard(false);
         }
-      )
-        .then(async (response) => {
-          const data = await response.data;
-          if (data?.length > 0) {
-            setActivateDashboard(true);
-          } else {
-            setActivateDashboard(false);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+      })
+      .catch((err) => console.log(err));
+  }, [accessToken]);
   const [startTime, setStartTime] = useState(Date.now());
   useEffect(() => {
     // Set start time when the component mounts

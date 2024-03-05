@@ -1,11 +1,11 @@
 import { Divider } from "antd";
 import React, { useEffect, useState } from "react";
 
-
 import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
+import { useApplicationContext } from "../../context/app-context";
 const UserAccount = () => {
-  const [userInfo, setUserInfo] = useState(null);
+  const { userEmail, userPlan } = useApplicationContext();
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
@@ -65,17 +65,7 @@ const UserAccount = () => {
     };
     //eslint-disable-next-line
   }, [location, userID]);
-  useEffect(() => {
-    const userID = localStorage.getItem("user_id");
-    AxiosInstance.get(`api/user/details?id=${userID}`)
-      .then(async (res) => {
-        const response = await res.data;
-        sessionStorage.setItem("user-email", response.email);
-        sessionStorage.setItem("user-plan", response.plan);
-        setUserInfo(response);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+
   return (
     <>
       <NavBar />
@@ -90,6 +80,8 @@ const UserAccount = () => {
             </h2>
           </div>
         </div>
+
+ <div></div>
         <Divider />
 
         <div className="d-lg-flex">
@@ -99,7 +91,7 @@ const UserAccount = () => {
 
           <div className="container col-lg-8 col-12">
             <div className="d-flex justify-content-between align-items-center mb-3 ">
-              <p style={{ margin: "0" }}>{userInfo?.email}</p>
+              <p style={{ margin: "0" }}>{userEmail}</p>
               <a href="/change-email">Change email</a>
             </div>
 
@@ -117,7 +109,7 @@ const UserAccount = () => {
 
           <div className="container col-lg-8 col-12">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <p style={{ margin: "0" }}>{userInfo?.plan}</p>
+              <p style={{ margin: "0" }}>{userPlan}</p>
               <a href="/change-plan">Change plan</a>
             </div>
           </div>

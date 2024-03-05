@@ -23,7 +23,9 @@ import ChangePassword from "../components/auth/change-password.js";
 import ChangePlan from "../components/auth/change-plan.js";
 import ForgotPasswordPage from "../components/auth/forgot-password.js";
 import RoleInformation from "../components/exec-rem/role-info.js";
-import TableComponent, { TableComponentMobile } from "../components/exec-rem/companies-filtered.js";
+import TableComponent, {
+  TableComponentMobile,
+} from "../components/exec-rem/companies-filtered.js";
 import BenchmarkOutput from "../components/exec-rem/output.js";
 import FillForm from "../pages/training-page/fill-form.js";
 import BlogsMainPage from "../pages/blog-page.js/main.js";
@@ -37,12 +39,26 @@ import PriceAJobVideo from "../components/price-a-job/demo-video.js";
 import KPIClientOutput from "../components/KPI-client/output.js";
 import Success from "../components/payment/Success.js";
 import Canceled from "../components/payment/Canceled.js";
-import { exec_rem_input_path, exec_rem_landing_path, home_path, login_app_path, login_path, otp_validation_path, price_a_job_dashboard_path, price_a_job_input_path, price_a_job_landing_path, price_a_job_output_path, sales_incentive_page_path, training_page_path } from "../config/constant.js";
-
-
+import {
+  exec_rem_input_path,
+  exec_rem_landing_path,
+  home_path,
+  login_app_path,
+  login_path,
+  otp_validation_path,
+  price_a_job_dashboard_path,
+  price_a_job_input_path,
+  price_a_job_landing_path,
+  price_a_job_output_path,
+  sales_incentive_page_path,
+  training_page_path,
+  unauthorized_path,
+} from "../config/constant.js";
+import Unauthorized from "../components/misc/unauthorized.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
     const handleResize = () => {
@@ -113,7 +129,10 @@ const AppRoute = () => {
         />
 
         <Route path={price_a_job_output_path} element={<VerifyPlanRoute />} />
-        <Route path={price_a_job_dashboard_path} element={<VerifyPlanRoute />} />
+        <Route
+          path={price_a_job_dashboard_path}
+          element={<VerifyPlanRoute />}
+        />
         {/* <Route
           path="/reports"
           element={
@@ -132,6 +151,14 @@ const AppRoute = () => {
           }
         />
          <Route
+          path={unauthorized_path}
+          element={
+            <>
+              <Unauthorized />
+            </>
+          }
+        />
+        <Route
           path={login_app_path}
           element={
             <>
@@ -147,7 +174,7 @@ const AppRoute = () => {
             </>
           }
         />
-       
+
         <Route
           path={training_page_path}
           element={
@@ -224,7 +251,7 @@ const AppRoute = () => {
           path="/contact"
           element={
             <>
-              <Contact/>
+              <Contact />
             </>
           }
         />
@@ -347,7 +374,7 @@ const AppRoute = () => {
             </>
           }
         />
-   
+
         <Route
           path="/post"
           element={
