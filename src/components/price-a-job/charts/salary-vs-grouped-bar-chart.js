@@ -68,10 +68,10 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       borderColor: borderColor,
       strokeDashArray: 3,
       padding: {
-        top: -20,
-        bottom: -8,
-        left: -10,
-        right: 8,
+        top: -10,
+        bottom: 8,
+        left: 50,
+        right: 50,
       },
     },
     xaxis: {
@@ -97,11 +97,11 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
     yaxis: {
       title: {
         text: "Average Salary (LPA)",
-        offsetX:-10
+        offsetX:-20
       },
       labels: {
         show: true,
-        offsetX:-10,
+        offsetX:20,
         formatter: function (value) {
           return value + "  ";
 

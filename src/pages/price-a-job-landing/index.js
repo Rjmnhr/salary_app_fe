@@ -16,10 +16,10 @@ import FooterComponent from "../../components/layout/footer";
 const LandingPage = () => {
   const navigate = useNavigate();
   const [activateDashboard, setActivateDashboard] = useState(false);
-
   const accessToken = localStorage.getItem("accessToken");
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
+  sessionStorage.removeItem("activeIndex");
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,

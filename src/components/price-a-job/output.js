@@ -38,8 +38,6 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-
-
 const ReportsPage = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
@@ -52,6 +50,7 @@ const ReportsPage = ({ userPlan }) => {
   const storedJobTitles = JSON.parse(
     sessionStorage.getItem("selectedJobTitles")
   );
+  const storedReportID = sessionStorage.getItem("report_id");
   const storedExperience = sessionStorage.getItem("experience");
   const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
   const storedSupervise = sessionStorage.getItem("isSupervise");
@@ -67,7 +66,9 @@ const ReportsPage = ({ userPlan }) => {
   const [editableSkills, setEditableSkills] = useState([]);
   const [currentReportID, setCurrentReportID] = useState("");
   let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(
+    parseInt(sessionStorage.getItem("activeIndex")) || 0
+  );
   // const [jobsData, setJobsData] = useState(items);
   const [locationData, setLocationData] = useState(cities);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -78,6 +79,7 @@ const ReportsPage = ({ userPlan }) => {
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
   const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
+
   const accessToken = localStorage.getItem("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
@@ -85,6 +87,17 @@ const ReportsPage = ({ userPlan }) => {
   const userID = localStorage.getItem("user_id");
   const pathLocation = useLocation();
   const path = pathLocation.pathname;
+  const reportUpdateStatus = sessionStorage.getItem("report-updated");
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    const storedActiveIndex = sessionStorage.getItem("activeIndex");
+    if (storedActiveIndex > 0) {
+      setShowPreviousReports(true);
+    } else {
+      setShowPreviousReports(false);
+    }
+  }, []);
   useEffect(() => {
     AxiosInstance.post(
       `/api/track-data/store3`,
@@ -151,6 +164,16 @@ const ReportsPage = ({ userPlan }) => {
     }
   }, [userPlan]);
 
+  useEffect(() => {
+    // Cleanup function to be executed when leaving the component
+    return () => {
+      // Remove items from session storage
+      sessionStorage.removeItem("activeIndex");
+
+      // Add more items as needed
+    };
+  }, []); // The empty dependency array ensures that the cleanup function runs only once on component unmount
+
   const handleExpandClick = (index) => {
     setExpanded((prevExpanded) => ({
       ...prevExpanded,
@@ -161,6 +184,7 @@ const ReportsPage = ({ userPlan }) => {
   // Create a new array by mapping the jobTitles array
   const CreateArr = () => {
     const newArr = storedJobTitles?.map((jobTitle) => ({
+      report_id: storedReportID,
       job_titles: jobTitle,
       location: storedLocation,
       experience: storedExperience,
@@ -181,6 +205,10 @@ const ReportsPage = ({ userPlan }) => {
       createdArray = CreateArr();
     }
 
+    if (reportUpdateStatus === "true") {
+      createdArray = "";
+    }
+
     AxiosInstance.post(
       "/api/report/get",
       { user_id: storedUserID },
@@ -195,14 +223,15 @@ const ReportsPage = ({ userPlan }) => {
         const data = await response.data;
 
         if (response.status === 403 || response.status === 401)
-          return navigate(login_app_path+`?p=${path}`);
+          return navigate(login_app_path + `?p=${path}`);
         const reversedData = [...data].reverse();
 
         // Use Set to store distinct objects
         const uniqueObjects = new Set(
           [...createdArray, ...reversedData].map(JSON.stringify)
         );
-
+        console.log("🚀 ~ .then ~ reversedData:", JSON.stringify(reversedData));
+        console.log("🚀 ~ .then ~ createdArray:", JSON.stringify(createdArray));
         // Convert Set back to an array of objects
         const distinctArray = [...uniqueObjects].map(JSON.parse);
 
@@ -215,6 +244,7 @@ const ReportsPage = ({ userPlan }) => {
         setCurrentReportID(distinctArray[0].report_id);
         setEditableSector(distinctArray[0].sector);
       })
+
       .catch((err) => console.log(err));
     //eslint-disable-next-line
   }, []);
@@ -248,6 +278,7 @@ const ReportsPage = ({ userPlan }) => {
           formData.append("manage", storedManage);
           formData.append("supervise", storedSupervise);
           formData.append("sector", storedSector);
+          formData.append("report_id", storedReportID);
 
           const response = await AxiosInstance.post(
             "/api/report/save",
@@ -261,7 +292,7 @@ const ReportsPage = ({ userPlan }) => {
           );
 
           if (response.status === 403 || response.status === 401)
-            return navigate(login_app_path+`?p=${path}`);
+            return navigate(login_app_path + `?p=${path}`);
         })
       );
 
@@ -286,6 +317,7 @@ const ReportsPage = ({ userPlan }) => {
       .then(async (res) => {
         const response = await res.data;
         console.log("🚀 ~ updateReport ~ response:", response);
+        sessionStorage.setItem("report-updated", true);
       })
       .catch((err) => console.log(err));
   };
@@ -314,7 +346,7 @@ const ReportsPage = ({ userPlan }) => {
           );
 
           if (response.status === 403 || response.status === 401)
-            return navigate(login_app_path+`?p=${path}`);
+            return navigate(login_app_path + `?p=${path}`);
 
           return { data: response.data.data, bool: response.data.bool };
         } else {
@@ -361,7 +393,8 @@ const ReportsPage = ({ userPlan }) => {
               },
             }
           );
-          if (response.status !== 200) return navigate(login_app_path+`?p=${path}`);
+          if (response.status !== 200)
+            return navigate(login_app_path + `?p=${path}`);
           return response.data;
         } else {
           return null; // Handle out-of-bounds index
@@ -404,7 +437,7 @@ const ReportsPage = ({ userPlan }) => {
               }
             );
             if (response.status === 403 || response.status === 401)
-              return navigate(login_app_path+`?p=${path}`);
+              return navigate(login_app_path + `?p=${path}`);
             return response.data;
           } catch (error) {
             console.error("API request failed:", error);
@@ -533,7 +566,8 @@ const ReportsPage = ({ userPlan }) => {
       )
         .then(async (response) => {
           const retrievedSkillsData = await response.data;
-          if (response.status !== 200) return navigate(login_app_path+`?p=${path}`);
+          if (response.status !== 200)
+            return navigate(login_app_path + `?p=${path}`);
           const nestedSkillsData = [retrievedSkillsData];
 
           const uniqueValues = new Set();
@@ -568,7 +602,7 @@ const ReportsPage = ({ userPlan }) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [editableJobTitle, accessToken, navigate,path]);
+  }, [editableJobTitle, accessToken, navigate, path]);
 
   useEffect(() => {
     if (dataArray.length > 0) {
@@ -587,7 +621,7 @@ const ReportsPage = ({ userPlan }) => {
           const response = await res.data;
 
           if (res.status === 403 || res.status === 401)
-            return navigate(login_app_path+`?p=${path}`);
+            return navigate(login_app_path + `?p=${path}`);
           const sectors = response.map((item) => Object.values(item)[0]);
 
           // Create a new Set to store unique values
@@ -629,7 +663,7 @@ const ReportsPage = ({ userPlan }) => {
       <NavBar />
       {salaryData && salaryDataByRole && salaryDataNoExp ? (
         <div
-          className="container-fluid   d-lg-flex justify-content-center align-items-start 
+          className="container-fluid d-lg-flex justify-content-center align-items-start 
          "
           style={{
             padding: "0",
@@ -794,6 +828,7 @@ const ReportsPage = ({ userPlan }) => {
                   key={dataArray[0]?.report_id}
                   onClick={() => {
                     setActiveIndex(0);
+                    sessionStorage.setItem("activeIndex", 0);
                   }}
                   style={{ cursor: "pointer" }}
                 >
@@ -869,7 +904,10 @@ const ReportsPage = ({ userPlan }) => {
                     <p style={{ margin: "0" }}>See More</p>
                     <ExpandMore
                       expand={expanded[0] || false}
-                      onClick={() => handleExpandClick(0)}
+                      onClick={() => {
+                        handleExpandClick(0);
+                        setIsExpanded(!isExpanded);
+                      }}
                       aria-expanded={expanded[0] || false}
                       aria-label="show more"
                     >
@@ -908,6 +946,7 @@ const ReportsPage = ({ userPlan }) => {
                   setShowPreviousReports(!showPreviousReports);
 
                   setActiveIndex(0);
+                  sessionStorage.setItem("activeIndex", 0);
                 }}
                 className="btn btn-primary mb-3 w-100"
               >
@@ -922,97 +961,101 @@ const ReportsPage = ({ userPlan }) => {
               className="scrollable-container"
               style={{
                 overflowY: "scroll",
-                maxHeight: "50vh",
+                maxHeight: isExpanded ? "30vh" : "45vh",
               }}
             >
               {showPreviousReports && (
                 <div>
-                  {dataArray &&
-                    dataArray.map((data, index) => {
-                      // Check if the current index is not the first one (index 0)
-                      if (index !== 0) {
-                        return (
-                          <Card
-                            className={`card selectable-tab p-2 px-3 text-left mb-3 ${
-                              activeIndex === index ? "selected-tab" : ""
-                            }`}
-                            key={data.report_id}
-                            onClick={() => {
-                              setActiveIndex(index);
-                            }}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <p
-                              style={{ fontWeight: "500" }}
-                              className="fw-b text-primary"
+                  {dataArray
+                    ? dataArray.map((data, index) => {
+                        // Check if the current index is not the first one (index 0)
+                        if (index !== 0) {
+                          return (
+                            <Card
+                              className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                                activeIndex === index ? "selected-tab" : ""
+                              }`}
+                              key={data.report_id}
+                              onClick={() => {
+                                setActiveIndex(index);
+                                sessionStorage.setItem("activeIndex", index);
+                              }}
+                              style={{ cursor: "pointer" }}
                             >
-                              {data.job_titles}
-                            </p>
-                            <div className="d-flex justify-content-start align-items-center">
                               <p
-                                className=" border-right px-2"
-                                style={{
-                                  borderRight: "1px solid",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "3px",
-                                }}
+                                style={{ fontWeight: "500" }}
+                                className="fw-b text-primary"
                               >
-                                <CalendarOutlined /> {data.experience} years
+                                {data.job_titles}
                               </p>
-                              <p
-                                className=" border-right px-2"
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "3px",
-                                }}
-                              >
-                                {" "}
-                                <EnvironmentOutlined /> {data.location}
-                              </p>
-                            </div>
+                              <div className="d-flex justify-content-start align-items-center">
+                                <p
+                                  className=" border-right px-2"
+                                  style={{
+                                    borderRight: "1px solid",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "3px",
+                                  }}
+                                >
+                                  <CalendarOutlined /> {data.experience} years
+                                </p>
+                                <p
+                                  className=" border-right px-2"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "3px",
+                                  }}
+                                >
+                                  {" "}
+                                  <EnvironmentOutlined /> {data.location}
+                                </p>
+                              </div>
 
-                            <CardActions disableSpacing>
-                              <p style={{ margin: "0" }}>See More</p>
-                              <ExpandMore
-                                expand={expanded[index] || false}
-                                onClick={() => handleExpandClick(index)}
-                                aria-expanded={expanded[index] || false}
-                                aria-label="show more"
+                              <CardActions disableSpacing>
+                                <p style={{ margin: "0" }}>See More</p>
+                                <ExpandMore
+                                  expand={expanded[index] || false}
+                                  onClick={() => handleExpandClick(index)}
+                                  aria-expanded={expanded[index] || false}
+                                  aria-label="show more"
+                                >
+                                  <ExpandMoreIcon />
+                                </ExpandMore>
+                              </CardActions>
+                              <Collapse
+                                in={expanded[index] || false}
+                                timeout="auto"
+                                unmountOnExit
                               >
-                                <ExpandMoreIcon />
-                              </ExpandMore>
-                            </CardActions>
-                            <Collapse
-                              in={expanded[index] || false}
-                              timeout="auto"
-                              unmountOnExit
-                            >
-                              <div>
-                                <SkillsList skills={JSON.parse(data.skills)} />
-                              </div>
-                              <div>
-                                <p>
-                                  Supervise employees :{" "}
-                                  <span style={{ fontSize: "14px" }}>
-                                    {data.supervise}
-                                  </span>{" "}
-                                </p>
-                                <p>
-                                  Manage projects :{" "}
-                                  <span style={{ fontSize: "14px" }}>
-                                    {data.manage}
-                                  </span>{" "}
-                                </p>
-                              </div>
-                            </Collapse>
-                          </Card>
-                        );
-                      }
-                      // If it's the first element, don't render anything or render something else.
-                      return null; // or any other component/element you want
-                    })}
+                                <div>
+                                  <SkillsList
+                                    skills={JSON.parse(data.skills)}
+                                  />
+                                </div>
+                                <div>
+                                  <p>
+                                    Supervise employees :{" "}
+                                    <span style={{ fontSize: "14px" }}>
+                                      {data.supervise}
+                                    </span>{" "}
+                                  </p>
+                                  <p>
+                                    Manage projects :{" "}
+                                    <span style={{ fontSize: "14px" }}>
+                                      {data.manage}
+                                    </span>{" "}
+                                  </p>
+                                </div>
+                              </Collapse>
+                            </Card>
+                          );
+                        }
+                        // If it's the first element, don't render anything or render something else.
+                        return null; // or any other component/element you want
+                      })
+                    : "Loading...."}
                 </div>
               )}
             </div>

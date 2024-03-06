@@ -64,6 +64,8 @@ const PriceAJob = () => {
   const [sector, setSector] = useState(null);
   const { Option } = Select;
   const accessToken = localStorage.getItem("accessToken");
+  sessionStorage.setItem("report-updated", false);
+  sessionStorage.removeItem("activeIndex");
 
   // const [displayedSkills, setDisplayedSkills] = useState(6);
 
@@ -342,6 +344,8 @@ const PriceAJob = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const reportID = Date.now() + Math.floor(Math.random() * 1000);
+    sessionStorage.setItem("report_id", reportID);
     sessionStorage.setItem(
       "selectedJobTitles",
       JSON.stringify(selectedJobTitles)

@@ -1,11 +1,12 @@
-import { Divider } from "antd";
+import { Avatar, Divider } from "antd";
 import React, { useEffect, useState } from "react";
 
 import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
 import { useApplicationContext } from "../../context/app-context";
+import { UserOutlined } from "@ant-design/icons";
 const UserAccount = () => {
-  const { userEmail, userPlan } = useApplicationContext();
+  const { userEmail, userPlan, firstName, lastName } = useApplicationContext();
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
@@ -69,7 +70,7 @@ const UserAccount = () => {
   return (
     <>
       <NavBar />
-      <div style={{ marginTop: "80px" }} className="container p-3 min-vh-100 ">
+      <div style={{ marginTop: "100px" }} className="container p-3 min-vh-100 ">
         <div
           className="d-flex justify-content-between align-items-center "
           style={{ gap: "10px" }}
@@ -80,37 +81,48 @@ const UserAccount = () => {
             </h2>
           </div>
         </div>
-
- <div></div>
-        <Divider />
-
-        <div className="d-lg-flex">
-          <div className="container col-lg-4 col-12 text-left">
-            <h3 className="mb-3">MEMBERSHIP</h3>
-          </div>
-
-          <div className="container col-lg-8 col-12">
-            <div className="d-flex justify-content-between align-items-center mb-3 ">
-              <p style={{ margin: "0" }}>{userEmail}</p>
-              <a href="/change-email">Change email</a>
+        <div className="card shadow p-3">
+          <div className="card-body">
+            <div className="d-flex p-3 align-items-center">
+              <Avatar className="mr-3">
+                <UserOutlined />
+              </Avatar>
+              <h5>
+                {firstName} {lastName}
+              </h5>
+              <p></p>
             </div>
+            <Divider />
 
-            <div className="d-flex justify-content-between align-items-center mb-3 ">
-              <p style={{ margin: "0" }}>Password: ********</p>
-              <a href="/change-password">Change password</a>
+            <div className="d-lg-flex">
+              <div className="container col-lg-4 col-12 text-left">
+                <h3 className="mb-3">MEMBERSHIP</h3>
+              </div>
+
+              <div className="container col-lg-8 col-12">
+                <div className="d-flex justify-content-between align-items-center mb-3 ">
+                  <p style={{ margin: "0" }}>{userEmail}</p>
+                  <a href="/change-email">Change email</a>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center mb-3 ">
+                  <p style={{ margin: "0" }}>Password: ********</p>
+                  <a href="/change-password">Change password</a>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <Divider />
-        <div className="d-lg-flex">
-          <div className="container col-lg-4 col-12 text-left">
-            <h3 className="mb-3">PLAN DETAILS</h3>
-          </div>
+            <Divider />
+            <div className="d-lg-flex">
+              <div className="container col-lg-4 col-12 text-left">
+                <h3 className="mb-3">PLAN DETAILS</h3>
+              </div>
 
-          <div className="container col-lg-8 col-12">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <p style={{ margin: "0" }}>{userPlan}</p>
-              <a href="/change-plan">Change plan</a>
+              <div className="container col-lg-8 col-12">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <p style={{ margin: "0" }}>{userPlan}</p>
+                  <a href="/change-plan">Change plan</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

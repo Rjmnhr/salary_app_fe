@@ -5,6 +5,7 @@ import { Avatar, Dropdown } from "antd";
 import logo from "../../icons/logo192.png";
 import { useApplicationContext } from "../../context/app-context";
 import AxiosInstance from "../../config/axios";
+import { UserOutlined } from "@ant-design/icons";
 
 const NavBar = ({ bgInput }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -247,7 +248,7 @@ const NavBar = ({ bgInput }) => {
                             }}
                             size="medium"
                           >
-                            {initials}
+                            <UserOutlined />
                           </Avatar>
                         </a>
                       </li>

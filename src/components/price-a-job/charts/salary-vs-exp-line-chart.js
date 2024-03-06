@@ -8,10 +8,18 @@ import {
 } from "../../../config/constant";
 
 const SalaryVsExpLineChart = ({ title, width, height, data }) => {
-  const numericSalaries = data
+  const test = data[5].averageSalary;
+  console.log("🚀 ~ SalaryVsExpLineChart ~ test:", test);
+  const filteredData = data.filter(
+    (d) =>
+      d.averageSalary !== "NaN" &&
+      d.averageSalary !== null &&
+      d.averageSalary !== undefined
+  );
+
+  const numericSalaries = filteredData
     .map((d) => d.averageSalary)
     .filter((salary) => salary !== "NaN");
-
 
   const options = {
     chart: {
@@ -38,7 +46,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       width: 2,
       curve: "smooth",
       fill: {
-        type: "gradient",
+        type: "solid",
         gradient: {
           shade: shadeColor,
           shadeIntensity: 0.1,
@@ -78,16 +86,18 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       strokeDashArray: 3,
       padding: {
         top: -20,
-        bottom: -8,
-        left: -10,
-        right: 8,
+        bottom: 10,
+        left: 50,
+        right: 50,
       },
     },
     xaxis: {
       title: {
-        offsetY: -10,
+        text: "Experience (years)",
+        offsetY: 10,
+        offsetX: -20,
       },
-      categories: data.map((d) => d.experienceLevel),
+      categories: filteredData.map((d) => d.experienceLevel),
       axisBorder: {
         show: false,
       },
@@ -105,11 +115,11 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
     yaxis: {
       title: {
         text: "Average Salary (LPA)",
-        offsetX: -10,
+        offsetX: -20,
       },
       labels: {
         show: true,
-        offsetX: -10,
+        offsetX: 20,
         formatter: function (value) {
           return value + "  ";
         },
@@ -132,7 +142,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
   const series = [
     {
       name: "Average Salary (LPA) ",
-      data: data.map((d) => d.averageSalary),
+      data: filteredData.map((d) => d.averageSalary),
     },
   ];
   return (

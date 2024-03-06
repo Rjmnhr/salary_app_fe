@@ -23,6 +23,7 @@ import ReportUnsuccessful from "../misc/report-unsuccessful";
 import logoImagePath from "../../icons/logo192.png";
 import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
 import { price_a_job_profile_threshold } from "../../config/constant";
+import SalaryTrendChart from "./charts/salary-trend-chart";
 
 const GeneratedReport = ({
   jobsData,
@@ -341,7 +342,7 @@ const GeneratedReport = ({
         setChartHeight(150);
         setPieChartWidth(200);
       } else {
-        setChartWidth(600);
+        setChartWidth(700);
         setChartHeight(300);
         setPieChartWidth(400);
       }
@@ -523,6 +524,26 @@ const GeneratedReport = ({
                   data={sortedJobsDataByRole}
                 />
               </div> */}
+
+              <div
+                className="mb-5 card custom-shadow mt-5 text-center" 
+                style={{
+                  display: "grid",
+                  justifyItems: "center",
+                  alignContent: "center",
+                  pageBreakBefore: "auto",
+                  pageBreakInside: "avoid",
+                }}
+              >
+                <div className="card-body">
+                <h5 className="mb-5">Average Salary Trend</h5>
+                  <SalaryTrendChart
+                    data={jobsData}
+                    width={chartWidth}
+                    height={chartHeight}
+                  />
+                </div>
+              </div>
               <div
                 className="text-center mt-5 card custom-shadow"
                 style={{
@@ -543,17 +564,7 @@ const GeneratedReport = ({
                   />
                 </div>
 
-                <p
-                  style={{
-                    marginTop: "10px",
-                    padding: "0",
-                    color: "blue",
-                    fontFamily: "Arial, sans-serif",
-                    fontSize: "14px",
-                  }}
-                >
-                  Experience (Years)
-                </p>
+       
               </div>
 
               <div
