@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2c44527c.css",
+    "main.js": "/static/js/main.c638933c.js",
+    "static/js/703.02020290.chunk.js": "/static/js/703.02020290.chunk.js",
+    "static/js/513.ead06e66.chunk.js": "/static/js/513.ead06e66.chunk.js",
+    "static/js/787.4f88162d.chunk.js": "/static/js/787.4f88162d.chunk.js",
+    "static/media/demo-benchmark.mp4": "/static/media/demo-benchmark.b37a089d6736f5fbb9ac.mp4",
+    "static/media/demo.mp4": "/static/media/demo.6daba19d7a79aa3bf9ac.mp4",
+    "static/media/sample_report.pdf": "/static/media/sample_report.4899287de4601a596df7.pdf",
+    "static/media/cover-2.jpg": "/static/media/cover-2.ac013b95bdc8c202fd42.jpg",
+    "static/media/9169253.jpg": "/static/media/9169253.3725ffc876270c6e1110.jpg",
+    "static/media/salary-wave.png": "/static/media/salary-wave.f8b0d60781fd7a0b32ac.png",
+    "static/media/welcome-image.png": "/static/media/welcome-image.001f697b4f6eb7ca2233.png",
+    "static/media/circle-background.jpg": "/static/media/circle-background.4cf875b683045f974707.jpg",
+    "static/media/page-misc-error-light.png": "/static/media/page-misc-error-light.27df96fefd06d8c3b5b0.png",
+    "static/media/cancelled.png": "/static/media/cancelled.839388847e79241bfab7.png",
+    "static/media/Settings.gif": "/static/media/Settings.816e2b9b9cf8e61a5db0.gif",
+    "static/media/caution.png": "/static/media/caution.3c5a1e1e07ba797715b2.png",
+    "static/media/empty-box.png": "/static/media/empty-box.1b8e3927aacd0720acb5.png",
+    "static/media/data science.png": "/static/media/data science.db807ba873913234f12e.png",
+    "static/media/encrypted.png": "/static/media/encrypted.1fc2981c67e7814af39c.png",
+    "static/media/logo192.png": "/static/media/logo192.44f76c51be0697d43df3.png",
+    "static/media/premium-quality.png": "/static/media/premium-quality.7d28cddceac9116fced2.png",
+    "static/media/data-science-preview.png": "/static/media/data-science-preview.0f2ea99f8b71c4383081.png",
+    "static/media/gmail.png": "/static/media/gmail.a2f2146f929409405da0.png",
+    "static/media/trend.png": "/static/media/trend.9716bc588e42aea454a9.png",
+    "index.html": "/index.html",
+    "static/media/check-soft-bg.svg": "/static/media/check-soft-bg.c08cab036b8a757bccc21c60aa9c85aa.svg",
+    "main.2c44527c.css.map": "/static/css/main.2c44527c.css.map",
+    "main.c638933c.js.map": "/static/js/main.c638933c.js.map",
+    "703.02020290.chunk.js.map": "/static/js/703.02020290.chunk.js.map",
+    "513.ead06e66.chunk.js.map": "/static/js/513.ead06e66.chunk.js.map",
+    "787.4f88162d.chunk.js.map": "/static/js/787.4f88162d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2c44527c.css",
+    "static/js/main.c638933c.js"
+  ]
+}
