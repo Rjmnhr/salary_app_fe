@@ -1,10 +1,19 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { axisColor, borderColor, colorConfig, shadeColor } from "../../../config/constant";
-
+import {
+  axisColor,
+  borderColor,
+  colorConfig,
+  shadeColor,
+} from "../../../config/constant";
 
 const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
-
+  const filteredData = data.filter(
+    (d) =>
+      d.averageSalary !== "NaN" &&
+      d.averageSalary !== null &&
+      d.averageSalary !== undefined
+  );
   const options = {
     chart: {
       height: 215,
@@ -20,7 +29,6 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
     plotOptions: {
       bar: {
         // columnWidth: "50%", // Adjust the columnWidth to control the width of the bars
-        
       },
     },
     dataLabels: {
@@ -77,9 +85,9 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
     xaxis: {
       title: {
         text: "Experience (years)",
-        offsetY:-10
+        offsetY: -10,
       },
-      categories: data.map((d) => d.experienceLevel),
+      categories: filteredData.map((d) => d.experienceLevel),
       axisBorder: {
         show: false,
       },
@@ -97,14 +105,13 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
     yaxis: {
       title: {
         text: "Average Salary (LPA)",
-        offsetX:-20
+        offsetX: -20,
       },
       labels: {
         show: true,
-        offsetX:20,
+        offsetX: 20,
         formatter: function (value) {
           return value + "  ";
-
         },
         style: {
           fontSize: "13px",
@@ -113,7 +120,7 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       },
       offsetY: 10, // This offset controls the gap between the Y-axis border and labels
       min: 1, // Adjust the min value based on your data
-      max: Math.max(...data.map((d) => d.averageSalary)), // Adjust the max value based on your data
+      max: Math.max(...filteredData.map((d) => d.averageSalary)), // Adjust the max value based on your data
       tickAmount: 4,
       axisBorder: {
         show: false, // Show the Y-axis border
@@ -121,18 +128,16 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
         offsetX: -20, // Adjust the offset to position the Y-axis border
       },
     },
-
   };
 
   const series = [
     {
       name: "Average Salary (LPA) ",
-      data: data.map((d) => d.averageSalary),
+      data: filteredData.map((d) => d.averageSalary),
     },
   ];
   return (
     <div>
-
       <Chart
         options={options}
         series={series}
@@ -146,9 +151,7 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
 
 export default SalaryVsGroupedExpBarChart;
 
-
-
-      /* <BarChart width={width} height={height} data={data}>
+/* <BarChart width={width} height={height} data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="experienceLevel" />
 

@@ -1,34 +1,33 @@
-
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 // const COLORS = ["#e08963", "#38908f", "#b2ebe0", "#5e96ae", "#ffbfa3"];
 
-export const SimplePieChart = ({ title, width, dataWithPercent, data }) => {
-  // const options = {
-  //   chart: {
-  //     type: "pie",
-  //     width: width,
-  //     offsetY: 0,
-  //   },
-  //   labels: data.map((entry) => entry.name),
-  //   legend: {
-  //     show: true,
-  //     position: "bottom",
-  //   },
-  //   colors: COLORS,
-  //   responsive: [
-  //     {
-  //       breakpoint: 480,
-  //       options: {
-  //         legend: {
-  //           position: "bottom",
-  //         },
-  //       },
-  //     },
-  //   ],
-  // };
+export const SimplePieChart = ({ title, width, dataWithPercent, data ,height}) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const options = {
     labels: data.map((entry) => entry.name),
-
+    dataLabels: {
+      enabled: isMobile ? true : true,
+    },
     legend: {
       position: "bottom",
       itemMargin: {
@@ -62,7 +61,7 @@ export const SimplePieChart = ({ title, width, dataWithPercent, data }) => {
     ],
   };
 
-  const series = dataWithPercent.map((entry) => entry.value);
+  const series = dataWithPercent.map((entry) => parseFloat(entry.percentage));
   return (
     <div
       className="text-center mt-3"
@@ -74,7 +73,7 @@ export const SimplePieChart = ({ title, width, dataWithPercent, data }) => {
     >
       <h5 className="mb-5">Most five common skills for {title} </h5>
 
-      <Chart options={options} series={series} type="pie" width={width} />
+      <Chart options={options} series={series} type="pie" width={width} height={400} />
     </div>
   );
 };

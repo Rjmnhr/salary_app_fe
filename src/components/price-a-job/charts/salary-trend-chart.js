@@ -8,6 +8,7 @@ import {
 } from "../../../config/constant";
 
 const SalaryTrendChart = ({ data, width, height }) => {
+
   // Categorize data based on year and month
   const categorizedData = data.reduce((acc, item) => {
     const yearMonth = new Date(item.test).toISOString().slice(0, 7); // Extracting year and month

@@ -26,24 +26,21 @@ const calculateAverage = (arr) => {
   const sum = arr.reduce((acc, value) => acc + value, 0);
   return (sum / arr.length).toFixed(2);
 };
-const MedianSalaryChartForSkills = ({ data, skills }) => {
+const MedianSalaryChartForSkills = ({ data, skills, width }) => {
   // Initialize an empty array to store the median salary data for each skill
-  const [chartWidth, setChartWidth] = useState(600);
-  const [chartHeight, setChartHeight] = useState(300);
+
+  const [chartHeight, setChartHeight] = useState(400);
 
   useEffect(() => {
     const updateChartSize = () => {
       const screenWidth = window.innerWidth;
 
       if (screenWidth < 912) {
-        setChartWidth(300);
         setChartHeight(200);
       }
       if (screenWidth < 600) {
-        setChartWidth(300);
         setChartHeight(150);
       } else {
-        setChartWidth(600);
         setChartHeight(300);
       }
     };
@@ -143,7 +140,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       strokeDashArray: 3,
       padding: {
         top: -10,
-        bottom: 8,
+        bottom: 20,
         left: 50,
         right: 50,
       },
@@ -151,7 +148,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
     xaxis: {
       title: {
         text: "Skills",
-        offsetY: -10,
+        offsetY: 20,
         offsetX: -10,
       },
       categories: skillMedians.map((d) => d.skill),
@@ -163,8 +160,9 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
       },
       labels: {
         show: true,
+        offsetY: 3,
         style: {
-          fontSize: "13px",
+          fontSize: "8px",
           colors: axisColor,
         },
       },
@@ -172,7 +170,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
     yaxis: {
       title: {
         text: "Average Salary (LPA)",
-        offsetX:-20,
+        offsetX: -20,
       },
       labels: {
         show: true,
@@ -230,7 +228,7 @@ const MedianSalaryChartForSkills = ({ data, skills }) => {
                 options={options}
                 series={series}
                 type="bar"
-                width={chartWidth}
+                width={width}
                 height={chartHeight}
               />
             </div>

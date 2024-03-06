@@ -624,7 +624,9 @@ const PriceAJob = () => {
             </div>
           </>
         ) : (
-          <div className="container-fluid p-3">
+          <div className="container-fluid p-3 plg-5">
+            <Skeleton active />
+            <Skeleton active />
             <Skeleton active />
             <Skeleton active />
           </div>

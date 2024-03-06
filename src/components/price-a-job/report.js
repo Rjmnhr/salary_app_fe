@@ -34,7 +34,7 @@ const GeneratedReport = ({
   selectedSkills,
   skillsBool,
 }) => {
-  const [chartWidth, setChartWidth] = useState(600);
+  const [chartWidth, setChartWidth] = useState(500);
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
   const printAreaRef = useRef(null);
@@ -333,11 +333,10 @@ const GeneratedReport = ({
       const screenWidth = window.innerWidth;
 
       if (screenWidth < 912) {
-        setChartWidth(300);
+        setChartWidth(550);
         setChartHeight(200);
         setPieChartWidth(300);
-      }
-      if (screenWidth < 600) {
+      } else if (screenWidth < 600) {
         setChartWidth(300);
         setChartHeight(150);
         setPieChartWidth(200);
@@ -526,7 +525,7 @@ const GeneratedReport = ({
               </div> */}
 
               <div
-                className="mb-5 card custom-shadow mt-5 text-center" 
+                className="mb-5 card custom-shadow mt-5 text-center"
                 style={{
                   display: "grid",
                   justifyItems: "center",
@@ -536,7 +535,7 @@ const GeneratedReport = ({
                 }}
               >
                 <div className="card-body">
-                <h5 className="mb-5">Average Salary Trend</h5>
+                  <h5 className="mb-5">Average Salary Trend</h5>
                   <SalaryTrendChart
                     data={jobsData}
                     width={chartWidth}
@@ -563,8 +562,6 @@ const GeneratedReport = ({
                     data={groupedLineChartData}
                   />
                 </div>
-
-       
               </div>
 
               <div
@@ -591,7 +588,19 @@ const GeneratedReport = ({
               </div>
 
               {isMobile ? (
-                ""
+                <div
+                className="mb-5 card custom-shadow mt-5"
+                style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
+              >
+                <div className="card-body">
+                  <SimplePieChart
+                    title={jobsData[0]?.mapped_job_title}
+                    width={pieChartWidth}
+                    dataWithPercent={chartDataWithPercentages}
+                    data={chartData}
+                  />
+                </div>
+              </div>
               ) : (
                 <div
                   className="mb-5 card custom-shadow mt-5"
@@ -610,6 +619,8 @@ const GeneratedReport = ({
               <MedianSalaryChartForSkills
                 data={jobsDataByRole}
                 skills={JSON.parse(selectedSkills)}
+                width={chartWidth}
+                height={chartHeight}
               />
 
               <p style={{ fontSize: "14px" }} className="my-3 text-center">

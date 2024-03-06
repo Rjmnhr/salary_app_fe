@@ -8,8 +8,6 @@ import {
 } from "../../../config/constant";
 
 const SalaryVsExpLineChart = ({ title, width, height, data }) => {
-  const test = data[5].averageSalary;
-  console.log("🚀 ~ SalaryVsExpLineChart ~ test:", test);
   const filteredData = data.filter(
     (d) =>
       d.averageSalary !== "NaN" &&

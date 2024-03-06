@@ -230,8 +230,7 @@ const ReportsPage = ({ userPlan }) => {
         const uniqueObjects = new Set(
           [...createdArray, ...reversedData].map(JSON.stringify)
         );
-        console.log("🚀 ~ .then ~ reversedData:", JSON.stringify(reversedData));
-        console.log("🚀 ~ .then ~ createdArray:", JSON.stringify(createdArray));
+
         // Convert Set back to an array of objects
         const distinctArray = [...uniqueObjects].map(JSON.parse);
 
@@ -250,7 +249,7 @@ const ReportsPage = ({ userPlan }) => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === "/reports#dashboard") {
+    if (location.pathname === "/reports-dashboard") {
       return;
     } else {
       if (saveTheReport === "true") {
@@ -315,8 +314,9 @@ const ReportsPage = ({ userPlan }) => {
       },
     })
       .then(async (res) => {
+        //eslint-disable-next-line
         const response = await res.data;
-        console.log("🚀 ~ updateReport ~ response:", response);
+
         sessionStorage.setItem("report-updated", true);
       })
       .catch((err) => console.log(err));
