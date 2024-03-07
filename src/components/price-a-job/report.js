@@ -332,14 +332,14 @@ const GeneratedReport = ({
     const updateChartSize = () => {
       const screenWidth = window.innerWidth;
 
-      if (screenWidth < 912) {
+      if (screenWidth < 600) {
+        setChartWidth(350);
+        setChartHeight(300);
+        setPieChartWidth(200);
+      } else if (screenWidth < 912) {
         setChartWidth(550);
         setChartHeight(200);
         setPieChartWidth(300);
-      } else if (screenWidth < 600) {
-        setChartWidth(300);
-        setChartHeight(150);
-        setPieChartWidth(200);
       } else {
         setChartWidth(700);
         setChartHeight(300);
@@ -589,18 +589,18 @@ const GeneratedReport = ({
 
               {isMobile ? (
                 <div
-                className="mb-5 card custom-shadow mt-5"
-                style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
-              >
-                <div className="card-body">
-                  <SimplePieChart
-                    title={jobsData[0]?.mapped_job_title}
-                    width={pieChartWidth}
-                    dataWithPercent={chartDataWithPercentages}
-                    data={chartData}
-                  />
+                  className="mb-5 card custom-shadow mt-5"
+                  style={{ pageBreakBefore: "auto", pageBreakInside: "avoid" }}
+                >
+                  <div className="card-body">
+                    <SimplePieChart
+                      title={jobsData[0]?.mapped_job_title}
+                      width={pieChartWidth}
+                      dataWithPercent={chartDataWithPercentages}
+                      data={chartData}
+                    />
+                  </div>
                 </div>
-              </div>
               ) : (
                 <div
                   className="mb-5 card custom-shadow mt-5"

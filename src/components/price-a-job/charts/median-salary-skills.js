@@ -34,12 +34,10 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
   useEffect(() => {
     const updateChartSize = () => {
       const screenWidth = window.innerWidth;
-
-      if (screenWidth < 912) {
-        setChartHeight(200);
-      }
       if (screenWidth < 600) {
-        setChartHeight(150);
+        setChartHeight(300);
+      } else if (screenWidth < 912) {
+        setChartHeight(200);
       } else {
         setChartHeight(300);
       }

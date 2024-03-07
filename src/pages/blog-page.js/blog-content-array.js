@@ -527,4 +527,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Account Manager Compensation Insights: Benchmarking Salary Trends",
+    subMain:
+      "Dive into our comprehensive compensation benchmarking analysis for Account Manager in Bangalore with four years of experience.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1709729373/mfpupuptdeneskb5dw5o.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1709729373/mfpupuptdeneskb5dw5o.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Gain valuable salary insights and understand the impact of skills on pay variations. Stay ahead with real-time salary data customized to your location. Our tool offers detailed salary benchmarking, providing a low-cost solution for your compensation analysis needs. Sign up today to access LinkedIn salary insights and explore salary benchmarking options with Equipay Partners.",
+      },
+    ],
+    footer:
+      "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up",
+    footerButton: (
+      <a href="/price-a-job">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];

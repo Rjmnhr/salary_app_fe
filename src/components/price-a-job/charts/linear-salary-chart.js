@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { decimalFix } from "../../../utils/price-a-job-helper-functions";
 
 const LinearSalaryChart = ({ data }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div>
       <div className="d-flex mb-3 mt-3 ">
@@ -31,13 +51,18 @@ const LinearSalaryChart = ({ data }) => {
           <div className="w-100 text-start mt-2">
             <p
               className="stripe-text"
-              style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+              style={{
+                fontWeight: "bold",
+                margin: "0",
+                color: "gray",
+                fontSize: isMobile ? "11px" : "",
+              }}
             >
               Min
             </p>
             <p
               className="stripe-text"
-              style={{ fontWeight: "bold", color: "gray" }}
+              style={{ fontWeight: "bold", color: "gray", fontSize: isMobile ? "11px" : "", }}
             >
               {decimalFix(data.minSalary)} LPA
             </p>
@@ -96,13 +121,14 @@ const LinearSalaryChart = ({ data }) => {
                   fontWeight: "bold",
                   margin: "0",
                   color: "gray",
+                  fontSize: isMobile ? "11px" : "",
                 }}
               >
                 25th Percentile
               </p>
               <p
                 className="stripe-text"
-                style={{ fontWeight: "bold", color: "gray" }}
+                style={{ fontWeight: "bold", color: "gray", fontSize: isMobile ? "11px" : "", }}
               >
                 {decimalFix(data.percentile25)} LPA
               </p>
@@ -114,13 +140,14 @@ const LinearSalaryChart = ({ data }) => {
                   fontWeight: "bold",
                   margin: "0",
                   color: "gray",
+                  fontSize: isMobile ? "11px" : "",
                 }}
               >
                 MEDIAN
               </p>
               <p
                 className="stripe-text"
-                style={{ fontWeight: "bold", color: "gray" }}
+                style={{ fontWeight: "bold", color: "gray", fontSize: isMobile ? "11px" : "" }}
               >
                 {decimalFix(data.medianSalary)} LPA
               </p>
@@ -132,13 +159,14 @@ const LinearSalaryChart = ({ data }) => {
                   fontWeight: "bold",
                   margin: "0",
                   color: "gray",
+                  fontSize: isMobile ? "11px" : "",
                 }}
               >
                 75th Percentile
               </p>
               <p
                 className="stripe-text"
-                style={{ fontWeight: "bold", color: "gray" }}
+                style={{ fontWeight: "bold", color: "gray" , fontSize: isMobile ? "11px" : "",}}
               >
                 {decimalFix(data.percentile75)} LPA
               </p>
@@ -176,13 +204,13 @@ const LinearSalaryChart = ({ data }) => {
           <div className="w-100 text-right mt-2">
             <p
               className="stripe-text"
-              style={{ fontWeight: "bold", margin: "0", color: "gray" }}
+              style={{ fontWeight: "bold", margin: "0", color: "gray", fontSize: isMobile ? "11px" : "", }}
             >
               Max
             </p>
             <p
               className="stripe-text"
-              style={{ fontWeight: "bold", color: "gray" }}
+              style={{ fontWeight: "bold", color: "gray", fontSize: isMobile ? "11px" : "", }}
             >
               {decimalFix(data.maxSalary)} LPA
             </p>
