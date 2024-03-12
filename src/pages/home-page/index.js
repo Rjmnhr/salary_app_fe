@@ -11,6 +11,11 @@ import { HomePageStyled } from "./style";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
 import ParallaxComponent from "../../components/enhancements/parallax-scroll";
+import {
+  exec_rem_landing_path,
+  price_a_job_landing_path,
+  salary_survey,
+} from "../../config/constant";
 
 const HomePage = () => {
   const contactRef = useRef(null);
@@ -84,7 +89,7 @@ const HomePage = () => {
       <NavBar scrollToContact={scrollToContact} />
       <HomePageStyled>
         <section
-          style={{ background: "#5783db", marginTop: "60px" }}
+          style={{ background: "#EEF5FF", marginTop: "60px" }}
           className="d-flex align-items-center vh-100"
         >
           <div className="container" data-aos="zoom-out" data-aos-delay="100">
@@ -97,15 +102,20 @@ const HomePage = () => {
               />
               <div className="col-xl-6 text-center p-0 p-lg-1 text-lg-start">
                 <h1
-                  className="text-light"
+                  className=""
                   style={{
                     textAlign: "center",
                     fontSize: "50px",
                     fontWeight: "bold",
+                    color: "#5783db",
                   }}
                 >
                   YOUR PARTNERS IN ALL
-                  <span className="text-light"> MATTERS</span> PAY
+                  <span style={{ color: "#5783db" }} className="">
+                    {" "}
+                    MATTERS
+                  </span>{" "}
+                  PAY
                 </h1>
 
                 <div
@@ -118,24 +128,20 @@ const HomePage = () => {
                   }}
                 >
                   <button
-                    onClick={() => navigate("/price-a-job")}
- 
-                    className="custom-button btn border btn-lg mb-3 m-lg-0 btn-light"
+                    onClick={() => navigate(price_a_job_landing_path)}
+                    className="custom-demo-btn mt-3 m-3 "
                   >
                     Price a Job
                   </button>
                   <br />
                   <button
-                    onClick={() => navigate("/executive-compensation")}
-  
+                    onClick={() => navigate(exec_rem_landing_path)}
                     className="custom-button btn border btn-lg d-none"
-                  >
-                    Executive Compensation
-                  </button>
+                  ></button>
+
                   <button
-                    onClick={() => navigate("/salary-survey")}
-              
-                    className="custom-button btn border btn-lg mb-3 m-lg-0 mt-3 btn-light"
+                    onClick={() => navigate(salary_survey)}
+                    className="custom-demo-btn mt-3 m-3 "
                   >
                     Salary Survey
                   </button>

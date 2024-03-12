@@ -55,6 +55,7 @@ import {
   unauthorized_path,
 } from "../config/constant.js";
 import Unauthorized from "../components/misc/unauthorized.js";
+import PriceAJobVideoLatest from "../components/price-a-job/demo-video-latest.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -150,7 +151,7 @@ const AppRoute = () => {
             </>
           }
         />
-         <Route
+        <Route
           path={unauthorized_path}
           element={
             <>
@@ -413,6 +414,14 @@ const AppRoute = () => {
           element={
             <>
               <KPIClientOutput />
+            </>
+          }
+        />
+        <Route
+          path="/price-a-job-demo-latest"
+          element={
+            <>
+              <PriceAJobVideoLatest />
             </>
           }
         />

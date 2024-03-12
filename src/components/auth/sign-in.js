@@ -8,6 +8,7 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
+import { price_a_job_input_path } from "../../config/constant";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +18,9 @@ const SignIn = () => {
   const navigate = useNavigate();
   const Location = useLocation();
   const searchParams = new URLSearchParams(Location.search);
-  const path = searchParams.has("p") ? searchParams.get("p") : "/";
+  const path = searchParams.has("p")
+    ? searchParams.get("p")
+    : price_a_job_input_path;
   const { setIsSignIn, setIsLoggedIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -96,6 +99,7 @@ const SignIn = () => {
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line
   }, [isLoading]);
+  
   return (
     <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
       {contextHolder}

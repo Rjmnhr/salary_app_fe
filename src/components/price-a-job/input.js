@@ -189,6 +189,26 @@ const PriceAJob = () => {
         console.log(err);
       });
   }, [selectedJobTitles, accessToken, navigate, path]);
+
+  // useEffect(() => {
+  //   if (selectedJobTitles[0]) {
+  //     AxiosInstance.post(
+  //       "/api/salary/valid-inputs",
+  //       { title: selectedJobTitles[0] },
+  //       {
+  //         headers: {
+  //           token: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //       .then(async (res) => {
+  //         const response = await res.data;
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [selectedJobTitles]);
   useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       const fetchResponses = async () => {
