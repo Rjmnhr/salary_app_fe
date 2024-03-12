@@ -6,27 +6,83 @@ import {
   colorConfig,
   shadeColor,
 } from "../../../config/constant";
+import { reverse } from "lodash";
 
 const SalaryTrendChart = ({ data, width, height }) => {
-
   // Categorize data based on year and month
-  const categorizedData = data.reduce((acc, item) => {
-    const yearMonth = new Date(item.test).toISOString().slice(0, 7); // Extracting year and month
-    if (!acc[yearMonth]) {
-      acc[yearMonth] = { count: 0, totalSalary: 0 };
+  // Categorize data based on year and month
+  const categorizedData = {
+    "Last 30 Days": { salaries: [] },
+    "Last 3 Months": { salaries: [] },
+    "Last 6 Months": { salaries: [] },
+  };
+
+  const currentDate = new Date();
+  const currentMonthStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+
+  const previousMonthStart = new Date(currentMonthStart);
+  previousMonthStart.setMonth(currentMonthStart.getMonth() - 1);
+
+  const last3MonthsDate = new Date(currentDate);
+  last3MonthsDate.setMonth(currentDate.getMonth() - 3);
+
+  const last6MonthsDate = new Date(currentDate);
+  last6MonthsDate.setMonth(currentDate.getMonth() - 6);
+
+  // Filter data based on time categories
+  data.forEach((item) => {
+    const itemDate = new Date(item.test);
+    const salary = item.mapped_average_sal;
+
+    if (itemDate >= currentMonthStart || itemDate >= previousMonthStart) {
+      categorizedData["Last 30 Days"].salaries.push(salary);
     }
-    acc[yearMonth].count += 1;
-    acc[yearMonth].totalSalary += item.mapped_average_sal;
-    return acc;
-  }, {});
+
+    if (itemDate >= last3MonthsDate) {
+      categorizedData["Last 3 Months"].salaries.push(salary);
+    }
+
+    if (itemDate >= last6MonthsDate) {
+      categorizedData["Last 6 Months"].salaries.push(salary);
+    }
+  });
+
+  // // Calculate median for each category
+  // const chartData = Object.entries(categorizedData)
+  //   .reverse()
+  //   .map(([category, values]) => {
+  //     const sortedSalaries = values.salaries.sort((a, b) => a - b);
+  //     const middleIndex = Math.floor(sortedSalaries.length / 2);
+  //     let median =
+  //       sortedSalaries.length % 2 === 0
+  //         ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+  //         : sortedSalaries[middleIndex];
+
+  //     median = median ? median : 0;
+  //     return {
+  //       x: category,
+  //       y: median.toFixed(2),
+  //     };
+  //   });
 
   // Calculate average for each category
-  const chartData = Object.entries(categorizedData).map(
-    ([yearMonth, values]) => ({
-      x: new Date(yearMonth + "-01").getTime(),
-      y: (values.totalSalary / values.count).toFixed(2),
-    })
-  );
+  const chartData = Object.entries(categorizedData)
+    .reverse()
+    .map(([category, values]) => {
+      const average =
+        values.salaries.length > 0
+          ? values.salaries.reduce((acc, val) => acc + val, 0) /
+            values.salaries.length
+          : 0;
+      return {
+        x: category,
+        y: average.toFixed(2),
+      };
+    });
 
   const minYValue = Math.round(
     Math.min(...chartData.map((point) => point.y)) - 1
@@ -91,14 +147,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
       },
     },
     xaxis: {
-      type: "datetime",
       labels: {
-        datetimeFormatter: {
-          year: "yyyy",
-          month: "MMM yyyy",
-          day: "dd MMM",
-        },
-
         style: {
           colors: axisColor,
         },
@@ -122,7 +171,6 @@ const SalaryTrendChart = ({ data, width, height }) => {
         },
       },
       min: minYValue,
-   
     },
     axisBorder: {
       show: false, // Show the Y-axis border
