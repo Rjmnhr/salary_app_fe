@@ -26,6 +26,7 @@ import {
   price_a_job_input_path,
   price_a_job_profile_threshold,
 } from "../../config/constant";
+import Cookies from "js-cookie";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -80,7 +81,7 @@ const ReportsPage = ({ userPlan }) => {
   const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
   const locationURL = window.location.href;

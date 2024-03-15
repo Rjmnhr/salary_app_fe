@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
 import { price_a_job_input_path } from "../../config/constant";
+import Cookies from "js-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ const SignIn = () => {
   const path = searchParams.has("p")
     ? searchParams.get("p")
     : price_a_job_input_path;
-  const { setIsSignIn, setIsLoggedIn } = useApplicationContext();
+  const { setIsSignIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSwitch = () => {
@@ -59,11 +60,7 @@ const SignIn = () => {
 
       if (!accessToken) return error(data);
 
-      localStorage.setItem("isLoggedIn", true);
-
-      localStorage.setItem("accessToken", accessToken);
-
-      setIsLoggedIn(true);
+      Cookies.set("accessToken", accessToken, { expires: 1 }); // Cookie expiration set to 1 day
 
       setEmail("");
       setPassword("");
@@ -99,11 +96,18 @@ const SignIn = () => {
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line
   }, [isLoading]);
-  
+
   return (
-    <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
+    <div
+      style={{
+        display: "grid",
+        justifyItems: "center",
+        alignContent: "center",
+        height: "97vh",
+      }}
+    >
       {contextHolder}
-      <div class="container card col-12  p-3" data-aos="fade-up">
+      <div class="container card col-12 shadow  p-3 p-lg-5" data-aos="fade-up">
         <div class="section-title">
           <h2>Login to Equipay Partners</h2>
         </div>
@@ -144,8 +148,19 @@ const SignIn = () => {
               </div>
 
               <div class="text-center">
-                <button className="btn btn-primary w-75 mb-3" type="submit">
-                  {isLoading ? <LoadingOutlined /> : "Log in"}
+                <button
+                  className="btn btn-primary w-75 mb-3 btn-lg"
+                  type="submit"
+                  style={{ transition: "all ease 1s" }}
+                  disabled={!(email && password)}
+                >
+                  {isLoading ? (
+                    <span>
+                      Log in... <LoadingOutlined />
+                    </span>
+                  ) : (
+                    "Log in"
+                  )}
                 </button>
                 {/* <GoogleLoginComponent element={"Log in with Google"} /> */}
                 <p class="card-text text-muted">
@@ -164,6 +179,7 @@ const SignIn = () => {
           </div>
         </div>
       </div>
+      <p className="mt-3">By signing in, you agree to our terms & conditions</p>
     </div>
   );
 };

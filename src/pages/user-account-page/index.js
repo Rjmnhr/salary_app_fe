@@ -6,7 +6,7 @@ import NavBar from "../../components/layout/nav-bar";
 import { useApplicationContext } from "../../context/app-context";
 import { UserOutlined } from "@ant-design/icons";
 const UserAccount = () => {
-  const { userEmail, userPlan, firstName, lastName } = useApplicationContext();
+  const { userData } = useApplicationContext();
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
@@ -88,7 +88,7 @@ const UserAccount = () => {
                 <UserOutlined />
               </Avatar>
               <h5>
-                {firstName} {lastName}
+                {userData?.first_name} {userData?.last_name}
               </h5>
               <p></p>
             </div>
@@ -101,7 +101,7 @@ const UserAccount = () => {
 
               <div className="container col-lg-8 col-12">
                 <div className="d-flex justify-content-between align-items-center mb-3 ">
-                  <p style={{ margin: "0" }}>{userEmail}</p>
+                  <p style={{ margin: "0" }}>{userData?.email}</p>
                   <a href="/change-email">Change email</a>
                 </div>
 
@@ -119,7 +119,7 @@ const UserAccount = () => {
 
               <div className="container col-lg-8 col-12">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <p style={{ margin: "0" }}>{userPlan}</p>
+                  <p style={{ margin: "0" }}>{userData?.plan}</p>
                   <a href="/change-plan">Change plan</a>
                 </div>
               </div>

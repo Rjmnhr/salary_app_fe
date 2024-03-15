@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Input, Select, Tag, Skeleton } from "antd";
+import { Input, Select, Tag, Skeleton, Spin, Space } from "antd";
 import AxiosInstance from "../../config/axios";
 import {
   CapitalizeFirstLetter,
@@ -11,6 +11,8 @@ import {
 
 import { login_app_path } from "../../config/constant";
 import NavBar from "../layout/nav-bar";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
 // import { DistinctSkills } from "../../components/list-of-distinct-skills";
 
@@ -43,12 +45,17 @@ cities.sort();
 
 const PriceAJob = () => {
   const [selectedJobTitles, setSelectedJobTitles] = useState([]);
+  // eslint-disable-next-line
   const [data, setData] = useState(cities);
   const [location, setLocation] = useState("");
   const pathLocation = useLocation();
   const path = pathLocation.pathname;
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState({
+    city: false,
+    experience: false,
+    sector: false,
+  }); // State to manage loading
   // eslint-disable-next-line
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [skillData, setSkillData] = useState([]);
@@ -61,9 +68,17 @@ const PriceAJob = () => {
   const [topSkills, setTopSkills] = useState([]);
   const [initialTopSkills, setInitialTopSkills] = useState([]);
   const [sectorsOption, setSectorsOption] = useState([]);
+  const [validatedInputsArr, setValidatedInputsArr] = useState([]);
+  const [validatedCityInputs, setValidatedCityInputs] = useState([]);
+  const [validatedExpInputs, setValidatedExpInputs] = useState([]);
+  const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
+
+  const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
+    useState([]);
+
   const [sector, setSector] = useState(null);
   const { Option } = Select;
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   sessionStorage.setItem("report-updated", false);
   sessionStorage.removeItem("activeIndex");
 
@@ -139,12 +154,12 @@ const PriceAJob = () => {
       .then(async (res) => {
         const response = await res.data;
 
-        if (res.status !== 200) {
+        if (response.status !== 200) {
           navigate(login_app_path + `?p=${path}`);
           return;
         }
 
-        const jobRoles = response.map((item) => Object.values(item)[0]);
+        const jobRoles = response?.data.map((item) => Object.values(item)[0]);
 
         // Create a new Set to store unique values
         const uniqueSet = new Set(jobRoles);
@@ -173,7 +188,9 @@ const PriceAJob = () => {
     )
       .then(async (res) => {
         const response = await res.data;
-        if (res.status !== 200) return navigate(login_app_path + `?p=${path}`);
+        if (response.status !== 200)
+          return navigate(login_app_path + `?p=${path}`);
+
         const sectors = response.map((item) => Object.values(item)[0]);
 
         // Create a new Set to store unique values
@@ -190,25 +207,94 @@ const PriceAJob = () => {
       });
   }, [selectedJobTitles, accessToken, navigate, path]);
 
-  // useEffect(() => {
-  //   if (selectedJobTitles[0]) {
-  //     AxiosInstance.post(
-  //       "/api/salary/valid-inputs",
-  //       { title: selectedJobTitles[0] },
-  //       {
-  //         headers: {
-  //           token: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     )
-  //       .then(async (res) => {
-  //         const response = await res.data;
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [selectedJobTitles]);
+  useEffect(() => {
+    if (selectedJobTitles[0]) {
+      setLoading({
+        city: true,
+        experience: false,
+        sector: false,
+      });
+      AxiosInstance.post(
+        "/api/salary/valid-inputs",
+        { title: selectedJobTitles[0] },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      )
+        .then(async (res) => {
+          const response = await res.data;
+          if (res.status === 200) {
+            const result = response.result;
+            const resultWithSector = response.sector_result;
+            setLoading({
+              city: false,
+              experience: false,
+              sector: false,
+            });
+            setValidatedInputsArr(result);
+            setValidatedInputsArrWithSector(resultWithSector);
+
+            const distinctLocations = [
+              ...new Set(result?.map((item) => item.location)),
+            ];
+
+            setValidatedCityInputs(distinctLocations);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [selectedJobTitles, accessToken]);
+
+  useEffect(() => {
+    if (validatedInputsArr?.length > 0 && location) {
+      setLoading({
+        city: false,
+        experience: true,
+        sector: false,
+      });
+      // Extracting distinct locations
+      const filterValidatedInputsArr = validatedInputsArr.filter(
+        (d) => d.location === location
+      );
+
+      // Extracting distinct experiences
+      const distinctExperiences = [
+        ...new Set(filterValidatedInputsArr.map((item) => item.experience)),
+      ];
+
+      setValidatedExpInputs(distinctExperiences);
+      setLoading({
+        city: false,
+        experience: false,
+        sector: false,
+      });
+    }
+  }, [validatedInputsArr, location]);
+
+  useEffect(() => {
+    if (validatedInputsArrWithSector?.length > 0 && location && experience) {
+      // Extracting distinct locations
+      const filterValidatedInputsArr = validatedInputsArrWithSector.filter(
+        (d) => d.location === location
+      );
+
+      const filterValidatedInputsArrWithExp = filterValidatedInputsArr.filter(
+        (d) => d.experience === experience
+      );
+
+      // Extracting distinct experiences
+      const distinctSectors = [
+        ...new Set(filterValidatedInputsArrWithExp?.map((item) => item.sector)),
+      ];
+
+      setValidatedSectorInputs(distinctSectors);
+    }
+  }, [validatedInputsArrWithSector, location, experience]);
+
   useEffect(() => {
     if (selectedJobTitles && selectedJobTitles.length > 0) {
       const fetchResponses = async () => {
@@ -389,6 +475,13 @@ const PriceAJob = () => {
     setJobsData(jobsDataFetched);
     setSector(null);
     setSelectedSkills([]);
+    setTopSkills([]);
+    setLocation("");
+    setValidatedCityInputs([]);
+    setValidatedExpInputs([]);
+    setValidatedSectorInputs([]);
+    setSector(null);
+    setExperience("");
   };
 
   const handleManageSelect = (value) => {
@@ -453,19 +546,21 @@ const PriceAJob = () => {
                       borderRadius: "0",
                       textAlign: "start",
                     }}
+                    suffixIcon={loading?.city ? <Spin size="small" /> : null} // Conditionally render Spin component when loading is true
                     className="input border"
                     showSearch
+                    value={location ? location : null}
                     placeholder="City"
                     defaultActiveFirstOption={false}
-                    suffixIcon={null}
                     filterOption={false}
                     onSearch={handleSearch}
                     onChange={handleSelectChange}
                     notFoundContent={null}
-                    options={(data || []).map((d) => ({
+                    options={(validatedCityInputs || []).map((d) => ({
                       value: d,
                       label: d,
                     }))}
+                    disabled={validatedCityInputs.length > 0 ? false : true}
                   />
                 </div>
 
@@ -478,6 +573,7 @@ const PriceAJob = () => {
                       textAlign: "start",
                     }}
                     className="input border"
+                    value={experience ? experience : null}
                     type={false}
                     placeholder="Years of experience"
                     defaultActiveFirstOption={false}
@@ -485,11 +581,27 @@ const PriceAJob = () => {
                     filterOption={false}
                     onChange={handleExperience}
                     notFoundContent={null}
-                    options={(experienceOptions || []).map((e) => ({
-                      value: e,
-                      label: e,
-                    }))}
-                  />
+                    disabled={validatedExpInputs.length > 0 ? false : true}
+                    optionLabelProp="label"
+                  >
+                    {experienceOptions.map((option) => (
+                      <Select.Option
+                        key={option}
+                        value={option}
+                        label={
+                          <Space>
+                            {validatedExpInputs.includes(option) ? null : (
+                              <CloseCircleOutlined />
+                            )}
+                            {option}
+                          </Space>
+                        }
+                        disabled={!validatedExpInputs.includes(option)}
+                      >
+                        {option}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </div>
 
                 <div className="mb-3 col-12 col-lg-6 ">
@@ -511,6 +623,11 @@ const PriceAJob = () => {
                     onChange={handleSkillSelectChange}
                     notFoundContent={null}
                     value={selectedSkills}
+                    disabled={
+                      selectedJobTitles.length > 0 && location && experience
+                        ? false
+                        : true
+                    }
                   >
                     {(skillData || []).map((d) => (
                       <Option key={d} value={d}>
@@ -519,64 +636,85 @@ const PriceAJob = () => {
                     ))}
                   </Select>
                 </div>
-                <div
-                  style={{ transition: " all 0.3s ease" }}
-                  className="d-flex col-12 col-lg-6 flex-wrap justify-content-start align-items-center mt-1 mb-2"
-                >
-                  {topSkills.map((skill, index) => {
-                    return (
-                      <Tag
-                        onClick={() => handleSkillButtonClick(skill)}
-                        key={index}
-                        className=" skill-btn  m-1"
+
+                {selectedJobTitles.length > 0 &&
+                  location &&
+                  experience &&
+                  (topSkills.length > 0 ? (
+                    <>
+                      <div
+                        style={{ transition: " all 0.3s ease" }}
+                        className="d-flex col-12 col-lg-6 flex-wrap justify-content-start align-items-center mt-1 mb-2"
                       >
-                        {skill}
-                      </Tag>
-                    );
-                  })}
-                  {/* 
-            {displayedSkills < topSkills.length && (
-              <div
-                className="text-primary btn load-more-btn"
-                onClick={() => setDisplayedSkills(topSkills.length)}
-              >
-                Load More...
-              </div>
-            )} */}
-                </div>
-                <div className="mb-3 col-12 col-lg-6">
-                  <Select
-                    size={"large"}
-                    style={{
-                      width: "100%",
-                      borderRadius: "0",
-                      textAlign: "start",
-                    }}
-                    value={sector}
-                    className="input border"
-                    showSearch
-                    placeholder="Sector"
-                    defaultActiveFirstOption={false}
-                    suffixIcon={null}
-                    filterOption={false}
-                    onSearch={handleSectorSearch}
-                    onChange={(value) => setSector(value)}
-                    notFoundContent={null}
-                    options={(sectorsOption || []).map((d) => ({
-                      value: d,
-                      label: CapitalizeFirstLetter(d),
-                    }))}
-                  />
-                </div>
+                        {topSkills.map((skill, index) => {
+                          return (
+                            <Tag
+                              onClick={() => handleSkillButtonClick(skill)}
+                              key={index}
+                              className=" skill-btn  m-1"
+                            >
+                              {skill}
+                            </Tag>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <div
+                      style={{
+                        height: "5vh",
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                      }}
+                      className="mb-3"
+                    >
+                      <Spin />
+                      <span className="ml-2">Loading top skills</span>
+                    </div>
+                  ))}
+
+                {validatedInputsArrWithSector.length > 0 && (
+                  <div className="mb-3 col-12 col-lg-6">
+                    <Select
+                      size={"large"}
+                      style={{
+                        width: "100%",
+                        borderRadius: "0",
+                        textAlign: "start",
+                      }}
+                      value={sector}
+                      className="input border"
+                      showSearch
+                      placeholder="Sector"
+                      defaultActiveFirstOption={false}
+                      suffixIcon={null}
+                      filterOption={false}
+                      onSearch={handleSectorSearch}
+                      onChange={(value) => setSector(value)}
+                      notFoundContent={null}
+                      options={(validatedSectorInputs || []).map((d) => ({
+                        value: d,
+                        label: CapitalizeFirstLetter(d),
+                      }))}
+                      disabled={validatedSectorInputs.length > 0 ? false : true}
+                    />
+                  </div>
+                )}
 
                 <div className="mb-3 col-12 col-lg-6 ">
                   <Input
                     placeholder="Any other skills or additional information"
                     allowClear
+                    disabled={
+                      selectedJobTitles.length > 0 && location && experience
+                        ? false
+                        : true
+                    }
                   />
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6">
+                <div className="mb-3 col-12 col-lg-6 d-none">
                   <Select
                     size={"large"}
                     placeholder="Does this role supervise employees?"
@@ -601,7 +739,7 @@ const PriceAJob = () => {
                   />
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6">
+                <div className="mb-3 col-12 col-lg-6 d-none">
                   <Select
                     size={"large"}
                     placeholder="Does this role manage or lead projects?"

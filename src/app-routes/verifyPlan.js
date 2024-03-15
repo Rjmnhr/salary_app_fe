@@ -3,9 +3,10 @@ import { Navigate } from "react-router-dom";
 
 import AxiosInstance from "../config/axios";
 import ReportsPage from "../components/price-a-job/output";
+import Cookies from "js-cookie";
 
 const VerifyPlanRoute = ({ element }) => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
 
   const [userPlan, setUserPlan] = useState(null);
 

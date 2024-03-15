@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import BgVideo from "../../video/demo.mp4";
-
 import DownloadSamplePDF from "../../components/price-a-job/download-sample-pdf";
-
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
-
 import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
 import FooterComponent from "../../components/layout/footer";
+import Cookies from "js-cookie";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [activateDashboard, setActivateDashboard] = useState(false);
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("accessToken");
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
   sessionStorage.removeItem("activeIndex");
@@ -40,26 +36,28 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
-    AxiosInstance.post(
-      "/api/report/get",
-      { payload: "payload" },
+    if (accessToken) {
+      AxiosInstance.post(
+        "/api/report/get",
+        { payload: "payload" },
 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          token: `Bearer ${accessToken}`,
-        },
-      }
-    )
-      .then(async (response) => {
-        const data = await response.data;
-        if (data?.length > 0) {
-          setActivateDashboard(true);
-        } else {
-          setActivateDashboard(false);
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${accessToken}`,
+          },
         }
-      })
-      .catch((err) => console.log(err));
+      )
+        .then(async (response) => {
+          const data = await response.data;
+          if (data?.length > 0) {
+            setActivateDashboard(true);
+          } else {
+            setActivateDashboard(false);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   }, [accessToken]);
   const [startTime, setStartTime] = useState(Date.now());
   useEffect(() => {

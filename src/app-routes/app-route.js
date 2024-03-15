@@ -104,18 +104,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route
-          path={price_a_job_input_path}
-          element={
-            <ProtectedRoute
-              element={
-                <>
-                  <PriceAJob />
-                </>
-              }
-            />
-          }
-        />
+        <Route path={price_a_job_input_path} element={<PriceAJob />} />
         <Route
           path={exec_rem_input_path}
           element={

@@ -8,16 +8,14 @@ export const LoginPagestyled = styled.div`
 
   .left-container {
     width: 55%;
-    display: grid;
-    place-items: center;
     height: 100vh;
-
-    color: white;
-    padding: 20px;
+    text-align: left;
+    color: #4694e8;
   }
 
   .left-container h1 {
-    font-size: 80px;
+    font-size: 60px;
+    margin-top: 40px;
   }
 
   .right-container {

@@ -1,4 +1,3 @@
-
 import { useApplicationContext } from "../../context/app-context";
 import loginBG from "../../icons/salary-wave.png";
 import { LoginPagestyled } from "./style";
@@ -6,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import { Helmet } from "react-helmet";
 import AxiosInstance from "../../config/axios";
-import NavBar from "../../components/layout/nav-bar";
 import SignIn from "../../components/auth/sign-in";
 import SignUp from "../../components/auth/sign-up";
 
@@ -72,32 +70,33 @@ const LoginPage = () => {
   }, [location, userID]);
   return (
     <>
-         <Helmet>
+      <Helmet>
         <title>Login | Equipay Partners</title>
         <meta
-      name="description"
-      content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
-    />
-    <meta
-      property="og:description"
-      content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
-    />
+          name="description"
+          content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
+        />
+        <meta
+          property="og:description"
+          content="Secure access to your Equipay Partners account. Login for personalized pay solutions, training resources, and exclusive advisory services."
+        />
         {/* Add other meta tags, link tags, etc. as needed */}
       </Helmet>
       <LoginPagestyled>
-        <NavBar bgInput={"transparent"} />
-
         <div className="main-container" style={{ height: "100vh" }}>
           <div
-            className="left-container img_container"
+            className="left-container img_container p-3"
             style={{
               backgroundImage: `url(${loginBG})`,
               backgroundPosition: "center",
               backgroundSize: "cover",
               height: "100vh",
-              transform: "translate3d(0px, 0px, 0px)",
             }}
-          ></div>
+          >
+            <h1 className="">Equipay Partners </h1>
+            <p style={{ color: "black" }}>Your partners in all matters pay</p>
+          </div>
+
           <div className="right-container">
             <div className="right-sub-container">
               <div>{isSignIn ? <SignIn /> : <SignUp />}</div>

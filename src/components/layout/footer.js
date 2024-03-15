@@ -53,10 +53,10 @@ const FooterComponent = () => {
                   <i class="bx bx-chevron-right"></i>{" "}
                   <a href="/price-a-job">Price a job</a>
                 </li>
-                <li>
+                {/* <li>
                   <i class="bx bx-chevron-right"></i>{" "}
                   <a href="/executive-compensation">Executive compensation</a>
-                </li>
+                </li> */}
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
                   <a href="sales-incentive">Sales incentive</a>

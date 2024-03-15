@@ -52,4 +52,3 @@ export const borderColor = colorConfig.colors.borderColor;
 export const shadeColor = colorConfig.colors.shadeColor;
 
 export const price_a_job_profile_threshold = 10;
-export const access_token = localStorage.getItem("accessToken");

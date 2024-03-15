@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-
 import successTick from "../../icons/check-soft-bg.svg";
 import preLoader from "../../icons/Settings.gif";
 import AxiosInstance from "../../config/axios";
+import Cookies from "js-cookie";
 
 const SuccessRegistration = () => {
   //eslint-disable-next-line
@@ -174,7 +174,7 @@ const SuccessRegistration = () => {
         // localStorage.setItem("plan", plan);
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("accessToken", accessToken);
+        Cookies.set("accessToken", accessToken, { expires: 1 }); // Cookie expiration set to 1 day
         localStorage.setItem("email", data.email);
 
         clearLocalStorage();

@@ -16,13 +16,32 @@ import {
   price_a_job_landing_path,
   salary_survey,
 } from "../../config/constant";
+import FooterComponent from "../../components/layout/footer";
 
 const HomePage = () => {
-  const contactRef = useRef(null);
+  const serviceRef = useRef(null);
+  const faqRef = useRef(null);
   const navigate = useNavigate();
-  const scrollToContact = () => {
-    contactRef.current.scrollIntoView({ behavior: "smooth" });
+
+  const scrollToFunction = (ref) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
+
+  const path = window.location.hash;
+  useEffect(() => {
+    switch (path) {
+      case "#services":
+        scrollToFunction(serviceRef);
+        break;
+      case "#faq":
+        scrollToFunction(faqRef);
+        break;
+      default:
+        break;
+    }
+  }, [path]);
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
@@ -39,7 +58,6 @@ const HomePage = () => {
       .then(async (response) => {
         //eslint-disable-next-line
         const data = await response.data;
-        console.log("🚀 ~ file: index.js:37 ~ .then ~ data:", data);
       })
       .catch((err) => console.log(err));
 
@@ -86,7 +104,7 @@ const HomePage = () => {
 
   return (
     <>
-      <NavBar scrollToContact={scrollToContact} />
+      <NavBar />
       <HomePageStyled>
         <section
           style={{ background: "#EEF5FF", marginTop: "60px" }}
@@ -161,7 +179,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section id="service" className="service ">
+        <section id="service" className="service " ref={serviceRef}>
           <div className="container" data-aos="fade-up">
             <div className="content col-xl-12 d-flex align-items-stretch">
               <div className="col-12 section-title">
@@ -496,128 +514,11 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+        <div>
+          <Contact />
+        </div>
 
-        <Contact />
-
-        <footer id="footer">
-          <div class="footer-top">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-3 col-md-6 footer-contact text-left">
-                  <h3>
-                    Equipay Partners<span>.</span>
-                  </h3>
-
-                  <p>
-                    <strong>Indian Headquarter:</strong>
-                    <br />
-                    11th Main Road, HAL 2nd Stage <br />
-                    Indira Nagar, Bangalore,
-                    <br />
-                    Karnataka-560038
-                    <br />
-                    <strong>Email:</strong> team@equipaypartners.com
-                    <br />
-                  </p>
-                </div>
-
-                <div class="col-lg-2 col-md-6 footer-links text-left">
-                  <h4>Useful Links</h4>
-                  <ul>
-                    <li>
-                      <i class="bx bx-chevron-right"></i> <a href="/#">Home</a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="#about">About us</a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="#services">Services</a>
-                    </li>
-
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="#faq">Frequently Asked Questions</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="col-lg-3 col-md-6 footer-links text-left">
-                  <h4>Our Services</h4>
-                  <ul>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="/price-a-job">Price a job</a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="/executive-compensation">
-                        Executive compensation
-                      </a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="sales-incentive">Sales incentive</a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="/training">Training</a>
-                    </li>
-                    <li>
-                      <i class="bx bx-chevron-right"></i>{" "}
-                      <a href="/blog">Blog</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div class="col-lg-4 col-md-6 footer-newsletter text-left">
-                  <h4>Join Our Newsletter</h4>
-                  <p>
-                    Please enter your email if you are interested to read about
-                    our regular work, live case studies, what's happening in
-                    businesses around and some interesting trends
-                  </p>
-                  <form action="" method="post">
-                    <input type="email" name="email" />
-                    <input type="submit" value="Subscribe" />
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="container d-md-flex py-4">
-            <div class="me-md-auto text-center text-md-left"></div>
-            <div class="social-links text-center text-md-right pt-3 pt-md-0">
-              {/* <a href="/#" class="twitter">
-              <i class="bx bxl-twitter"></i>
-            </a> */}
-              <a
-                href="https://www.facebook.com/profile.php?id=61554618998649"
-                class="facebook"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <i class="bx bxl-facebook"></i>
-              </a>
-              {/* <a href="/#" class="instagram">
-              <i class="bx bxl-instagram"></i>
-            </a>
-            <a href="/#" class="google-plus">
-              <i class="bx bxl-skype"></i>
-            </a> */}
-              <a
-                href="https://www.linkedin.com/company/equipay-partners"
-                class="linkedin"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <i class="bx bxl-linkedin"></i>
-              </a>
-            </div>
-          </div>
-        </footer>
+        <FooterComponent />
       </HomePageStyled>
     </>
   );

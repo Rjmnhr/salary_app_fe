@@ -4,62 +4,32 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar, Dropdown } from "antd";
 import logo from "../../icons/logo192.png";
 import { useApplicationContext } from "../../context/app-context";
-import AxiosInstance from "../../config/axios";
 import { UserOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
 const NavBar = ({ bgInput }) => {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const Location = useLocation();
   const [initials, setInitials] = useState("");
-  const accessToken = localStorage.getItem("accessToken");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const {
-    setFirstName,
-    setLastName,
-    setUserEmail,
-    setUserPlan,
-
-    firstName,
-    lastName,
-  } = useApplicationContext();
+  const { userData } = useApplicationContext();
 
   useEffect(() => {
-    AxiosInstance.get("api/user/details", {
-      headers: {
-        token: `Bearer ${accessToken}`,
-      },
-    })
-      .then(async (res) => {
-        const UserData = res.data?.data;
+    if (userData) {
+      const sanitizedFirstName = String(userData?.first_name);
 
-        if (res.status === 200) {
-          setFirstName(UserData.first_name);
-          setLastName(UserData.last_name);
-          setUserEmail(UserData.email);
-          setUserPlan(UserData.plan);
-          setIsLoggedIn(true);
-        }
-      })
-      .catch((err) => console.log(err));
-    //eslint-disable-next-line
-  }, []);
+      const sanitizedLastName = String(userData?.last_name);
 
-  useEffect(() => {
+      // Extracting the first letters only if both first and last names have values
+      const initialsValue =
+        sanitizedFirstName && sanitizedLastName
+          ? (sanitizedFirstName[0] + sanitizedLastName[0]).toUpperCase()
+          : "";
+
+      setInitials(initialsValue);
+    }
     // Ensure firstName and lastName are strings
-    const sanitizedFirstName = String(firstName);
-
-    const sanitizedLastName = String(lastName);
-
-    // Extracting the first letters only if both first and last names have values
-    const initialsValue =
-      sanitizedFirstName && sanitizedLastName
-        ? (sanitizedFirstName[0] + sanitizedLastName[0]).toUpperCase()
-        : "";
-
-    setInitials(initialsValue);
-  }, [firstName, lastName]);
+  }, [userData]);
 
   const getActiveLink = (path) => {
     switch (path) {
@@ -91,34 +61,15 @@ const NavBar = ({ bgInput }) => {
 
   const activeLink = getActiveLink(Location.pathname);
   // Add a scroll event listener to the window
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        // If the user has scrolled more than 50 pixels, set scrolled to true
-        setScrolled(true);
-      } else {
-        // If the user has scrolled back to the top, set scrolled to false
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
 
-  //eslint-disable-next-line
   const handleLogOut = () => {
     navigate("/");
-    localStorage.removeItem("accessToken", "");
-    localStorage.setItem("isLoggedIn", false);
+    Cookies.remove("accessToken");
+    Cookies.remove("userData");
   };
 
   const items = [
@@ -127,7 +78,7 @@ const NavBar = ({ bgInput }) => {
       label: (
         <div className="d-flex justify-content-start align-items-center pb-2 text-start  ">
           {" "}
-          <p className="m-0">{firstName}</p>
+          <p className="m-0">{userData?.first_name}</p>
           <Avatar
             style={{
               backgroundColor: "#007bff",
@@ -167,7 +118,7 @@ const NavBar = ({ bgInput }) => {
         </button>
         <header
           id="header"
-          className={`navbar fixed-top ${scrolled ? "scrolled" : ""}`}
+          className={`navbar fixed-top `}
           style={{
             background: bgInput ? bgInput : "white",
             boxShadow: "0px 2px 15px rgba(0, 0, 0, 0.1)",
@@ -225,7 +176,7 @@ const NavBar = ({ bgInput }) => {
                   <a href="/blog">Blog</a>
                 </li>
 
-                {isLoggedIn ? (
+                {userData ? (
                   <>
                     <Dropdown
                       menu={{
