@@ -121,11 +121,15 @@ const PayPulseInput = () => {
   }, [location]);
 
   useEffect(() => {
-    AxiosInstance.get(api_pay_pulse_titles, {
-      headers: {
-        token: `Bearer ${accessToken}`,
-      },
-    })
+    AxiosInstance.get(
+      api_pay_pulse_titles,
+      { payload: "payload" },
+      {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      }
+    )
       .then(async (res) => {
         const response = await res.data;
 

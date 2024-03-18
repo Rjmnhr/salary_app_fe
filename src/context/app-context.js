@@ -12,11 +12,15 @@ export const AppContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (!userData) {
-      AxiosInstance.get("api/user/details", {
-        headers: {
-          token: `Bearer ${accessToken}`,
-        },
-      })
+      AxiosInstance.get(
+        "api/user/details",
+        { payload: "payload" },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      )
         .then((res) => {
           const UserData = res.data?.data;
           if (res.status === 200) {

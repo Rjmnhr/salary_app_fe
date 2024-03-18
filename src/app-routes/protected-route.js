@@ -13,6 +13,7 @@ const ProtectedRoute = ({ element }) => {
     try {
       const res = await AxiosInstance.get(
         "/api/user/details",
+        { payload: "payload" },
 
         {
           headers: {
