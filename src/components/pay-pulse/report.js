@@ -535,7 +535,7 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-3">Average Salary Trend</h5>
+                  <h5 className="mb-5 mt-3">Median Salary Trend </h5>
                   <SalaryTrendChart
                     data={jobsData}
                     width={chartWidth}
