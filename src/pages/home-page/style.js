@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
-    
 export const HomePageStyled = styled.div`
-
-.custom-button {
+  .custom-button {
     color: white;
   }
 
@@ -41,10 +39,7 @@ export const HomePageStyled = styled.div`
     transform: scale(0.9);
   }
 
-
-
-
-
-`
-
-
+  .laptop-bg img {
+    width: 100%;
+  }
+`;

@@ -148,7 +148,7 @@ const NavBar = ({ bgInput }) => {
             >
               <ul>
                 <li className={activeLink === "price-a-job" ? "active" : ""}>
-                  <a href="/pay-pulse">Pay Pulse</a>
+                  <a href="/pay-pulse">PayPulse</a>
                 </li>
                 <li
                   className={`

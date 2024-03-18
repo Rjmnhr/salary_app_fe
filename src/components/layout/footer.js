@@ -36,14 +36,19 @@ const FooterComponent = ({ setTrigger, trigger }) => {
                   <i class="bx bx-chevron-right"></i> <a href="/#">Home</a>
                 </li>
 
-                <li onClick={() => setTrigger(!trigger)}>
+                <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="#services">Services</a>
+                  <a href="/#services">Services</a>
                 </li>
 
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="#testimonials">Testimonials</a>
+                  <a href="/#products">Products</a>
+                </li>
+
+                <li>
+                  <i class="bx bx-chevron-right"></i>{" "}
+                  <a href="/#testimonials">Testimonials</a>
                 </li>
               </ul>
             </div>

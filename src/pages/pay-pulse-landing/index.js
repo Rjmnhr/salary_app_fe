@@ -8,6 +8,7 @@ import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
 import FooterComponent from "../../components/layout/footer";
 import Cookies from "js-cookie";
+import { api_pay_pulse_getActivity } from "../../config/config";
 
 const PayPulseLandingPage = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const PayPulseLandingPage = () => {
   useEffect(() => {
     if (accessToken) {
       AxiosInstance.post(
-        "/api/report/get",
+        api_pay_pulse_getActivity,
         { payload: "payload" },
 
         {
@@ -99,14 +100,14 @@ const PayPulseLandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>Pay Pulse | Equipay Partners</title>
+        <title>PayPulse | Equipay Partners</title>
         <meta
           name="description"
-          content="Refine pay strategies with Equipay's Pay Pulse, ensuring precise and competitive compensation for every role."
+          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
         />
         <meta
           property="og:description"
-          content="Refine pay strategies with Equipay's Pay Pulse, ensuring precise and competitive compensation for every role."
+          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
         />
         {/* Add other meta tags, link tags, etc. as needed */}
       </Helmet>
@@ -131,7 +132,7 @@ const PayPulseLandingPage = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    Pay Pulse
+                    PayPulse
                   </h1>
                   <div
                     className="mb-3"

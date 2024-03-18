@@ -17,11 +17,14 @@ import {
   salary_survey,
 } from "../../config/constant";
 import FooterComponent from "../../components/layout/footer";
+import { SendOutlined } from "@ant-design/icons";
 
 const HomePage = () => {
-  const serviceRef = useRef(null);
-  const faqRef = useRef(null);
   const testimonialRef = useRef(null);
+  const serviceRef = useRef(null);
+  const productsRef = useRef(null);
+  const faqRef = useRef(null);
+
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
 
@@ -32,17 +35,22 @@ const HomePage = () => {
   };
 
   const path = window.location.hash;
+
   useEffect(() => {
     switch (path) {
       case "#services":
         scrollToFunction(serviceRef);
         break;
+      case "#products":
+        scrollToFunction(productsRef);
+        break;
+      case "#testimonials":
+        scrollToFunction(testimonialRef);
+        break;
       case "#faq":
         scrollToFunction(faqRef);
         break;
-      case "#testimonial":
-        scrollToFunction(testimonialRef);
-        break;
+
       default:
         break;
     }
@@ -167,7 +175,7 @@ const HomePage = () => {
                     onClick={() => navigate(pay_pulse_landing_path)}
                     className="custom-demo-btn mt-3 m-3 "
                   >
-                    Pay Pulse
+                    PayPulse
                   </button>
                   <br />
                   <button
@@ -197,7 +205,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section id="service" className="service " ref={serviceRef}>
+        <section id="service" className="service" ref={serviceRef}>
           <div className="container" data-aos="fade-up">
             <div className="content col-xl-12 d-flex align-items-stretch">
               <div className="col-12 section-title">
@@ -283,6 +291,143 @@ const HomePage = () => {
                       closely with you to define clear and measurable objectives
                       for your Sales Incentive program.
                     </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          ref={productsRef}
+          id="products"
+          className="services section-bg "
+        >
+          <div className="container" data-aos="fade-up">
+            <div className="section-title">
+              <h2>Our Products</h2>
+            </div>
+
+            <div
+              className="d-lg-flex"
+              style={{ justifyItems: "center", alignContent: "start" }}
+            >
+              <div className="col-md-6  mt-4 mt-md-0 mb-3 mb-md-0">
+                <div
+                  className="icon-box"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <i className="icofont-chart-bar-graph"></i>
+                  <h3 className="mb-0 ml-3">PayPulse</h3>
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  <div className="text-left col-10">
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3"
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        Real-Time insights for informed decision-making
+                      </span>
+                    </h5>
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3 "
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        Insights based on skills for accurate salary
+                        determinations.
+                      </span>
+                    </h5>
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3"
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        Industry and location- specific salary data for informed
+                        decisions
+                      </span>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6  mb-3 mb-md-0">
+                <div
+                  className="icon-box"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <i className="icofont-computer"></i>
+                  <h3 className="mb-0 ml-3">Salary Survey</h3>
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  <div className="text-left col-10">
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3"
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        Depending on the data submitted, we can provide you with
+                        salary data in various geographies
+                      </span>
+                    </h5>
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3 "
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        The salary survey will cover functions like sales, IT,
+                        HR, marketing, operations, finance and more
+                      </span>
+                    </h5>
+                    <h5 className="mb-3 d-flex">
+                      {" "}
+                      <SendOutlined
+                        className="mr-3"
+                        style={{ color: "#007bff" }}
+                      />{" "}
+                      <span>
+                        {" "}
+                        Receive a general market report for all roles based on
+                        your industry, the role's experience, and location
+                      </span>
+                    </h5>
                   </div>
                 </div>
               </div>
