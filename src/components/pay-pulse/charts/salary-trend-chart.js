@@ -183,6 +183,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
       offsetX: -20, // Adjust the offset to position the Y-axis border
     },
   };
+  console.log("🚀 ~ SalaryTrendChart ~ chartData:", chartData);
 
   return (
     <Chart
