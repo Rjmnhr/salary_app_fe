@@ -22,10 +22,10 @@ import SalaryVsGroupedExpBarChart from "./charts/salary-vs-grouped-bar-chart";
 import ReportUnsuccessful from "../misc/report-unsuccessful";
 import logoImagePath from "../../icons/logo192.png";
 import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
-import { price_a_job_profile_threshold } from "../../config/constant";
+import { pay_pulse_profile_threshold } from "../../config/constant";
 import SalaryTrendChart from "./charts/salary-trend-chart";
 
-const GeneratedReport = ({
+const PayPulseReportComponent = ({
   jobsData,
   location,
   experience,
@@ -324,8 +324,8 @@ const GeneratedReport = ({
 
   // Create data for the line chart (salary vs. experience)
   // const lineChartData = jobsDataNoExp.map((job) => ({
-  //   experience: job.avg_experience,
-  //   salary: job.mapped_average_sal,
+  //   experience: job.experience,
+  //   salary: job.salary,
   // }));
 
   useEffect(() => {
@@ -401,11 +401,11 @@ const GeneratedReport = ({
   // Update the SimplePieChart component
 
   // const sortedJobsData = [...jobsData].sort(
-  //   (a, b) => a.mapped_average_sal - b.mapped_average_sal
+  //   (a, b) => a.salary - b.salary
   // );
 
   // const sortedJobsDataByRole = [...jobsDataByRole].sort(
-  //   (a, b) => a.mapped_average_sal - b.mapped_average_sal
+  //   (a, b) => a.salary - b.salary
   // );
 
   // const sortedLineChartDataNoExp = [...lineChartData].sort(
@@ -415,7 +415,7 @@ const GeneratedReport = ({
   return (
     <>
       {contextHolder}
-      {jobsData.length >= price_a_job_profile_threshold ? (
+      {jobsData.length >= pay_pulse_profile_threshold ? (
         <div
           className="container  col-lg-11 col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
           style={{
@@ -427,7 +427,7 @@ const GeneratedReport = ({
           <DownloadButtonComponent />
 
           <div className="p-lg-3 p-1" ref={printAreaRef}>
-            <h3>{jobsData[0]?.mapped_job_title} Salary Report</h3>
+            <h3>{jobsData[0]?.title} Salary Report</h3>
             <div className="d-lg-flex justify-content-start align-items-center">
               <p
                 className=" border-right px-2"
@@ -491,13 +491,13 @@ const GeneratedReport = ({
               >
                 <p>
                   Salary for all individual roles mapped to{" "}
-                  {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                  {jobsData[0]?.title} with {experience} year(s) of
                   experience in{" "}
                   <span className="text-primary"> {location}</span>
                 </p>
 
                 <IndividualSalaryLineChart
-                  title={jobsData[0]?.mapped_job_title}
+                  title={jobsData[0]?.title}
                   width={chartWidth}
                   height={chartHeight}
                   data={sortedJobsData}
@@ -513,11 +513,11 @@ const GeneratedReport = ({
               >
                 <p>
                   Salary for all individual roles mapped to{" "}
-                  {jobsData[0]?.mapped_job_title} with {experience} year(s) of
+                  {jobsData[0]?.title} with {experience} year(s) of
                   experience in <span className="text-primary"> India</span>
                 </p>
                 <IndividualSalaryLineChart
-                  title={jobsData[0]?.mapped_job_title}
+                  title={jobsData[0]?.title}
                   width={chartWidth}
                   height={chartHeight}
                   data={sortedJobsDataByRole}
@@ -594,7 +594,7 @@ const GeneratedReport = ({
                 >
                   <div className="card-body">
                     <SimplePieChart
-                      title={jobsData[0]?.mapped_job_title}
+                      title={jobsData[0]?.title}
                       width={pieChartWidth}
                       dataWithPercent={chartDataWithPercentages}
                       data={chartData}
@@ -608,7 +608,7 @@ const GeneratedReport = ({
                 >
                   <div className="card-body">
                     <SimplePieChart
-                      title={jobsData[0]?.mapped_job_title}
+                      title={jobsData[0]?.title}
                       width={pieChartWidth}
                       dataWithPercent={chartDataWithPercentages}
                       data={chartData}
@@ -636,4 +636,4 @@ const GeneratedReport = ({
   );
 };
 
-export default GeneratedReport;
+export default PayPulseReportComponent;

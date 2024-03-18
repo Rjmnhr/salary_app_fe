@@ -14,19 +14,25 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button, Modal, Popconfirm, Select, Skeleton } from "antd";
-import { cities, experienceOptions } from "./input";
 import { useLocation, useNavigate } from "react-router-dom";
-import GeneratedReport from "./report";
+import PayPulseReportComponent from "./report";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
 import { formatColumnName } from "../../utils/price-a-job-helper-functions";
 import {
   login_app_path,
-  price_a_job_input_path,
-  price_a_job_profile_threshold,
+  pay_pulse_input_path,
+  pay_pulse_profile_threshold,
 } from "../../config/constant";
 import Cookies from "js-cookie";
+import {
+  api_pay_pulse_getActivity,
+  api_pay_pulse_salary_data,
+  api_pay_pulse_salary_data_no_exp,
+  api_pay_pulse_salary_data_no_loc,
+  api_pay_pulse_sectors,
+} from "../../config/config";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -39,7 +45,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const ReportsPage = ({ userPlan }) => {
+const PayPulseOutput = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
@@ -47,17 +53,6 @@ const ReportsPage = ({ userPlan }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
-  const storedLocation = sessionStorage.getItem("location");
-  const storedJobTitles = JSON.parse(
-    sessionStorage.getItem("selectedJobTitles")
-  );
-  const storedReportID = sessionStorage.getItem("report_id");
-  const storedExperience = sessionStorage.getItem("experience");
-  const storedSkills = JSON.parse(sessionStorage.getItem("selected_skills"));
-  const storedSupervise = sessionStorage.getItem("isSupervise");
-  const storedSector = sessionStorage.getItem("sector");
-  const storedManage = sessionStorage.getItem("isManage");
-  const storedUserID = localStorage.getItem("user_id");
   const [showPreviousReports, setShowPreviousReports] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editableExperience, setEditableExperience] = useState("");
@@ -66,11 +61,11 @@ const ReportsPage = ({ userPlan }) => {
   const [editableJobTitle, setEditableJobTitle] = useState("");
   const [editableSkills, setEditableSkills] = useState([]);
   const [currentReportID, setCurrentReportID] = useState("");
-  let saveTheReport = sessionStorage.getItem("saveTheReport") || "true";
   const [activeIndex, setActiveIndex] = useState(
     parseInt(sessionStorage.getItem("activeIndex")) || 0
   );
-  // const [jobsData, setJobsData] = useState(items);
+  const cities = [];
+  const experienceOptions = [];
   const [locationData, setLocationData] = useState(cities);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [skillSet, setSkillSet] = useState([]);
@@ -81,6 +76,7 @@ const ReportsPage = ({ userPlan }) => {
   const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
+  const userInput = JSON.parse(sessionStorage.getItem("input-values"));
   const accessToken = Cookies.get("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
@@ -184,16 +180,19 @@ const ReportsPage = ({ userPlan }) => {
 
   // Create a new array by mapping the jobTitles array
   const CreateArr = () => {
-    const newArr = storedJobTitles?.map((jobTitle) => ({
-      report_id: storedReportID,
-      job_titles: jobTitle,
-      location: storedLocation,
-      experience: storedExperience,
-      skills: sessionStorage.getItem("selected_skills"),
-      manage: storedManage,
-      supervise: storedSupervise,
-      sector: storedSector,
-    }));
+    const newArr = [
+      {
+        report_id: userInput?.report_id,
+        title: userInput?.title,
+        location: userInput?.location,
+        experience: userInput?.experience,
+        skills: JSON.stringify(userInput?.skills),
+        manage: "",
+        supervise: "",
+        sector: userInput?.sectors,
+        title_id: userInput?.title_id,
+      },
+    ];
 
     return newArr;
   };
@@ -211,8 +210,8 @@ const ReportsPage = ({ userPlan }) => {
     }
 
     AxiosInstance.post(
-      "/api/report/get",
-      { user_id: storedUserID },
+      api_pay_pulse_getActivity,
+      { payload: "payload" },
       {
         headers: {
           "Content-Type": "application/json",
@@ -249,56 +248,6 @@ const ReportsPage = ({ userPlan }) => {
     //eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    if (location.pathname === "/reports-dashboard") {
-      return;
-    } else {
-      if (saveTheReport === "true") {
-        if (storedJobTitles) {
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          saveTheReport = "false";
-          saveReport();
-        }
-      }
-    }
-
-    //eslint-disable-next-line
-  }, []);
-
-  const saveReport = async () => {
-    if (storedJobTitles && storedJobTitles.length > 0) {
-      await Promise.all(
-        storedJobTitles.map(async (jobTitle) => {
-          const formData = new FormData();
-
-          formData.append("job_titles", jobTitle);
-          formData.append("experience", storedExperience);
-          formData.append("skills", JSON.stringify(storedSkills));
-          formData.append("location ", storedLocation);
-          formData.append("manage", storedManage);
-          formData.append("supervise", storedSupervise);
-          formData.append("sector", storedSector);
-          formData.append("report_id", storedReportID);
-
-          const response = await AxiosInstance.post(
-            "/api/report/save",
-            formData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                token: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          if (response.status === 403 || response.status === 401)
-            return navigate(login_app_path + `?p=${path}`);
-        })
-      );
-
-      sessionStorage.setItem("saveTheReport", "false"); // Mark report as saved in localStorage
-    }
-  };
   const updateReport = () => {
     const formData = new FormData();
 
@@ -322,6 +271,7 @@ const ReportsPage = ({ userPlan }) => {
       })
       .catch((err) => console.log(err));
   };
+
   useEffect(() => {
     if (dataArray && dataArray.length > 0) {
       setIsReportReady(false);
@@ -329,13 +279,13 @@ const ReportsPage = ({ userPlan }) => {
         if (index >= 0 && index < dataArray.length) {
           const data = dataArray[index];
           const response = await AxiosInstance.post(
-            "/api/salary/data",
+            api_pay_pulse_salary_data,
             {
               location: data.location,
-              job_title: data.job_titles,
+              title_id: data.title_id,
               skills: JSON.parse(data.skills),
               experience: data.experience,
-              threshold: price_a_job_profile_threshold,
+              threshold: pay_pulse_profile_threshold,
               sector: data.sector,
             },
             {
@@ -379,12 +329,12 @@ const ReportsPage = ({ userPlan }) => {
         if (index >= 0 && index < dataArray.length) {
           const data = dataArray[index];
           const response = await AxiosInstance.post(
-            "/api/salary/data/no-location",
+            api_pay_pulse_salary_data_no_loc,
             {
-              job_title: data.job_titles,
+              title_id: data.title_id,
               skills: JSON.parse(data.skills),
               experience: data.experience,
-              threshold: price_a_job_profile_threshold,
+              threshold: pay_pulse_profile_threshold,
               sector: data.sector,
             },
             {
@@ -423,11 +373,12 @@ const ReportsPage = ({ userPlan }) => {
           const data = dataArray[index];
           try {
             const response = await AxiosInstance.post(
-              "/api/salary/data/no-experience",
+              api_pay_pulse_salary_data_no_exp,
               {
-                job_title: data.job_titles,
+                title_id: data.title_id,
+                location: data.location,
                 skills: JSON.parse(data.skills),
-                threshold: price_a_job_profile_threshold,
+                threshold: pay_pulse_profile_threshold,
                 sector: data.sector,
               },
               {
@@ -506,8 +457,8 @@ const ReportsPage = ({ userPlan }) => {
         location: editableLocation,
         experience: editableExperience,
         skills: JSON.stringify(editableSkills),
-        manage: storedManage,
-        supervise: storedSupervise,
+        manage: "",
+        supervise: "",
         sector: editableSector,
       };
 
@@ -608,9 +559,9 @@ const ReportsPage = ({ userPlan }) => {
   useEffect(() => {
     if (dataArray.length > 0) {
       AxiosInstance.post(
-        "/api/salary/sectors",
+        api_pay_pulse_sectors,
         {
-          title: dataArray[activeIndex]?.job_titles,
+          title_id: dataArray[activeIndex]?.title_id,
         },
         {
           headers: {
@@ -813,7 +764,7 @@ const ReportsPage = ({ userPlan }) => {
                 </div>
               </div>
             </Modal>
-            <a href={price_a_job_input_path}>
+            <a href={pay_pulse_input_path}>
               {" "}
               <button className="btn btn-dark  w-100 mb-3">
                 Generate more reports
@@ -838,7 +789,7 @@ const ReportsPage = ({ userPlan }) => {
                       style={{ fontWeight: "500" }}
                       className="fw-b text-primary"
                     >
-                      {dataArray[0]?.job_titles}
+                      {dataArray[0]?.title}
                     </p>
 
                     {isEditing ? (
@@ -923,20 +874,7 @@ const ReportsPage = ({ userPlan }) => {
                     <div>
                       <SkillsList skills={JSON.parse(dataArray[0]?.skills)} />
                     </div>
-                    <div>
-                      <p>
-                        Supervise employees :{" "}
-                        <span style={{ fontSize: "14px" }}>
-                          {dataArray[0]?.supervise}
-                        </span>{" "}
-                      </p>
-                      <p>
-                        Manage projects :{" "}
-                        <span style={{ fontSize: "14px" }}>
-                          {dataArray[0]?.manage}
-                        </span>{" "}
-                      </p>
-                    </div>
+                    <div></div>
                   </Collapse>
                 </Card>
               )}
@@ -987,7 +925,7 @@ const ReportsPage = ({ userPlan }) => {
                                 style={{ fontWeight: "500" }}
                                 className="fw-b text-primary"
                               >
-                                {data.job_titles}
+                                {data.title}
                               </p>
                               <div className="d-flex justify-content-start align-items-center">
                                 <p
@@ -1035,20 +973,7 @@ const ReportsPage = ({ userPlan }) => {
                                     skills={JSON.parse(data.skills)}
                                   />
                                 </div>
-                                <div>
-                                  <p>
-                                    Supervise employees :{" "}
-                                    <span style={{ fontSize: "14px" }}>
-                                      {data.supervise}
-                                    </span>{" "}
-                                  </p>
-                                  <p>
-                                    Manage projects :{" "}
-                                    <span style={{ fontSize: "14px" }}>
-                                      {data.manage}
-                                    </span>{" "}
-                                  </p>
-                                </div>
+                                <div></div>
                               </Collapse>
                             </Card>
                           );
@@ -1072,7 +997,7 @@ const ReportsPage = ({ userPlan }) => {
             {isActiveIndexLimited ? (
               activeIndex > duplicateDataArray.length - (reportLimit + 1) ? (
                 isReportReady ? (
-                  <GeneratedReport
+                  <PayPulseReportComponent
                     jobsData={salaryData}
                     location={dataArray[activeIndex].location}
                     experience={dataArray[activeIndex].experience}
@@ -1099,7 +1024,7 @@ const ReportsPage = ({ userPlan }) => {
               )
             ) : // When isActiveIndexLimited is false, activeIndex condition doesn't apply
             isReportReady ? (
-              <GeneratedReport
+              <PayPulseReportComponent
                 jobsData={salaryData}
                 location={dataArray[activeIndex].location}
                 experience={dataArray[activeIndex].experience}
@@ -1174,4 +1099,4 @@ const ReportsPage = ({ userPlan }) => {
   );
 };
 
-export default ReportsPage;
+export default PayPulseOutput;

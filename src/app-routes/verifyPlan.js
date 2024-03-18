@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import AxiosInstance from "../config/axios";
-import ReportsPage from "../components/price-a-job/output";
+import PayPulseOutput from "../components/pay-pulse/output";
 import Cookies from "js-cookie";
 
 const VerifyPlanRoute = ({ element }) => {
@@ -46,7 +46,7 @@ const VerifyPlanRoute = ({ element }) => {
     if (userPlan) {
       return (
         <>
-          <ReportsPage userPlan={userPlan} />
+          <PayPulseOutput userPlan={userPlan} />
         </>
       );
     } else {

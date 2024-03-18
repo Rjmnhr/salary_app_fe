@@ -13,7 +13,7 @@ import AxiosInstance from "../../config/axios";
 import ParallaxComponent from "../../components/enhancements/parallax-scroll";
 import {
   exec_rem_landing_path,
-  price_a_job_landing_path,
+  pay_pulse_landing_path,
   salary_survey,
 } from "../../config/constant";
 import FooterComponent from "../../components/layout/footer";
@@ -21,7 +21,9 @@ import FooterComponent from "../../components/layout/footer";
 const HomePage = () => {
   const serviceRef = useRef(null);
   const faqRef = useRef(null);
+  const testimonialRef = useRef(null);
   const navigate = useNavigate();
+  const [trigger, setTrigger] = useState(false);
 
   const scrollToFunction = (ref) => {
     if (ref.current) {
@@ -38,10 +40,13 @@ const HomePage = () => {
       case "#faq":
         scrollToFunction(faqRef);
         break;
+      case "#testimonial":
+        scrollToFunction(testimonialRef);
+        break;
       default:
         break;
     }
-  }, [path]);
+  }, [path, trigger]);
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
@@ -63,6 +68,20 @@ const HomePage = () => {
 
     //eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    const handlePageReload = () => {
+      // Your logic to be executed when the page is reloaded
+      navigate("/");
+    };
+
+    window.onload = handlePageReload;
+
+    return () => {
+      // Cleanup function to remove the event listener
+      window.onload = null;
+    };
+  }, [navigate]); // Empty dependency array ensures that this effect runs only once
 
   const [startTime, setStartTime] = useState(Date.now());
   useEffect(() => {
@@ -135,21 +154,20 @@ const HomePage = () => {
                   </span>{" "}
                   PAY
                 </h1>
-
-                <div
-                  className="mb-3 mt-5 d-lg-flex flex-wrap justify-content-center "
+                <di
+                  v
+                  className="mb-3 mt-5 d-lg-flex flex-wrap justify-content-center"
                   style={{
                     textAlign: "center",
                     alignItems: "center",
-
                     gap: "8px",
                   }}
                 >
                   <button
-                    onClick={() => navigate(price_a_job_landing_path)}
+                    onClick={() => navigate(pay_pulse_landing_path)}
                     className="custom-demo-btn mt-3 m-3 "
                   >
-                    Price a Job
+                    Pay Pulse
                   </button>
                   <br />
                   <button
@@ -163,7 +181,7 @@ const HomePage = () => {
                   >
                     Salary Survey
                   </button>
-                </div>
+                </di>
                 <div
                   className="mb-3 mt-5 d-lg-flex"
                   style={{
@@ -341,11 +359,14 @@ const HomePage = () => {
           }
         />
 
-        <section id="testimonials" className="testimonials">
+        <section
+          ref={testimonialRef}
+          id="testimonials"
+          className="testimonials"
+        >
           <div className="container" data-aos="fade-up">
             <div className="section-title">
               <h2>Testimonials</h2>
-              <p>Following are some of our student testimonials</p>
             </div>
 
             <Carousel autoplay>
@@ -366,7 +387,7 @@ const HomePage = () => {
 
               <div className="testimonial-wrap">
                 <div className="testimonial-item">
-                  <h3>John Lennox</h3>
+                  <h3>Vikram Jaydev</h3>
                   {/* <h4>CEO &amp; Founder, Brisbane</h4> */}
                   <p>
                     <i className="bx bxs-quote-alt-left quote-icon-left"></i>The
@@ -518,7 +539,7 @@ const HomePage = () => {
           <Contact />
         </div>
 
-        <FooterComponent />
+        <FooterComponent setTrigger={setTrigger} trigger={trigger} />
       </HomePageStyled>
     </>
   );

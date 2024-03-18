@@ -28,14 +28,13 @@ export const CapitalizeFirstLetter = (data) => {
 };
 
 export function calculateAverageSalary(data) {
-  const salaries = data.map((job) => job.mapped_average_sal);
+  const salaries = data.map((job) => job.salary);
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
   return (totalSalary / salaries.length)?.toFixed(2);
 }
 
-
 export function calculateMaxSalary(data) {
-  const salaries = data.map((job) => job.mapped_average_sal);
+  const salaries = data.map((job) => job.salary);
   const maxSalary = Math.max(...salaries);
   return maxSalary.toFixed(2);
 }
@@ -44,10 +43,9 @@ export const decimalFix = (number) => {
   return trimmed;
 };
 
-
 export function calculateStatistics(data) {
   // Calculate average salary
-  const salaries = data.map((job) => job.mapped_average_sal);
+  const salaries = data.map((job) => job.salary);
 
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
   const averageSalary = totalSalary / salaries.length;
@@ -66,10 +64,8 @@ export function calculateStatistics(data) {
   const maxSalary = Math.max(...salaries);
 
   // Calculate 10th and 90th percentile values
-  const percentile25 =
-    sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
-  const percentile75 =
-    sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
+  const percentile25 = sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+  const percentile75 = sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
 
   return {
     averageSalary,

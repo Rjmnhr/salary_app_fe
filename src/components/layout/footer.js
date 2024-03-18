@@ -1,6 +1,14 @@
-import React from "react";
+import { Modal } from "antd";
+import React, { useState } from "react";
 
-const FooterComponent = () => {
+const FooterComponent = ({ setTrigger, trigger }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [subscriptionEmail, setSubscriptionEmail] = useState("");
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <footer id="footer">
       <div class="footer-top">
@@ -14,10 +22,7 @@ const FooterComponent = () => {
               <p>
                 <strong>Indian Headquarter:</strong>
                 <br />
-                11th Main Road, HAL 2nd Stage <br />
-                Indira Nagar, Bangalore,
-                <br />
-                Karnataka-560038
+                Bangalore, India
                 <br />
                 <strong>Email:</strong> team@equipaypartners.com
                 <br />
@@ -30,18 +35,15 @@ const FooterComponent = () => {
                 <li>
                   <i class="bx bx-chevron-right"></i> <a href="/#">Home</a>
                 </li>
-                <li>
-                  <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="#about">About us</a>
-                </li>
-                <li>
+
+                <li onClick={() => setTrigger(!trigger)}>
                   <i class="bx bx-chevron-right"></i>{" "}
                   <a href="#services">Services</a>
                 </li>
 
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="#faq">Frequently Asked Questions</a>
+                  <a href="#testimonials">Testimonials</a>
                 </li>
               </ul>
             </div>
@@ -51,7 +53,7 @@ const FooterComponent = () => {
               <ul>
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="/price-a-job">Price a job</a>
+                  <a href="/pay-pulse">PayPulse</a>
                 </li>
                 {/* <li>
                   <i class="bx bx-chevron-right"></i>{" "}
@@ -78,9 +80,16 @@ const FooterComponent = () => {
                 regular work, live case studies, what's happening in businesses
                 around and some interesting trends
               </p>
-              <form action="" method="post">
-                <input type="email" name="email" />
-                <input type="submit" value="Subscribe" />
+              <form onSubmit={() => setModalVisible(true)}>
+                <SubscriptionModal
+                  visible={modalVisible}
+                  onClose={closeModal}
+                />
+                <input
+                  type="email"
+                  onChange={(e) => setSubscriptionEmail(e.target.value)}
+                />
+                <input type="submit" disabled={!subscriptionEmail} />
               </form>
             </div>
           </div>
@@ -122,3 +131,19 @@ const FooterComponent = () => {
 };
 
 export default FooterComponent;
+
+const SubscriptionModal = ({ visible, onClose }) => {
+  return (
+    <Modal
+      visible={visible}
+      title="Thank you for subscribing!"
+      onCancel={onClose}
+      footer={null}
+    >
+      <p>
+        You're all set to receive our updates and insights. Stay tuned for our
+        next newsletter!
+      </p>
+    </Modal>
+  );
+};

@@ -8,21 +8,20 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
-import { price_a_job_input_path } from "../../config/constant";
+import { pay_pulse_input_path } from "../../config/constant";
 import Cookies from "js-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
   const Location = useLocation();
   const searchParams = new URLSearchParams(Location.search);
   const path = searchParams.has("p")
     ? searchParams.get("p")
-    : price_a_job_input_path;
-  const { setIsSignIn } = useApplicationContext();
+    : pay_pulse_input_path;
+  const { setIsSignIn, setUserData } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSwitch = () => {
@@ -56,10 +55,13 @@ const SignIn = () => {
 
       success();
 
+      setUserData(data);
+
       const accessToken = data.accessToken;
 
       if (!accessToken) return error(data);
 
+      localStorage.setItem("accessToken", accessToken);
       Cookies.set("accessToken", accessToken, { expires: 1 }); // Cookie expiration set to 1 day
 
       setEmail("");

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import AxiosInstance from "../config/axios";
-import Cookies from "js-cookie";
 
 const MyContext = createContext();
 
@@ -9,37 +8,24 @@ export const AppContextProvider = ({ children }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const accessToken = Cookies.get("accessToken");
-  console.log("🚀 ~ useEffect ~ accessToken:", accessToken);
-  useEffect(() => {
-    if (accessToken) {
-      const cachedUserData = Cookies.get("userData");
-      if (cachedUserData) {
-        setUserData(JSON.parse(cachedUserData));
-        setIsLoggedIn(true);
-      } else {
-        AxiosInstance.get("api/user/details", {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        })
-          .then((res) => {
-            const UserData = res.data?.data;
-            if (res.status === 200) {
-              setUserData(UserData);
-              setIsLoggedIn(true);
-              Cookies.set("userData", JSON.stringify(UserData), { expires: 7 }); // Cookie expiration set to 7 days
-            }
-          })
-          .catch((err) => console.log(err));
-      }
-    }
-  }, [accessToken]);
+  const accessToken = localStorage.getItem("accessToken");
 
-  const updateUserData = (newUserData) => {
-    setUserData(newUserData);
-    Cookies.set("userData", JSON.stringify(newUserData), { expires: 7 }); // Cookie expiration set to 7 days
-  };
+  useEffect(() => {
+    if (!userData) {
+      AxiosInstance.get("api/user/details", {
+        headers: {
+          token: `Bearer ${accessToken}`,
+        },
+      })
+        .then((res) => {
+          const UserData = res.data?.data;
+          if (res.status === 200) {
+            setUserData(UserData);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [userData, accessToken]);
 
   const value = {
     isSignIn,
@@ -49,7 +35,8 @@ export const AppContextProvider = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     userData,
-    updateUserData,
+
+    setUserData,
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

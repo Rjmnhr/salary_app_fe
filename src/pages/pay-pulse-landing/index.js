@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BgVideo from "../../video/demo.mp4";
-import DownloadSamplePDF from "../../components/price-a-job/download-sample-pdf";
+import DownloadSamplePDF from "../../components/pay-pulse/download-sample-pdf";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import AxiosInstance from "../../config/axios";
@@ -9,7 +9,7 @@ import NavBar from "../../components/layout/nav-bar";
 import FooterComponent from "../../components/layout/footer";
 import Cookies from "js-cookie";
 
-const LandingPage = () => {
+const PayPulseLandingPage = () => {
   const navigate = useNavigate();
   const [activateDashboard, setActivateDashboard] = useState(false);
   const accessToken = Cookies.get("accessToken");
@@ -99,14 +99,14 @@ const LandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>Price a job | Equipay Partners</title>
+        <title>Pay Pulse | Equipay Partners</title>
         <meta
           name="description"
-          content="Refine pay strategies with Equipay's Price a Job, ensuring precise and competitive compensation for every role."
+          content="Refine pay strategies with Equipay's Pay Pulse, ensuring precise and competitive compensation for every role."
         />
         <meta
           property="og:description"
-          content="Refine pay strategies with Equipay's Price a Job, ensuring precise and competitive compensation for every role."
+          content="Refine pay strategies with Equipay's Pay Pulse, ensuring precise and competitive compensation for every role."
         />
         {/* Add other meta tags, link tags, etc. as needed */}
       </Helmet>
@@ -131,7 +131,7 @@ const LandingPage = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    PRICE A JOB
+                    Pay Pulse
                   </h1>
                   <div
                     className="mb-3"
@@ -144,7 +144,7 @@ const LandingPage = () => {
                     }}
                   >
                     <button
-                      onClick={() => navigate("/price-a-job-add-details")}
+                      onClick={() => navigate("/pay-pulse-add-details")}
                       style={{
                         fontSize: "20px",
                         marginTop: "10px",
@@ -200,7 +200,7 @@ const LandingPage = () => {
               <div className="col-xl-7 d-flex align-items-stretch">
                 <div className="icon-boxes d-flex flex-column justify-content-center">
                   <div className="video-main">
-                    <a href="/price-a-job-video">
+                    <a href="/pay-pulse-video">
                       <video
                         style={{
                           width: "100%",
@@ -380,4 +380,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default PayPulseLandingPage;

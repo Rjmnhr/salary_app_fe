@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home-page/index.js";
-import LandingPage from "../pages/price-a-job-landing/index.js";
+import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
 import { useEffect, useState } from "react";
 import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
 import ProtectedRoute from "./protected-route.js";
-import PriceAJob from "../components/price-a-job/input.js";
+import PayPulseInput from "../components/pay-pulse/input.js";
+
 import ExecutiveBenchmark from "../components/exec-rem/input.js";
 import VerifyPlanRoute from "./verifyPlan.js";
 import LoginPage from "../pages/login-page/index.js";
@@ -35,7 +36,7 @@ import SurveyComplete from "../components/salary-survey/surve-complete.js";
 import IndividualBlogPage from "../pages/blog-page.js/index.js";
 import KPIClientPage from "../pages/KPI-client-page/index.js";
 import ExecutiveBenchmarkVideo from "../components/exec-rem/demo-video.js";
-import PriceAJobVideo from "../components/price-a-job/demo-video.js";
+import PayPulseVideo from "../components/pay-pulse/demo-video.js";
 import KPIClientOutput from "../components/KPI-client/output.js";
 import Success from "../components/payment/Success.js";
 import Canceled from "../components/payment/Canceled.js";
@@ -46,16 +47,16 @@ import {
   login_app_path,
   login_path,
   otp_validation_path,
-  price_a_job_dashboard_path,
-  price_a_job_input_path,
-  price_a_job_landing_path,
-  price_a_job_output_path,
+  pay_pulse_dashboard_path,
+  pay_pulse_input_path,
+  pay_pulse_landing_path,
+  pay_pulse_output_path,
   sales_incentive_page_path,
   training_page_path,
   unauthorized_path,
 } from "../config/constant.js";
 import Unauthorized from "../components/misc/unauthorized.js";
-import PriceAJobVideoLatest from "../components/price-a-job/demo-video-latest.js";
+import PriceAJobVideoLatest from "../components/pay-pulse/demo-video-latest.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -89,10 +90,10 @@ const AppRoute = () => {
           }
         />
         <Route
-          path={price_a_job_landing_path}
+          path={pay_pulse_landing_path}
           element={
             <>
-              <LandingPage />
+              <PayPulseLandingPage />
             </>
           }
         />
@@ -104,7 +105,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route path={price_a_job_input_path} element={<PriceAJob />} />
+        <Route path={pay_pulse_input_path} element={<PayPulseInput />} />
         <Route
           path={exec_rem_input_path}
           element={
@@ -118,11 +119,8 @@ const AppRoute = () => {
           }
         />
 
-        <Route path={price_a_job_output_path} element={<VerifyPlanRoute />} />
-        <Route
-          path={price_a_job_dashboard_path}
-          element={<VerifyPlanRoute />}
-        />
+        <Route path={pay_pulse_output_path} element={<VerifyPlanRoute />} />
+        <Route path={pay_pulse_dashboard_path} element={<VerifyPlanRoute />} />
         {/* <Route
           path="/reports"
           element={
@@ -391,10 +389,10 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/price-a-job-video"
+          path="/pay-pulse-video"
           element={
             <>
-              <PriceAJobVideo />
+              <PayPulseVideo />
             </>
           }
         />
@@ -407,7 +405,7 @@ const AppRoute = () => {
           }
         />
         <Route
-          path="/price-a-job-demo-latest"
+          path="/pay-pulse-demo-latest"
           element={
             <>
               <PriceAJobVideoLatest />

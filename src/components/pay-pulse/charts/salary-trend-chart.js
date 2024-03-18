@@ -6,7 +6,6 @@ import {
   colorConfig,
   shadeColor,
 } from "../../../config/constant";
-import { reverse } from "lodash";
 
 const SalaryTrendChart = ({ data, width, height }) => {
   // Categorize data based on year and month
@@ -35,8 +34,8 @@ const SalaryTrendChart = ({ data, width, height }) => {
 
   // Filter data based on time categories
   data.forEach((item) => {
-    const itemDate = new Date(item.test);
-    const salary = item.mapped_average_sal;
+    const itemDate = new Date(item.posted_date);
+    const salary = item.salary;
 
     if (itemDate >= currentMonthStart || itemDate >= previousMonthStart) {
       categorizedData["Last 30 Days"].salaries.push(salary);
@@ -51,38 +50,38 @@ const SalaryTrendChart = ({ data, width, height }) => {
     }
   });
 
-  // // Calculate median for each category
-  // const chartData = Object.entries(categorizedData)
-  //   .reverse()
-  //   .map(([category, values]) => {
-  //     const sortedSalaries = values.salaries.sort((a, b) => a - b);
-  //     const middleIndex = Math.floor(sortedSalaries.length / 2);
-  //     let median =
-  //       sortedSalaries.length % 2 === 0
-  //         ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
-  //         : sortedSalaries[middleIndex];
-
-  //     median = median ? median : 0;
-  //     return {
-  //       x: category,
-  //       y: median.toFixed(2),
-  //     };
-  //   });
-
-  // Calculate average for each category
+  // Calculate median for each category
   const chartData = Object.entries(categorizedData)
     .reverse()
     .map(([category, values]) => {
-      const average =
-        values.salaries.length > 0
-          ? values.salaries.reduce((acc, val) => acc + val, 0) /
-            values.salaries.length
-          : 0;
+      const sortedSalaries = values.salaries.sort((a, b) => a - b);
+      const middleIndex = Math.floor(sortedSalaries.length / 2);
+      let median =
+        sortedSalaries.length % 2 === 0
+          ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
+          : sortedSalaries[middleIndex];
+
+      median = median ? median : 0;
       return {
         x: category,
-        y: average.toFixed(2),
+        y: median.toFixed(2),
       };
     });
+
+  // Calculate average for each category
+  // const chartData = Object.entries(categorizedData)
+  //   .reverse()
+  //   .map(([category, values]) => {
+  //     const average =
+  //       values.salaries.length > 0
+  //         ? values.salaries.reduce((acc, val) => acc + val, 0) /
+  //           values.salaries.length
+  //         : 0;
+  //     return {
+  //       x: category,
+  //       y: average.toFixed(2),
+  //     };
+  //   });
 
   const minYValue = Math.round(
     Math.min(...chartData.map((point) => point.y)) - 1
@@ -155,7 +154,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
     },
     yaxis: {
       title: {
-        text: "Average Salary (LPA)",
+        text: "Median Salary (LPA)",
         offsetX: -20,
       },
       labels: {
@@ -182,7 +181,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
   return (
     <Chart
       options={options}
-      series={[{ name: "Average Salary (LPA)", data: chartData }]}
+      series={[{ name: "Median Salary (LPA)", data: chartData }]}
       type="line"
       width={width}
       height={height}

@@ -36,7 +36,7 @@ export const BlogContentArr = [
     footer:
       "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -79,7 +79,7 @@ export const BlogContentArr = [
     footer:
       "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -122,7 +122,7 @@ export const BlogContentArr = [
     footer:
       "To explore a sample role, register now and experience our salary tool for free. It's your gateway to understanding the real-time salary landscape for Software Engineers",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -202,7 +202,7 @@ export const BlogContentArr = [
     footer:
       "To explore a sample role, register now and experience our salary tool for free. It's your gateway to understanding the real-time salary landscape for Software Engineers",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -245,7 +245,7 @@ export const BlogContentArr = [
     footer:
       "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -288,7 +288,7 @@ export const BlogContentArr = [
     footer:
       "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -331,7 +331,7 @@ export const BlogContentArr = [
     footer:
       "To try a sample role, simply register and try out our salary tool for free",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -362,7 +362,7 @@ export const BlogContentArr = [
     footer:
       "To access a sample role, sign up and explore our complimentary salary tool for compensation benchmarking",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -394,7 +394,7 @@ export const BlogContentArr = [
     footer:
       "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up today.",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -426,7 +426,7 @@ export const BlogContentArr = [
     footer:
       "Sign up today to access our exclusive salary tool and delve into the intricacies of compensation analysis tailored to your profession. ",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -458,7 +458,7 @@ export const BlogContentArr = [
     footer:
       "Sign up today to access our exclusive salary tool and delve into the intricacies of compensation analysis tailored to your profession.",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -490,7 +490,7 @@ export const BlogContentArr = [
     footer:
       "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up today",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -522,7 +522,7 @@ export const BlogContentArr = [
     footer:
       "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -554,7 +554,7 @@ export const BlogContentArr = [
     footer:
       "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),
@@ -586,7 +586,7 @@ export const BlogContentArr = [
     footer:
       "Unlock access to our comprehensive salary tool and delve into the nuances of compensation analysis by signing up",
     footerButton: (
-      <a href="/price-a-job">
+      <a href="/pay-pulse">
         <button className="btn btn-lg btn-primary">Click here</button>
       </a>
     ),

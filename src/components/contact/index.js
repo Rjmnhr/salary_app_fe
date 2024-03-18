@@ -136,7 +136,7 @@ const Contact = () => {
                   <div class="info-box mt-4">
                     <i class="bx bx-envelope"></i>
                     <h3>Email Us</h3>
-                    <p>partner@equipaypartners.com</p>
+                    <p>team@equipaypartners.com</p>
                   </div>
                 </div>
                 {/* <div class="col-md-6">

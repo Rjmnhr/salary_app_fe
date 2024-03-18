@@ -35,11 +35,11 @@ const NavBar = ({ bgInput }) => {
     switch (path) {
       case "/":
         return "home";
-      case "/price-a-job-add-details":
+      case "/pay-pulse-add-details":
         return "price-a-job";
       case "/reports":
         return "price-a-job";
-      case "/price-a-job":
+      case "/pay-pulse":
         return "price-a-job";
       case "/executive-compensation":
         return "/executive-compensation";
@@ -148,7 +148,7 @@ const NavBar = ({ bgInput }) => {
             >
               <ul>
                 <li className={activeLink === "price-a-job" ? "active" : ""}>
-                  <a href="/price-a-job">Price a Job</a>
+                  <a href="/pay-pulse">Pay Pulse</a>
                 </li>
                 <li
                   className={`

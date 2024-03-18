@@ -4,97 +4,71 @@ import "./custom-style.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Input, Select, Tag, Skeleton, Spin, Space } from "antd";
 import AxiosInstance from "../../config/axios";
-import {
-  CapitalizeFirstLetter,
-  formatColumnName,
-} from "../../utils/price-a-job-helper-functions";
-
+import { CapitalizeFirstLetter } from "../../utils/price-a-job-helper-functions";
 import { login_app_path } from "../../config/constant";
 import NavBar from "../layout/nav-bar";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
-
-// import { DistinctSkills } from "../../components/list-of-distinct-skills";
-
-export const cities = [
-  "Chandigarh",
-  "New Delhi",
-  "Hyderabad",
-  "Ahmedabad",
-  "Surat",
-  "Vadodara",
-  "Gurgaon",
-  "Bangalore",
-  "Kochi",
-  "Indore",
-  "Mumbai",
-  "Pune",
-  "Jaipur",
-  "Chennai",
-  "Coimbatore",
-  "Lucknow",
-  "Noida",
-  "Kolkata",
-  "Thane",
-  "Delhi",
-];
+import {
+  api_pay_pulse_relevantSkills,
+  api_pay_pulse_saveActivity,
+  api_pay_pulse_titles,
+  api_pay_pulse_topSkills,
+  api_pay_pulse_validInputs,
+  api_track_data_1,
+  api_track_data_2,
+} from "../../config/config";
 
 export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
-cities.sort();
-
-const PriceAJob = () => {
-  const [selectedJobTitles, setSelectedJobTitles] = useState([]);
-  // eslint-disable-next-line
-  const [data, setData] = useState(cities);
+const PayPulseInput = () => {
+  const [availableTitles, setAvailableTitles] = useState([]);
+  const [availableTitlesFetched, setAvailableTitlesFetched] = useState([]);
+  const [selectedTitle, setSelectedTitle] = useState(null);
+  const [selectedTitleID, setSelectedTitleID] = useState(0);
   const [location, setLocation] = useState("");
-  const pathLocation = useLocation();
-  const path = pathLocation.pathname;
-  const navigate = useNavigate();
+  const [experience, setExperience] = useState("");
+  const [isSupervise, setIsSupervise] = useState(false);
+  const [isManage, setIsManage] = useState(false);
+  const [relevantSkills, setRelevantSkills] = useState([]);
+  const [topSkills, setTopSkills] = useState([]);
+  const [sector, setSector] = useState(null);
+
+  const [initialTopSkills, setInitialTopSkills] = useState([]);
+  const [skillData, setSkillData] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+
+  const [validatedInputsArr, setValidatedInputsArr] = useState([]);
+  const [validatedCityInputs, setValidatedCityInputs] = useState([]);
+  const [validatedExpInputs, setValidatedExpInputs] = useState([]);
+  const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
+  const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
+    useState([]);
+  const [startTime, setStartTime] = useState(Date.now());
   const [loading, setLoading] = useState({
     city: false,
     experience: false,
     sector: false,
   }); // State to manage loading
-  // eslint-disable-next-line
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [skillData, setSkillData] = useState([]);
-  const [jobsData, setJobsData] = useState([]);
-  const [jobsDataFetched, setJobsDataFetched] = useState([]);
-  const [skillSet, setSkillSet] = useState([]);
-  const [experience, setExperience] = useState("");
-  const [isSupervise, setIsSupervise] = useState("");
-  const [isManage, setIsManage] = useState("");
-  const [topSkills, setTopSkills] = useState([]);
-  const [initialTopSkills, setInitialTopSkills] = useState([]);
-  const [sectorsOption, setSectorsOption] = useState([]);
-  const [validatedInputsArr, setValidatedInputsArr] = useState([]);
-  const [validatedCityInputs, setValidatedCityInputs] = useState([]);
-  const [validatedExpInputs, setValidatedExpInputs] = useState([]);
-  const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
 
-  const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
-    useState([]);
-
-  const [sector, setSector] = useState(null);
+  const pathLocation = useLocation();
+  const path = pathLocation.pathname;
+  const navigate = useNavigate();
   const { Option } = Select;
   const accessToken = Cookies.get("accessToken");
   sessionStorage.setItem("report-updated", false);
   sessionStorage.removeItem("activeIndex");
-
-  // const [displayedSkills, setDisplayedSkills] = useState(6);
-
   sessionStorage.removeItem("saveTheReport");
-
   const locationURL = window.location.href;
-  const userID = localStorage.getItem("user_id");
+
   useEffect(() => {
     AxiosInstance.post(
-      `/api/track-data/store3`,
-      { path: locationURL, id: userID },
+      api_track_data_1,
+      { path: locationURL },
       {
         headers: {
           "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
         },
       }
     )
@@ -107,7 +81,6 @@ const PriceAJob = () => {
     //eslint-disable-next-line
   }, []);
 
-  const [startTime, setStartTime] = useState(Date.now());
   useEffect(() => {
     // Set start time when the component mounts
     setStartTime(Date.now());
@@ -120,11 +93,12 @@ const PriceAJob = () => {
 
       // Send the data to your backend
       AxiosInstance.post(
-        `/api/track-data/store2`,
-        { path: location, id: userID, timeSpent: timeSpentInSeconds },
+        api_track_data_2,
+        { path: location, timeSpent: timeSpentInSeconds },
         {
           headers: {
             "Content-Type": "application/json",
+            token: `Bearer ${accessToken}`,
           },
         }
       )
@@ -143,10 +117,10 @@ const PriceAJob = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
     //eslint-disable-next-line
-  }, [location, userID]);
+  }, [location]);
 
   useEffect(() => {
-    AxiosInstance.get("/api/salary/titles", {
+    AxiosInstance.get(api_pay_pulse_titles, {
       headers: {
         token: `Bearer ${accessToken}`,
       },
@@ -158,18 +132,8 @@ const PriceAJob = () => {
           navigate(login_app_path + `?p=${path}`);
           return;
         }
-
-        const jobRoles = response?.data.map((item) => Object.values(item)[0]);
-
-        // Create a new Set to store unique values
-        const uniqueSet = new Set(jobRoles);
-
-        // Convert the Set back to an array, sort it, and remove "unclassified" if present
-        const uniqueArray = Array.from(uniqueSet)
-          .filter((role) => role !== "unclassified")
-          .sort();
-        setJobsData(uniqueArray);
-        setJobsDataFetched(uniqueArray);
+        setAvailableTitles(response?.data);
+        setAvailableTitlesFetched(response?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -177,46 +141,10 @@ const PriceAJob = () => {
   }, [accessToken, navigate, path]);
 
   useEffect(() => {
-    AxiosInstance.post(
-      "/api/salary/sectors",
-      { title: selectedJobTitles[0] },
-      {
-        headers: {
-          token: `Bearer ${accessToken}`,
-        },
-      }
-    )
-      .then(async (res) => {
-        const response = await res.data;
-        if (response.status !== 200)
-          return navigate(login_app_path + `?p=${path}`);
-
-        const sectors = response.map((item) => Object.values(item)[0]);
-
-        // Create a new Set to store unique values
-        const uniqueSet = new Set(sectors);
-
-        // Convert the Set back to an array, sort it, and remove "unclassified" if present
-        const uniqueArray = Array.from(uniqueSet)
-          .filter((sector) => sector !== "Nan")
-          .sort();
-        setSectorsOption(uniqueArray);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [selectedJobTitles, accessToken, navigate, path]);
-
-  useEffect(() => {
-    if (selectedJobTitles[0]) {
-      setLoading({
-        city: true,
-        experience: false,
-        sector: false,
-      });
+    if (selectedTitleID !== 0 && selectedTitleID) {
       AxiosInstance.post(
-        "/api/salary/valid-inputs",
-        { title: selectedJobTitles[0] },
+        api_pay_pulse_relevantSkills,
+        { title_id: selectedTitleID },
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -225,29 +153,87 @@ const PriceAJob = () => {
       )
         .then(async (res) => {
           const response = await res.data;
-          if (res.status === 200) {
-            const result = response.result;
-            const resultWithSector = response.sector_result;
-            setLoading({
-              city: false,
-              experience: false,
-              sector: false,
-            });
-            setValidatedInputsArr(result);
-            setValidatedInputsArrWithSector(resultWithSector);
-
-            const distinctLocations = [
-              ...new Set(result?.map((item) => item.location)),
-            ];
-
-            setValidatedCityInputs(distinctLocations);
-          }
+          if (response.status !== 200)
+            return navigate(login_app_path + `?p=${path}`);
+          const skills = response?.data.map((item) => Object.values(item)[0]);
+          setRelevantSkills(skills);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [selectedJobTitles, accessToken]);
+  }, [selectedTitleID, accessToken, navigate, path]);
+
+  useEffect(() => {
+    if (selectedTitleID !== 0 && selectedTitleID) {
+      if (selectedTitleID !== 0 && selectedTitleID) {
+        AxiosInstance.post(
+          api_pay_pulse_topSkills,
+          { title_id: selectedTitleID },
+          {
+            headers: {
+              token: `Bearer ${accessToken}`,
+            },
+          }
+        )
+          .then(async (res) => {
+            const response = await res.data;
+            if (response.status !== 200)
+              return navigate(login_app_path + `?p=${path}`);
+            const skills = response?.data.map((item) => Object.values(item)[0]);
+            setTopSkills(skills);
+            setInitialTopSkills(skills);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }, [selectedTitleID, accessToken, navigate, path]);
+
+  // useEffect(() => {
+  //   if (selectedTitleID !== 0 && selectedTitleID) {
+  //     AxiosInstance.post(
+  //       api_pay_pulse_sectors,
+  //       { title_id: selectedTitleID },
+  //       {
+  //         headers: {
+  //           token: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //       .then(async (res) => {
+  //         const response = await res.data;
+  //         if (response.status !== 200)
+  //           return navigate(login_app_path + `?p=${path}`);
+
+  //         const sectors = response?.data.map((item) => Object.values(item)[0]);
+
+  //         setSectorsOption(sectors);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [selectedTitleID, accessToken, navigate, path]);
+
+  const handleTitleSearch = (newValueId) => {
+    const filter = availableTitlesFetched.filter((data) =>
+      data?.id.includes(newValueId)
+    );
+
+    setAvailableTitles(filter);
+  };
+  const handleLocationChange = (value) => {
+    setLocation(value);
+  };
+
+  const handleSectorSearch = (newValue) => {
+    const filter = validatedSectorInputs.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    validatedSectorInputs(filter);
+  };
 
   useEffect(() => {
     if (validatedInputsArr?.length > 0 && location) {
@@ -296,63 +282,6 @@ const PriceAJob = () => {
   }, [validatedInputsArrWithSector, location, experience]);
 
   useEffect(() => {
-    if (selectedJobTitles && selectedJobTitles.length > 0) {
-      const fetchResponses = async () => {
-        const retrievedSkillsData = await Promise.all(
-          selectedJobTitles.map(async (jobTitle) => {
-            const response = await AxiosInstance.post(
-              "/api/skills/data",
-              {
-                job_title: formatColumnName(jobTitle),
-              },
-              {
-                headers: {
-                  "content-type": "application/json",
-                  token: `Bearer ${accessToken}`,
-                },
-              }
-            );
-
-            if (response.status !== 200)
-              return navigate(login_app_path + `?p=${path}`);
-            return response.data;
-          })
-        );
-
-        const uniqueValues = new Set();
-
-        retrievedSkillsData.forEach((innerArray) => {
-          innerArray.forEach((obj) => {
-            const value = Object.values(obj)[0];
-            if (value !== null && value.trim() !== "" && value.length > 1) {
-              uniqueValues.add(value);
-            }
-          });
-        });
-
-        const flattenedUniqueValues = [...uniqueValues];
-
-        const sortedArr = flattenedUniqueValues.sort((a, b) => {
-          const isSpecialA = /[^a-zA-Z]/.test(a[0]); // Check if a starts with a special character
-          const isSpecialB = /[^a-zA-Z]/.test(b[0]); // Check if b starts with a special character
-
-          if (isSpecialA && !isSpecialB) {
-            return 1; // Move a to the end
-          } else if (!isSpecialA && isSpecialB) {
-            return -1; // Move b to the end
-          } else {
-            return a.localeCompare(b); // Sort alphabetically
-          }
-        });
-
-        setSkillSet(sortedArr);
-      };
-
-      fetchResponses();
-    }
-  }, [selectedJobTitles, accessToken, navigate, path]);
-
-  useEffect(() => {
     // Filter elements from topSkills that do not exist in selectedSkills
     const filteredTopSkills = topSkills.filter(
       (skill) => !selectedSkills.includes(skill)
@@ -363,37 +292,51 @@ const PriceAJob = () => {
   }, [selectedSkills]);
 
   useEffect(() => {
-    if (selectedJobTitles && selectedJobTitles.length > 0) {
+    if (selectedTitleID !== 0 && selectedTitleID) {
+      setLoading({
+        city: true,
+        experience: false,
+        sector: false,
+      });
       AxiosInstance.post(
-        "/api/skills/data/top-skills",
-        { job_title: formatColumnName(selectedJobTitles[0]) },
+        api_pay_pulse_validInputs,
+        { title_id: selectedTitleID },
         {
           headers: {
-            "content-type": "application/json",
             token: `Bearer ${accessToken}`,
           },
         }
       )
-        .then(async (response) => {
-          const resultData = await response.data;
-          if (response.status !== 200)
-            return navigate(login_app_path + `?p=${path}`);
+        .then(async (res) => {
+          const response = await res.data;
+          if (res.status === 200) {
+            const result = response.result;
+            const resultWithSector = response.sector_result;
+            setLoading({
+              city: false,
+              experience: false,
+              sector: false,
+            });
+            setValidatedInputsArr(result);
+            setValidatedInputsArrWithSector(resultWithSector);
 
-          const valuesArray = resultData
-            .map((item) => Object.values(item))
-            .flat();
+            const distinctLocations = [
+              ...new Set(result?.map((item) => item.location)),
+            ];
 
-          setTopSkills(valuesArray);
-          setInitialTopSkills(valuesArray);
+            setValidatedCityInputs(distinctLocations);
+          }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  }, [selectedJobTitles, accessToken, navigate, path]);
+  }, [selectedTitleID, accessToken]);
 
   const handleSkillSearch = (newValue) => {
     if (newValue) {
       if (newValue.length > 0) {
-        const filter = skillSet.filter((data) =>
+        const filter = relevantSkills.filter((data) =>
           data.toLowerCase().includes(newValue.toLowerCase())
         );
         setSkillData(filter);
@@ -424,55 +367,21 @@ const PriceAJob = () => {
     }
   };
 
-  const handleSearch = (newValue) => {
-    const filter = cities.filter((data) =>
+  const handleLocationSearch = (newValue) => {
+    const filter = validatedCityInputs.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
-    setData(filter);
-  };
-  const handleSectorSearch = (newValue) => {
-    const filter = sectorsOption.filter((data) =>
-      data?.toLowerCase().includes(newValue.toLowerCase())
-    );
-    setSectorsOption(filter);
-  };
-
-  const handleJobSearch = (newValue) => {
-    const filter = jobsDataFetched.filter((data) =>
-      data?.toLowerCase().includes(newValue.toLowerCase())
-    );
-
-    setJobsData(filter);
-  };
-  const handleSelectChange = (value) => {
-    setLocation(value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const reportID = Date.now() + Math.floor(Math.random() * 1000);
-    sessionStorage.setItem("report_id", reportID);
-    sessionStorage.setItem(
-      "selectedJobTitles",
-      JSON.stringify(selectedJobTitles)
-    );
-    sessionStorage.setItem("location", location);
-    sessionStorage.setItem("experience", experience);
-    sessionStorage.setItem("selected_skills", JSON.stringify(selectedSkills));
-    sessionStorage.setItem("isSupervise", isSupervise);
-    sessionStorage.setItem("isManage", isManage);
-    sessionStorage.setItem("sector", sector ? sector : "");
-
-    navigate("/reports");
+    setValidatedCityInputs(filter);
   };
 
   const handleExperience = (value) => {
     setExperience(value);
   };
 
-  const handleSelectJob = (value) => {
-    setSelectedJobTitles([value]);
-    setJobsData(jobsDataFetched);
+  const handleSelectTitle = (titleID, title) => {
+    setSelectedTitle(title);
+    setSelectedTitleID(titleID);
+    setAvailableTitles(availableTitlesFetched);
     setSector(null);
     setSelectedSkills([]);
     setTopSkills([]);
@@ -500,15 +409,58 @@ const PriceAJob = () => {
     setTopSkills(topSkills.filter((s) => s !== skill?.toLowerCase()));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const reportID = Date.now() + Math.floor(Math.random() * 1000);
+    saveReport(reportID);
+
+    sessionStorage.setItem(
+      "input-values",
+      JSON.stringify({
+        title: selectedTitle,
+        title_id: selectedTitleID,
+        location: location,
+        experience: experience,
+        skills: selectedSkills,
+        sectors: sector ? sector : "",
+        report_id: reportID,
+      })
+    );
+    navigate("/reports");
+  };
+
+  const saveReport = async (reportID) => {
+    const formData = new FormData();
+
+    formData.append("title_id", selectedTitleID);
+    formData.append("title", selectedTitle);
+    formData.append("experience", experience);
+    formData.append("skills", JSON.stringify(selectedSkills));
+    formData.append("location ", location);
+    formData.append("manage", isManage);
+    formData.append("supervise", isSupervise);
+    formData.append("sector", sector);
+    formData.append("report_id", reportID);
+
+    AxiosInstance.post(api_pay_pulse_saveActivity, formData, {
+      headers: {
+        "Content-Type": "application/json",
+        token: `Bearer ${accessToken}`,
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
   return (
     <>
       <NavBar />
       <div style={{ marginTop: "100px" }}>
-        {jobsDataFetched.length > 0 ? (
+        {availableTitlesFetched.length > 0 ? (
           <>
             {" "}
             <div className="container-fluid">
-              <h2 className="fs-2 mt-3">Price a Job</h2>
+              <h2 className="fs-2 mt-3">PayPulse</h2>
               <h5 className="mt-3">
                 Let's start building a profile with compensable factors to
                 benchmark jobs.
@@ -522,17 +474,19 @@ const PriceAJob = () => {
                     size={"large"}
                     showSearch
                     placeholder="Job Title"
-                    value={selectedJobTitles}
-                    onChange={handleSelectJob}
-                    onSearch={handleJobSearch}
+                    value={selectedTitle}
+                    onChange={(value, option) =>
+                      handleSelectTitle(value, option.label)
+                    }
+                    onSearch={handleTitleSearch}
                     style={{
                       width: "100%",
                       borderRadius: "3px",
                       textAlign: "start",
                     }}
-                    options={(jobsData || []).map((item) => ({
-                      value: item,
-                      label: item,
+                    options={(availableTitles || []).map((item) => ({
+                      value: item.id,
+                      label: item.titles,
                     }))}
                     className="border text-start"
                   />
@@ -553,8 +507,8 @@ const PriceAJob = () => {
                     placeholder="City"
                     defaultActiveFirstOption={false}
                     filterOption={false}
-                    onSearch={handleSearch}
-                    onChange={handleSelectChange}
+                    onSearch={handleLocationSearch}
+                    onChange={handleLocationChange}
                     notFoundContent={null}
                     options={(validatedCityInputs || []).map((d) => ({
                       value: d,
@@ -624,9 +578,7 @@ const PriceAJob = () => {
                     notFoundContent={null}
                     value={selectedSkills}
                     disabled={
-                      selectedJobTitles.length > 0 && location && experience
-                        ? false
-                        : true
+                      selectedTitle && location && experience ? false : true
                     }
                   >
                     {(skillData || []).map((d) => (
@@ -637,7 +589,7 @@ const PriceAJob = () => {
                   </Select>
                 </div>
 
-                {selectedJobTitles.length > 0 &&
+                {selectedTitle &&
                   location &&
                   experience &&
                   (topSkills.length > 0 ? (
@@ -707,9 +659,7 @@ const PriceAJob = () => {
                     placeholder="Any other skills or additional information"
                     allowClear
                     disabled={
-                      selectedJobTitles.length > 0 && location && experience
-                        ? false
-                        : true
+                      selectedTitle && location && experience ? false : true
                     }
                   />
                 </div>
@@ -765,7 +715,7 @@ const PriceAJob = () => {
                 </div>
               </div>
               <div className="mb-3">
-                {selectedJobTitles.length > 0 && location && experience ? (
+                {selectedTitle && location && experience ? (
                   <button
                     onClick={handleSubmit}
                     type="submit"
@@ -794,4 +744,4 @@ const PriceAJob = () => {
   );
 };
 
-export default PriceAJob;
+export default PayPulseInput;

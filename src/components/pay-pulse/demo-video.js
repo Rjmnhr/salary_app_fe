@@ -2,10 +2,9 @@ import React from "react";
 
 import BgVideo from "../../video/demo.mp4";
 
-
 import NavBar from "../layout/nav-bar";
 import FooterComponent from "../layout/footer";
-const PriceAJobVideo = () => {
+const PayPulseVideo = () => {
   return (
     <div>
       <NavBar />
@@ -36,4 +35,4 @@ const PriceAJobVideo = () => {
   );
 };
 
-export default PriceAJobVideo;
+export default PayPulseVideo;

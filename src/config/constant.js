@@ -6,11 +6,11 @@ export const user_account_path = "/account";
 export const otp_validation_path = "/otp-validation";
 export const unauthorized_path = "/unauthorized";
 
-export const price_a_job_landing_path = "/price-a-job";
-export const price_a_job_input_path = "/price-a-job-add-details";
-export const price_a_job_output_path = "/reports";
-export const price_a_job_dashboard_path = "/reports-dashboard";
-export const price_a_job_video_path = "/price-a-job-video";
+export const pay_pulse_landing_path = "/pay-pulse";
+export const pay_pulse_input_path = "/pay-pulse-add-details";
+export const pay_pulse_output_path = "/reports";
+export const pay_pulse_dashboard_path = "/reports-dashboard";
+export const pay_pulse_video_path = "/pay-pulse-video";
 
 export const exec_rem_landing_path = "/executive-compensation";
 export const exec_rem_input_path = "/executive-compensation-add-details";
@@ -51,4 +51,4 @@ export const axisColor = colorConfig.colors.axisColor;
 export const borderColor = colorConfig.colors.borderColor;
 export const shadeColor = colorConfig.colors.shadeColor;
 
-export const price_a_job_profile_threshold = 10;
+export const pay_pulse_profile_threshold = 10;

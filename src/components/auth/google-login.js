@@ -2,7 +2,6 @@ import React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-
 import { useNavigate, useLocation } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
 
@@ -49,7 +48,7 @@ const GoogleLoginComponent = ({ element }) => {
         localStorage.setItem("accessToken", data.accessToken);
 
         if (Location.pathname === "/login-app") {
-          navigate("/price-a-job");
+          navigate("/pay-pulse");
         } else {
           navigate("/");
         }
