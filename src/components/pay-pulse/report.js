@@ -341,8 +341,8 @@ const PayPulseReportComponent = ({
         setChartHeight(200);
         setPieChartWidth(300);
       } else {
-        setChartWidth(700);
-        setChartHeight(300);
+        setChartWidth(650);
+        setChartHeight(400);
         setPieChartWidth(400);
       }
     };
@@ -535,7 +535,7 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5">Average Salary Trend</h5>
+                  <h5 className="mb-5 mt-3">Average Salary Trend</h5>
                   <SalaryTrendChart
                     data={jobsData}
                     width={chartWidth}
@@ -554,7 +554,9 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5">Average Salary vs Experience Level</h5>
+                  <h5 className="mb-5 mt-2 pl-4" style={{ fontSize: "20px" }}>
+                    Average Salary vs Experience Level
+                  </h5>
 
                   <SalaryVsExpLineChart
                     width={chartWidth}
@@ -575,7 +577,7 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5">
+                  <h5 className="mb-5 mt-3">
                     {" "}
                     Average Salary vs Grouped Experience Level
                   </h5>

@@ -41,7 +41,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       enabled: false,
     },
     stroke: {
-      width: 2,
+      width: 3,
       curve: "smooth",
       fill: {
         type: "solid",
@@ -94,7 +94,12 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
         text: "Experience (years)",
         offsetY: 10,
         offsetX: -20,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
+
       categories: filteredData.map((d) => d.experienceLevel),
       axisBorder: {
         show: false,
@@ -105,7 +110,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       labels: {
         show: true,
         style: {
-          fontSize: "13px",
+          fontSize: "16px",
           colors: axisColor,
         },
       },
@@ -114,6 +119,10 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       title: {
         text: "Average Salary (LPA)",
         offsetX: -20,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       labels: {
         show: true,
@@ -122,7 +131,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
           return value + "  ";
         },
         style: {
-          fontSize: "13px",
+          fontSize: "16px",
           colors: "#a1acb8",
         },
       },

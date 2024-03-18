@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Tabs } from "antd";
 import {
   CalendarOutlined,
   EnvironmentOutlined,
@@ -19,7 +18,6 @@ import PayPulseReportComponent from "./report";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
-import { formatColumnName } from "../../utils/price-a-job-helper-functions";
 import {
   login_app_path,
   pay_pulse_input_path,
@@ -28,10 +26,12 @@ import {
 import Cookies from "js-cookie";
 import {
   api_pay_pulse_getActivity,
+  api_pay_pulse_relevantSkills,
   api_pay_pulse_salary_data,
   api_pay_pulse_salary_data_no_exp,
   api_pay_pulse_salary_data_no_loc,
   api_pay_pulse_sectors,
+  api_pay_pulse_updateActivity,
 } from "../../config/config";
 
 const ExpandMore = styled((props) => {
@@ -49,6 +49,7 @@ const PayPulseOutput = ({ userPlan }) => {
   const [salaryData, setSalaryData] = useState([]); // Store API responses here
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
+
   const [duplicateDataArray, setDuplicateDataArray] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
@@ -236,7 +237,7 @@ const PayPulseOutput = ({ userPlan }) => {
 
         setDataArray(distinctArray);
         setDuplicateDataArray(distinctArray);
-        setEditableJobTitle(distinctArray[0].job_titles);
+        setEditableJobTitle(distinctArray[0].title);
         setEditableLocation(distinctArray[0].location);
         setEditableExperience(distinctArray[0].experience);
         setEditableSkills(JSON.parse(distinctArray[0].skills));
@@ -257,7 +258,7 @@ const PayPulseOutput = ({ userPlan }) => {
     formData.append("sector", editableSector);
     formData.append("id", currentReportID);
 
-    AxiosInstance.post("api/report/update", formData, {
+    AxiosInstance.post(api_pay_pulse_updateActivity, formData, {
       headers: {
         "Content-Type": "application/json",
         token: `Bearer ${accessToken}`,
@@ -453,13 +454,14 @@ const PayPulseOutput = ({ userPlan }) => {
       setIsReportReady(false);
       // Create a new report object with the edited values
       const editedReport = {
-        job_titles: editableJobTitle,
+        title: editableJobTitle,
         location: editableLocation,
         experience: editableExperience,
         skills: JSON.stringify(editableSkills),
         manage: "",
         supervise: "",
         sector: editableSector,
+        title_id: dataArray[activeIndex].title_id,
       };
 
       // Update the first element of dataArray with the edited report
@@ -502,12 +504,13 @@ const PayPulseOutput = ({ userPlan }) => {
     );
     sectorsOption(filter);
   };
+
   useEffect(() => {
-    if (editableJobTitle) {
+    if (dataArray.length > 0) {
       AxiosInstance.post(
-        "/api/skills/data",
+        api_pay_pulse_relevantSkills,
         {
-          job_title: formatColumnName(editableJobTitle),
+          title_id: dataArray[0].title_id,
         },
         {
           headers: {
@@ -520,41 +523,20 @@ const PayPulseOutput = ({ userPlan }) => {
           const retrievedSkillsData = await response.data;
           if (response.status !== 200)
             return navigate(login_app_path + `?p=${path}`);
-          const nestedSkillsData = [retrievedSkillsData];
 
-          const uniqueValues = new Set();
+          const skills = retrievedSkillsData?.data.map(
+            (item) => Object.values(item)[0]
+          );
 
-          nestedSkillsData.forEach((innerArray) => {
-            innerArray.forEach((obj) => {
-              const value = Object.values(obj)[0];
-              if (value !== null && value.trim() !== "" && value.length > 1) {
-                uniqueValues.add(value);
-              }
-            });
-          });
+          skills.sort();
 
-          const flattenedUniqueValues = [...uniqueValues];
+          setSkillSet(skills);
 
-          const sortedArr = flattenedUniqueValues.sort((a, b) => {
-            const isSpecialA = /[^a-zA-Z]/.test(a[0]); // Check if a starts with a special character
-            const isSpecialB = /[^a-zA-Z]/.test(b[0]); // Check if b starts with a special character
-
-            if (isSpecialA && !isSpecialB) {
-              return 1; // Move a to the end
-            } else if (!isSpecialA && isSpecialB) {
-              return -1; // Move b to the end
-            } else {
-              return a.localeCompare(b); // Sort alphabetically
-            }
-          });
-
-          setSkillSet(sortedArr);
-
-          setSkillData(sortedArr);
+          setSkillData(skills);
         })
         .catch((err) => console.log(err));
     }
-  }, [editableJobTitle, accessToken, navigate, path]);
+  }, [dataArray, accessToken, navigate, path]);
 
   useEffect(() => {
     if (dataArray.length > 0) {
@@ -571,19 +553,23 @@ const PayPulseOutput = ({ userPlan }) => {
       )
         .then(async (res) => {
           const response = await res.data;
+          console.log("🚀 ~ .then ~ response:", response);
 
-          if (res.status === 403 || res.status === 401)
+          if (res.status === 403 || res.status === 401) {
             return navigate(login_app_path + `?p=${path}`);
-          const sectors = response.map((item) => Object.values(item)[0]);
+          }
 
-          // Create a new Set to store unique values
-          const uniqueSet = new Set(sectors);
-          // Convert the Set back to an array, sort it, and remove "unclassified" if present
-          const uniqueArray = Array.from(uniqueSet)
-            .filter((sector) => sector !== "Nan")
-            .sort();
+          if (res.status === 200) {
+            const sectors = response?.map((item) => Object.values(item)[0]);
+            // Create a new Set to store unique values
+            const uniqueSet = new Set(sectors);
+            // Convert the Set back to an array, sort it, and remove "unclassified" if present
+            const uniqueArray = Array.from(uniqueSet)
+              .filter((sector) => sector !== "Nan")
+              .sort();
 
-          setSectorsOption(uniqueArray);
+            setSectorsOption(uniqueArray);
+          }
         })
         .catch((err) => console.log(err));
     }

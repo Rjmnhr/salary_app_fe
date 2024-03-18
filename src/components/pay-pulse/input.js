@@ -217,13 +217,15 @@ const PayPulseInput = () => {
   //   }
   // }, [selectedTitleID, accessToken, navigate, path]);
 
-  const handleTitleSearch = (newValueId) => {
-    const filter = availableTitlesFetched.filter((data) =>
-      data?.id.includes(newValueId)
-    );
+  const handleTitleSearch = (searchValue) => {
+    const filter = availableTitlesFetched.filter((data) => {
+      // Check if the titles property of the current object includes the searchValue
+      return data.titles.toLowerCase().includes(searchValue.toLowerCase());
+    });
 
     setAvailableTitles(filter);
   };
+
   const handleLocationChange = (value) => {
     setLocation(value);
   };
@@ -476,7 +478,7 @@ const PayPulseInput = () => {
                     placeholder="Job Title"
                     value={selectedTitle}
                     onChange={(value, option) =>
-                      handleSelectTitle(value, option.label)
+                      handleSelectTitle(option.id, value)
                     }
                     onSearch={handleTitleSearch}
                     style={{
@@ -485,8 +487,9 @@ const PayPulseInput = () => {
                       textAlign: "start",
                     }}
                     options={(availableTitles || []).map((item) => ({
-                      value: item.id,
+                      value: item.titles,
                       label: item.titles,
+                      id: item.id, // Include id in the option object
                     }))}
                     className="border text-start"
                   />

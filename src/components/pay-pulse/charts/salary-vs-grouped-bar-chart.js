@@ -1,11 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import {
-  axisColor,
-  borderColor,
-  colorConfig,
-  shadeColor,
-} from "../../../config/constant";
+import { axisColor, colorConfig } from "../../../config/constant";
 
 const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
   const filteredData = data.filter(
@@ -63,17 +58,10 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
     },
     colors: [colorConfig.colors.primary],
     fill: {
-      type: "gradient",
-      gradient: {
-        shade: shadeColor,
-        shadeIntensity: 0.1,
-        opacityFrom: 0.7,
-        opacityTo: 0.8,
-        stops: [0, 95, 100],
-      },
+      type: "solid",
     },
     grid: {
-      borderColor: borderColor,
+      borderColor: "#b3b4b5",
       strokeDashArray: 3,
       padding: {
         top: -10,
@@ -86,6 +74,10 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       title: {
         text: "Experience (years)",
         offsetY: -10,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       categories: filteredData.map((d) => d.experienceLevel),
       axisBorder: {
@@ -97,7 +89,7 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       labels: {
         show: true,
         style: {
-          fontSize: "13px",
+          fontSize: "16px",
           colors: axisColor,
         },
       },
@@ -106,6 +98,10 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
       title: {
         text: "Average Salary (LPA)",
         offsetX: -20,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       labels: {
         show: true,
@@ -114,12 +110,12 @@ const SalaryVsGroupedExpBarChart = ({ data, width, height }) => {
           return value + "  ";
         },
         style: {
-          fontSize: "13px",
+          fontSize: "16px",
           colors: "#a1acb8",
         },
       },
       offsetY: 10, // This offset controls the gap between the Y-axis border and labels
-      min: 1, // Adjust the min value based on your data
+      min: 0, // Adjust the min value based on your data
       max: Math.max(...filteredData.map((d) => d.averageSalary)), // Adjust the max value based on your data
       tickAmount: 4,
       axisBorder: {

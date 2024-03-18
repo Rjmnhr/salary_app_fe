@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import {
-  axisColor,
-  borderColor,
-  colorConfig,
-  shadeColor,
-} from "../../../config/constant";
+import { axisColor, borderColor, colorConfig } from "../../../config/constant";
 
 // Function to calculate the median of an array
 export const calculateMedian = (arr) => {
@@ -62,9 +57,7 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
       item.combined_skills?.toLowerCase().includes(skill?.toLowerCase())
     );
 
-    const median = calculateAverage(
-      filteredData.map((item) => item.mapped_average_sal)
-    );
+    const median = calculateAverage(filteredData.map((item) => item.salary));
 
     // Check if the median is valid (not NaN or null) before adding it to the array
     if (!isNaN(median) && median !== null) {
@@ -96,7 +89,7 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
       enabled: false,
     },
     stroke: {
-      width: 2,
+      width: 3,
       curve: "smooth",
     },
     legend: {
@@ -124,14 +117,7 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
     },
     colors: [colorConfig.colors.primary],
     fill: {
-      type: "gradient",
-      gradient: {
-        shade: shadeColor,
-        shadeIntensity: 0.1,
-        opacityFrom: 0.7,
-        opacityTo: 0.8,
-        stops: [0, 95, 100],
-      },
+      type: "solid",
     },
     grid: {
       borderColor: borderColor,
@@ -148,6 +134,10 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
         text: "Skills",
         offsetY: 20,
         offsetX: -10,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       categories: skillMedians.map((d) => d.skill),
       axisBorder: {
@@ -160,8 +150,8 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
         show: true,
         offsetY: 3,
         style: {
-          fontSize: "8px",
-          colors: axisColor,
+          fontSize: "9px",
+          colors: "black",
         },
       },
     },
@@ -169,6 +159,10 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
       title: {
         text: "Average Salary (LPA)",
         offsetX: -20,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       labels: {
         show: true,
@@ -177,12 +171,12 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
           return value + "  ";
         },
         style: {
-          fontSize: "13px",
-          colors: "#a1acb8",
+          fontSize: "16px",
+          colors: axisColor,
         },
       },
       offsetY: 10, // This offset controls the gap between the Y-axis border and labels
-      min: 1, // Adjust the min value based on your data
+      min: 0, // Adjust the min value based on your data
       max: Math.max(...skillMedians.map((d) => d.median)), // Adjust the max value based on your data
       tickAmount: 4,
       axisBorder: {

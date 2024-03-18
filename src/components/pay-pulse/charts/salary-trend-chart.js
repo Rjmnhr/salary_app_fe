@@ -99,7 +99,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
       },
     },
     stroke: {
-      width: 2,
+      width: 3,
       curve: "smooth",
       fill: {
         type: "solid",
@@ -149,13 +149,19 @@ const SalaryTrendChart = ({ data, width, height }) => {
       labels: {
         style: {
           colors: axisColor,
+          fontSize: "16px",
         },
       },
+      offsetY: 10,
     },
     yaxis: {
       title: {
         text: "Median Salary (LPA)",
         offsetX: -20,
+        style: {
+          fontSize: "16px",
+          fontWeight: "normal",
+        },
       },
       labels: {
         show: true,
@@ -165,7 +171,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
         hideOverlappingLabels: true,
         rotateAlways: true,
         style: {
-          fontSize: "13px",
+          fontSize: "16px",
           colors: "#a1acb8",
         },
       },

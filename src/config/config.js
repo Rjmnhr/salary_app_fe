@@ -3,6 +3,7 @@ export const api_track_data_2 = "/api/track-data/store2";
 
 export const api_pay_pulse_saveActivity = "/api/pay-pulse/save-activity";
 export const api_pay_pulse_getActivity = "/api/pay-pulse/get-activity";
+export const api_pay_pulse_updateActivity = "/api/pay-pulse/update-activity";
 
 export const api_pay_pulse_titles = "/api/pay-pulse/titles";
 export const api_pay_pulse_sectors = "/api/pay-pulse/sectors";

@@ -107,14 +107,14 @@ const NavBar = ({ bgInput }) => {
   ];
 
   return (
-    <body className={`${menuOpen ? "mobile-nav-active" : ""} `}>
+    <div className={`${menuOpen ? "mobile-nav-active" : ""} `}>
       <NavBarStyled>
         <button
           type="button"
-          class="mobile-nav-toggle d-lg-none"
+          className="mobile-nav-toggle d-lg-none"
           onClick={handleMenuToggle}
         >
-          <i style={{ color: "black" }} class="icofont-navigation-menu"></i>
+          <i style={{ color: "black" }} className="icofont-navigation-menu"></i>
         </button>
         <header
           id="header"
@@ -124,8 +124,8 @@ const NavBar = ({ bgInput }) => {
             boxShadow: "0px 2px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div class="container-fluid px-5 d-flex align-items-center">
-            <h1 class="logo me-auto">
+          <div className="container-fluid px-5 d-flex align-items-center">
+            <h1 className="logo me-auto">
               <a href="/">
                 {" "}
                 <img
@@ -140,7 +140,7 @@ const NavBar = ({ bgInput }) => {
             </h1>
 
             <nav
-              class={`${
+              className={`${
                 menuOpen
                   ? "mobile-nav d-lg-none"
                   : " nav-menu d-none d-lg-block"
@@ -215,7 +215,7 @@ const NavBar = ({ bgInput }) => {
           </div>
         </header>
       </NavBarStyled>
-    </body>
+    </div>
   );
 };
 
