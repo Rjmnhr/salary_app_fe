@@ -1,6 +1,8 @@
 import React from "react";
 import pdfPath from "./sample_report.pdf";
 import { notification } from "antd";
+import { PayPulsePageStyled } from "../../../pages/pay-pulse-landing/style";
+import { ArrowDownOutlined } from "@ant-design/icons";
 function DownloadSamplePDF() {
   const [api, contextHolder] = notification.useNotification();
 
@@ -28,21 +30,19 @@ function DownloadSamplePDF() {
   };
 
   return (
-    <div>
-      {contextHolder}
-      <button
-        onClick={downloadPdf}
-        style={{
-          fontSize: "20px",
+    <PayPulsePageStyled>
+      <div>
+        {contextHolder}
 
-          background: "rgb(0, 128, 128)",
-          color: "white",
-        }}
-        className="btn "
-      >
-        Download sample report
-      </button>
-    </div>
+        <button
+          onClick={downloadPdf}
+          className="custom-download-btn mt-2 mb-3 shadow p-3"
+        >
+          Download sample
+          <ArrowDownOutlined className="ml-2" />
+        </button>
+      </div>
+    </PayPulsePageStyled>
   );
 }
 

@@ -65,9 +65,7 @@ const PayPulseOutput = ({ userPlan }) => {
   const [activeIndex, setActiveIndex] = useState(
     parseInt(sessionStorage.getItem("activeIndex")) || 0
   );
-  const cities = [];
-  const experienceOptions = [];
-  const [locationData, setLocationData] = useState(cities);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [skillSet, setSkillSet] = useState([]);
   const [skillData, setSkillData] = useState([]);
@@ -77,6 +75,10 @@ const PayPulseOutput = ({ userPlan }) => {
   const [sectorsOption, setSectorsOption] = useState([]);
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
+  const userInputOptions = JSON.parse(sessionStorage.getItem("input-options"));
+  const [locationOptions, setLocationOptions] = useState(
+    userInputOptions?.locationOptions
+  );
   const userInput = JSON.parse(sessionStorage.getItem("input-values"));
   const accessToken = Cookies.get("accessToken");
   const location = useLocation();
@@ -475,10 +477,10 @@ const PayPulseOutput = ({ userPlan }) => {
   // useEffect(() => {
 
   const handleSearch = (newValue) => {
-    const filter = cities.filter((data) =>
+    const filter = userInputOptions?.locationOptions.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
-    setLocationData(filter);
+    setLocationOptions(filter);
   };
 
   const handleSelectEditableLocation = (value) => {
@@ -647,7 +649,7 @@ const PayPulseOutput = ({ userPlan }) => {
                       onSearch={handleSearch}
                       onChange={handleSelectEditableLocation}
                       notFoundContent={null}
-                      options={(locationData || []).map((d) => ({
+                      options={(locationOptions || []).map((d) => ({
                         value: d,
                         label: d,
                       }))}
@@ -673,10 +675,12 @@ const PayPulseOutput = ({ userPlan }) => {
                       value={editableExperience}
                       onChange={handleSelectEditableExperience}
                       notFoundContent={null}
-                      options={(experienceOptions || []).map((e) => ({
-                        value: e,
-                        label: e,
-                      }))}
+                      options={(userInputOptions?.experienceOptions || []).map(
+                        (e) => ({
+                          value: e,
+                          label: e,
+                        })
+                      )}
                     />
                   </div>
                 </div>
@@ -711,43 +715,45 @@ const PayPulseOutput = ({ userPlan }) => {
                     </Select>
                   </div>
                 </div>
-                <div className="mb-3 d-flex align-items-center">
-                  <label className="col-3">Sector : </label>
-                  <div className="col-8 d-flex">
-                    <Select
-                      size={"large"}
-                      style={{
-                        width: "100%",
-                        borderRadius: "0",
-                        textAlign: "start",
-                      }}
-                      value={editableSector}
-                      className="input border"
-                      showSearch
-                      placeholder="Sector"
-                      defaultActiveFirstOption={false}
-                      suffixIcon={null}
-                      filterOption={false}
-                      onSearch={handleEditableSectorSearch}
-                      onChange={(value) => setEditableSector(value)}
-                      notFoundContent={null}
-                      options={[
-                        { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
-                        ...(sectorsOption || []).map((d) => ({
-                          value: d,
-                          label: CapitalizeFirstLetter(d),
-                        })),
-                      ]}
-                    />
-                    <p
-                      className="bg-primary text-light m-0 text-center ml-1 p-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setEditableSector("")}
-                    >
-                      X
-                    </p>
+                {userInputOptions?.sectorsOption && (
+                  <div className="mb-3 d-flex align-items-center">
+                    <label className="col-3">Sector : </label>
+                    <div className="col-8 d-flex">
+                      <Select
+                        size={"large"}
+                        style={{
+                          width: "100%",
+                          borderRadius: "0",
+                          textAlign: "start",
+                        }}
+                        value={editableSector}
+                        className="input border"
+                        showSearch
+                        placeholder="Sector"
+                        defaultActiveFirstOption={false}
+                        suffixIcon={null}
+                        filterOption={false}
+                        onSearch={handleEditableSectorSearch}
+                        onChange={(value) => setEditableSector(value)}
+                        notFoundContent={null}
+                        options={[
+                          { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
+                          ...(sectorsOption || []).map((d) => ({
+                            value: d,
+                            label: CapitalizeFirstLetter(d),
+                          })),
+                        ]}
+                      />
+                      <p
+                        className="bg-primary text-light m-0 text-center ml-1 p-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setEditableSector("")}
+                      >
+                        X
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </Modal>
             <a href={pay_pulse_input_path}>

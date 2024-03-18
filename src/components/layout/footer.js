@@ -1,5 +1,13 @@
 import { Modal } from "antd";
 import React, { useState } from "react";
+import {
+  advisory_page_path,
+  blog_page_path,
+  pay_pulse_landing_path,
+  salary_survey,
+  sales_incentive_page_path,
+  training_page_path,
+} from "../../config/constant";
 
 const FooterComponent = ({ setTrigger, trigger }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,22 +66,33 @@ const FooterComponent = ({ setTrigger, trigger }) => {
               <ul>
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="/pay-pulse">PayPulse</a>
+                  <a href={pay_pulse_landing_path}>PayPulse</a>
                 </li>
+                <li>
+                  <i class="bx bx-chevron-right"></i>{" "}
+                  <a href={salary_survey}>Salary survey</a>
+                </li>
+                <li>
+                  <i class="bx bx-chevron-right"></i>{" "}
+                  <a href={training_page_path}>Training</a>
+                </li>
+
                 {/* <li>
                   <i class="bx bx-chevron-right"></i>{" "}
                   <a href="/executive-compensation">Executive compensation</a>
                 </li> */}
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="sales-incentive">Sales incentive</a>
+                  <a href={sales_incentive_page_path}>Sales incentive</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>{" "}
-                  <a href="/training">Training</a>
+                  <a href={advisory_page_path}>Advisory</a>
                 </li>
+
                 <li>
-                  <i class="bx bx-chevron-right"></i> <a href="/blog">Blog</a>
+                  <i class="bx bx-chevron-right"></i>{" "}
+                  <a href={blog_page_path}>Blogs</a>
                 </li>
               </ul>
             </div>

@@ -18,7 +18,10 @@ export const exec_rem_output_path = "/exec-rem-report";
 export const exec_rem_dashboard_path = "/exec-rem-reports-dashboard";
 export const exec_rem_video_path = "/executive-compensation-video";
 
-export const salary_survey = "salary_survey";
+export const salary_survey = "/salary-survey";
+export const advisory_page_path = "/advisory";
+
+export const blog_page_path = "/blog";
 
 export const training_page_path = "/training";
 export const sales_incentive_page_path = "/sales";

@@ -168,7 +168,7 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
         show: true,
         offsetX: 20,
         formatter: function (value) {
-          return value + "  ";
+          return value?.toFixed(2);
         },
         style: {
           fontSize: "16px",

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import preLoader from "../../icons/Settings.gif";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
+import { useApplicationContext } from "../../context/app-context";
+import { login_path, pay_pulse_input_path } from "../../config/constant";
 
 const SuccessRegistrationBasic = () => {
   const first_name = sessionStorage.getItem("first_name");
@@ -14,7 +16,7 @@ const SuccessRegistrationBasic = () => {
   const job = sessionStorage.getItem("job");
   const company = sessionStorage.getItem("company");
   const [isProfileCreated, setProfileCreated] = useState(false);
-
+  const { setUserData } = useApplicationContext();
   const [seconds, setSeconds] = useState(5);
   const navigate = useNavigate();
 
@@ -84,7 +86,7 @@ const SuccessRegistrationBasic = () => {
           setSeconds(seconds - 1);
         } else {
           clearInterval(countdown);
-          navigate("/pay-pulse-add-details");
+          navigate(pay_pulse_input_path);
         }
       }, 1000);
 
@@ -132,19 +134,17 @@ const SuccessRegistrationBasic = () => {
         const accessToken = data.accessToken;
 
         if (!accessToken) {
-          navigate("/login");
+          navigate(login_path);
           clearSessionStorage();
           return;
         }
+        setUserData(data);
 
-        const user_id = data.id;
         // const plan = data.plan;
 
         // localStorage.setItem("plan", plan);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("isLoggedIn", true);
+
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("email", data.email);
 
         clearSessionStorage();
         setProfileCreated(true); // Mark profile as created
@@ -183,7 +183,7 @@ const SuccessRegistrationBasic = () => {
                 <p>
                   You will be redirecting automatically in {seconds} seconds
                 </p>{" "}
-                or <a href="/pay-pulse-add-details">Click here</a>{" "}
+                or <a href={pay_pulse_input_path}>Click here</a>{" "}
               </>
             ) : (
               <div className="d-flex align-items-center justify-content-center gap-2 mb-3">

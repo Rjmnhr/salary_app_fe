@@ -61,10 +61,10 @@ const SalaryTrendChart = ({ data, width, height }) => {
           ? (sortedSalaries[middleIndex - 1] + sortedSalaries[middleIndex]) / 2
           : sortedSalaries[middleIndex];
 
-      median = median ? median : 0;
+      median = median ? parseFloat(median.toFixed(2)) : 0;
       return {
         x: category,
-        y: median.toFixed(2),
+        y: parseFloat(median),
       };
     });
 
@@ -164,6 +164,9 @@ const SalaryTrendChart = ({ data, width, height }) => {
         },
       },
       labels: {
+        formatter: function (value) {
+          return value?.toFixed(2);
+        },
         show: true,
         offsetX: 20,
         trim: false,
@@ -183,7 +186,6 @@ const SalaryTrendChart = ({ data, width, height }) => {
       offsetX: -20, // Adjust the offset to position the Y-axis border
     },
   };
-  console.log("🚀 ~ SalaryTrendChart ~ chartData:", chartData);
 
   return (
     <Chart

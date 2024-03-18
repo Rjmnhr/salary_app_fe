@@ -93,8 +93,10 @@ const LoginPage = () => {
               height: "100vh",
             }}
           >
-            <h1 className="">Equipay Partners </h1>
-            <p style={{ color: "black" }}>Your partners in all matters pay</p>
+            <h1 className="text-center">Equipay Partners </h1>
+            <p className="text-center" style={{ color: "black" }}>
+              Your partners in all matters pay
+            </p>
           </div>
 
           <div className="right-container">

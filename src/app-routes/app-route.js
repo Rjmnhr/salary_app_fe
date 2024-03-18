@@ -41,6 +41,7 @@ import KPIClientOutput from "../components/KPI-client/output.js";
 import Success from "../components/payment/Success.js";
 import Canceled from "../components/payment/Canceled.js";
 import {
+  advisory_page_path,
   exec_rem_input_path,
   exec_rem_landing_path,
   home_path,
@@ -57,6 +58,7 @@ import {
 } from "../config/constant.js";
 import Unauthorized from "../components/misc/unauthorized.js";
 import PriceAJobVideoLatest from "../components/pay-pulse/demo-video-latest.js";
+import AdvisoryPage from "../pages/advisory-page/index.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -277,6 +279,14 @@ const AppRoute = () => {
                 </>
               }
             />
+          }
+        />
+        <Route
+          path={advisory_page_path}
+          element={
+            <>
+              <AdvisoryPage />
+            </>
           }
         />
         <Route

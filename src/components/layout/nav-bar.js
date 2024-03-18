@@ -1,18 +1,151 @@
 import React, { useEffect, useState } from "react";
 import { NavBarStyled } from "./style";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Avatar, Dropdown } from "antd";
+import { Avatar, Dropdown, Menu } from "antd";
 import logo from "../../icons/logo192.png";
 import { useApplicationContext } from "../../context/app-context";
-import { UserOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
+import { ArrowRightOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  advisory_page_path,
+  pay_pulse_landing_path,
+  salary_survey,
+  sales_incentive_page_path,
+  training_page_path,
+} from "../../config/constant";
 
 const NavBar = ({ bgInput }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const Location = useLocation();
   const [initials, setInitials] = useState("");
-  const { userData } = useApplicationContext();
+  const { userData, setUserData } = useApplicationContext();
+  const [hoveredItem, setHoveredItem] = useState(null);
+
+  const productMenuItems = [
+    {
+      key: "1",
+      title: (
+        <div
+          className="p-2 d-flex justify-content-between"
+          onMouseEnter={() => setHoveredItem("1")}
+          onMouseLeave={() => setHoveredItem(null)}
+          style={{ width: "200px" }}
+          onClick={() => navigate(pay_pulse_landing_path)}
+        >
+          <h6>
+            {" "}
+            <i
+              className="icofont-chart-bar-graph text-primary mr-2"
+              style={{ fontSize: "20px" }}
+            ></i>
+            PayPulse
+          </h6>
+          {hoveredItem === "1" && (
+            <ArrowRightOutlined className="text-primary" />
+          )}
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      title: (
+        <div
+          className="p-2 d-flex justify-content-between"
+          onMouseEnter={() => setHoveredItem("2")}
+          onMouseLeave={() => setHoveredItem(null)}
+          style={{ width: "200px" }}
+          onClick={() => navigate(salary_survey)}
+        >
+          <h6>
+            {" "}
+            <i
+              className="icofont-computer text-primary mr-2"
+              style={{ fontSize: "20px" }}
+            ></i>
+            Salary Survey
+          </h6>
+          {hoveredItem === "2" && (
+            <ArrowRightOutlined className="text-primary" />
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  const serviceMenuItems = [
+    {
+      key: "1",
+      title: (
+        <div
+          className="p-2 d-flex justify-content-between"
+          onMouseEnter={() => setHoveredItem("1")}
+          onMouseLeave={() => setHoveredItem(null)}
+          style={{ width: "200px" }}
+          onClick={() => navigate(training_page_path)}
+        >
+          <h6>
+            {" "}
+            <i
+              className="icofont-teacher text-primary mr-2"
+              style={{ fontSize: "20px" }}
+            ></i>
+            Training
+          </h6>
+          {hoveredItem === "1" && (
+            <ArrowRightOutlined className="text-primary" />
+          )}
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      title: (
+        <div
+          className="p-2 d-flex justify-content-between"
+          onMouseEnter={() => setHoveredItem("2")}
+          onMouseLeave={() => setHoveredItem(null)}
+          style={{ width: "200px" }}
+          onClick={() => navigate(sales_incentive_page_path)}
+        >
+          <h6>
+            {" "}
+            <i
+              className="icofont-money text-primary mr-2"
+              style={{ fontSize: "20px" }}
+            ></i>
+            Sales Incentive
+          </h6>
+          {hoveredItem === "2" && (
+            <ArrowRightOutlined className="text-primary" />
+          )}
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      title: (
+        <div
+          className="p-2 d-flex justify-content-between"
+          onMouseEnter={() => setHoveredItem("3")}
+          onMouseLeave={() => setHoveredItem(null)}
+          style={{ width: "200px" }}
+          onClick={() => navigate(advisory_page_path)}
+        >
+          <h6>
+            {" "}
+            <i
+              className="icofont-light-bulb text-primary mr-2"
+              style={{ fontSize: "20px" }}
+            ></i>
+            Advisory
+          </h6>
+          {hoveredItem === "3" && (
+            <ArrowRightOutlined className="text-primary" />
+          )}
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
     if (userData) {
@@ -68,8 +201,8 @@ const NavBar = ({ bgInput }) => {
 
   const handleLogOut = () => {
     navigate("/");
-    Cookies.remove("accessToken");
-    Cookies.remove("userData");
+    localStorage.removeItem("accessToken");
+    setUserData(null);
   };
 
   const items = [
@@ -106,6 +239,12 @@ const NavBar = ({ bgInput }) => {
     },
   ];
 
+  // Handle menu item click
+  const handleMenuItemClick = (key) => {
+    // Handle menu item click as needed
+    console.log(`Clicked on menu item with key: ${key}`);
+  };
+
   return (
     <div className={`${menuOpen ? "mobile-nav-active" : ""} `}>
       <NavBarStyled>
@@ -124,7 +263,7 @@ const NavBar = ({ bgInput }) => {
             boxShadow: "0px 2px 15px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="container-fluid px-5 d-flex align-items-center">
+          <div className="container  d-flex align-items-center">
             <h1 className="logo me-auto">
               <a href="/">
                 {" "}
@@ -147,33 +286,49 @@ const NavBar = ({ bgInput }) => {
               } `}
             >
               <ul>
-                <li className={activeLink === "price-a-job" ? "active" : ""}>
-                  <a href="/pay-pulse">PayPulse</a>
-                </li>
-                <li
-                  className={`
-                   ${activeLink === "/executive-compensation" ? "active" : ""}
-                   d-none
-                 `}
+                <Dropdown
+                  overlay={
+                    <Menu
+                      className="p-3"
+                      onClick={({ key }) => handleMenuItemClick(key)}
+                    >
+                      {productMenuItems.map((item) => (
+                        <Menu.Item key={item.key}>{item.title}</Menu.Item>
+                      ))}
+                    </Menu>
+                  }
+                  placement="bottomLeft"
                 >
-                  <a href="/executive-compensation">Executive Compensation</a>
-                </li>
-                <li className={activeLink === "survey" ? "active" : ""}>
-                  <a href="/salary-survey">Salary survey</a>
-                </li>
-                <li
-                  className={` d-none ${activeLink === "kpi" ? "active" : ""}`}
+                  <li>
+                    <a style={{ fontSize: "16px" }} href="#products">
+                      Products
+                    </a>
+                  </li>
+                </Dropdown>
+                <Dropdown
+                  overlay={
+                    <Menu
+                      className="p-3"
+                      onClick={({ key }) => handleMenuItemClick(key)}
+                    >
+                      {serviceMenuItems.map((item) => (
+                        <Menu.Item key={item.key}>{item.title}</Menu.Item>
+                      ))}
+                    </Menu>
+                  }
+                  placement="bottomLeft"
                 >
-                  <a href="/kpi-client">KPI Client</a>
-                </li>
-                <li className={activeLink === "training" ? "active" : ""}>
-                  <a href="/training">Training</a>
-                </li>
-                <li className={activeLink === "sales" ? "active" : ""}>
-                  <a href="/sales">Sales Incentive</a>
-                </li>
+                  <li>
+                    <a style={{ fontSize: "16px" }} href="#products">
+                      Services
+                    </a>
+                  </li>
+                </Dropdown>
+
                 <li className={activeLink === "blog" ? "active" : ""}>
-                  <a href="/blog">Blog</a>
+                  <a style={{ fontSize: "16px" }} href="/blog">
+                    Blogs
+                  </a>
                 </li>
 
                 {userData ? (
@@ -207,7 +362,9 @@ const NavBar = ({ bgInput }) => {
                   </>
                 ) : (
                   <li>
-                    <a href="/login">Log in</a>
+                    <a style={{ fontSize: "16px" }} href="/login">
+                      Login/Register
+                    </a>
                   </li>
                 )}
               </ul>

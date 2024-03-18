@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
 import { pay_pulse_input_path } from "../../config/constant";
-import Cookies from "js-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -62,7 +61,6 @@ const SignIn = () => {
       if (!accessToken) return error(data);
 
       localStorage.setItem("accessToken", accessToken);
-      Cookies.set("accessToken", accessToken, { expires: 1 }); // Cookie expiration set to 1 day
 
       setEmail("");
       setPassword("");

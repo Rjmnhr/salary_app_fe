@@ -7,8 +7,8 @@ export const HomePageStyled = styled.div`
 
   .custom-button:hover {
     background: white;
-    color: #2e0b96;
-    border: 2px solid #2e0b96;
+    color: #696cff;
+    border: 2px solid #696cff;
   }
 
   .custom-demo-btn {
@@ -21,7 +21,7 @@ export const HomePageStyled = styled.div`
     letter-spacing: 1px;
     text-decoration: none;
     color: white;
-    background: #2e0b96;
+    background: #696cff;
     cursor: pointer;
     transition: ease-out 0.5s;
     border: 2px solid white;
@@ -32,7 +32,7 @@ export const HomePageStyled = styled.div`
   .custom-demo-btn:hover {
     color: #1a6cb6;
     box-shadow: inset 0 -100px 0 0 white;
-    border: 2px solid #2e0b96;
+    border: 2px solid #696cff;
   }
 
   .custom-demo-btn:active {

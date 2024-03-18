@@ -1,9 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-
 import welcomeImg from "../../icons/welcome-image.png";
 import secondCoverImg from "../../icons/cover-2.jpg";
 // import eagle from "../../eagle.jpg";
-
 import NavBar from "../../components/layout/nav-bar";
 import { Carousel } from "antd";
 import Contact from "../../components/contact";
@@ -301,7 +299,7 @@ const HomePage = () => {
         <section
           ref={productsRef}
           id="products"
-          className="services section-bg "
+          className="services section-bg"
         >
           <div className="container" data-aos="fade-up">
             <div className="section-title">

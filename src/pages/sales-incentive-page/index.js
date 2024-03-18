@@ -108,10 +108,8 @@ const SalesIncentive = () => {
                     /> */}
 
                     <div className="col mb-5">
-                      <a
-                        className="card card-ghost card-transition-zoom h-100"
-                        href="./portfolio-case-study.html"
-                      >
+                      {/* eslint-disable-next-line*/}
+                      <a className="card card-ghost card-transition-zoom h-100">
                         <div className="card-transition-zoom-item">
                           <div className="image-overlay">
                             <img

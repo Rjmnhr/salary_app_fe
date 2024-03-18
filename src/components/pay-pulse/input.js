@@ -18,6 +18,7 @@ import {
   api_track_data_1,
   api_track_data_2,
 } from "../../config/config";
+import { Helmet } from "react-helmet";
 
 export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
@@ -428,6 +429,17 @@ const PayPulseInput = () => {
         report_id: reportID,
       })
     );
+
+    sessionStorage.setItem(
+      "input-options",
+      JSON.stringify({
+        experienceOptions: validatedExpInputs,
+        locationOptions: validatedCityInputs,
+        skillsOptions: relevantSkills,
+        sectorsOptions: validatedSectorInputs,
+      })
+    );
+
     navigate("/reports");
   };
 
@@ -456,6 +468,18 @@ const PayPulseInput = () => {
 
   return (
     <>
+      <Helmet>
+        <title>PayPulse | Equipay Partners</title>
+        <meta
+          name="description"
+          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
+        />
+        <meta
+          property="og:description"
+          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
+        />
+        {/* Add other meta tags, link tags, etc. as needed */}
+      </Helmet>
       <NavBar />
       <div style={{ marginTop: "100px" }}>
         {availableTitlesFetched.length > 0 ? (
@@ -467,6 +491,10 @@ const PayPulseInput = () => {
                 Let's start building a profile with compensable factors to
                 benchmark jobs.
               </h5>
+
+              <p className="text-primary">
+                Options will be populated based on the availability of the data
+              </p>
               <div
                 className="w-100 mt-5"
                 style={{ display: "grid", placeItems: "center" }}
