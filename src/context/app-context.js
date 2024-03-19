@@ -14,7 +14,7 @@ export const AppContextProvider = ({ children }) => {
     if (!userData) {
       AxiosInstance.get(
         "api/user/details",
-        { payload: "payload" },
+
         {
           headers: {
             "Content-Type": "application/json",

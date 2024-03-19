@@ -17,6 +17,7 @@ const VerifyPlanRoute = ({ element }) => {
 
         {
           headers: {
+            "Content-Type": "application/json",
             token: `Bearer ${accessToken}`,
           },
         }

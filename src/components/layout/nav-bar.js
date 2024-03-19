@@ -205,11 +205,20 @@ const NavBar = ({ bgInput }) => {
     setUserData(null);
   };
 
-  const items = [
+  // Handle menu item click
+  const handleMenuItemClick = (key) => {
+    // Handle menu item click as needed
+    console.log(`Clicked on menu item with key: ${key}`);
+  };
+  const profileMenuItems = [
     {
       key: "1",
-      label: (
-        <div className="d-flex justify-content-start align-items-center pb-2 text-start  ">
+      title: (
+        <div
+          onClick={() => navigate("/account")}
+          className="d-flex justify-content-between align-items-center pb-2 text-start  "
+          style={{ width: "100px" }}
+        >
           {" "}
           <p className="m-0">{userData?.first_name}</p>
           <Avatar
@@ -227,24 +236,13 @@ const NavBar = ({ bgInput }) => {
     },
     {
       key: "2",
-      label: <a href="/account">My Profile</a>,
-    },
-    {
-      key: "3",
-      label: (
+      title: (
         <a href="#eq" onClick={handleLogOut}>
           Log out
         </a>
       ),
     },
   ];
-
-  // Handle menu item click
-  const handleMenuItemClick = (key) => {
-    // Handle menu item click as needed
-    console.log(`Clicked on menu item with key: ${key}`);
-  };
-
   return (
     <div className={`${menuOpen ? "mobile-nav-active" : ""} `}>
       <NavBarStyled>
@@ -334,9 +332,16 @@ const NavBar = ({ bgInput }) => {
                 {userData ? (
                   <>
                     <Dropdown
-                      menu={{
-                        items,
-                      }}
+                      overlay={
+                        <Menu
+                          className="p-2"
+                          onClick={({ key }) => handleMenuItemClick(key)}
+                        >
+                          {profileMenuItems.map((item) => (
+                            <Menu.Item key={item.key}>{item.title}</Menu.Item>
+                          ))}
+                        </Menu>
+                      }
                       placement="bottomLeft"
                     >
                       <li
