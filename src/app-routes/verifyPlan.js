@@ -3,10 +3,9 @@ import { Navigate } from "react-router-dom";
 
 import AxiosInstance from "../config/axios";
 import PayPulseOutput from "../components/pay-pulse/output";
-import Cookies from "js-cookie";
 
 const VerifyPlanRoute = ({ element }) => {
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   const [userPlan, setUserPlan] = useState(null);
 

@@ -23,7 +23,6 @@ import {
   pay_pulse_input_path,
   pay_pulse_profile_threshold,
 } from "../../config/constant";
-import Cookies from "js-cookie";
 import {
   api_pay_pulse_getActivity,
   api_pay_pulse_relevantSkills,
@@ -80,7 +79,7 @@ const PayPulseOutput = ({ userPlan }) => {
     userInputOptions?.locationOptions
   );
   const userInput = JSON.parse(sessionStorage.getItem("input-values"));
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
   const locationURL = window.location.href;

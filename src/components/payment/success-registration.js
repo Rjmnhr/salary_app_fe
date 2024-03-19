@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import successTick from "../../icons/check-soft-bg.svg";
 import preLoader from "../../icons/Settings.gif";
 import AxiosInstance from "../../config/axios";
-import Cookies from "js-cookie";
 
 const SuccessRegistration = () => {
   //eslint-disable-next-line
@@ -168,14 +167,11 @@ const SuccessRegistration = () => {
           return;
         }
 
-        const user_id = data.id;
         // const plan = data.plan;
 
         // localStorage.setItem("plan", plan);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("isLoggedIn", true);
-        Cookies.set("accessToken", accessToken, { expires: 1 }); // Cookie expiration set to 1 day
-        localStorage.setItem("email", data.email);
+
+        localStorage.setItem("accessToken", accessToken); // Cookie expiration set to 1 day
 
         clearLocalStorage();
         setProfileCreated(true); // Mark profile as created

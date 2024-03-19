@@ -154,7 +154,7 @@ const HomePage = () => {
                   }}
                 >
                   YOUR PARTNERS IN ALL
-                  <span style={{ color: "#5783db" }} className="">
+                  <span style={{ color: "" }} className="">
                     {" "}
                     MATTERS
                   </span>{" "}
@@ -183,7 +183,7 @@ const HomePage = () => {
 
                   <button
                     onClick={() => navigate(salary_survey)}
-                    className="custom-demo-btn mt-3 m-3 "
+                    className="custom-btn mt-3 m-3 "
                   >
                     Salary Survey
                   </button>

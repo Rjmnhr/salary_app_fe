@@ -17,6 +17,7 @@ export const AppContextProvider = ({ children }) => {
         { payload: "payload" },
         {
           headers: {
+            "Content-Type": "application/json",
             token: `Bearer ${accessToken}`,
           },
         }

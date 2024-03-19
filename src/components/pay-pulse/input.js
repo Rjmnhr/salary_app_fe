@@ -8,7 +8,7 @@ import { CapitalizeFirstLetter } from "../../utils/price-a-job-helper-functions"
 import { login_app_path } from "../../config/constant";
 import NavBar from "../layout/nav-bar";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
+
 import {
   api_pay_pulse_relevantSkills,
   api_pay_pulse_saveActivity,
@@ -51,12 +51,12 @@ const PayPulseInput = () => {
     experience: false,
     sector: false,
   }); // State to manage loading
-
   const pathLocation = useLocation();
   const path = pathLocation.pathname;
   const navigate = useNavigate();
   const { Option } = Select;
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
+
   sessionStorage.setItem("report-updated", false);
   sessionStorage.removeItem("activeIndex");
   sessionStorage.removeItem("saveTheReport");
@@ -123,9 +123,10 @@ const PayPulseInput = () => {
   useEffect(() => {
     AxiosInstance.get(
       api_pay_pulse_titles,
-      { payload: "payload" },
+
       {
         headers: {
+          "Content-Type": "application/json",
           token: `Bearer ${accessToken}`,
         },
       }

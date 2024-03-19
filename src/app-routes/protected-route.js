@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import AxiosInstance from "../config/axios";
-import Cookies from "js-cookie";
 
 const ProtectedRoute = ({ element }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const location = useLocation();
   const path = location.pathname;
-  const accessToken = Cookies.get("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   const VerifyToken = async () => {
     try {
@@ -17,6 +16,7 @@ const ProtectedRoute = ({ element }) => {
 
         {
           headers: {
+            "Content-Type": "application/json",
             token: `Bearer ${accessToken}`,
           },
         }

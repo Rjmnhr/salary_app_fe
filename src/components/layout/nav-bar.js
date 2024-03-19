@@ -361,11 +361,7 @@ const NavBar = ({ bgInput }) => {
                     </Dropdown>
                   </>
                 ) : (
-                  <li>
-                    <a style={{ fontSize: "16px" }} href="/login">
-                      Login/Register
-                    </a>
-                  </li>
+                  ""
                 )}
               </ul>
             </nav>
