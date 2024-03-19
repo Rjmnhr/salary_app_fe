@@ -4,7 +4,6 @@ import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
 import { useEffect, useState } from "react";
 import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
 import ProtectedRoute from "./protected-route.js";
-import PayPulseInput from "../components/pay-pulse/input.js";
 
 import ExecutiveBenchmark from "../components/exec-rem/input.js";
 import VerifyPlanRoute from "./verifyPlan.js";
@@ -59,6 +58,7 @@ import {
 import Unauthorized from "../components/misc/unauthorized.js";
 import PriceAJobVideoLatest from "../components/pay-pulse/demo-video-latest.js";
 import AdvisoryPage from "../pages/advisory-page/index.js";
+import PayPulseInputPage from "../components/pay-pulse/input-page.js";
 
 const AppRoute = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -107,7 +107,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route path={pay_pulse_input_path} element={<PayPulseInput />} />
+        <Route path={pay_pulse_input_path} element={<PayPulseInputPage />} />
         <Route
           path={exec_rem_input_path}
           element={

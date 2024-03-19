@@ -9,7 +9,7 @@ import {
   login_app_path,
   pay_pulse_profile_threshold,
 } from "../../config/constant";
-import NavBar from "../layout/nav-bar";
+
 import {
   CloseCircleOutlined,
   ExclamationCircleOutlined,
@@ -25,7 +25,6 @@ import {
   api_track_data_1,
   api_track_data_2,
 } from "../../config/config";
-import { Helmet } from "react-helmet";
 
 export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
@@ -52,6 +51,8 @@ const PayPulseInput = () => {
   const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
   const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
     useState([]);
+
+  const isPisPreviousReports = false;
   const [startTime, setStartTime] = useState(Date.now());
   const [loading, setLoading] = useState({
     city: false,
@@ -68,8 +69,26 @@ const PayPulseInput = () => {
   sessionStorage.removeItem("activeIndex");
   sessionStorage.removeItem("saveTheReport");
   const locationURL = window.location.href;
-
   const [modalVisible, setModalVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const closeModal = () => {
     setModalVisible(false);
@@ -495,22 +514,9 @@ const PayPulseInput = () => {
 
   return (
     <>
-      <Helmet>
-        <title>PayPulse | Equipay Partners</title>
-        <meta
-          name="description"
-          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
-        />
-        <meta
-          property="og:description"
-          content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
-        />
-        {/* Add other meta tags, link tags, etc. as needed */}
-      </Helmet>
-      <NavBar />
-      <div style={{ marginTop: "100px" }}>
+      <div>
         {availableTitlesFetched.length > 0 ? (
-          <>
+          <div>
             {" "}
             <div className="container-fluid">
               <h2 className="fs-2 mt-3">PayPulse</h2>
@@ -526,7 +532,11 @@ const PayPulseInput = () => {
                 className="w-100 mt-5"
                 style={{ display: "grid", placeItems: "center" }}
               >
-                <div className="mb-3 col-12 col-lg-6">
+                <div
+                  className={`mb-3 col-12 ${
+                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                  } `}
+                >
                   <Select
                     size={"large"}
                     showSearch
@@ -556,7 +566,11 @@ const PayPulseInput = () => {
                   title={selectedTitle}
                 />
 
-                <div className="mb-3 col-12 col-lg-6">
+                <div
+                  className={`mb-3 col-12 ${
+                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                  } `}
+                >
                   <Select
                     size={"large"}
                     style={{
@@ -582,7 +596,11 @@ const PayPulseInput = () => {
                   />
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6">
+                <div
+                  className={`mb-3 col-12 ${
+                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                  } `}
+                >
                   <Select
                     size={"large"}
                     style={{
@@ -622,7 +640,11 @@ const PayPulseInput = () => {
                   </Select>
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6 ">
+                <div
+                  className={`mb-3 col-12 ${
+                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                  }  `}
+                >
                   <Select
                     mode="multiple"
                     size={"large"}
@@ -660,7 +682,9 @@ const PayPulseInput = () => {
                     <>
                       <div
                         style={{ transition: " all 0.3s ease" }}
-                        className="d-flex col-12 col-lg-6 flex-wrap justify-content-start align-items-center mt-1 mb-2"
+                        className={`d-flex col-12 ${
+                          isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                        } flex-wrap justify-content-start align-items-center mt-1 mb-2`}
                       >
                         {topSkills.map((skill, index) => {
                           return (
@@ -691,7 +715,11 @@ const PayPulseInput = () => {
                   ))}
 
                 {validatedSectorInputs.length > 0 && (
-                  <div className="mb-3 col-12 col-lg-6">
+                  <div
+                    className={`mb-3 col-12 ${
+                      isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    } `}
+                  >
                     <Select
                       size={"large"}
                       style={{
@@ -718,7 +746,11 @@ const PayPulseInput = () => {
                   </div>
                 )}
 
-                <div className="mb-3 col-12 col-lg-6 ">
+                <div
+                  className={`mb-3 col-12 ${
+                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                  } `}
+                >
                   <Input
                     placeholder="Any other skills or additional information"
                     allowClear
@@ -728,7 +760,7 @@ const PayPulseInput = () => {
                   />
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6 d-none">
+                <div className="mb-3 col-12 col-lg-10 d-none">
                   <Select
                     size={"large"}
                     placeholder="Does this role supervise employees?"
@@ -753,7 +785,7 @@ const PayPulseInput = () => {
                   />
                 </div>
 
-                <div className="mb-3 col-12 col-lg-6 d-none">
+                <div className="mb-3 col-12 col-lg-10 d-none">
                   <Select
                     size={"large"}
                     placeholder="Does this role manage or lead projects?"
@@ -782,7 +814,13 @@ const PayPulseInput = () => {
                 <button
                   onClick={handleSubmit}
                   type="submit"
-                  className="btn btn-primary btn-lg mt-3 w-25"
+                  className={`btn btn-primary btn-lg mt-3  shadow ${
+                    isMobile
+                      ? "w-75"
+                      : isPisPreviousReports
+                      ? "w-lg-50"
+                      : "w-25 "
+                  } `}
                   disabled={!(selectedTitle && location && experience)}
                 >
                   {isLoading ? (
@@ -795,7 +833,7 @@ const PayPulseInput = () => {
                 </button>
               </div>
             </div>
-          </>
+          </div>
         ) : (
           <div className="container-fluid p-3 plg-5">
             <Skeleton active />

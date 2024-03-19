@@ -26,8 +26,14 @@ const NavBar = ({ bgInput }) => {
   const Location = useLocation();
   const accessToken = localStorage.getItem("accessToken");
   const [initials, setInitials] = useState("");
-  const { userData, setUserData, setIsPreviousReports, isPreviousReports } =
-    useApplicationContext();
+  const {
+    userData,
+    setUserData,
+    setIsPreviousReports,
+    isPreviousReports,
+    setPayPulsePrevReports,
+  } = useApplicationContext();
+
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const productMenuItems = [
@@ -240,6 +246,7 @@ const NavBar = ({ bgInput }) => {
 
           if (data.status === 200) {
             setIsPreviousReports(true);
+            setPayPulsePrevReports(data.data);
           } else {
             return navigate(login_app_path);
           }

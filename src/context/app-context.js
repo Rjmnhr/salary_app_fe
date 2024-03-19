@@ -8,8 +8,8 @@ export const AppContextProvider = ({ children }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-
   const [isPreviousReports, setIsPreviousReports] = useState(false);
+  const [payPulsePrevReports, setPayPulsePrevReports] = useState([]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -43,6 +43,8 @@ export const AppContextProvider = ({ children }) => {
     setUserData,
     isPreviousReports,
     setIsPreviousReports,
+    payPulsePrevReports,
+    setPayPulsePrevReports,
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

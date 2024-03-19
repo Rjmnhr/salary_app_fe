@@ -45,13 +45,16 @@ export const decimalFix = (number) => {
 
 export function calculateStatistics(data) {
   // Calculate average salary
-  const salaries = data.map((job) => job.salary);
+  const salariesSet = new Set(data.map((job) => job.salary));
+  const salaries = [...salariesSet];
 
   const totalSalary = salaries.reduce((acc, val) => acc + val, 0);
+
   const averageSalary = totalSalary / salaries.length;
 
   // Calculate median salary
   const sortedSalaries = [...salaries].sort((a, b) => a - b);
+
   const middleIndex = Math.floor(sortedSalaries.length / 2);
   const medianSalary =
     sortedSalaries.length % 2 === 0
@@ -59,13 +62,22 @@ export function calculateStatistics(data) {
       : sortedSalaries[middleIndex];
 
   // Calculate minimum and maximum salary
-  const minSalary = Math.min(...salaries);
 
-  const maxSalary = Math.max(...salaries);
-
-  // Calculate 10th and 90th percentile values
-  const percentile25 = sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
   const percentile75 = sortedSalaries[Math.floor(0.75 * sortedSalaries.length)];
+  const percentile25 = sortedSalaries[Math.floor(0.25 * sortedSalaries.length)];
+
+  const maxSalary = findMaxSalary(salaries, percentile75);
+  const minSalary = findMinSalary(salaries, percentile25);
+
+  // while (maxSalary <= 2 * percentile75 && maxSalary >= percentile75) {
+  //   // Finding the next maximum value from existing salaries
+  //   maxSalary = sortedSalaries.find((salary) => salary < maxSalary);
+  // }
+
+  // while (minSalary <= 2 * percentile25) {
+  //   // Finding the next minimum value from existing salaries
+  //   minSalary = salaries.find((salary) => salary > minSalary);
+  // }
 
   return {
     averageSalary,
@@ -76,3 +88,48 @@ export function calculateStatistics(data) {
     percentile75,
   };
 }
+
+const findMaxSalary = (salaries, threshold) => {
+  // Sort the salaries array from highest to lowest
+  const sortedSalaries = salaries.sort((a, b) => b - a);
+
+  let maxSalary = sortedSalaries[0]; // Initial max salary
+  let index = 0;
+
+  // Iterate through the sorted array to find the maximum value that satisfies the condition
+  while (maxSalary >= threshold * 2 || maxSalary < threshold) {
+    index++;
+
+    // If index exceeds array length, break the loop as we have checked all salaries
+    if (index >= sortedSalaries.length) {
+      console.log("No salary satisfies the condition");
+      return;
+    }
+
+    maxSalary = sortedSalaries[index];
+  }
+
+  return maxSalary;
+};
+
+const findMinSalary = (salaries, threshold) => {
+  // Sort the salaries array from lowest to highest
+  const sortedSalaries = salaries.sort((a, b) => a - b);
+
+  let minSalary = sortedSalaries[0]; // Initial min salary
+  let index = 0;
+
+  // Iterate through the sorted array to find the minimum value that satisfies the condition
+  while (minSalary < threshold / 2 || minSalary > threshold) {
+    index++;
+
+    // If index exceeds array length, break the loop as we have checked all salaries
+    if (index >= sortedSalaries.length) {
+      console.log("No salary satisfies the condition");
+      return;
+    }
+
+    minSalary = sortedSalaries[index];
+  }
+  return minSalary;
+};
