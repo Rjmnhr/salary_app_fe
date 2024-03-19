@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 import { axisColor, borderColor, colorConfig } from "../../../config/constant";
 
@@ -21,34 +21,9 @@ const calculateAverage = (arr) => {
   const sum = arr.reduce((acc, value) => acc + value, 0);
   return (sum / arr.length).toFixed(2);
 };
-const MedianSalaryChartForSkills = ({ data, skills, width }) => {
+const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
   // Initialize an empty array to store the median salary data for each skill
 
-  const [chartHeight, setChartHeight] = useState(400);
-
-  useEffect(() => {
-    const updateChartSize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth < 600) {
-        setChartHeight(300);
-      } else if (screenWidth < 912) {
-        setChartHeight(200);
-      } else {
-        setChartHeight(300);
-      }
-    };
-
-    // Call the function to set initial size
-    updateChartSize();
-
-    // Add an event listener to check for window size changes
-    window.addEventListener("resize", updateChartSize);
-
-    // Clean up the event listener when the component is unmounted
-    return () => {
-      window.removeEventListener("resize", updateChartSize);
-    };
-  }, []);
   const skillMedians = [];
 
   // Calculate the median salary for each skill
@@ -221,7 +196,7 @@ const MedianSalaryChartForSkills = ({ data, skills, width }) => {
                 series={series}
                 type="bar"
                 width={width}
-                height={chartHeight}
+                height={height}
               />
             </div>
           </div>

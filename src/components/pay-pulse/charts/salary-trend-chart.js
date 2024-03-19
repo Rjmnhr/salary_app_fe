@@ -84,9 +84,12 @@ const SalaryTrendChart = ({ data, width, height }) => {
   //   });
 
   const minYValue = Math.round(
-    Math.min(...chartData.map((point) => point.y)) - 1
+    Math.min(...chartData.map((point) => point.y)) - 2
   );
-  // const maxYValue = Math.max(...chartData.map((point) => point.y)) + 1;
+
+  const maxYValue = Math.round(
+    Math.max(...chartData.map((point) => point.y)) + 1
+  );
 
   const options = {
     chart: {
@@ -163,10 +166,12 @@ const SalaryTrendChart = ({ data, width, height }) => {
           fontWeight: "normal",
         },
       },
+      tickAmount: 4, // You can adjust this value based on your preference
       labels: {
         formatter: function (value) {
-          return value?.toFixed(2);
+          return value.toFixed(2);
         },
+
         show: true,
         offsetX: 20,
         trim: false,
@@ -179,7 +184,9 @@ const SalaryTrendChart = ({ data, width, height }) => {
         },
       },
       min: minYValue,
+      max: maxYValue,
     },
+
     axisBorder: {
       show: false, // Show the Y-axis border
       color: "#a1acb8", // Color of the Y-axis border
