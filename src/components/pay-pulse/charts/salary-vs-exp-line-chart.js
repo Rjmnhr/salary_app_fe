@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
   axisColor,
@@ -8,6 +8,25 @@ import {
 } from "../../../config/constant";
 
 const SalaryVsExpLineChart = ({ title, width, height, data }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const filteredData = data.filter(
     (d) =>
       d.averageSalary !== "NaN" &&
@@ -95,7 +114,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
         offsetY: 10,
         offsetX: -20,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           fontWeight: "normal",
         },
       },
@@ -110,17 +129,17 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
       labels: {
         show: true,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           colors: axisColor,
         },
       },
     },
     yaxis: {
       title: {
-        text: "Average Salary (LPA)",
+        text: isMobile ? "" : "Average Salary (LPA)",
         offsetX: -20,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           fontWeight: "normal",
         },
       },
@@ -131,7 +150,7 @@ const SalaryVsExpLineChart = ({ title, width, height, data }) => {
           return value?.toFixed(2);
         },
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           colors: "#a1acb8",
         },
       },

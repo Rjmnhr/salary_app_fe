@@ -16,7 +16,7 @@ import {
 } from "../../config/constant";
 import FooterComponent from "../../components/layout/footer";
 import { SendOutlined } from "@ant-design/icons";
-
+import { animateScroll as scroll } from "react-scroll";
 const HomePage = () => {
   const testimonialRef = useRef(null);
   const serviceRef = useRef(null);
@@ -26,12 +26,14 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
 
-  const scrollToFunction = (ref) => {
+  function scrollToFunction(ref) {
     if (ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
+      scroll.scrollTo(ref.current.offsetTop, {
+        duration: 2000,
+        smooth: "easeInOutQuart",
+      });
     }
-  };
-
+  }
   const path = window.location.hash;
 
   useEffect(() => {
@@ -296,11 +298,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section
-          ref={productsRef}
-          id="products"
-          className="services section-bg"
-        >
+        <section ref={productsRef} id="service" className="services section-bg">
           <div className="container" data-aos="fade-up">
             <div className="section-title">
               <h2>Our Products</h2>
@@ -502,11 +500,7 @@ const HomePage = () => {
           }
         />
 
-        <section
-          ref={testimonialRef}
-          id="testimonials"
-          className="testimonials"
-        >
+        <section id="service" className="testimonials" ref={testimonialRef}>
           <div className="container" data-aos="fade-up">
             <div className="section-title">
               <h2>Testimonials</h2>

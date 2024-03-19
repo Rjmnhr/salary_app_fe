@@ -54,4 +54,4 @@ export const axisColor = colorConfig.colors.axisColor;
 export const borderColor = colorConfig.colors.borderColor;
 export const shadeColor = colorConfig.colors.shadeColor;
 
-export const pay_pulse_profile_threshold = 10;
+export const pay_pulse_profile_threshold = 15;

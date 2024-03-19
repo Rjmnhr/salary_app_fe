@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Input, Select, Tag, Skeleton, Spin, Space } from "antd";
+import { Input, Select, Tag, Skeleton, Spin, Space, Modal } from "antd";
 import AxiosInstance from "../../config/axios";
 import { CapitalizeFirstLetter } from "../../utils/price-a-job-helper-functions";
-import { login_app_path } from "../../config/constant";
+import {
+  login_app_path,
+  pay_pulse_profile_threshold,
+} from "../../config/constant";
 import NavBar from "../layout/nav-bar";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 
 import {
   api_pay_pulse_relevantSkills,
@@ -56,11 +63,18 @@ const PayPulseInput = () => {
   const navigate = useNavigate();
   const { Option } = Select;
   const accessToken = localStorage.getItem("accessToken");
-
+  const [isLoading, setIsLoading] = useState(false);
   sessionStorage.setItem("report-updated", false);
   sessionStorage.removeItem("activeIndex");
   sessionStorage.removeItem("saveTheReport");
   const locationURL = window.location.href;
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedTitle(null);
+  };
 
   useEffect(() => {
     AxiosInstance.post(
@@ -234,6 +248,8 @@ const PayPulseInput = () => {
 
   const handleLocationChange = (value) => {
     setLocation(value);
+
+    setExperience("");
   };
 
   const handleSectorSearch = (newValue) => {
@@ -308,7 +324,7 @@ const PayPulseInput = () => {
       });
       AxiosInstance.post(
         api_pay_pulse_validInputs,
-        { title_id: selectedTitleID },
+        { title_id: selectedTitleID, threshold: pay_pulse_profile_threshold },
         {
           headers: {
             token: `Bearer ${accessToken}`,
@@ -325,6 +341,11 @@ const PayPulseInput = () => {
               experience: false,
               sector: false,
             });
+
+            if (result?.length === 0) {
+              setModalVisible(true);
+            }
+
             setValidatedInputsArr(result);
             setValidatedInputsArrWithSector(resultWithSector);
 
@@ -418,6 +439,7 @@ const PayPulseInput = () => {
   };
 
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     const reportID = Date.now() + Math.floor(Math.random() * 1000);
     saveReport(reportID);
@@ -527,6 +549,12 @@ const PayPulseInput = () => {
                     className="border text-start"
                   />
                 </div>
+
+                <DataAlertModal
+                  visible={modalVisible}
+                  onClose={closeModal}
+                  title={selectedTitle}
+                />
 
                 <div className="mb-3 col-12 col-lg-6">
                   <Select
@@ -639,7 +667,7 @@ const PayPulseInput = () => {
                             <Tag
                               onClick={() => handleSkillButtonClick(skill)}
                               key={index}
-                              className=" skill-btn  m-1"
+                              className=" skill-btn  m-1 "
                             >
                               {skill}
                             </Tag>
@@ -662,7 +690,7 @@ const PayPulseInput = () => {
                     </div>
                   ))}
 
-                {validatedInputsArrWithSector.length > 0 && (
+                {validatedSectorInputs.length > 0 && (
                   <div className="mb-3 col-12 col-lg-6">
                     <Select
                       size={"large"}
@@ -751,19 +779,20 @@ const PayPulseInput = () => {
                 </div>
               </div>
               <div className="mb-3">
-                {selectedTitle && location && experience ? (
-                  <button
-                    onClick={handleSubmit}
-                    type="submit"
-                    className="btn btn-primary mt-3 w-25"
-                  >
-                    Next
-                  </button>
-                ) : (
-                  <button disabled className="btn btn-primary mt-3 w-25">
-                    Next
-                  </button>
-                )}
+                <button
+                  onClick={handleSubmit}
+                  type="submit"
+                  className="btn btn-primary btn-lg mt-3 w-25"
+                  disabled={!(selectedTitle && location && experience)}
+                >
+                  {isLoading ? (
+                    <span>
+                      Generate Report <LoadingOutlined />
+                    </span>
+                  ) : (
+                    "Generate Report"
+                  )}
+                </button>
               </div>
             </div>
           </>
@@ -781,3 +810,23 @@ const PayPulseInput = () => {
 };
 
 export default PayPulseInput;
+
+const DataAlertModal = ({ visible, onClose, title }) => {
+  return (
+    <Modal visible={visible} onCancel={onClose} footer={null} centered>
+      <div className="p-3">
+        <div style={{ display: "grid", placeItems: "center" }} className="mb-3">
+          <ExclamationCircleOutlined
+            style={{ fontSize: "30px", color: "orange" }}
+          />
+        </div>
+
+        <p>
+          Sorry, there isn't enough data for {title} at the moment. We're
+          working on gathering more information. Please check back soon or
+          select a different job role.
+        </p>
+      </div>
+    </Modal>
+  );
+};

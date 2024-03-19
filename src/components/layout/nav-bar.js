@@ -7,18 +7,27 @@ import { useApplicationContext } from "../../context/app-context";
 import { ArrowRightOutlined, UserOutlined } from "@ant-design/icons";
 import {
   advisory_page_path,
+  blog_page_path,
+  home_path,
+  login_app_path,
+  pay_pulse_dashboard_path,
+  pay_pulse_input_path,
   pay_pulse_landing_path,
   salary_survey,
   sales_incentive_page_path,
   training_page_path,
 } from "../../config/constant";
+import AxiosInstance from "../../config/axios";
+import { api_pay_pulse_getActivity } from "../../config/config";
 
 const NavBar = ({ bgInput }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const Location = useLocation();
+  const accessToken = localStorage.getItem("accessToken");
   const [initials, setInitials] = useState("");
-  const { userData, setUserData } = useApplicationContext();
+  const { userData, setUserData, setIsPreviousReports, isPreviousReports } =
+    useApplicationContext();
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const productMenuItems = [
@@ -210,6 +219,35 @@ const NavBar = ({ bgInput }) => {
     // Handle menu item click as needed
     console.log(`Clicked on menu item with key: ${key}`);
   };
+
+  useEffect(() => {
+    if (userData && !isPreviousReports) {
+      AxiosInstance.post(
+        api_pay_pulse_getActivity,
+        { payload: "payload" },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      )
+        .then(async (response) => {
+          const data = await response.data;
+
+          if (response.status === 403 || response.status === 401)
+            return navigate(login_app_path);
+
+          if (data.status === 200) {
+            setIsPreviousReports(true);
+          } else {
+            return navigate(login_app_path);
+          }
+        })
+
+        .catch((err) => console.log(err));
+    }
+  }, [isPreviousReports, userData]);
   const profileMenuItems = [
     {
       key: "1",
@@ -236,11 +274,7 @@ const NavBar = ({ bgInput }) => {
     },
     {
       key: "2",
-      title: (
-        <a href="#eq" onClick={handleLogOut}>
-          Log out
-        </a>
-      ),
+      title: <a onClick={handleLogOut}>Log out</a>,
     },
   ];
   return (
@@ -263,7 +297,7 @@ const NavBar = ({ bgInput }) => {
         >
           <div className="container  d-flex align-items-center">
             <h1 className="logo me-auto">
-              <a href="/">
+              <a onClick={() => navigate(home_path)}>
                 {" "}
                 <img
                   style={{ marginRight: "8px" }}
@@ -284,6 +318,13 @@ const NavBar = ({ bgInput }) => {
               } `}
             >
               <ul>
+                {isPreviousReports &&
+                  (Location.pathname === pay_pulse_input_path ||
+                    Location.pathname === pay_pulse_dashboard_path) && (
+                    <li>
+                      <a href={pay_pulse_dashboard_path}>Previous Reports</a>
+                    </li>
+                  )}
                 <Dropdown
                   overlay={
                     <Menu
@@ -298,9 +339,7 @@ const NavBar = ({ bgInput }) => {
                   placement="bottomLeft"
                 >
                   <li>
-                    <a style={{ fontSize: "16px" }} href="#products">
-                      Products
-                    </a>
+                    <a style={{ fontSize: "16px" }}>Products</a>
                   </li>
                 </Dropdown>
                 <Dropdown
@@ -317,14 +356,15 @@ const NavBar = ({ bgInput }) => {
                   placement="bottomLeft"
                 >
                   <li>
-                    <a style={{ fontSize: "16px" }} href="#products">
-                      Services
-                    </a>
+                    <a style={{ fontSize: "16px" }}>Services</a>
                   </li>
                 </Dropdown>
 
                 <li className={activeLink === "blog" ? "active" : ""}>
-                  <a style={{ fontSize: "16px" }} href="/blog">
+                  <a
+                    style={{ fontSize: "16px", cursor: "pointer" }}
+                    onClick={() => navigate(blog_page_path)}
+                  >
                     Blogs
                   </a>
                 </li>

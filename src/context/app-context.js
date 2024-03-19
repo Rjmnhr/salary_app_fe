@@ -8,29 +8,29 @@ export const AppContextProvider = ({ children }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const accessToken = localStorage.getItem("accessToken");
+
+  const [isPreviousReports, setIsPreviousReports] = useState(false);
 
   useEffect(() => {
-    if (!userData) {
-      AxiosInstance.get(
-        "api/user/details",
+    const accessToken = localStorage.getItem("accessToken");
+    AxiosInstance.get(
+      "api/user/details",
 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${accessToken}`,
-          },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then((res) => {
+        const UserData = res.data?.data;
+        if (res.status === 200) {
+          setUserData(UserData);
         }
-      )
-        .then((res) => {
-          const UserData = res.data?.data;
-          if (res.status === 200) {
-            setUserData(UserData);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [userData, accessToken]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const value = {
     isSignIn,
@@ -40,8 +40,9 @@ export const AppContextProvider = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     userData,
-
     setUserData,
+    isPreviousReports,
+    setIsPreviousReports,
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

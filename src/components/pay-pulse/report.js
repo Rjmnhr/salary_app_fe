@@ -38,6 +38,7 @@ const PayPulseReportComponent = ({
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
   const printAreaRef = useRef(null);
+  //eslint-disable-next-line
   const [api, contextHolder] = notification.useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -74,7 +75,7 @@ const PayPulseReportComponent = ({
         className="btn border"
         onClick={() => {
           setIsLoading(true);
-          openNotification("topRight");
+
           generatePDF();
         }}
       >
@@ -96,21 +97,13 @@ const PayPulseReportComponent = ({
         }}
         onClick={() => {
           setIsLoading(true);
-          openNotification("topRight");
+
           generatePDF();
         }}
       />
     );
 
     return isMobile ? mobileButton : downloadButton;
-  };
-
-  const openNotification = (placement) => {
-    api.info({
-      message: `Your report is getting downloaded`,
-
-      placement,
-    });
   };
 
   const generatePDF = () => {
@@ -127,12 +120,7 @@ const PayPulseReportComponent = ({
 
       // Define watermark positions for text (you can customize as needed)
       const textWatermarkPositions = [
-        { top: "4%", left: "90%", rotation: "0deg" },
-
-        { top: "30%", left: "90%", rotation: "0deg" },
-        { top: "50%", left: "90%", rotation: "0deg" },
-        { top: "70%", left: "90%", rotation: "0deg" },
-        { top: "90%", left: "90%", rotation: "0deg" },
+        { top: "2.3%", left: "90%", rotation: "0deg" },
       ];
 
       // Define logo position
@@ -143,6 +131,7 @@ const PayPulseReportComponent = ({
         height: "50px",
         margin: "-90px",
         marginLeft: "-30px",
+        padding: "10px",
       };
       // Replace with the actual path to your logo image
 
@@ -166,6 +155,7 @@ const PayPulseReportComponent = ({
         logoImage.style.height = logoPosition.height;
         logoImage.style.marginTop = logoPosition.margin;
         logoImage.style.marginLeft = logoPosition.marginLeft;
+        logoImage.style.padding = logoPosition.padding;
 
         wrapperDiv.appendChild(logoImage);
         // Append each text watermark to the wrapper
@@ -421,7 +411,8 @@ const PayPulseReportComponent = ({
           style={{
             background: "white",
             height: "85vh",
-            overflowY: "scroll",
+
+            overflowY: isMobile ? "" : "scroll",
           }}
         >
           <DownloadButtonComponent />
@@ -481,55 +472,12 @@ const PayPulseReportComponent = ({
               <p className="text-primary ">Across India</p>
 
               <LinearSalaryChart data={statisticsForJobsDataByRole} />
-              {/* <div
-                className="text-center mt-3"
-                style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  alignContent: "center",
-                }}
-              >
-                <p>
-                  Salary for all individual roles mapped to{" "}
-                  {jobsData[0]?.title} with {experience} year(s) of
-                  experience in{" "}
-                  <span className="text-primary"> {location}</span>
-                </p>
-
-                <IndividualSalaryLineChart
-                  title={jobsData[0]?.title}
-                  width={chartWidth}
-                  height={chartHeight}
-                  data={sortedJobsData}
-                />
-              </div> */}
-              {/* <div
-                className="text-center mt-3"
-                style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  alignContent: "center",
-                }}
-              >
-                <p>
-                  Salary for all individual roles mapped to{" "}
-                  {jobsData[0]?.title} with {experience} year(s) of
-                  experience in <span className="text-primary"> India</span>
-                </p>
-                <IndividualSalaryLineChart
-                  title={jobsData[0]?.title}
-                  width={chartWidth}
-                  height={chartHeight}
-                  data={sortedJobsDataByRole}
-                />
-              </div> */}
 
               <div
-                className="mb-5 card custom-shadow mt-5 text-center"
+                className="mb-5 card custom-shadow mt-5 text-center d-lg-flex"
                 style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
                   pageBreakBefore: "auto",
                   pageBreakInside: "avoid",
                 }}
@@ -544,17 +492,16 @@ const PayPulseReportComponent = ({
                 </div>
               </div>
               <div
-                className="text-center mt-5 card custom-shadow"
+                className="text-center mt-5 card custom-shadow d-lg-flex"
                 style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
                   pageBreakBefore: "auto",
                   pageBreakInside: "avoid",
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-2 pl-4" style={{ fontSize: "20px" }}>
+                  <h5 className="mb-5 mt-2 pl-4 " style={{ fontSize: "20px" }}>
                     Average Salary vs Experience Level
                   </h5>
 
@@ -567,17 +514,16 @@ const PayPulseReportComponent = ({
               </div>
 
               <div
-                className="text-center mt-5 card custom-shadow"
+                className="text-center mt-5 card custom-shadow d-lg-flex"
                 style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
                   pageBreakBefore: "auto",
                   pageBreakInside: "avoid",
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-3">
+                  <h5 className="mb-5 mt-3 ">
                     {" "}
                     Average Salary vs Grouped Experience Level
                   </h5>

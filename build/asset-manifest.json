@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.2c44527c.css",
-    "main.js": "/static/js/main.f8de945c.js",
+    "main.js": "/static/js/main.50453273.js",
     "static/js/703.39ad37d3.chunk.js": "/static/js/703.39ad37d3.chunk.js",
     "static/js/513.773f89dc.chunk.js": "/static/js/513.773f89dc.chunk.js",
     "static/js/787.4f88162d.chunk.js": "/static/js/787.4f88162d.chunk.js",
@@ -10,8 +10,8 @@
     "static/media/two-content-business-partners-discussing-issue.webp": "/static/media/two-content-business-partners-discussing-issue.3761bf83ee2f1268f7b8.webp",
     "static/media/demo.mp4": "/static/media/demo.6daba19d7a79aa3bf9ac.mp4",
     "static/media/cover-2.jpg": "/static/media/cover-2.ac013b95bdc8c202fd42.jpg",
-    "static/media/sample_report.pdf": "/static/media/sample_report.caaeb5fa509525f755bb.pdf",
     "static/media/9169253.jpg": "/static/media/9169253.3725ffc876270c6e1110.jpg",
+    "static/media/sample_report.pdf": "/static/media/sample_report.85d0b6dcc61ef0558542.pdf",
     "static/media/salary-wave.png": "/static/media/salary-wave.f8b0d60781fd7a0b32ac.png",
     "static/media/WhatsApp Image 2024-03-19 at 01.09.04.jpeg": "/static/media/WhatsApp Image 2024-03-19 at 01.09.04.4c8b806e03c28c72243f.jpeg",
     "static/media/welcome-image.png": "/static/media/welcome-image.001f697b4f6eb7ca2233.png",
@@ -31,13 +31,13 @@
     "index.html": "/index.html",
     "static/media/check-soft-bg.svg": "/static/media/check-soft-bg.c08cab036b8a757bccc21c60aa9c85aa.svg",
     "main.2c44527c.css.map": "/static/css/main.2c44527c.css.map",
-    "main.f8de945c.js.map": "/static/js/main.f8de945c.js.map",
+    "main.50453273.js.map": "/static/js/main.50453273.js.map",
     "703.39ad37d3.chunk.js.map": "/static/js/703.39ad37d3.chunk.js.map",
     "513.773f89dc.chunk.js.map": "/static/js/513.773f89dc.chunk.js.map",
     "787.4f88162d.chunk.js.map": "/static/js/787.4f88162d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2c44527c.css",
-    "static/js/main.f8de945c.js"
+    "static/js/main.50453273.js"
   ]
 }

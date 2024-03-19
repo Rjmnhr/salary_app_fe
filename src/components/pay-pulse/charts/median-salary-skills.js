@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { axisColor, borderColor, colorConfig } from "../../../config/constant";
 
@@ -24,6 +24,25 @@ const calculateAverage = (arr) => {
 const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
   // Initialize an empty array to store the median salary data for each skill
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const skillMedians = [];
 
   // Calculate the median salary for each skill
@@ -106,11 +125,11 @@ const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
     },
     xaxis: {
       title: {
-        text: "Skills",
+        text: "",
         offsetY: 20,
         offsetX: -10,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           fontWeight: "normal",
         },
       },
@@ -125,17 +144,17 @@ const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
         show: true,
         offsetY: 3,
         style: {
-          fontSize: "9px",
+          fontSize: "11px",
           colors: "black",
         },
       },
     },
     yaxis: {
       title: {
-        text: "Average Salary (LPA)",
+        text: isMobile ? "" : "Average Salary (LPA)",
         offsetX: -20,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           fontWeight: "normal",
         },
       },
@@ -146,7 +165,7 @@ const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
           return value?.toFixed(2);
         },
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           colors: axisColor,
         },
       },

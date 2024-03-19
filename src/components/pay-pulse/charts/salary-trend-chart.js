@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
   axisColor,
@@ -8,6 +8,26 @@ import {
 } from "../../../config/constant";
 
 const SalaryTrendChart = ({ data, width, height }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   // Categorize data based on year and month
   // Categorize data based on year and month
   const categorizedData = {
@@ -152,17 +172,17 @@ const SalaryTrendChart = ({ data, width, height }) => {
       labels: {
         style: {
           colors: axisColor,
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
         },
       },
       offsetY: 10,
     },
     yaxis: {
       title: {
-        text: "Median Salary (LPA)",
+        text: isMobile ? "" : "Median Salary (LPA)",
         offsetX: -20,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           fontWeight: "normal",
         },
       },
@@ -179,7 +199,7 @@ const SalaryTrendChart = ({ data, width, height }) => {
         hideOverlappingLabels: true,
         rotateAlways: true,
         style: {
-          fontSize: "16px",
+          fontSize: isMobile ? "11px" : "16px",
           colors: "#a1acb8",
         },
       },

@@ -20,6 +20,7 @@ import NavBar from "../layout/nav-bar";
 import ReportLimitFallBack from "../misc/report-limit-fallback";
 import {
   login_app_path,
+  pay_pulse_dashboard_path,
   pay_pulse_input_path,
   pay_pulse_profile_threshold,
 } from "../../config/constant";
@@ -32,6 +33,8 @@ import {
   api_pay_pulse_sectors,
   api_pay_pulse_updateActivity,
 } from "../../config/config";
+import { useRecoilState } from "recoil";
+import { salaryDataState } from "../../atom/atom-states";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -45,7 +48,8 @@ const ExpandMore = styled((props) => {
 }));
 
 const PayPulseOutput = ({ userPlan }) => {
-  const [salaryData, setSalaryData] = useState([]); // Store API responses here
+  const [salaryData, setSalaryData] = useRecoilState(salaryDataState);
+
   const [filteredThroughSkill, setFilteredThroughSkill] = useState([]);
   const [dataArray, setDataArray] = useState([]);
 
@@ -54,6 +58,7 @@ const PayPulseOutput = ({ userPlan }) => {
   const [salaryDataByRole, setSalaryDataByRole] = useState([]);
   const [salaryDataNoExp, setSalaryDataNoExp] = useState([]);
   const [showPreviousReports, setShowPreviousReports] = useState(false);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editableExperience, setEditableExperience] = useState("");
   const [editableSector, setEditableSector] = useState("");
@@ -64,7 +69,6 @@ const PayPulseOutput = ({ userPlan }) => {
   const [activeIndex, setActiveIndex] = useState(
     parseInt(sessionStorage.getItem("activeIndex")) || 0
   );
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [skillSet, setSkillSet] = useState([]);
   const [skillData, setSkillData] = useState([]);
@@ -88,6 +92,13 @@ const PayPulseOutput = ({ userPlan }) => {
   const path = pathLocation.pathname;
   const reportUpdateStatus = sessionStorage.getItem("report-updated");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [inDashboard, setInDashboard] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname === pay_pulse_dashboard_path) {
+      setInDashboard(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const storedActiveIndex = sessionStorage.getItem("activeIndex");
@@ -201,7 +212,7 @@ const PayPulseOutput = ({ userPlan }) => {
 
   useEffect(() => {
     let createdArray = "";
-    if (location.pathname === "/reports-dashboard") {
+    if (inDashboard) {
       createdArray = "";
     } else {
       createdArray = CreateArr();
@@ -226,7 +237,7 @@ const PayPulseOutput = ({ userPlan }) => {
 
         if (response.status === 403 || response.status === 401)
           return navigate(login_app_path + `?p=${path}`);
-        const reversedData = [...data].reverse();
+        const reversedData = [...data.data].reverse();
 
         // Use Set to store distinct objects
         const uniqueObjects = new Set(
@@ -554,14 +565,15 @@ const PayPulseOutput = ({ userPlan }) => {
       )
         .then(async (res) => {
           const response = await res.data;
-          console.log("🚀 ~ .then ~ response:", response);
 
           if (res.status === 403 || res.status === 401) {
             return navigate(login_app_path + `?p=${path}`);
           }
 
           if (res.status === 200) {
-            const sectors = response?.map((item) => Object.values(item)[0]);
+            const sectors = response?.data.map(
+              (item) => Object.values(item)[0]
+            );
             // Create a new Set to store unique values
             const uniqueSet = new Set(sectors);
             // Convert the Set back to an array, sort it, and remove "unclassified" if present
