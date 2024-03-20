@@ -126,7 +126,7 @@ const TrainingPage = () => {
             alignContent: "center",
             marginTop: "100px",
           }}
-          className="container-fluid px-5"
+          className="container-fluid px-lg-5"
         >
           {/* <div
             style={{

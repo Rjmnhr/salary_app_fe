@@ -152,7 +152,7 @@ const HomePage = () => {
                     textAlign: "center",
                     fontSize: "50px",
                     fontWeight: "bold",
-                    color: "#5783db",
+                    // color: "#5783db",
                   }}
                 >
                   YOUR PARTNERS IN ALL
