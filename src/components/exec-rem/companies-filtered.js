@@ -3,7 +3,6 @@ import { Input, Modal, Spin, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { CompaniesFilteredStyled } from "./style";
 
-
 import { useNavigate } from "react-router-dom";
 import emptyBox from "../../icons/empty-box.png";
 import { ArrowForward } from "@mui/icons-material";
@@ -11,6 +10,7 @@ import AxiosInstance from "../../config/axios";
 import NavBar from "../layout/nav-bar";
 import BasedOnIndex from "./input-options/based-on-index";
 import HandSelectedPeers from "./input-options/hand-selected-peers";
+import { useApplicationContext } from "../../context/app-context";
 export const TableComponentMobile = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedCompanies, setSelectedCompanies] = useState([]);
@@ -200,25 +200,8 @@ const TableComponent = () => {
   const navigate = useNavigate();
   const storeOption = sessionStorage.getItem("option");
   const data = JSON.parse(sessionStorage.getItem("companies"));
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
 
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   const showModal = () => {
     setIsModalVisible(true);
   };

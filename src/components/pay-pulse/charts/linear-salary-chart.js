@@ -1,26 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { decimalFix } from "../../../utils/price-a-job-helper-functions";
+import { useApplicationContext } from "../../../context/app-context";
 
 const LinearSalaryChart = ({ data }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { isMobile } = useApplicationContext();
 
   return (
     <div>

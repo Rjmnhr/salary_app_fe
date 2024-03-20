@@ -24,6 +24,7 @@ import logoImagePath from "../../icons/logo192.png";
 import SalaryVsExpLineChart from "./charts/salary-vs-exp-line-chart";
 import { pay_pulse_profile_threshold } from "../../config/constant";
 import SalaryTrendChart from "./charts/salary-trend-chart";
+import { useApplicationContext } from "../../context/app-context";
 
 const PayPulseReportComponent = ({
   jobsData,
@@ -41,25 +42,7 @@ const PayPulseReportComponent = ({
   //eslint-disable-next-line
   const [api, contextHolder] = notification.useNotification();
   const [isLoading, setIsLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { isMobile } = useApplicationContext();
 
   const DownloadButtonComponent = () => {
     const downloadButton = (
@@ -483,7 +466,9 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-3">Median Salary Trend </h5>
+                  <div className="d-flex justify-content-center">
+                    <h5 className="mb-5 mt-3 w-75 ">Median Salary Trend </h5>
+                  </div>
                   <SalaryTrendChart
                     data={jobsData}
                     width={chartWidth}
@@ -501,9 +486,11 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-2 pl-4 " style={{ fontSize: "20px" }}>
-                    Average Salary vs Experience Level
-                  </h5>
+                  <div className="d-flex justify-content-center">
+                    <h5 className="mb-5 mt-3 w-75 ">
+                      Average Salary vs Experience Level
+                    </h5>
+                  </div>
 
                   <SalaryVsExpLineChart
                     width={chartWidth}
@@ -523,10 +510,13 @@ const PayPulseReportComponent = ({
                 }}
               >
                 <div className="card-body">
-                  <h5 className="mb-5 mt-3 ">
-                    {" "}
-                    Average Salary vs Grouped Experience Level
-                  </h5>
+                  <div className="d-flex justify-content-center">
+                    <h5 className="mb-5 mt-3 w-75 ">
+                      {" "}
+                      Average Salary vs Grouped Experience Level
+                    </h5>
+                  </div>
+
                   <SalaryVsGroupedExpBarChart
                     width={chartWidth}
                     height={chartHeight}

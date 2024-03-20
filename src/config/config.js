@@ -17,3 +17,7 @@ export const api_pay_pulse_salary_data_no_loc =
 
 export const api_pay_pulse_salary_data_no_exp =
   "/api/pay-pulse/salary-data-no-exp";
+
+export const api_send_otp = "/api/otp/send-otp";
+export const api_verify_otp = "/api/otp/verify-otp";
+export const api_change_user_email = "/api/user/change-email";

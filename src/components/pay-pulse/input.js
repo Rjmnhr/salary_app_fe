@@ -25,6 +25,7 @@ import {
   api_track_data_1,
   api_track_data_2,
 } from "../../config/config";
+import { useApplicationContext } from "../../context/app-context";
 
 export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
@@ -40,11 +41,9 @@ const PayPulseInput = () => {
   const [relevantSkills, setRelevantSkills] = useState([]);
   const [topSkills, setTopSkills] = useState([]);
   const [sector, setSector] = useState(null);
-
   const [initialTopSkills, setInitialTopSkills] = useState([]);
   const [skillData, setSkillData] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
-
   const [validatedInputsArr, setValidatedInputsArr] = useState([]);
   const [validatedCityInputs, setValidatedCityInputs] = useState([]);
   const [validatedExpInputs, setValidatedExpInputs] = useState([]);
@@ -52,7 +51,6 @@ const PayPulseInput = () => {
   const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
     useState([]);
 
-  const payPulsePrevReports = [];
   const [startTime, setStartTime] = useState(Date.now());
   const [loading, setLoading] = useState({
     city: false,
@@ -70,25 +68,7 @@ const PayPulseInput = () => {
   sessionStorage.removeItem("saveTheReport");
   const locationURL = window.location.href;
   const [modalVisible, setModalVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { isMobile } = useApplicationContext();
 
   const closeModal = () => {
     setModalVisible(false);
@@ -503,11 +483,7 @@ const PayPulseInput = () => {
                 className="w-100 mt-5"
                 style={{ display: "grid", placeItems: "center" }}
               >
-                <div
-                  className={`mb-3 col-12 ${
-                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                  } `}
-                >
+                <div className={`mb-3 col-12 col-lg-8`}>
                   <Select
                     size={"large"}
                     showSearch
@@ -537,11 +513,7 @@ const PayPulseInput = () => {
                   title={selectedTitle}
                 />
 
-                <div
-                  className={`mb-3 col-12 ${
-                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                  } `}
-                >
+                <div className={`mb-3 col-12 col-lg-8 `}>
                   <Select
                     size={"large"}
                     style={{
@@ -567,11 +539,7 @@ const PayPulseInput = () => {
                   />
                 </div>
 
-                <div
-                  className={`mb-3 col-12 ${
-                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                  } `}
-                >
+                <div className={`mb-3 col-12 col-lg-8 `}>
                   <Select
                     size={"large"}
                     style={{
@@ -611,11 +579,7 @@ const PayPulseInput = () => {
                   </Select>
                 </div>
 
-                <div
-                  className={`mb-3 col-12 ${
-                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                  }  `}
-                >
+                <div className={`mb-3 col-12 col-lg-8  `}>
                   <Select
                     mode="multiple"
                     size={"large"}
@@ -653,11 +617,7 @@ const PayPulseInput = () => {
                     <>
                       <div
                         style={{ transition: " all 0.3s ease" }}
-                        className={`d-flex col-12 ${
-                          payPulsePrevReports?.length > 0
-                            ? "col-lg-10"
-                            : "col-lg-8"
-                        } flex-wrap justify-content-start align-items-center mt-1 mb-2`}
+                        className={`d-flex col-12 col-lg-8 flex-wrap justify-content-start align-items-center mt-1 mb-2`}
                       >
                         {topSkills.map((skill, index) => {
                           return (
@@ -688,11 +648,7 @@ const PayPulseInput = () => {
                   ))}
 
                 {validatedSectorInputs.length > 0 && (
-                  <div
-                    className={`mb-3 col-12 ${
-                      payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                    } `}
-                  >
+                  <div className={`mb-3 col-12 col-lg-8 `}>
                     <Select
                       size={"large"}
                       style={{
@@ -719,11 +675,7 @@ const PayPulseInput = () => {
                   </div>
                 )}
 
-                <div
-                  className={`mb-3 col-12 ${
-                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
-                  } `}
-                >
+                <div className={`mb-3 col-12 col-lg-8 `}>
                   <Input
                     placeholder="Any other skills or additional information"
                     allowClear
@@ -787,12 +739,8 @@ const PayPulseInput = () => {
                 <button
                   onClick={handleSubmit}
                   type="submit"
-                  className={`btn btn-primary btn-lg mt-3  shadow ${
-                    isMobile
-                      ? "w-75"
-                      : payPulsePrevReports?.length > 0
-                      ? "w-lg-50"
-                      : "w-25 "
+                  className={`btn btn-primary  mt-3 mb-3  shadow ${
+                    isMobile ? "w-75" : "w-25 "
                   } `}
                   disabled={!(selectedTitle && location && experience)}
                 >

@@ -8,7 +8,11 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import AxiosInstance from "../../config/axios";
-import { pay_pulse_input_path } from "../../config/constant";
+import {
+  pay_pulse_input_path,
+  privacy_policy_path,
+  terms_condition_path,
+} from "../../config/constant";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -179,7 +183,11 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-      <p className="mt-3">By signing in, you agree to our terms & conditions</p>
+      <p className="mt-3">
+        By signing in, you agree to our{" "}
+        <a href={privacy_policy_path}>privacy policy </a> &{" "}
+        <a href={terms_condition_path}>conditions</a>
+      </p>
     </div>
   );
 };

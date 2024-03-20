@@ -1,27 +1,15 @@
-import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import { useApplicationContext } from "../../../context/app-context";
 // const COLORS = ["#e08963", "#38908f", "#b2ebe0", "#5e96ae", "#ffbfa3"];
 
-export const SimplePieChart = ({ title, width, dataWithPercent, data ,height}) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+export const SimplePieChart = ({
+  title,
+  width,
+  dataWithPercent,
+  data,
+  height,
+}) => {
+  const { isMobile } = useApplicationContext();
 
   const options = {
     labels: data.map((entry) => entry.name),
@@ -71,9 +59,19 @@ export const SimplePieChart = ({ title, width, dataWithPercent, data ,height}) =
         alignContent: "center",
       }}
     >
-      <h5 className="mb-5">Most five common skills for {title} </h5>
+      <div className="d-flex justify-content-center">
+        <h5 className={`mb-5 mt-3  ${isMobile ? "w-75" : "w-100"} `}>
+          Most five common skills for {title}{" "}
+        </h5>
+      </div>
 
-      <Chart options={options} series={series} type="pie" width={width} height={400} />
+      <Chart
+        options={options}
+        series={series}
+        type="pie"
+        width={width}
+        height={400}
+      />
     </div>
   );
 };

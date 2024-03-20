@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 
-
-
 import html2pdf from "html2pdf.js";
 import { Button, notification } from "antd";
 import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
-import {BenchmarkLineCharts, SalaryTrendChart, SalaryTrendGraph2} from "./charts";
+import {
+  BenchmarkLineCharts,
+  SalaryTrendChart,
+  SalaryTrendGraph2,
+} from "./charts";
+import { useApplicationContext } from "../../context/app-context";
 const decimalFix = (number) => {
   const trimmed = Math.floor(number * 100) / 100;
   return trimmed;
@@ -157,7 +160,7 @@ const GenerateBenchmarkReport = ({
   const [api, contextHolder] = notification.useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const elementRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
   const roleType = sessionStorage.getItem("roleType");
 
   const valueType =
@@ -239,24 +242,6 @@ const GenerateBenchmarkReport = ({
       placement,
     });
   };
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const generatePDF = () => {
     const element = elementRef.current;

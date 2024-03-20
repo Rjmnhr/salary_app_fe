@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowForward } from "@mui/icons-material";
 import AxiosInstance from "../../../../config/axios";
 import MatchCountComponentIndex from "./match-count-index";
+import { useApplicationContext } from "../../../../context/app-context";
 
 const indexNames = [
   "NSE500",
@@ -56,7 +57,7 @@ const BasedOnIndex = ({ sectors }) => {
   const [distinctCompaniesCountTogether, setDistinctCompaniesCountTogether] =
     useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
   const navigate = useNavigate();
 
   const showModal = () => {
@@ -255,23 +256,7 @@ const BasedOnIndex = ({ sectors }) => {
   //     setSelectedIndustries([]);
   //   }
   // }, [selectedSectors]);
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
 
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <div style={{ color: "white" }} className="container-fluid p-0 p-lg-3">
       <div
@@ -358,16 +343,18 @@ const BasedOnIndex = ({ sectors }) => {
         </div>
       </div>
       <div className="mb-3 d-flex justify-content-center">
-         
-              <button
-          style={{ marginBottom: `${isMobile ? "80px" : ""}` ,width: `${isMobile ? "100%" : "25%"}` }}
+        <button
+          style={{
+            marginBottom: `${isMobile ? "80px" : ""}`,
+            width: `${isMobile ? "100%" : "25%"}`,
+          }}
           onClick={handleSubmit}
           type="submit"
           className="btn btn-lg bg-light mt-3 d-flex align-items-center justify-content-between"
         >
-          Next  <ArrowForward/>
+          Next <ArrowForward />
         </button>
-        </div>
+      </div>
       {isMobile ? (
         selectedSectors.length > 0 || selectedIndex ? (
           <div

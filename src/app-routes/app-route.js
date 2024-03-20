@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home-page/index.js";
 import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
-import { useEffect, useState } from "react";
 import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
 import ProtectedRoute from "./protected-route.js";
 
@@ -51,7 +50,9 @@ import {
   pay_pulse_input_path,
   pay_pulse_landing_path,
   pay_pulse_output_path,
+  privacy_policy_path,
   sales_incentive_page_path,
+  terms_condition_path,
   training_page_path,
   unauthorized_path,
 } from "../config/constant.js";
@@ -59,27 +60,13 @@ import Unauthorized from "../components/misc/unauthorized.js";
 import PriceAJobVideoLatest from "../components/pay-pulse/demo-video-latest.js";
 import AdvisoryPage from "../pages/advisory-page/index.js";
 import PayPulseInputPage from "../components/pay-pulse/input-page.js";
+import { useApplicationContext } from "../context/app-context.js";
+import PrivacyPolicy from "../legal-policies/privacy-policy.js";
+import TermsAndConditions from "../legal-policies/terms-and-conditions.js";
 
 const AppRoute = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
 
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -181,6 +168,24 @@ const AppRoute = () => {
             </>
           }
         />
+
+        <Route
+          path={privacy_policy_path}
+          element={
+            <>
+              <PrivacyPolicy />
+            </>
+          }
+        />
+        <Route
+          path={terms_condition_path}
+          element={
+            <>
+              <TermsAndConditions />
+            </>
+          }
+        />
+
         <Route
           path="/registration-pricing"
           element={

@@ -10,6 +10,7 @@ export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isPreviousReports, setIsPreviousReports] = useState(false);
   const [payPulsePrevReports, setPayPulsePrevReports] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -32,6 +33,24 @@ export const AppContextProvider = ({ children }) => {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Add an event listener to handle window resizing
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const value = {
     isSignIn,
     setIsSignIn,
@@ -45,6 +64,8 @@ export const AppContextProvider = ({ children }) => {
     setIsPreviousReports,
     payPulsePrevReports,
     setPayPulsePrevReports,
+    isMobile,
+    setIsMobile,
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

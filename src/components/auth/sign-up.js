@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Input, message } from "antd";
 import AxiosInstance from "../../config/axios";
+import {
+  privacy_policy_path,
+  terms_condition_path,
+} from "../../config/constant";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -110,7 +114,8 @@ const SignUp = () => {
       <div
         style={{
           display: "grid",
-          placeItems: "center",
+          justifyItems: "center",
+          alignContent: "center",
           height: "100vh",
           marginTop: "20px",
           marginBottom: "20px",
@@ -265,6 +270,11 @@ const SignUp = () => {
             </div>
           </div>
         </div>
+        <p className="mt-3">
+          By signing up, you agree to our{" "}
+          <a href={privacy_policy_path}>privacy policy </a> &{" "}
+          <a href={terms_condition_path}>conditions</a>
+        </p>
       </div>
     </>
   );

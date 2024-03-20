@@ -10,6 +10,7 @@ import { HandSelectedPeersStyled } from "./style";
 import { ArrowForward } from "@mui/icons-material";
 import AxiosInstance from "../../../../config/axios";
 import MatchCountComponent from "./match-count";
+import { useApplicationContext } from "../../../../context/app-context";
 
 const HandSelectedPeers = ({ sectors }) => {
   const [marketCap, setMarketCap] = useState(0);
@@ -39,7 +40,7 @@ const HandSelectedPeers = ({ sectors }) => {
     useState(0);
   const [distinctCompaniesCountTogether, setDistinctCompaniesCountTogether] =
     useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -380,23 +381,6 @@ const HandSelectedPeers = ({ sectors }) => {
     fontWeight: "bold",
   };
 
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <>
       <HandSelectedPeersStyled>

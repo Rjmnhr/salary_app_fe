@@ -83,7 +83,7 @@ const UserAccount = () => {
         </div>
         <div className="card shadow p-3">
           <div className="card-body">
-            <div className="d-flex p-3 align-items-center">
+            <div className="d-flex p-lg-3 align-items-center">
               <Avatar className="mr-3">
                 <UserOutlined />
               </Avatar>
@@ -95,11 +95,11 @@ const UserAccount = () => {
             <Divider />
 
             <div className="d-lg-flex">
-              <div className="container col-lg-4 col-12 text-left">
+              <div className="container col-lg-4 col-12 p-0 p-lg-3 text-left">
                 <h3 className="mb-3">MEMBERSHIP</h3>
               </div>
 
-              <div className="container col-lg-8 col-12">
+              <div className="container col-lg-8  p-0 p-lg-3 col-12">
                 <div className="d-flex justify-content-between align-items-center mb-3 ">
                   <p style={{ margin: "0" }}>{userData?.email}</p>
                   <a href="/change-email">Change email</a>
@@ -113,11 +113,11 @@ const UserAccount = () => {
             </div>
             <Divider />
             <div className="d-lg-flex">
-              <div className="container col-lg-4 col-12 text-left">
+              <div className="container col-lg-4 p-0 p-lg-3 col-12 text-left">
                 <h3 className="mb-3">PLAN DETAILS</h3>
               </div>
 
-              <div className="container col-lg-8 col-12">
+              <div className="container col-lg-8 p-0 p-lg-3 col-12">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <p style={{ margin: "0" }}>{userData?.plan}</p>
                   <a href="/change-plan">Change plan</a>

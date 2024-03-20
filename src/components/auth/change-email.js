@@ -10,16 +10,21 @@ import { useApplicationContext } from "../../context/app-context";
 import { CheckCircleOutlineRounded } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
-
-const email = sessionStorage.getItem("user-email");
-const userID = localStorage.getItem("user_id");
+import {
+  api_change_user_email,
+  api_send_otp,
+  api_verify_otp,
+} from "../../config/config";
 
 const VerifyEmail = ({ setIsOtpSend }) => {
+  const { userData } = useApplicationContext();
+
+  const email = userData?.email;
   const handleSubmit = async () => {
     const lowerCasedEmail = email.toLowerCase();
     console.log(lowerCasedEmail);
 
-    AxiosInstance.post("/api/otp/send-otp", {
+    AxiosInstance.post(api_send_otp, {
       email: lowerCasedEmail,
     })
       .then(async (response) => {
@@ -91,13 +96,14 @@ const OtpVerification = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [warning, setWarning] = useState("");
   const { setIsEmailVerified } = useApplicationContext();
-
+  const { userData } = useApplicationContext();
+  const email = userData?.email;
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setIsLoading(true);
 
-    AxiosInstance.post("/api/otp/verify-otp", {
+    AxiosInstance.post(api_verify_otp, {
       email: email,
       otp: otp,
     })
@@ -158,6 +164,7 @@ const ChangeNewMail = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [emailUsed, setEmailUsed] = useState(false);
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   const notification = ({ message, type }) => {
@@ -175,14 +182,15 @@ const ChangeNewMail = () => {
     e.preventDefault();
 
     AxiosInstance.post(
-      "/api/user/change-email",
+      api_change_user_email,
       {
         email: newEmail,
-        id: userID,
+        id: "id",
       },
       {
         headers: {
           "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
         },
       }
     )
@@ -213,6 +221,8 @@ const ChangeNewMail = () => {
         console.log(err);
       });
   };
+  const { userData } = useApplicationContext();
+  const email = userData?.email;
 
   return (
     <>

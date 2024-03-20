@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 import { axisColor, borderColor, colorConfig } from "../../../config/constant";
+import { useApplicationContext } from "../../../context/app-context";
 
 // Function to calculate the median of an array
 export const calculateMedian = (arr) => {
@@ -24,25 +25,8 @@ const calculateAverage = (arr) => {
 const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
   // Initialize an empty array to store the median salary data for each skill
 
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
 
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   const skillMedians = [];
 
   // Calculate the median salary for each skill
@@ -204,11 +188,13 @@ const MedianSalaryChartForSkills = ({ data, skills, height, width }) => {
                 alignContent: "center",
               }}
             >
-              <h5 className="mb-5">
-                {" "}
-                Average salary for skill(s) you have selected across{" "}
-                <span className="tex-primary">India</span>
-              </h5>
+              <div className="d-flex justify-content-center">
+                <h5 className={`mb-5 mt-3  ${isMobile ? "w-75" : "w-100"} `}>
+                  {" "}
+                  Average salary for skill(s) you have selected across{" "}
+                  <span className="tex-primary">India</span>
+                </h5>
+              </div>
 
               <Chart
                 options={options}

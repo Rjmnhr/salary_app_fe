@@ -9,25 +9,19 @@ import {
   advisory_page_path,
   blog_page_path,
   home_path,
-  login_app_path,
-  pay_pulse_dashboard_path,
-  pay_pulse_input_path,
   pay_pulse_landing_path,
   salary_survey,
   sales_incentive_page_path,
   training_page_path,
 } from "../../config/constant";
-import AxiosInstance from "../../config/axios";
-import { api_pay_pulse_getActivity } from "../../config/config";
 
 const NavBar = ({ bgInput }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const Location = useLocation();
-  const accessToken = localStorage.getItem("accessToken");
+
   const [initials, setInitials] = useState("");
-  const { userData, setUserData, payPulsePrevReports, setPayPulsePrevReports } =
-    useApplicationContext();
+  const { userData, setUserData } = useApplicationContext();
 
   const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -221,34 +215,6 @@ const NavBar = ({ bgInput }) => {
     console.log(`Clicked on menu item with key: ${key}`);
   };
 
-  useEffect(() => {
-    if (userData) {
-      AxiosInstance.post(
-        api_pay_pulse_getActivity,
-        { payload: "payload" },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${accessToken}`,
-          },
-        }
-      )
-        .then(async (response) => {
-          const data = await response.data;
-
-          if (response.status === 403 || response.status === 401)
-            return navigate(login_app_path);
-
-          if (data.status === 200) {
-            setPayPulsePrevReports(data.data);
-          } else {
-            return navigate(login_app_path);
-          }
-        })
-
-        .catch((err) => console.log(err));
-    }
-  }, [userData]);
   const profileMenuItems = [
     {
       key: "1",
@@ -275,6 +241,7 @@ const NavBar = ({ bgInput }) => {
     },
     {
       key: "2",
+      //eslint-disable-next-line
       title: <a onClick={handleLogOut}>Log out</a>,
     },
   ];
@@ -286,7 +253,7 @@ const NavBar = ({ bgInput }) => {
           className="mobile-nav-toggle d-lg-none"
           onClick={handleMenuToggle}
         >
-          <i style={{ color: "black" }} className="icofont-navigation-menu"></i>
+          <i className="icofont-navigation-menu"></i>
         </button>
         <header
           id="header"
@@ -298,34 +265,31 @@ const NavBar = ({ bgInput }) => {
         >
           <div className="container  d-flex align-items-center">
             <h1 className="logo me-auto">
-              <a onClick={() => navigate(home_path)}>
+              {/*eslint-disable-next-line*/}
+              <span
+                onClick={() => navigate(home_path)}
+                style={{ cursor: "pointer" }}
+              >
                 {" "}
                 <img
-                  style={{ marginRight: "8px" }}
+                  style={{ marginRight: "8px", marginBottom: "3px" }}
                   src={logo}
                   alt=""
                   height={35}
                   width={35}
                 />
                 Equipay Partners
-              </a>
+              </span>
             </h1>
 
             <nav
               className={`${
                 menuOpen
-                  ? "mobile-nav d-lg-none"
-                  : " nav-menu d-none d-lg-block"
+                  ? "mobile-nav d-lg-none text-left"
+                  : " nav-menu d-none d-lg-block "
               } `}
             >
               <ul>
-                {payPulsePrevReports?.length > 0 &&
-                  (Location.pathname === pay_pulse_input_path ||
-                    Location.pathname === pay_pulse_dashboard_path) && (
-                    <li>
-                      <a href={pay_pulse_dashboard_path}>Previous Reports</a>
-                    </li>
-                  )}
                 <Dropdown
                   overlay={
                     <Menu
@@ -340,6 +304,7 @@ const NavBar = ({ bgInput }) => {
                   placement="bottomLeft"
                 >
                   <li>
+                    {/*eslint-disable-next-line*/}
                     <a style={{ fontSize: "16px" }}>Products</a>
                   </li>
                 </Dropdown>
@@ -357,11 +322,13 @@ const NavBar = ({ bgInput }) => {
                   placement="bottomLeft"
                 >
                   <li>
+                    {/*eslint-disable-next-line*/}
                     <a style={{ fontSize: "16px" }}>Services</a>
                   </li>
                 </Dropdown>
 
                 <li className={activeLink === "blog" ? "active" : ""}>
+                  {/*eslint-disable-next-line*/}
                   <a
                     style={{ fontSize: "16px", cursor: "pointer" }}
                     onClick={() => navigate(blog_page_path)}

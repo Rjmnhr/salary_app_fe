@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 import {
   axisColor,
@@ -6,27 +6,10 @@ import {
   colorConfig,
   shadeColor,
 } from "../../../config/constant";
+import { useApplicationContext } from "../../../context/app-context";
 
 const SalaryTrendChart = ({ data, width, height }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { isMobile } = useApplicationContext();
 
   // Categorize data based on year and month
   // Categorize data based on year and month

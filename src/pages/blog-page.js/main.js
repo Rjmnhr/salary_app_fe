@@ -1,10 +1,12 @@
 import React from "react";
 
-
 import { BlogContentArr } from "./blog-content-array";
 import NavBar from "../../components/layout/nav-bar";
+import { useApplicationContext } from "../../context/app-context";
 
 const BlogsMainPage = () => {
+  const { isMobile } = useApplicationContext();
+
   return (
     <>
       <NavBar />
@@ -47,7 +49,11 @@ const BlogsMainPage = () => {
                           <p class="card-text">{blog.subMain}</p>
                           <a href={`/post?blog=${blog.main}`}>
                             {" "}
-                            <button className="btn  btn-primary w-25">
+                            <button
+                              className={`btn  btn-primary ${
+                                isMobile ? "w-100" : "w-25"
+                              }  `}
+                            >
                               Read More
                             </button>
                           </a>

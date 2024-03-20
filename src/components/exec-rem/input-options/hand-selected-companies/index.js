@@ -6,13 +6,15 @@ import { ArrowForward } from "@mui/icons-material";
 import emptyBox from "../../../../icons/empty-box.png";
 import AxiosInstance from "../../../../config/axios";
 import { availableRoles, roleTypeMap } from "../../role-info";
+import { useApplicationContext } from "../../../../context/app-context";
+
 const HandSelectedCompanies = ({ sectors }) => {
   const navigate = useNavigate();
   const [role, setRole] = useState("");
   const [companies, setCompanies] = useState([]);
   const [roleType, setRoleType] = useState(""); // New state for role type
   const [initialCompaniesOrder, setInitialCompaniesOrder] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useApplicationContext();
   const [selectedCompaniesList, setSelectedCompaniesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -106,7 +108,7 @@ const HandSelectedCompanies = ({ sectors }) => {
     const modifiedCompanyList = selectedCompaniesList.map((company) => ({
       company_name: company,
     }));
-  
+
     sessionStorage.setItem(
       "companies-selected",
       JSON.stringify(modifiedCompanyList)
@@ -117,23 +119,7 @@ const HandSelectedCompanies = ({ sectors }) => {
     sessionStorage.setItem("roleType", roleType); // Store the role type in session storage
     navigate("/output");
   };
-  useEffect(() => {
-    // Check if the screen width is less than a certain value (e.g., 768px) to determine if it's a mobile device
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
 
-    // Add an event listener to handle window resizing
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
   return (
     <div className="container p-0 p-lg-3" style={{ color: "white" }}>
       <div className="d-lg-flex mt-3">
