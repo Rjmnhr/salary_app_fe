@@ -5,8 +5,17 @@ import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
 import { useApplicationContext } from "../../context/app-context";
 import { UserOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { login_path } from "../../config/constant";
 const UserAccount = () => {
   const { userData } = useApplicationContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userData) {
+      navigate(login_path);
+    }
+  }, [userData, navigate]);
 
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");

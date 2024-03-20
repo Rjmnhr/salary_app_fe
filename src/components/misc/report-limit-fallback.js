@@ -2,8 +2,10 @@ import React from "react";
 import CheckoutComponent from "../payment/Checkout";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import reportLimitIcon from "../../icons/caution.png";
+import { useNavigate } from "react-router-dom";
 
 const ReportLimitFallBack = ({ userPlan }) => {
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -18,7 +20,14 @@ const ReportLimitFallBack = ({ userPlan }) => {
       <img height={100} width={100} src={reportLimitIcon} alt="" />
       <h3>Report Limit Reached</h3>
       <p>You have 0 reports remaining. Upgrade now to create more reports.</p>
-      <div class="position-relative pb-3">
+      <h4>Reach out to us to discuss pricing options and upgrade your plan</h4>
+      <button
+        onClick={() => navigate("/contact")}
+        className="btn btn-lg btn-primary mt-3"
+      >
+        Contact now{" "}
+      </button>
+      <div class="position-relative pb-3 d-none">
         <div class="row mb-5">
           {userPlan === "Standard" ? (
             ""

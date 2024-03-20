@@ -28,6 +28,7 @@ const SignUp = () => {
   const [isUserExists, setIsUserExists] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [passwordCondition, setPasswordCondition] = useState(true);
 
   const { setIsSignIn } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
@@ -100,14 +101,30 @@ const SignUp = () => {
     }
   };
   useEffect(() => {
-    if (password && confirmPassword)
+    if (password && confirmPassword) {
       if (password === confirmPassword) {
         setIsPasswordSame(true);
       } else {
         setIsPasswordSame(false);
       }
+    } else {
+      setIsPasswordSame(true);
+    }
+
     // eslint-disable-next-line
   }, [password, confirmPassword]);
+
+  useEffect(() => {
+    if (password?.length > 0) {
+      if (password.length < 8) {
+        setPasswordCondition(false);
+      } else {
+        setPasswordCondition(true);
+      }
+    } else {
+      setPasswordCondition(true);
+    }
+  }, [password]);
   return (
     <>
       {contextHolder}
@@ -116,7 +133,7 @@ const SignUp = () => {
           display: "grid",
           justifyItems: "center",
           alignContent: "center",
-          height: "100vh",
+
           marginTop: "20px",
           marginBottom: "20px",
         }}
@@ -197,13 +214,16 @@ const SignUp = () => {
                     class="form-control"
                     name="email"
                     id="email"
-                    placeholder="Your Email"
+                    placeholder="Email"
                     data-rule="email"
                     data-msg="Please enter a valid email"
                     onChange={(e) => setEmail(e.target.value)}
                   />{" "}
                   {isUserExists ? (
-                    <p style={{ color: "red", fontSize: "12px" }}>
+                    <p
+                      style={{ color: "red", fontSize: "12px" }}
+                      className="mt-2"
+                    >
                       {" "}
                       User already exists
                     </p>
@@ -221,6 +241,17 @@ const SignUp = () => {
                     className="border text-start"
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  {!passwordCondition ? (
+                    <p
+                      style={{ color: "red", fontSize: "12px" }}
+                      className="mt-2"
+                    >
+                      {" "}
+                      Password must be at least 8 characters
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <div className="mb-3 col-12 col-lg-12">
@@ -238,10 +269,11 @@ const SignUp = () => {
                   <p
                     style={{
                       color: "red",
-                      fontSize: "14px",
+                      fontSize: "12px",
                       margin: "0",
                       paddingLeft: "15px",
                     }}
+                    className="mb-3"
                   >
                     Password does not match the confirm password.
                   </p>
@@ -250,7 +282,11 @@ const SignUp = () => {
                 )}
 
                 <div class="text-center">
-                  <button className="btn btn-primary w-75 mb-3" type="submit">
+                  <button
+                    className="btn btn-primary w-75 mb-3"
+                    type="submit"
+                    disabled={!(passwordCondition && isPasswordSame)}
+                  >
                     {isLoading ? <LoadingOutlined /> : "Create an account"}
                   </button>
                   {/* <GoogleLoginComponent element={"sign up with Google"} /> */}

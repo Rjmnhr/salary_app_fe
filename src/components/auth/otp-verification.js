@@ -4,8 +4,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { OtpVerificationPageStyled } from "./style";
 
-
-
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps } from "antd";
 import AxiosInstance from "../../config/axios";
@@ -17,9 +15,9 @@ const items = [
   {
     title: "Plan",
   },
-  {
-    title: "Payment",
-  },
+  // {
+  //   title: "Payment",
+  // },
 ];
 const OtpVerification = () => {
   const [warning, setWarning] = useState("");
@@ -201,7 +199,7 @@ const OtpVerification = () => {
                 {otpPin.map((otp, index) => (
                   <input
                     style={{
-                      width: "20px",
+                      width: "30px",
                       background: "none",
                       border: "none",
                       borderBottom: "1px solid black",

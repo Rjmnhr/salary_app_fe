@@ -93,7 +93,6 @@ const PayPulseLandingPage = () => {
           property="og:description"
           content="Refine pay strategies with Equipay's PayPulse, ensuring precise and competitive compensation for every role."
         />
-        {/* Add other meta tags, link tags, etc. as needed */}
       </Helmet>
       <NavBar />
       <PayPulsePageStyled>
@@ -102,7 +101,7 @@ const PayPulseLandingPage = () => {
           style={{
             background: "#daf0f5",
 
-            marginTop: "80px",
+            marginTop: "65px",
           }}
         >
           <section id="about" className="about ">

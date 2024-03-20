@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-
 import { Steps } from "antd";
 import { useNavigate } from "react-router-dom";
 import AxiosInstance from "../../config/axios";
 import CheckoutComponent from "../../components/payment/Checkout";
-
+import { RightCircleTwoTone } from "@ant-design/icons";
 
 const items = [
   {
@@ -14,9 +13,9 @@ const items = [
   {
     title: "Plan",
   },
-  {
-    title: "Payment",
-  },
+  // {
+  //   title: "Payment",
+  // },
 ];
 
 const RegistrationPricing = () => {
@@ -89,7 +88,7 @@ const RegistrationPricing = () => {
       >
         <div
           style={{ display: "grid", placeItems: "center" }}
-          className="col-12"
+          className="col-12  d-none d-lg-block"
         >
           <Steps
             className="col-8"
@@ -102,13 +101,13 @@ const RegistrationPricing = () => {
 
         <div class="container content-space-1">
           <div class="w-lg-65 text-center mx-lg-auto mb-5 mb-sm-7 mb-lg-10"></div>
-          <div className="text-left mb-5">
+          <div className="text-center mb-5">
             <h3>Choose your plan to continue </h3>
           </div>
           <div class="position-relative">
-            <div class="row mb-5">
+            <div class="d-lg-flex justify-content-center mb-5">
               <div class="col-lg-4 col-sm-12 mb-4 mb-lg-0">
-                <div class="card card-lg h-100">
+                <div class="card card-lg card-shadow card-pinned  h-100">
                   <div class="card-body">
                     <div class="mb-3">
                       <h2 class="mb-1 text-primary">BASIC</h2>
@@ -125,14 +124,23 @@ const RegistrationPricing = () => {
                     </div> */}
                     </div>
 
-                    <div class="row pricing">
-                      <ul>
-                        <li>One Job Report</li>
+                    <div
+                      class="pricing"
+                      style={{ display: "grid", placeItems: "center" }}
+                    >
+                      <div className="mb-3 row">
+                        <RightCircleTwoTone
+                          style={{ fontSize: "20px", marginRight: "8px" }}
+                        />{" "}
+                        <h5 className="m-0">One Salary Report</h5>
+                      </div>
 
-                        <li>One Executive Compensation Report</li>
-
-                        <li className="invisible">PDF Download</li>
-                      </ul>
+                      <div className="mb-3 row">
+                        <RightCircleTwoTone
+                          style={{ fontSize: "20px", marginRight: "8px" }}
+                        />{" "}
+                        <h5 className="m-0">PDF Download</h5>
+                      </div>
                     </div>
                     <button
                       onClick={() => navigate("/success-registration-basic")}
@@ -140,7 +148,7 @@ const RegistrationPricing = () => {
                         background: "black",
                         color: "white",
                       }}
-                      className="btn border w-75 "
+                      className="btn btn-lg border w-75 mt-3 "
                     >
                       Select
                     </button>
@@ -148,7 +156,7 @@ const RegistrationPricing = () => {
                 </div>
               </div>
 
-              <div class="col-lg-4 mb-lg-0  mb-5">
+              <div class="col-lg-4 mb-lg-0  mb-5 d-none">
                 <div class="card card-lg card-shadow card-pinned h-100">
                   <span class="badge bg-dark text-white card-pinned-top-end">
                     Most popular
@@ -186,7 +194,7 @@ const RegistrationPricing = () => {
                 </div>
               </div>
 
-              <div class="col-lg-4 mb-4 mb-lg-0">
+              <div class="col-lg-4 mb-4 mb-lg-0 d-none">
                 <div class="card card-lg h-100">
                   <div class="card-body">
                     <div class="mb-3">

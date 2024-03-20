@@ -75,12 +75,12 @@ word-break: break-word !important;
     <div className="text-left p-0 container-fluid">
       <NavBar background="white" />
       <div
-        style={{ height: "20vh", marginTop: "80px" }}
+        style={{ height: "20vh", marginTop: "90px" }}
         className="bg-light p-3  "
       >
-        <h1 className="text-center mt-3" style={{ fontFamily: "Arial" }}>
+        <h2 className="text-center mt-3" style={{ fontFamily: "Arial" }}>
           Equipay Partners's Privacy Policy
-        </h1>
+        </h2>
       </div>
       <div className="container p-3">
         {" "}

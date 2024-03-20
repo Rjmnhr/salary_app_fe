@@ -145,14 +145,14 @@ Calibri;color:#595959;mso-themecolor:text1;mso-themetint:166;"><strong><bdt clas
     <div className="text-start p-0 container-fluid">
       <NavBar background="white" />
       <div
-        style={{ height: "20vh", marginTop: "80px" }}
-        className="bg-light p-3  "
+        style={{ height: "20vh", marginTop: "90px" }}
+        className="bg-light p-3 pb-5 "
       >
-        <h1 className="text-center mt-3" style={{ fontFamily: "Arial" }}>
+        <h2 className="text-center mt-3 mb-3" style={{ fontFamily: "Arial" }}>
           Equipay Partners's Terms and Conditions
-        </h1>
+        </h2>
       </div>
-      <div className="container px-5 mb-3">
+      <div className="container px-5 mb-3 mt-5">
         {" "}
         <div dangerouslySetInnerHTML={{ __html: TermsAndConditionsHTML }} />
       </div>
