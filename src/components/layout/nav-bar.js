@@ -26,13 +26,8 @@ const NavBar = ({ bgInput }) => {
   const Location = useLocation();
   const accessToken = localStorage.getItem("accessToken");
   const [initials, setInitials] = useState("");
-  const {
-    userData,
-    setUserData,
-    setIsPreviousReports,
-    isPreviousReports,
-    setPayPulsePrevReports,
-  } = useApplicationContext();
+  const { userData, setUserData, payPulsePrevReports, setPayPulsePrevReports } =
+    useApplicationContext();
 
   const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -227,7 +222,7 @@ const NavBar = ({ bgInput }) => {
   };
 
   useEffect(() => {
-    if (userData && !isPreviousReports) {
+    if (userData) {
       AxiosInstance.post(
         api_pay_pulse_getActivity,
         { payload: "payload" },
@@ -245,7 +240,6 @@ const NavBar = ({ bgInput }) => {
             return navigate(login_app_path);
 
           if (data.status === 200) {
-            setIsPreviousReports(true);
             setPayPulsePrevReports(data.data);
           } else {
             return navigate(login_app_path);
@@ -254,7 +248,7 @@ const NavBar = ({ bgInput }) => {
 
         .catch((err) => console.log(err));
     }
-  }, [isPreviousReports, userData]);
+  }, [userData]);
   const profileMenuItems = [
     {
       key: "1",
@@ -325,7 +319,7 @@ const NavBar = ({ bgInput }) => {
               } `}
             >
               <ul>
-                {isPreviousReports &&
+                {payPulsePrevReports?.length > 0 &&
                   (Location.pathname === pay_pulse_input_path ||
                     Location.pathname === pay_pulse_dashboard_path) && (
                     <li>

@@ -52,7 +52,7 @@ const PayPulseInput = () => {
   const [validatedInputsArrWithSector, setValidatedInputsArrWithSector] =
     useState([]);
 
-  const isPisPreviousReports = false;
+  const payPulsePrevReports = [];
   const [startTime, setStartTime] = useState(Date.now());
   const [loading, setLoading] = useState({
     city: false,
@@ -229,32 +229,6 @@ const PayPulseInput = () => {
       }
     }
   }, [selectedTitleID, accessToken, navigate, path]);
-
-  // useEffect(() => {
-  //   if (selectedTitleID !== 0 && selectedTitleID) {
-  //     AxiosInstance.post(
-  //       api_pay_pulse_sectors,
-  //       { title_id: selectedTitleID },
-  //       {
-  //         headers: {
-  //           token: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     )
-  //       .then(async (res) => {
-  //         const response = await res.data;
-  //         if (response.status !== 200)
-  //           return navigate(login_app_path + `?p=${path}`);
-
-  //         const sectors = response?.data.map((item) => Object.values(item)[0]);
-
-  //         setSectorsOption(sectors);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [selectedTitleID, accessToken, navigate, path]);
 
   const handleTitleSearch = (searchValue) => {
     const filter = availableTitlesFetched.filter((data) => {
@@ -461,20 +435,6 @@ const PayPulseInput = () => {
     setIsLoading(true);
     e.preventDefault();
     const reportID = Date.now() + Math.floor(Math.random() * 1000);
-    saveReport(reportID);
-
-    sessionStorage.setItem(
-      "input-values",
-      JSON.stringify({
-        title: selectedTitle,
-        title_id: selectedTitleID,
-        location: location,
-        experience: experience,
-        skills: selectedSkills,
-        sectors: sector ? sector : "",
-        report_id: reportID,
-      })
-    );
 
     sessionStorage.setItem(
       "input-options",
@@ -483,10 +443,12 @@ const PayPulseInput = () => {
         locationOptions: validatedCityInputs,
         skillsOptions: relevantSkills,
         sectorsOptions: validatedSectorInputs,
+        validatedInputsArr: validatedInputsArr,
+        validatedInputsArrWithSector: validatedInputsArrWithSector,
       })
     );
 
-    navigate("/reports");
+    saveReport(reportID);
   };
 
   const saveReport = async (reportID) => {
@@ -507,9 +469,18 @@ const PayPulseInput = () => {
         "Content-Type": "application/json",
         token: `Bearer ${accessToken}`,
       },
-    }).catch((err) => {
-      console.log(err);
-    });
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        if (response.status === 200) {
+          navigate("/reports");
+        } else {
+          alert("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -534,7 +505,7 @@ const PayPulseInput = () => {
               >
                 <div
                   className={`mb-3 col-12 ${
-                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                   } `}
                 >
                   <Select
@@ -568,7 +539,7 @@ const PayPulseInput = () => {
 
                 <div
                   className={`mb-3 col-12 ${
-                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                   } `}
                 >
                   <Select
@@ -598,7 +569,7 @@ const PayPulseInput = () => {
 
                 <div
                   className={`mb-3 col-12 ${
-                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                   } `}
                 >
                   <Select
@@ -642,7 +613,7 @@ const PayPulseInput = () => {
 
                 <div
                   className={`mb-3 col-12 ${
-                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                   }  `}
                 >
                   <Select
@@ -683,7 +654,9 @@ const PayPulseInput = () => {
                       <div
                         style={{ transition: " all 0.3s ease" }}
                         className={`d-flex col-12 ${
-                          isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                          payPulsePrevReports?.length > 0
+                            ? "col-lg-10"
+                            : "col-lg-8"
                         } flex-wrap justify-content-start align-items-center mt-1 mb-2`}
                       >
                         {topSkills.map((skill, index) => {
@@ -717,7 +690,7 @@ const PayPulseInput = () => {
                 {validatedSectorInputs.length > 0 && (
                   <div
                     className={`mb-3 col-12 ${
-                      isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                      payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                     } `}
                   >
                     <Select
@@ -748,7 +721,7 @@ const PayPulseInput = () => {
 
                 <div
                   className={`mb-3 col-12 ${
-                    isPisPreviousReports ? "col-lg-10" : "col-lg-8"
+                    payPulsePrevReports?.length > 0 ? "col-lg-10" : "col-lg-8"
                   } `}
                 >
                   <Input
@@ -817,7 +790,7 @@ const PayPulseInput = () => {
                   className={`btn btn-primary btn-lg mt-3  shadow ${
                     isMobile
                       ? "w-75"
-                      : isPisPreviousReports
+                      : payPulsePrevReports?.length > 0
                       ? "w-lg-50"
                       : "w-25 "
                   } `}

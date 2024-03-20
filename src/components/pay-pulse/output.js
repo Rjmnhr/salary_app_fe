@@ -30,7 +30,6 @@ import {
   api_pay_pulse_salary_data,
   api_pay_pulse_salary_data_no_exp,
   api_pay_pulse_salary_data_no_loc,
-  api_pay_pulse_sectors,
   api_pay_pulse_updateActivity,
 } from "../../config/config";
 import { useRecoilState } from "recoil";
@@ -75,14 +74,14 @@ const PayPulseOutput = ({ userPlan }) => {
   const { Option } = Select;
   const [isReportReady, setIsReportReady] = useState(false);
   const [isActiveIndexLimited, setIsActiveIndexLimited] = useState(false);
-  const [sectorsOption, setSectorsOption] = useState([]);
+
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
 
   const userInputOptions = JSON.parse(sessionStorage.getItem("input-options"));
   const [locationOptions, setLocationOptions] = useState(
     userInputOptions?.locationOptions
   );
-  const userInput = JSON.parse(sessionStorage.getItem("input-values"));
+
   const accessToken = localStorage.getItem("accessToken");
   const location = useLocation();
   const navigate = useNavigate();
@@ -90,9 +89,64 @@ const PayPulseOutput = ({ userPlan }) => {
   const userID = localStorage.getItem("user_id");
   const pathLocation = useLocation();
   const path = pathLocation.pathname;
-  const reportUpdateStatus = sessionStorage.getItem("report-updated");
+
   const [isExpanded, setIsExpanded] = useState(false);
+
+  //eslint-disable-next-line
   const [inDashboard, setInDashboard] = useState(false);
+
+  const [validatedExpInputs, setValidatedExpInputs] = useState(
+    userInputOptions?.experienceOptions || []
+  );
+  const [validatedSectorInputs, setValidatedSectorInputs] = useState(
+    userInputOptions?.sectorsOptions || []
+  );
+  useEffect(() => {
+    const validatedInputsArr = userInputOptions?.validatedInputsArr;
+
+    if (validatedInputsArr?.length > 0 && editableLocation) {
+      // Extracting distinct locations
+      const filterValidatedInputsArr = validatedInputsArr.filter(
+        (d) => d.location === editableLocation
+      );
+
+      // Extracting distinct experiences
+      const distinctExperiences = [
+        ...new Set(filterValidatedInputsArr.map((item) => item.experience)),
+      ];
+
+      setValidatedExpInputs(distinctExperiences);
+    }
+    //eslint-disable-next-line
+  }, [editableLocation]);
+
+  useEffect(() => {
+    const validatedInputsArrWithSector =
+      userInputOptions?.validatedInputsArrWithSector;
+
+    if (
+      validatedInputsArrWithSector?.length > 0 &&
+      editableLocation &&
+      editableExperience
+    ) {
+      // Extracting distinct locations
+      const filterValidatedInputsArr = validatedInputsArrWithSector.filter(
+        (d) => d.location === editableLocation
+      );
+
+      const filterValidatedInputsArrWithExp = filterValidatedInputsArr.filter(
+        (d) => d.experience === editableExperience
+      );
+
+      // Extracting distinct experiences
+      const distinctSectors = [
+        ...new Set(filterValidatedInputsArrWithExp?.map((item) => item.sector)),
+      ];
+
+      setValidatedSectorInputs(distinctSectors);
+    }
+    //eslint-disable-next-line
+  }, [editableLocation, editableExperience]);
 
   useEffect(() => {
     if (location.pathname === pay_pulse_dashboard_path) {
@@ -191,37 +245,7 @@ const PayPulseOutput = ({ userPlan }) => {
     }));
   };
 
-  // Create a new array by mapping the jobTitles array
-  const CreateArr = () => {
-    const newArr = [
-      {
-        report_id: userInput?.report_id,
-        title: userInput?.title,
-        location: userInput?.location,
-        experience: userInput?.experience,
-        skills: JSON.stringify(userInput?.skills),
-        manage: "",
-        supervise: "",
-        sector: userInput?.sectors,
-        title_id: userInput?.title_id,
-      },
-    ];
-
-    return newArr;
-  };
-
   useEffect(() => {
-    let createdArray = "";
-    if (inDashboard) {
-      createdArray = "";
-    } else {
-      createdArray = CreateArr();
-    }
-
-    if (reportUpdateStatus === "true") {
-      createdArray = "";
-    }
-
     AxiosInstance.post(
       api_pay_pulse_getActivity,
       { payload: "payload" },
@@ -240,9 +264,7 @@ const PayPulseOutput = ({ userPlan }) => {
         const reversedData = [...data.data].reverse();
 
         // Use Set to store distinct objects
-        const uniqueObjects = new Set(
-          [...createdArray, ...reversedData].map(JSON.stringify)
-        );
+        const uniqueObjects = new Set([...reversedData].map(JSON.stringify));
 
         // Convert Set back to an array of objects
         const distinctArray = [...uniqueObjects].map(JSON.parse);
@@ -511,10 +533,10 @@ const PayPulseOutput = ({ userPlan }) => {
   };
 
   const handleEditableSectorSearch = (newValue) => {
-    const filter = sectorsOption.filter((data) =>
+    const filter = validatedSectorInputs.filter((data) =>
       data?.toLowerCase().includes(newValue.toLowerCase())
     );
-    sectorsOption(filter);
+    setValidatedSectorInputs(filter);
   };
 
   useEffect(() => {
@@ -550,46 +572,6 @@ const PayPulseOutput = ({ userPlan }) => {
     }
   }, [dataArray, accessToken, navigate, path]);
 
-  useEffect(() => {
-    if (dataArray.length > 0) {
-      AxiosInstance.post(
-        api_pay_pulse_sectors,
-        {
-          title_id: dataArray[activeIndex]?.title_id,
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
-        }
-      )
-        .then(async (res) => {
-          const response = await res.data;
-
-          if (res.status === 403 || res.status === 401) {
-            return navigate(login_app_path + `?p=${path}`);
-          }
-
-          if (res.status === 200) {
-            const sectors = response?.data.map(
-              (item) => Object.values(item)[0]
-            );
-            // Create a new Set to store unique values
-            const uniqueSet = new Set(sectors);
-            // Convert the Set back to an array, sort it, and remove "unclassified" if present
-            const uniqueArray = Array.from(uniqueSet)
-              .filter((sector) => sector !== "Nan")
-              .sort();
-
-            setSectorsOption(uniqueArray);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-
-    //eslint-disable-next-line
-  }, [dataArray]);
-
   const modalFooter = (
     <div>
       <Button
@@ -612,7 +594,10 @@ const PayPulseOutput = ({ userPlan }) => {
   return (
     <>
       <NavBar />
-      {salaryData && salaryDataByRole && salaryDataNoExp ? (
+      {salaryData &&
+      salaryDataByRole &&
+      salaryDataNoExp &&
+      dataArray.length > 0 ? (
         <div
           className="container-fluid d-lg-flex justify-content-center align-items-start 
          "
@@ -686,12 +671,10 @@ const PayPulseOutput = ({ userPlan }) => {
                       value={editableExperience}
                       onChange={handleSelectEditableExperience}
                       notFoundContent={null}
-                      options={(userInputOptions?.experienceOptions || []).map(
-                        (e) => ({
-                          value: e,
-                          label: e,
-                        })
-                      )}
+                      options={(validatedExpInputs || []).map((e) => ({
+                        value: e,
+                        label: e,
+                      }))}
                     />
                   </div>
                 </div>
@@ -726,7 +709,7 @@ const PayPulseOutput = ({ userPlan }) => {
                     </Select>
                   </div>
                 </div>
-                {userInputOptions?.sectorsOption && (
+                {validatedSectorInputs?.length > 0 && (
                   <div className="mb-3 d-flex align-items-center">
                     <label className="col-3">Sector : </label>
                     <div className="col-8 d-flex">
@@ -749,7 +732,7 @@ const PayPulseOutput = ({ userPlan }) => {
                         notFoundContent={null}
                         options={[
                           { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
-                          ...(sectorsOption || []).map((d) => ({
+                          ...(validatedSectorInputs || []).map((d) => ({
                             value: d,
                             label: CapitalizeFirstLetter(d),
                           })),

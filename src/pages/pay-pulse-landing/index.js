@@ -250,7 +250,7 @@ const PayPulseLandingPage = () => {
               </div>
             </div>
           </section>
-          <section id="pricing" className="pricing section-bg">
+          <section id="pricing" className="pricing section-bg d-none">
             <div className="container" data-aos="fade-up">
               <div className="section-title">
                 <h2>Pricing</h2>
