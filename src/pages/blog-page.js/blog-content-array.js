@@ -591,4 +591,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Automation Tester Salary Insights: Skills That Drive Your Pay",
+    subMain:
+      "Curious about how your skills as an Automation Tester impact your salary in the IT and Service industry? Dive into our latest salary insights tailored for professionals like you.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712042702/syoyrvxguknsn3orcs2y.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712042702/syoyrvxguknsn3orcs2y.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Our data reveals that expertise in automation tools such as Software Test, Selenium Automated Test Tool, Sql, Python, Rest, Git significantly boost your earning potential. Those with proficiency in scripting languages like Python and Java also command higher salaries. Stay ahead of the curve with real-time salary data, customized to your specific skill set and location. Explore the trends, benchmark your salary, and make informed career decisions with Equipay Partners.",
+      },
+    ],
+    footer:
+      "Unlock the power of your skills - discover how they influence your compensation today!",
+    footerButton: (
+      <a href="/pay-pulse">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
