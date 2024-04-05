@@ -29,7 +29,7 @@ const SalarySurveyPage = () => {
                 className="text-left custom-font "
               >
                 This salary survey is different from any other salary surveys.
-                Our salarytool captures salaries in all advertised jobs in
+                Our salary tool captures salaries in all advertised jobs in
                 real-time and we will provide you data from both participating
                 companies as well as real-time salary data
               </h3>
@@ -45,14 +45,11 @@ const SalarySurveyPage = () => {
                     >
                       Our salary surveys is open from{" "}
                       <span className="text-primary">1st February</span> and
-                      will remain open till{" "}
-                      <span className="text-primary">29th February</span>. We
-                      will then collate all data and send you general market
-                      result by <span className="text-primary">15th March</span>
-                      . Participation in the salary survey is free and each
-                      participant will get a general market salary result free
-                      of cost. For more customised and tailored salary data,
-                      there will be an access fee.
+                      will remains open. We will then collate all data and send
+                      you general market result. Participation in the salary
+                      survey is free and each participant will get a general
+                      market salary result free of cost. For more customized and
+                      tailored salary data, there will be an access fee.
                     </p>
 
                     <p style={{ fontWeight: "bold" }}>
