@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import html2pdf from "html2pdf.js";
-import { Button, notification } from "antd";
-import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
   BenchmarkLineCharts,
   SalaryTrendChart,
   SalaryTrendGraph2,
 } from "./charts";
-import { useApplicationContext } from "../../context/app-context";
+
 const decimalFix = (number) => {
   const trimmed = Math.floor(number * 100) / 100;
   return trimmed;
@@ -157,10 +154,9 @@ const GenerateBenchmarkReport = ({
   const [chartHeight, setChartHeight] = useState(400);
   const [chartWidthPdf, setChartWidthPdf] = useState(700);
   const [chartHeightPdf, setChartHeightPdf] = useState(3500);
-  const [api, contextHolder] = notification.useNotification();
-  const [isLoading, setIsLoading] = useState(false);
+
   const elementRef = useRef(null);
-  const { isMobile } = useApplicationContext();
+
   const roleType = sessionStorage.getItem("roleType");
 
   const valueType =
@@ -235,83 +231,9 @@ const GenerateBenchmarkReport = ({
       window.removeEventListener("resize", updateChartSize);
     };
   }, []);
-  const openNotification = (placement) => {
-    api.info({
-      message: `Your report is getting downloaded`,
-
-      placement,
-    });
-  };
-
-  const generatePDF = () => {
-    const element = elementRef.current;
-
-    if (element) {
-      const pdfOptions = {
-        margin: 5,
-        filename: `Equipay_${role}_Benchmark_Report`,
-        image: { type: "jpeg", quality: 1 }, // Maximum quality
-        html2canvas: { scale: 3 }, // Higher scale for better quality
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
-
-      // eslint-disable-next-line
-      html2pdf().from(element).set(pdfOptions).save();
-      setIsLoading(false);
-    } else {
-      console.error("Element not found.");
-      setIsLoading(false);
-    }
-  };
-
-  const DownloadButtonComponent = () => {
-    const downloadButton = (
-      <p
-        style={{
-          fontSize: "15px",
-          position: "absolute",
-          top: "0",
-          right: "0",
-          marginTop: "10px",
-          marginRight: "10px",
-        }}
-        className="btn border"
-        onClick={() => {
-          setIsLoading(true);
-          openNotification("topRight");
-          generatePDF();
-        }}
-      >
-        {" "}
-        Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
-      </p>
-    );
-
-    const mobileButton = (
-      <Button
-        type="primary"
-        shape="circle"
-        icon={isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: "9999",
-        }}
-        onClick={() => {
-          setIsLoading(true);
-          openNotification("topRight");
-          generatePDF();
-        }}
-      />
-    );
-
-    return isMobile ? mobileButton : downloadButton;
-  };
 
   return (
     <>
-      {contextHolder}
       {resultData.length > 1 ? (
         <div
           className="container  col-lg-11  col-12 m-lg-3 m-2 p-1 text-left scrollable-container"
@@ -321,7 +243,6 @@ const GenerateBenchmarkReport = ({
             overflowY: "scroll",
           }}
         >
-          <DownloadButtonComponent />
           <div className="p-lg-3 p-1 ">
             <h3>{role} Benchmark Report</h3>
             <div className="mt-3 mb-3">

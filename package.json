@@ -23,7 +23,6 @@
     "date-fns": "^2.30.0",
     "file-saver": "^2.0.5",
     "fraction.js": "^4.3.7",
-    "html2pdf.js": "^0.10.1",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",

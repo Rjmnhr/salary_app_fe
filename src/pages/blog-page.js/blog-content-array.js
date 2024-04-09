@@ -623,4 +623,36 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Devops Engineer Salary Insights: Skills That Drive Your Pay",
+    subMain:
+      "Curious about how your skills as an Devops Engineer impact your salary in the IT and Service industry? Dive into our latest salary insights tailored for professionals like you.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712662547/mlxhunwylss0edwqgsro.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712662547/mlxhunwylss0edwqgsro.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content:
+          "Our data reveals that expertise in tools such as Windows Powershell, Troubleshooting, Shell Scripting, Terraform significantly boost your earning potential.Stay ahead of the curve with real-time salary data, customized to your specific skill set and location. Explore the trends, benchmark your salary, and make informed career decisions with Equipay Partners.",
+      },
+    ],
+    footer:
+      "Unlock the power of your skills - discover how they influence your compensation today!",
+    footerButton: (
+      <a href="/pay-pulse">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
