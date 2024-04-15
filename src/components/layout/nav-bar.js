@@ -303,7 +303,7 @@ const NavBar = ({ bgInput }) => {
                   }
                   placement="bottomLeft"
                 >
-                  <li>
+                  <li className="d-none">
                     {/*eslint-disable-next-line*/}
                     <a style={{ fontSize: "16px" }}>Products</a>
                   </li>

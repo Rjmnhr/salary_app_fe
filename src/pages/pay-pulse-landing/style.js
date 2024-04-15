@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 export const PayPulsePageStyled = styled.div`
   .custom-button {
     color: white;
@@ -7,8 +6,8 @@ export const PayPulsePageStyled = styled.div`
 
   .custom-button:hover {
     background: white;
-    color: #696cff;
-    border: 2px solid #696cff;
+    color: #007bff;
+    border: 2px solid #007bff;
   }
 
   .custom-demo-btn {
@@ -20,7 +19,7 @@ export const PayPulsePageStyled = styled.div`
     letter-spacing: 1px;
     text-decoration: none;
     color: white;
-    background: #696cff;
+    background: #007bff;
     cursor: pointer;
     transition: ease-out 0.5s;
     border: 2px solid white;
@@ -31,7 +30,7 @@ export const PayPulsePageStyled = styled.div`
   .custom-demo-btn:hover {
     color: #1a6cb6;
     /* box-shadow: inset 0 -100px 0 0 white; */
-    border: 2px solid #696cff;
+    border: 2px solid #007bff;
 
     background: white;
   }
@@ -48,24 +47,27 @@ export const PayPulsePageStyled = styled.div`
     font-size: 18px;
     letter-spacing: 1px;
     text-decoration: none;
-    color: #696cff;
+    color: #007bff;
     background: white;
     cursor: pointer;
     transition: ease-out 0.5s;
     border: 2px solid white;
     border-radius: 1rem;
-    box-shadow: inset 0 0 0 0 #696cff;
+    box-shadow: inset 0 0 0 0 #007bff;
   }
 
   .custom-download-btn:hover {
     color: #1a6cb6;
     /* box-shadow: inset 0 -100px 0 0 white; */
-    border: 2px solid #696cff;
+    border: 2px solid #007bff;
 
     background: white;
   }
 
   .custom-download-btn:active {
     transform: scale(0.9);
+  }
+  .laptop-bg img {
+    width: 100%;
   }
 `;

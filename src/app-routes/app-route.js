@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "../pages/home-page/index.js";
 import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
 import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
 import ProtectedRoute from "./protected-route.js";
@@ -74,7 +73,7 @@ const AppRoute = () => {
           path={home_path}
           element={
             <>
-              <HomePage />
+              <PayPulseLandingPage />
             </>
           }
         />

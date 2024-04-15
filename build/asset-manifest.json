@@ -1,18 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.2c44527c.css",
-    "main.js": "/static/js/main.3c052598.js",
+    "main.js": "/static/js/main.f49857db.js",
     "static/js/787.4f88162d.chunk.js": "/static/js/787.4f88162d.chunk.js",
     "static/media/Screen Recording 2024-03-12 at 11.35.44 AM.mov": "/static/media/Screen Recording 2024-03-12 at 11.35.44 AM.e4c13d2dd2dbdf5dd9b9.mov",
     "static/media/demo-benchmark.mp4": "/static/media/demo-benchmark.b37a089d6736f5fbb9ac.mp4",
     "static/media/demo.mp4": "/static/media/demo.c7baad60f2076eac0ded.mp4",
     "static/media/two-content-business-partners-discussing-issue.webp": "/static/media/two-content-business-partners-discussing-issue.3761bf83ee2f1268f7b8.webp",
-    "static/media/cover-2.jpg": "/static/media/cover-2.ac013b95bdc8c202fd42.jpg",
+    "static/media/laptop-image.png": "/static/media/laptop-image.37a62ce90e293fad0e45.png",
     "static/media/9169253.jpg": "/static/media/9169253.3725ffc876270c6e1110.jpg",
     "static/media/sample_report.pdf": "/static/media/sample_report.85d0b6dcc61ef0558542.pdf",
     "static/media/salary-wave.png": "/static/media/salary-wave.f8b0d60781fd7a0b32ac.png",
     "static/media/WhatsApp Image 2024-03-19 at 01.09.04.jpeg": "/static/media/WhatsApp Image 2024-03-19 at 01.09.04.4c8b806e03c28c72243f.jpeg",
-    "static/media/welcome-image.png": "/static/media/welcome-image.001f697b4f6eb7ca2233.png",
     "static/media/circle-background.jpg": "/static/media/circle-background.4cf875b683045f974707.jpg",
     "static/media/page-misc-error-light.png": "/static/media/page-misc-error-light.27df96fefd06d8c3b5b0.png",
     "static/media/cancelled.png": "/static/media/cancelled.839388847e79241bfab7.png",
@@ -29,11 +28,11 @@
     "index.html": "/index.html",
     "static/media/check-soft-bg.svg": "/static/media/check-soft-bg.c08cab036b8a757bccc21c60aa9c85aa.svg",
     "main.2c44527c.css.map": "/static/css/main.2c44527c.css.map",
-    "main.3c052598.js.map": "/static/js/main.3c052598.js.map",
+    "main.f49857db.js.map": "/static/js/main.f49857db.js.map",
     "787.4f88162d.chunk.js.map": "/static/js/787.4f88162d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2c44527c.css",
-    "static/js/main.3c052598.js"
+    "static/js/main.f49857db.js"
   ]
 }
