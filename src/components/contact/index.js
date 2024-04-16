@@ -116,32 +116,32 @@ const Contact = () => {
 
   return (
     <div>
-      <section id="contact" class="contact">
-        <div class="container" data-aos="fade-up">
-          <div class="section-title">
+      <section id="contact" className="contact ">
+        <div className="container" data-aos="fade-up">
+          <div className="section-title">
             <h2>Contact</h2>
           </div>
 
-          <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-6">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="info-box">
-                    <i class="bx bx-map"></i>
+          <div className="row " data-aos="fade-up" data-aos-delay="100">
+            <div className="col-lg-6 ">
+              <div className="row">
+                <div className="col-md-12 ">
+                  <div className="info-box bg-white">
+                    <i className="bx bx-map"></i>
                     <h3>Our Address</h3>
                     <p>Bangalore India</p>
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <div class="info-box mt-4">
-                    <i class="bx bx-envelope"></i>
+                <div className="col-md-12">
+                  <div className="info-box mt-4 bg-white">
+                    <i className="bx bx-envelope"></i>
                     <h3>Email Us</h3>
-                    <p>team@equipaypartners.com</p>
+                    <p>partner@equipaypartners.com</p>
                   </div>
                 </div>
-                {/* <div class="col-md-6">
-                  <div class="info-box mt-4">
-                    <i class="bx bx-phone-call"></i>
+                {/* <div className="col-md-6">
+                  <div className="info-box mt-4">
+                    <i className="bx bx-phone-call"></i>
                     <h3>Call Us</h3>
                     <p>+61 424 853 384</p>
                   </div>
@@ -149,28 +149,28 @@ const Contact = () => {
               </div>
             </div>
 
-            <div class="col-lg-6">
-              <form class="php-email-form" onSubmit={handleSubmit}>
-                <div class="row">
-                  <div class="col form-group">
+            <div className="col-lg-6">
+              <form className="php-email-form bg-white" onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col form-group">
                     <input
                       required
                       type="text"
                       name="name"
-                      class="form-control"
+                      className="form-control"
                       id="name"
                       placeholder="Your Name"
                       data-rule="minlen:4"
                       data-msg="Please enter at least 4 chars"
                       onChange={(e) => setName(e.target.value)}
                     />
-                    <div class="validate"></div>
+                    <div className="validate"></div>
                   </div>
-                  <div class="col form-group">
+                  <div className="col form-group">
                     <input
                       required
                       type="email"
-                      class="form-control"
+                      className="form-control"
                       name="email"
                       id="email"
                       placeholder="Your Email"
@@ -178,14 +178,14 @@ const Contact = () => {
                       data-msg="Please enter a valid email"
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    <div class="validate"></div>
+                    <div className="validate"></div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     required
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     name="subject"
                     id="subject"
                     placeholder="Subject"
@@ -193,21 +193,21 @@ const Contact = () => {
                     data-msg="Please enter at least 8 chars of subject"
                     onChange={(e) => setSubject(e.target.value)}
                   />
-                  <div class="validate"></div>
+                  <div className="validate"></div>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     name="message"
                     rows="5"
                     data-msg="Please write something for us"
                     placeholder="Message"
                     onChange={(e) => setQuery(e.target.value)}
                   ></textarea>
-                  <div class="validate"></div>
+                  <div className="validate"></div>
                 </div>
 
-                <div class="text-center">
+                <div className="text-center">
                   <button className="w-75" type="submit">
                     {" "}
                     {isLoading ? <LoadingOutlined /> : " Send Message"}

@@ -4,7 +4,6 @@ import "./custom-style.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Input, Select, Tag, Skeleton, Spin, Space, Modal } from "antd";
 import AxiosInstance from "../../config/axios";
-import { CapitalizeFirstLetter } from "../../utils/price-a-job-helper-functions";
 import {
   login_app_path,
   pay_pulse_profile_threshold,
@@ -668,7 +667,7 @@ const PayPulseInput = () => {
                       notFoundContent={null}
                       options={(validatedSectorInputs || []).map((d) => ({
                         value: d,
-                        label: CapitalizeFirstLetter(d),
+                        label: d,
                       }))}
                       disabled={validatedSectorInputs.length > 0 ? false : true}
                     />

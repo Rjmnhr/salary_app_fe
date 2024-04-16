@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../layout/nav-bar";
 import { Helmet } from "react-helmet";
-import PayPulseInput from "./input";
 import Card from "@mui/material/Card";
 
 import {
@@ -36,32 +35,31 @@ const PayPulseInputPage = () => {
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (userData) {
-      AxiosInstance.post(
-        api_pay_pulse_getActivity,
-        { payload: "payload" },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${accessToken}`,
-          },
+    AxiosInstance.post(
+      api_pay_pulse_getActivity,
+      { payload: "payload" },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then(async (response) => {
+        const data = await response.data;
+
+        if (response.status === 403 || response.status === 401)
+          return navigate(login_app_path);
+
+        if (data.status === 200) {
+          setPayPulsePrevReports(data.data);
+        } else {
+          return navigate(login_app_path);
         }
-      )
-        .then(async (response) => {
-          const data = await response.data;
+      })
 
-          if (response.status === 403 || response.status === 401)
-            return navigate(login_app_path);
+      .catch((err) => console.log(err));
 
-          if (data.status === 200) {
-            setPayPulsePrevReports(data.data);
-          } else {
-            return navigate(login_app_path);
-          }
-        })
-
-        .catch((err) => console.log(err));
-    }
     //eslint-disable-next-line
   }, [userData, accessToken, navigate]);
   return (
@@ -113,11 +111,7 @@ const PayPulseInputPage = () => {
                 payPulsePrevReports?.length > 0 ? "col-lg-12" : "col-lg-12"
               } p-0    `}
             >
-              {userData?.user_type === "demo" ? (
-                <PayPulseInputDemo />
-              ) : (
-                <PayPulseInput />
-              )}
+              <PayPulseInputDemo />
             </div>
           </div>
 

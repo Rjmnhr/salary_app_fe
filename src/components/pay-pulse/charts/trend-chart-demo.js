@@ -12,9 +12,9 @@ const SalaryTrendChartDemo = ({ data, width, height }) => {
   const { isMobile } = useApplicationContext();
 
   const categorizedData = {
-    "Last 30 Days": data?.growth_last_30days,
-    "Last 3 Months": data?.growth_last_60days,
     "Last 6 Months": data?.growth_last_90days,
+    "Last 3 Months": data?.growth_last_60days,
+    "Last 30 Days": data?.growth_last_30days,
   };
 
   const categories = Object.keys(categorizedData);
@@ -110,8 +110,8 @@ const SalaryTrendChartDemo = ({ data, width, height }) => {
           colors: "#a1acb8",
         },
       },
-      min: data?.growth_last_30days - 0.2,
-      max: data?.growth_last_90days + 0.2,
+      // min: data?.growth_last_30days - 0.2,
+      // max: data?.growth_last_90days + 0.2,
     },
 
     axisBorder: {

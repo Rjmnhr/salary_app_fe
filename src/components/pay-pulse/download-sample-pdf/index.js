@@ -38,7 +38,7 @@ function DownloadSamplePDF() {
           onClick={downloadPdf}
           className="custom-download-btn mt-2 mb-3 shadow p-3"
         >
-          Download sample
+          PayPuls sample report
         </button>
       </div>
     </PayPulsePageStyled>

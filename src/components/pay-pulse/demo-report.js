@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { Tabs } from "antd";
-import { CalendarOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  DownloadOutlined,
+  EnvironmentOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 
 // import { RadialChart } from "react-vis";
 import "./custom-style.css";
@@ -11,7 +16,8 @@ import SalaryTrendChartDemo from "./charts/trend-chart-demo";
 import SalaryVsExpLineChartDemo from "./charts/salary-vs-exp-chart-demo";
 import { SimplePieChart } from "./charts/skills-pie-chart";
 import MedianSalaryChartForSkillsDemo from "./charts/median-salary-skills-demo";
-
+import { Button } from "antd";
+import logoImagePath from "../../icons/logo192.png";
 const PayPulseReportComponentDemo = ({
   demoData,
   skillsBool,
@@ -23,6 +29,134 @@ const PayPulseReportComponentDemo = ({
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
   const storedUserInputs = JSON.parse(sessionStorage.getItem("user-inputs"));
+  const [isLoading, setIsLoading] = useState(false);
+  const printAreaRef = useRef(null);
+  const DownloadButtonComponent = () => {
+    const downloadButton = (
+      <p
+        style={{
+          fontSize: "15px",
+          position: "absolute",
+          top: "0",
+          right: "0",
+          marginTop: "10px",
+          marginRight: "10px",
+        }}
+        className="btn border"
+        onClick={() => {
+          setIsLoading(true);
+
+          generatePDF();
+        }}
+      >
+        {" "}
+        Download {isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
+      </p>
+    );
+
+    const mobileButton = (
+      <Button
+        type="primary"
+        shape="circle"
+        icon={isLoading ? <LoadingOutlined /> : <DownloadOutlined />}
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: "9999",
+        }}
+        onClick={() => {
+          setIsLoading(true);
+
+          generatePDF();
+        }}
+      />
+    );
+
+    return isMobile ? mobileButton : downloadButton;
+  };
+
+  const generatePDF = () => {
+    const originalContents = document.body.innerHTML;
+    const printContent = printAreaRef.current;
+
+    if (printContent) {
+      const printContents = printContent.innerHTML;
+
+      // Create a new div to hold both the print contents, the text watermarks, and the logo
+      const wrapperDiv = document.createElement("div");
+      wrapperDiv.style.position = "relative";
+      wrapperDiv.innerHTML = printContents;
+
+      // Define watermark positions for text (you can customize as needed)
+      const textWatermarkPositions = [
+        { top: "2.3%", left: "90%", rotation: "0deg" },
+      ];
+
+      // Define logo position
+      const logoPosition = {
+        top: "80%",
+        left: "20%",
+        width: "50px",
+        height: "50px",
+        margin: "-90px",
+        marginLeft: "-30px",
+        padding: "10px",
+      };
+      // Replace with the actual path to your logo image
+
+      // Create text watermarks and position them
+      textWatermarkPositions.forEach((position) => {
+        const textWatermarkDiv = document.createElement("div");
+        textWatermarkDiv.style.position = "absolute";
+        textWatermarkDiv.style.top = position.top;
+        textWatermarkDiv.style.left = position.left;
+        textWatermarkDiv.style.transform = `translate(-50%, -50%) rotate(${position.rotation})`;
+        textWatermarkDiv.style.color = "rgba(0, 0, 0, 0.2)";
+        textWatermarkDiv.style.fontSize = "24px";
+        textWatermarkDiv.innerText = "Equipay Partners";
+
+        const logoImage = document.createElement("img");
+        logoImage.src = logoImagePath;
+        logoImage.style.position = "absolute";
+        logoImage.style.top = position.top;
+        logoImage.style.left = position.left;
+        logoImage.style.width = logoPosition.width;
+        logoImage.style.height = logoPosition.height;
+        logoImage.style.marginTop = logoPosition.margin;
+        logoImage.style.marginLeft = logoPosition.marginLeft;
+        logoImage.style.padding = logoPosition.padding;
+
+        wrapperDiv.appendChild(logoImage);
+        // Append each text watermark to the wrapper
+        wrapperDiv.appendChild(textWatermarkDiv);
+        // Append the logo to the wrapper
+      });
+
+      // Apply styles for print media to avoid box-shadow effect
+      const styleSheet = document.createElement("style");
+      styleSheet.type = "text/css";
+      styleSheet.innerText =
+        "@media print { .custom-shadow { box-shadow: none !important; } }";
+      wrapperDiv.appendChild(styleSheet);
+
+      // Replace the body content with the wrapper content
+      document.body.innerHTML = wrapperDiv.outerHTML;
+
+      // Replace the body content with the wrapper content
+      document.body.innerHTML = wrapperDiv.outerHTML;
+
+      // Print the page
+      window.print();
+      window.location.reload(); // Reload the page
+      // Restore the original content after printing
+      document.body.innerHTML = originalContents;
+    } else {
+      console.error("Element not found.");
+
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const updateChartSize = () => {
@@ -119,7 +253,8 @@ const PayPulseReportComponentDemo = ({
             overflowY: isMobile ? "" : "scroll",
           }}
         >
-          <div className="p-lg-3 p-1">
+          <DownloadButtonComponent />
+          <div className="p-lg-3 p-1" ref={printAreaRef}>
             <h3>{demoData[0]?.Title} Salary Report</h3>
             <div className="d-lg-flex justify-content-start align-items-center">
               <p
@@ -204,8 +339,9 @@ const PayPulseReportComponentDemo = ({
               >
                 <div className="card-body">
                   <div className="d-flex justify-content-center">
-                    <h5 className="mb-5 mt-3 w-75 ">
-                      Average Salary vs Experience Level
+                    <h5 className="mb-5 mt-3 w-100 ">
+                      Average salary for different experience levels in{" "}
+                      {demoData[0]?.location}
                     </h5>
                   </div>
 

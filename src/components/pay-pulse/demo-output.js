@@ -1,39 +1,20 @@
 import React, { useState, useEffect } from "react";
-import {
-  CalendarOutlined,
-  EnvironmentOutlined,
-  EditOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
-import { styled } from "@mui/material/styles";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button, Modal, Popconfirm, Select } from "antd";
 import NavBar from "../layout/nav-bar";
 import { pay_pulse_input_path } from "../../config/constant";
 import { demoData } from "./demo-data";
 import PayPulseReportComponentDemo from "./demo-report";
-
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+import { useApplicationContext } from "../../context/app-context";
 
 const PayPulseOutputDemo = ({ userPlan }) => {
   const userInputOptions = JSON.parse(sessionStorage.getItem("input-options"));
   const storedUserInputs = JSON.parse(sessionStorage.getItem("user-inputs"));
-  const [expanded, setExpanded] = React.useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editableExperience, setEditableExperience] = useState("");
+  const [editableTitle, setEditableTitle] = useState("");
+  const { userData } = useApplicationContext();
   const [editableSector, setEditableSector] = useState(
     storedUserInputs?.sector
   );
@@ -51,6 +32,9 @@ const PayPulseOutputDemo = ({ userPlan }) => {
   const [locationOptions, setLocationOptions] = useState(
     userInputOptions?.locationOptions
   );
+  const [titleOptions, setTitleOptions] = useState(
+    userInputOptions?.titleOptions
+  );
   //eslint-disable-next-line
   const [expOptions, setExpOptions] = useState(
     userInputOptions?.experienceOptions
@@ -60,8 +44,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
   );
   const parsedSkills = JSON.parse(userInputOptions?.skills || "") || [];
   //eslint-disable-next-line
-  const [sectorOptions, setSectorOptions] = useState(userInputOptions?.sector);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [sectorOptions, setSectorOptions] = useState([]);
   const [filteredDemoData, setFilteredDemoData] = useState([]);
   const [filteredDemoDataNoLoc, setFilteredDemoDataNoLoc] = useState([]);
   const [filteredDemoDataNoExp, setFilteredDemoDataNoExp] = useState([]);
@@ -84,22 +67,12 @@ const PayPulseOutputDemo = ({ userPlan }) => {
     };
   }, []); // The empty dependency array ensures that the cleanup function runs only once on component unmount
 
-  const handleExpandClick = (index) => {
-    setExpanded((prevExpanded) => ({
-      ...prevExpanded,
-      [index]: !prevExpanded[index],
-    }));
-  };
-
   function SkillsList({ skills }) {
     return (
       <div>
         <p>
           <span>Skills :</span>{" "}
-          <span style={{ fontSize: "14px" }}>
-            {" "}
-            {CapitalizeFirstLetter(skills.join(", "))}
-          </span>
+          <span style={{ fontSize: "14px" }}> {skills.join(", ")}</span>
         </p>
       </div>
     );
@@ -131,7 +104,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
 
       const filteredData = demoData.filter(
         (item) =>
-          item.Title === storedUserInputs.title &&
+          item.Title === editableTitle &&
           item.Experience === editableExperience &&
           item.location === editableLocation &&
           item.Industry === editableSector
@@ -139,20 +112,22 @@ const PayPulseOutputDemo = ({ userPlan }) => {
 
       const filteredDataNoLoc = demoData.filter(
         (item) =>
-          item.Title === storedUserInputs.title &&
+          item.Title === editableTitle &&
           item.Experience === editableExperience &&
           item.location === "Across India" &&
           item.Industry === editableSector
       );
       const filteredDataNoExp = demoData.filter(
         (item) =>
-          item.Title === storedUserInputs.title &&
+          item.Title === editableTitle &&
           item.location === editableLocation &&
           item.Industry === editableSector
       );
+
       setFilteredDemoData(filteredData);
       setFilteredDemoDataNoLoc(filteredDataNoLoc);
       setFilteredDemoDataNoExp(filteredDataNoExp);
+      setEditableTitle(filteredData[0]?.Title);
       setEditableExperience(filteredData[0]?.Experience);
       setEditableLocation(filteredData[0]?.location);
     }
@@ -165,9 +140,19 @@ const PayPulseOutputDemo = ({ userPlan }) => {
     );
     setLocationOptions(filter);
   };
+  const handleTitleSearch = (newValue) => {
+    const filter = userInputOptions?.titleOptions.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setTitleOptions(filter);
+  };
 
   const handleSelectEditableLocation = (value) => {
     setEditableLocation(value);
+  };
+
+  const handleSelectEditableTitle = (value) => {
+    setEditableTitle(value);
   };
   const handleSelectEditableExperience = (value) => {
     setEditableExperience(value);
@@ -217,6 +202,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
       setFilteredDemoData(filteredData);
       setFilteredDemoDataNoLoc(filteredDataNoLoc);
       setFilteredDemoDataNoExp(filteredDataNoExp);
+      setEditableTitle(filteredData[0]?.Title);
       setEditableExperience(filteredData[0]?.Experience);
       setEditableLocation(filteredData[0]?.location);
     }
@@ -230,6 +216,18 @@ const PayPulseOutputDemo = ({ userPlan }) => {
     setSkillsOptions(filter);
   };
 
+  useEffect(() => {
+    const filteredArray = demoData.filter((item) =>
+      item.Title.includes(editableTitle)
+    );
+
+    const uniqueIndustry = [
+      ...new Set(filteredArray.map((item) => item.Industry)),
+    ];
+
+    setSectorOptions(uniqueIndustry);
+    setEditableSector(uniqueIndustry[0]);
+  }, [editableTitle]);
   return (
     <>
       <NavBar />
@@ -254,6 +252,32 @@ const PayPulseOutputDemo = ({ userPlan }) => {
           )}
           <Modal closable={false} visible={isModalVisible} footer={modalFooter}>
             <div>
+              <div className="mb-3  d-flex align-items-center">
+                <label className="col-3">Job title : </label>
+                <div className="col-8">
+                  <Select
+                    size={"large"}
+                    style={{
+                      width: "100%",
+                      borderRadius: "0",
+                      textAlign: "start",
+                    }}
+                    className="input border"
+                    showSearch
+                    value={editableTitle}
+                    defaultActiveFirstOption={false}
+                    suffixIcon={null}
+                    filterOption={false}
+                    onSearch={handleTitleSearch}
+                    onChange={handleSelectEditableTitle}
+                    notFoundContent={null}
+                    options={(titleOptions || []).map((d) => ({
+                      value: d,
+                      label: d,
+                    }))}
+                  />
+                </div>
+              </div>
               <div className="mb-3  d-flex align-items-center">
                 <label className="col-3">Location : </label>
                 <div className="col-8">
@@ -306,37 +330,6 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                   />
                 </div>
               </div>
-
-              <div className="mb-3  d-flex align-items-center">
-                <label className="col-3">Skills : </label>
-                <div className="col-8">
-                  <Select
-                    mode="multiple"
-                    size={"large"}
-                    style={{
-                      width: "100%",
-                      borderRadius: "0",
-                      textAlign: "start",
-                    }}
-                    className="input border"
-                    showSearch
-                    placeholder="Important skills"
-                    defaultActiveFirstOption={false}
-                    suffixIcon={null}
-                    filterOption={false}
-                    onChange={handleSelectEditableSkills}
-                    onSearch={handleSkillsSearch}
-                    notFoundContent={null}
-                    value={editableSkills}
-                  >
-                    {skillsOptions?.map((d) => (
-                      <Option key={d} value={d}>
-                        {CapitalizeFirstLetter(d)}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-              </div>
               <div className="mb-3 d-flex align-items-center">
                 <label className="col-3">Sector : </label>
                 <div className="col-8 d-flex">
@@ -365,6 +358,37 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                   />
                 </div>
               </div>
+
+              <div className="mb-3  d-flex align-items-center">
+                <label className="col-3">Skills : </label>
+                <div className="col-8">
+                  <Select
+                    mode="multiple"
+                    size={"large"}
+                    style={{
+                      width: "100%",
+                      borderRadius: "0",
+                      textAlign: "start",
+                    }}
+                    className="input border"
+                    showSearch
+                    placeholder="Important skills"
+                    defaultActiveFirstOption={false}
+                    suffixIcon={null}
+                    filterOption={false}
+                    onChange={handleSelectEditableSkills}
+                    onSearch={handleSkillsSearch}
+                    notFoundContent={null}
+                    value={editableSkills}
+                  >
+                    {skillsOptions?.map((d) => (
+                      <Option key={d} value={d}>
+                        {d}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
             </div>
           </Modal>
           <a href={pay_pulse_input_path}>
@@ -386,9 +410,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
               style={{ cursor: "pointer" }}
             >
               <div className="d-flex align-content-center justify-content-between ">
-                <p style={{ fontWeight: "500" }} className="fw-b text-primary">
-                  {filteredDemoData[0]?.Title}
-                </p>
+                <p className="fw-b text-primary">{editableTitle}</p>
 
                 {isEditing ? (
                   <Popconfirm
@@ -406,7 +428,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                       <SaveOutlined />{" "}
                     </div>
                   </Popconfirm>
-                ) : (
+                ) : userData?.user_type === "demo" ? (
                   <Popconfirm
                     title="Are you sure you want to edit?"
                     onConfirm={handleChangeEdit}
@@ -422,54 +444,19 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                       <EditOutlined />
                     </div>
                   </Popconfirm>
+                ) : (
+                  ""
                 )}
               </div>
 
-              <div className="d-flex justify-content-start align-items-center">
-                <p
-                  className=" border-right px-2"
-                  style={{
-                    borderRight: "1px solid",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "3px",
-                  }}
-                >
-                  <CalendarOutlined /> {editableExperience} years
-                </p>
-                <p
-                  className=" border-right px-2"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "3px",
-                  }}
-                >
-                  {" "}
-                  <EnvironmentOutlined /> {editableLocation}
-                </p>
+              <div>
+                <p>Experience : {editableExperience} years</p>
+                <p> Location : {editableLocation}</p>
+                <p> Sector : {editableSector}</p>
               </div>
-
-              <CardActions disableSpacing>
-                <p style={{ margin: "0" }}>See More</p>
-                <ExpandMore
-                  expand={expanded[0] || false}
-                  onClick={() => {
-                    handleExpandClick(0);
-                    setIsExpanded(!isExpanded);
-                  }}
-                  aria-expanded={expanded[0] || false}
-                  aria-label="show more"
-                >
-                  <ExpandMoreIcon />
-                </ExpandMore>
-              </CardActions>
-              <Collapse in={expanded[0] || false} timeout="auto" unmountOnExit>
-                <div>
-                  <SkillsList skills={JSON.parse(storedUserInputs?.skills)} />
-                </div>
-                <div></div>
-              </Collapse>
+              <div>
+                <SkillsList skills={JSON.parse(storedUserInputs?.skills)} />
+              </div>
             </Card>
           </div>
         </div>

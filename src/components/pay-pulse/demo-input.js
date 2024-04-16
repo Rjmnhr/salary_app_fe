@@ -145,6 +145,7 @@ const PayPulseInputDemo = () => {
     sessionStorage.setItem(
       "input-options",
       JSON.stringify({
+        titleOptions: availableTitles,
         experienceOptions: validatedExpInputs,
         locationOptions: validatedCityInputs,
         skills: JSON.stringify(initialTopSkills),

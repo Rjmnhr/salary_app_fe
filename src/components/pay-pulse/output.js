@@ -454,10 +454,7 @@ const PayPulseOutput = ({ userPlan }) => {
       <div>
         <p>
           <span>Skills :</span>{" "}
-          <span style={{ fontSize: "14px" }}>
-            {" "}
-            {CapitalizeFirstLetter(skills.join(", "))}
-          </span>
+          <span style={{ fontSize: "14px" }}> {skills.join(", ")}</span>
         </p>
       </div>
     );

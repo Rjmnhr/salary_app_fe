@@ -112,44 +112,44 @@ export const DemoRegisterComponent = ({
                       name="Phone"
                       className="form-control phone-input"
                       id="Phone"
-                      placeholder="Phone number"
+                      placeholder="Phone "
                       data-rule="minlen:4"
                       data-msg="Please enter at least 4 chars"
                       onChange={(e) => setPhone(e.target.value)}
                     />
                     <div class="validate"></div>
                   </div>
+
                   <div class="col form-group">
                     <input
-                      value={title}
-                      type="Title"
+                      value={email}
+                      required
+                      type="email"
                       class="form-control"
-                      name="Title"
-                      id="Title"
-                      placeholder="Title"
-                      data-rule="Title"
-                      data-msg="Please enter a valid Title"
-                      onChange={(e) => setTitle(e.target.value)}
+                      name="email"
+                      id="email"
+                      placeholder="Email"
+                      data-rule="email"
+                      data-msg="Please enter a valid email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <div class="validate"></div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class=" form-group">
                   <input
-                    value={email}
-                    required
-                    type="email"
+                    value={title}
+                    type="Title"
                     class="form-control"
-                    name="email"
-                    id="email"
-                    placeholder="Email"
-                    data-rule="email"
-                    data-msg="Please enter a valid email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="Title"
+                    id="Title"
+                    placeholder="Designation"
+                    data-rule="Title"
+                    data-msg="Please enter a valid Title"
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                   <div class="validate"></div>
                 </div>
-
                 <div class="form-group">
                   <input
                     value={organization}
@@ -171,9 +171,6 @@ export const DemoRegisterComponent = ({
                     showSearch
                     style={{
                       width: "100%",
-                      height: "42px",
-                      outline: "none",
-                      placeholder: "red",
                     }}
                     placeholder="Industry"
                     optionFilterProp="children"
@@ -184,6 +181,9 @@ export const DemoRegisterComponent = ({
                         .indexOf(input.toLowerCase()) >= 0
                     }
                   >
+                    <Option value="" disabled>
+                      Select Industry
+                    </Option>
                     <Option value="Information Technology">
                       Information Technology
                     </Option>

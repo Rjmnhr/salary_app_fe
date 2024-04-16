@@ -7,10 +7,12 @@ import { Helmet } from "react-helmet";
 import AxiosInstance from "../../config/axios";
 import SignIn from "../../components/auth/sign-in";
 import SignUp from "../../components/auth/sign-up";
+import { home_path } from "../../config/constant";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { isSignIn } = useApplicationContext();
-
+  const navigate = useNavigate();
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
   useEffect(() => {
@@ -93,7 +95,13 @@ const LoginPage = () => {
               height: "100vh",
             }}
           >
-            <h1 className="text-center">Equipay Partners </h1>
+            <h1
+              className="text-center"
+              onClick={() => navigate(home_path)}
+              style={{ cursor: "pointer" }}
+            >
+              Equipay Partners{" "}
+            </h1>
             <p className="text-center" style={{ color: "black" }}>
               Your partners in all matters pay
             </p>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BgVideo from "../../video/demo.mp4";
-import DownloadSamplePDF from "../../components/pay-pulse/download-sample-pdf";
 import { Helmet } from "react-helmet";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
@@ -15,6 +14,7 @@ import { DemoRegisterComponent } from "../../components/pay-pulse/demo-register"
 import { DatePicker, Modal, Select, Switch, TimePicker } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
+import Contact from "../../components/contact";
 
 const PayPulseLandingPage = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const PayPulseLandingPage = () => {
   const [selectedDates, setSelectedDates] = useState(null);
   const [formattedDate, setFormattedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("4:00 PM");
-
+  const [datePicker, setDatePicker] = useState(null);
   const { Option } = Select;
   const [isCustomizationEnabled, setIsCustomizationEnabled] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -35,13 +35,13 @@ const PayPulseLandingPage = () => {
     setSelectedDates(null);
   };
 
-  const handleDatesSelect = (date) => {
-    if (date) {
+  const handleDatesSelect = (date, bool) => {
+    if (date && bool) {
       // Extract only the date part using moment.js
       const selectedDate = dayjs(date).startOf("day"); // This sets the time to 00:00:00
-      console.log(selectedDate.format("YYYY-MM-DD")); // Output the formatted date
 
       setFormattedDate(selectedDate.format("YYYY-MM-DD"));
+      setDatePicker(date);
     }
     setSelectedDates(date);
   };
@@ -194,9 +194,18 @@ const PayPulseLandingPage = () => {
                         onClick={() => navigate(pay_pulse_input_path)}
                         className="custom-demo-btn mt-3 mb-3 shadow p-3"
                       >
-                        One time trial <ArrowRightOutlined />
+                        <span className="mr-3">One time trial</span>{" "}
+                        <ArrowRightOutlined />
                       </button>
-                      <DownloadSamplePDF />
+                      <br />
+                      <button
+                        onClick={handleScrollTo}
+                        className="custom-download-btn mt-3 mb-3 shadow p-3"
+                      >
+                        Register for Demo
+                      </button>
+
+                      {/* <DownloadSamplePDF /> */}
                     </div>
 
                     {/* <a href="#contact" className="btn-get-started scrollto">
@@ -382,7 +391,7 @@ const PayPulseLandingPage = () => {
                   <Select
                     style={{ width: "100%" }}
                     placeholder="Select dates"
-                    onChange={handleDatesSelect}
+                    onChange={(value) => handleDatesSelect(value, false)}
                     value={selectedDates}
                     className="form-control "
                     disabled={isCustomizationEnabled}
@@ -402,10 +411,10 @@ const PayPulseLandingPage = () => {
                 />
                 <div class=" form-group">
                   <DatePicker
-                    value={selectedDates}
+                    value={datePicker}
                     style={{ width: "100%", marginTop: "10px" }}
                     placeholder="Select custom date"
-                    onChange={handleDatesSelect}
+                    onChange={(value) => handleDatesSelect(value, true)}
                     disabled={!isCustomizationEnabled}
                     className="mb-3 form-control "
                     showTime={false}
@@ -432,6 +441,10 @@ const PayPulseLandingPage = () => {
               </div>
             </div>
           </section>
+
+          <div>
+            <Contact />
+          </div>
         </div>
       </PayPulsePageStyled>
       <FooterComponent />
@@ -444,7 +457,7 @@ const PayPulseLandingPage = () => {
         <div className="p-3 ">
           <p style={{ fontSize: "18px" }}>
             Join us for a live demonstration of our product, Pay Pulse! We host
-            a demo every Wednesday. Click the button below to register
+            a demo every Wednesday. Click the button below to register.
           </p>
           <div className="d-flex justify-content-center mt-5">
             <button
