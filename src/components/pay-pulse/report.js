@@ -171,63 +171,6 @@ const PayPulseReportComponent = ({
     }
   };
 
-  //   const originalContents = document.body.innerHTML;
-  //   const printContent = printAreaRef.current;
-
-  //   if (printContent) {
-  //     const printContents = printContent.innerHTML;
-
-  //     document.body.innerHTML = printContents;
-  //     window.print();
-  //     // Restore the original content after printing
-  //     document.body.innerHTML = originalContents;
-
-  //   } else {
-  //     console.error("Element not found.");
-
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const generatePDF = async () => {
-  //   // const originalContents = document.body.innerHTML;
-  //   const printContent = printAreaRef.current;
-
-  //   if (printContent) {
-  //     const printContents = printContent.innerHTML;
-
-  //     try {
-  //       const response = await AxiosInstance.post(
-  //         "/api/generate-watermark-pdf",
-  //         {
-  //           pdfContent: printContents,
-  //         },
-  //         {
-  //           responseType: "blob", // Specify responseType as 'blob' to handle binary data
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-
-  //       if (response.status === 200) {
-  //         const url = URL.createObjectURL(new Blob([response.data]));
-
-  //         // For example, you can open the PDF in a new window
-  //         window.open(url, "_blank");
-  //       } else {
-  //         console.error("Failed to generate watermarked PDF.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error generating watermarked PDF:", error);
-  //     }
-  //   } else {
-  //     console.error("Element not found.");
-  //   }
-  // };
-
-  // Define a function to calculate statistics for a given dataset
-
   // Calculate statistics for jobsData
   const statisticsForJobsData = calculateStatistics(jobsData);
 

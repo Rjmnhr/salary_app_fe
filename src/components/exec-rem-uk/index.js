@@ -285,10 +285,8 @@ const ExecutiveBenchmarkUK = ({ sectors }) => {
 
   useEffect(() => {
     if (maxMarketCap || maxAssets || maxSales || maxPAT) {
-      console.log("pr");
       getCompaniesCountByMetrics();
     } else {
-      console.log("tr");
       setDistinctCompaniesCountMetrics(0);
     }
     //eslint-disable-next-line

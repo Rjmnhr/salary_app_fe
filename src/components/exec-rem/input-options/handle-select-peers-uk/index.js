@@ -199,7 +199,6 @@ const HandSelectedPeersUK = () => {
   }, [selectedSectors]);
 
   const handleSectorChange = (value) => {
-    console.log("🚀 ~ handleSectorChange ~ value:", value);
     setSelectedSectors(value);
     getIndustries(value);
   };
@@ -262,10 +261,8 @@ const HandSelectedPeersUK = () => {
 
   useEffect(() => {
     if (maxMarketCap || maxAssets) {
-      console.log("pr");
       getCompaniesCountByMetrics();
     } else {
-      console.log("tr");
       setDistinctCompaniesCountMetrics(0);
     }
     //eslint-disable-next-line

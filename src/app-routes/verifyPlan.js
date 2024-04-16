@@ -3,9 +3,12 @@ import { Navigate } from "react-router-dom";
 
 import AxiosInstance from "../config/axios";
 import PayPulseOutput from "../components/pay-pulse/output";
+import { useApplicationContext } from "../context/app-context";
+import PayPulseOutputDemo from "../components/pay-pulse/demo-output";
 
 const VerifyPlanRoute = ({ element }) => {
   const accessToken = localStorage.getItem("accessToken");
+  const { userData } = useApplicationContext();
 
   const [userPlan, setUserPlan] = useState(null);
 
@@ -46,7 +49,11 @@ const VerifyPlanRoute = ({ element }) => {
     if (userPlan) {
       return (
         <>
-          <PayPulseOutput userPlan={userPlan} />
+          {userData?.user_type === "demo" ? (
+            <PayPulseOutputDemo userPlan={userPlan} />
+          ) : (
+            <PayPulseOutput userPlan={userPlan} />
+          )}
         </>
       );
     } else {

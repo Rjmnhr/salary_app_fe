@@ -139,6 +139,16 @@ const PayPulseInputDemo = () => {
         location: location,
         title: selectedTitle,
         skills: JSON.stringify(selectedSkills),
+        sector: sector,
+      })
+    );
+    sessionStorage.setItem(
+      "input-options",
+      JSON.stringify({
+        experienceOptions: validatedExpInputs,
+        locationOptions: validatedCityInputs,
+        skills: JSON.stringify(initialTopSkills),
+        sector: validatedSectorInputs,
       })
     );
   };
@@ -154,10 +164,18 @@ const PayPulseInputDemo = () => {
     const filteredArray = demoData.filter((item) =>
       item.Title.includes(selectedTitle)
     );
-
-    const uniqueLoc = [...new Set(filteredArray.map((item) => item.location))];
+    const filteredLocArray = demoData.filter(
+      (item) =>
+        item.Title.includes(selectedTitle) && item.location !== "Across India"
+    );
+    const uniqueLoc = [
+      ...new Set(filteredLocArray.map((item) => item.location)),
+    ];
     const uniqueExp = [
       ...new Set(filteredArray.map((item) => item.Experience)),
+    ];
+    const uniqueIndustry = [
+      ...new Set(filteredArray.map((item) => item.Industry)),
     ];
     const uniqueSkills = [
       ...new Set(
@@ -169,6 +187,7 @@ const PayPulseInputDemo = () => {
     setValidatedExpInputs(uniqueExp);
     setTopSkills(uniqueSkills);
     setInitialTopSkills(uniqueSkills);
+    setValidatedSectorInputs(uniqueIndustry);
   }, [selectedTitle]);
 
   return (
@@ -366,7 +385,15 @@ const PayPulseInputDemo = () => {
               className={`btn btn-primary  mt-3 mb-3  shadow ${
                 isMobile ? "w-75" : "w-25 "
               } `}
-              disabled={!(selectedTitle && location && experience)}
+              disabled={
+                !(
+                  selectedTitle &&
+                  location &&
+                  experience &&
+                  sector &&
+                  selectedSkills?.length > 0
+                )
+              }
             >
               {isLoading ? (
                 <span>

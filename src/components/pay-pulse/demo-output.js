@@ -12,14 +12,10 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Button, Modal, Popconfirm, Select } from "antd";
-import { useLocation } from "react-router-dom";
-import PayPulseReportComponent from "./report";
 import NavBar from "../layout/nav-bar";
-import {
-  pay_pulse_dashboard_path,
-  pay_pulse_input_path,
-} from "../../config/constant";
+import { pay_pulse_input_path } from "../../config/constant";
 import { demoData } from "./demo-data";
+import PayPulseReportComponentDemo from "./demo-report";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,43 +29,42 @@ const ExpandMore = styled((props) => {
 }));
 
 const PayPulseOutputDemo = ({ userPlan }) => {
-  const [dataArray, setDataArray] = useState([]);
+  const userInputOptions = JSON.parse(sessionStorage.getItem("input-options"));
+  const storedUserInputs = JSON.parse(sessionStorage.getItem("user-inputs"));
   const [expanded, setExpanded] = React.useState(false);
-  const [showPreviousReports, setShowPreviousReports] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editableExperience, setEditableExperience] = useState("");
-  const [editableSector, setEditableSector] = useState("");
+  const [editableSector, setEditableSector] = useState(
+    storedUserInputs?.sector
+  );
   const [editableLocation, setEditableLocation] = useState("");
-  const [editableJobTitle, setEditableJobTitle] = useState("");
-  const [editableSkills, setEditableSkills] = useState([]);
+  const [editableSkills, setEditableSkills] = useState(
+    JSON.parse(storedUserInputs?.skills) || []
+  );
   const [activeIndex, setActiveIndex] = useState(
     parseInt(sessionStorage.getItem("activeIndex")) || 0
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [skillData, setSkillData] = useState([]);
   const { Option } = Select;
+  //eslint-disable-next-line
   const [reportLimit, setReportLimit] = useState(1); // Default to 1 report for Basic users
-  const userInputOptions = JSON.parse(sessionStorage.getItem("input-options"));
   const [locationOptions, setLocationOptions] = useState(
     userInputOptions?.locationOptions
   );
-  const location = useLocation();
-  const [isExpanded, setIsExpanded] = useState(false);
   //eslint-disable-next-line
-  const [inDashboard, setInDashboard] = useState(false);
-  const [validatedExpInputs, setValidatedExpInputs] = useState(
-    userInputOptions?.experienceOptions || []
+  const [expOptions, setExpOptions] = useState(
+    userInputOptions?.experienceOptions
   );
-  const [validatedSectorInputs, setValidatedSectorInputs] = useState(
-    userInputOptions?.sectorsOptions || []
+  const [skillsOptions, setSkillsOptions] = useState(
+    JSON.parse(userInputOptions?.skills || "") || []
   );
-
-  useEffect(() => {
-    if (location.pathname === pay_pulse_dashboard_path) {
-      setInDashboard(true);
-    }
-  }, [location.pathname]);
-
+  const parsedSkills = JSON.parse(userInputOptions?.skills || "") || [];
+  //eslint-disable-next-line
+  const [sectorOptions, setSectorOptions] = useState(userInputOptions?.sector);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [filteredDemoData, setFilteredDemoData] = useState([]);
+  const [filteredDemoDataNoLoc, setFilteredDemoDataNoLoc] = useState([]);
+  const [filteredDemoDataNoExp, setFilteredDemoDataNoExp] = useState([]);
   useEffect(() => {
     // Fetch the user's subscription plan and set the report limit accordingly
     if (userPlan === "Standard") {
@@ -133,23 +128,18 @@ const PayPulseOutputDemo = ({ userPlan }) => {
 
     if (isEditing) {
       // Create a new report object with the edited values
-      const editedReport = {
-        title: editableJobTitle,
-        location: editableLocation,
-        experience: editableExperience,
-        skills: JSON.stringify(editableSkills),
-        manage: "",
-        supervise: "",
-        sector: editableSector,
-        title_id: dataArray[activeIndex].title_id,
-      };
 
-      // Update the first element of dataArray with the edited report
-      const updatedDataArray = [...dataArray];
-      updatedDataArray[0] = editedReport;
+      const filteredData = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.Experience === editableExperience &&
+          item.location === editableLocation &&
+          item.Industry === editableSector
+      );
 
-      // Update the state with the modified dataArray
-      setDataArray(updatedDataArray);
+      setFilteredDemoData(filteredData);
+      setEditableExperience(filteredData[0]?.Experience);
+      setEditableLocation(filteredData[0]?.location);
     }
   };
   // useEffect(() => {
@@ -171,13 +161,6 @@ const PayPulseOutputDemo = ({ userPlan }) => {
     setEditableSkills(value);
   };
 
-  const handleEditableSectorSearch = (newValue) => {
-    const filter = validatedSectorInputs.filter((data) =>
-      data?.toLowerCase().includes(newValue.toLowerCase())
-    );
-    setValidatedSectorInputs(filter);
-  };
-
   const modalFooter = (
     <div>
       <Button
@@ -190,6 +173,46 @@ const PayPulseOutputDemo = ({ userPlan }) => {
       </Button>
     </div>
   );
+
+  useEffect(() => {
+    if (storedUserInputs) {
+      const filteredData = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.Experience === storedUserInputs.experience &&
+          item.location === storedUserInputs.location &&
+          item.Industry === storedUserInputs.sector
+      );
+
+      const filteredDataNoLoc = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.Experience === storedUserInputs.experience &&
+          item.location === "Across India" &&
+          item.Industry === storedUserInputs.sector
+      );
+      const filteredDataNoExp = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.location === storedUserInputs.location &&
+          item.Industry === storedUserInputs.sector
+      );
+
+      setFilteredDemoData(filteredData);
+      setFilteredDemoDataNoLoc(filteredDataNoLoc);
+      setFilteredDemoDataNoExp(filteredDataNoExp);
+      setEditableExperience(filteredData[0]?.Experience);
+      setEditableLocation(filteredData[0]?.location);
+    }
+    //eslint-disable-next-line
+  }, []);
+
+  const handleSkillsSearch = (newValue) => {
+    const filter = parsedSkills?.filter((data) =>
+      data?.toLowerCase().includes(newValue.toLowerCase())
+    );
+    setSkillsOptions(filter);
+  };
 
   return (
     <>
@@ -211,9 +234,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
           {userPlan === "Premium" ? (
             <p>Unlimited Reports</p>
           ) : (
-            <p>
-              Remaining reports : {Math.max(reportLimit - dataArray.length, 0)}
-            </p>
+            <p>Remaining reports : 0</p>
           )}
           <Modal closable={false} visible={isModalVisible} footer={modalFooter}>
             <div>
@@ -262,7 +283,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                     value={editableExperience}
                     onChange={handleSelectEditableExperience}
                     notFoundContent={null}
-                    options={(validatedExpInputs || []).map((e) => ({
+                    options={expOptions.map((e) => ({
                       value: e,
                       label: e,
                     }))}
@@ -288,10 +309,11 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                     suffixIcon={null}
                     filterOption={false}
                     onChange={handleSelectEditableSkills}
+                    onSearch={handleSkillsSearch}
                     notFoundContent={null}
                     value={editableSkills}
                   >
-                    {(skillData || []).map((d) => (
+                    {skillsOptions?.map((d) => (
                       <Option key={d} value={d}>
                         {CapitalizeFirstLetter(d)}
                       </Option>
@@ -299,45 +321,34 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                   </Select>
                 </div>
               </div>
-              {validatedSectorInputs?.length > 0 && (
-                <div className="mb-3 d-flex align-items-center">
-                  <label className="col-3">Sector : </label>
-                  <div className="col-8 d-flex">
-                    <Select
-                      size={"large"}
-                      style={{
-                        width: "100%",
-                        borderRadius: "0",
-                        textAlign: "start",
-                      }}
-                      value={editableSector}
-                      className="input border"
-                      showSearch
-                      placeholder="Sector"
-                      defaultActiveFirstOption={false}
-                      suffixIcon={null}
-                      filterOption={false}
-                      onSearch={handleEditableSectorSearch}
-                      onChange={(value) => setEditableSector(value)}
-                      notFoundContent={null}
-                      options={[
-                        { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
-                        ...(validatedSectorInputs || []).map((d) => ({
-                          value: d,
-                          label: CapitalizeFirstLetter(d),
-                        })),
-                      ]}
-                    />
-                    <p
-                      className="bg-primary text-light m-0 text-center ml-1 p-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setEditableSector("")}
-                    >
-                      X
-                    </p>
-                  </div>
+              <div className="mb-3 d-flex align-items-center">
+                <label className="col-3">Sector : </label>
+                <div className="col-8 d-flex">
+                  <Select
+                    size={"large"}
+                    style={{
+                      width: "100%",
+                      borderRadius: "0",
+                      textAlign: "start",
+                    }}
+                    value={editableSector}
+                    className="input border"
+                    placeholder="Sector"
+                    defaultActiveFirstOption={false}
+                    suffixIcon={null}
+                    filterOption={false}
+                    onChange={(value) => setEditableSector(value)}
+                    notFoundContent={null}
+                    options={[
+                      { value: "", label: "Select Sector", disabled: true }, // Add this line for the empty and disabled option
+                      ...sectorOptions?.map((d) => ({
+                        value: d,
+                        label: CapitalizeFirstLetter(d),
+                      })),
+                    ]}
+                  />
                 </div>
-              )}
+              </div>
             </div>
           </Modal>
           <a href={pay_pulse_input_path}>
@@ -348,216 +359,102 @@ const PayPulseOutputDemo = ({ userPlan }) => {
           </a>
 
           <div>
-            {dataArray && dataArray.length > 0 && (
-              <Card
-                className={`card selectable-tab p-2 px-3 text-left mb-3 ${
-                  activeIndex === 0 ? "selected-tab" : ""
-                }`}
-                key={dataArray[0]?.report_id}
-                onClick={() => {
-                  setActiveIndex(0);
-                  sessionStorage.setItem("activeIndex", 0);
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="d-flex align-content-center justify-content-between ">
-                  <p
-                    style={{ fontWeight: "500" }}
-                    className="fw-b text-primary"
-                  >
-                    {dataArray[0]?.title}
-                  </p>
-
-                  {isEditing ? (
-                    <Popconfirm
-                      title="Are you sure you want to save?"
-                      onConfirm={handleChangeEdit}
-                      okText="Yes"
-                      cancelText="No"
-                      placement="topRight" // Adjust the placement as needed
-                    >
-                      <div
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        <SaveOutlined />{" "}
-                      </div>
-                    </Popconfirm>
-                  ) : (
-                    <Popconfirm
-                      title="Are you sure you want to edit?"
-                      onConfirm={handleChangeEdit}
-                      okText="Yes"
-                      cancelText="No"
-                      placement="topRight" // Adjust the placement as needed
-                    >
-                      <div
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        <EditOutlined />
-                      </div>
-                    </Popconfirm>
-                  )}
-                </div>
-
-                <div className="d-flex justify-content-start align-items-center">
-                  <p
-                    className=" border-right px-2"
-                    style={{
-                      borderRight: "1px solid",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                    }}
-                  >
-                    <CalendarOutlined /> {editableExperience} years
-                  </p>
-                  <p
-                    className=" border-right px-2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                    }}
-                  >
-                    {" "}
-                    <EnvironmentOutlined /> {editableLocation}
-                  </p>
-                </div>
-
-                <CardActions disableSpacing>
-                  <p style={{ margin: "0" }}>See More</p>
-                  <ExpandMore
-                    expand={expanded[0] || false}
-                    onClick={() => {
-                      handleExpandClick(0);
-                      setIsExpanded(!isExpanded);
-                    }}
-                    aria-expanded={expanded[0] || false}
-                    aria-label="show more"
-                  >
-                    <ExpandMoreIcon />
-                  </ExpandMore>
-                </CardActions>
-                <Collapse
-                  in={expanded[0] || false}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <div>
-                    <SkillsList skills={JSON.parse(dataArray[0]?.skills)} />
-                  </div>
-                  <div></div>
-                </Collapse>
-              </Card>
-            )}
-          </div>
-          {dataArray.length > 1 ? (
-            <button
+            <Card
+              className={`card selectable-tab p-2 px-3 text-left mb-3 ${
+                activeIndex === 0 ? "selected-tab" : ""
+              }`}
               onClick={() => {
-                setShowPreviousReports(!showPreviousReports);
-
                 setActiveIndex(0);
                 sessionStorage.setItem("activeIndex", 0);
               }}
-              className="btn btn-primary mb-3 w-100"
+              style={{ cursor: "pointer" }}
             >
-              {showPreviousReports
-                ? "Hide previous reports"
-                : "See previous reports"}
-            </button>
-          ) : (
-            ""
-          )}
-          <div
-            className="scrollable-container"
-            style={{
-              overflowY: "scroll",
-              maxHeight: isExpanded ? "30vh" : "45vh",
-            }}
-          >
-            {showPreviousReports && (
-              <div>
-                {dataArray
-                  ? dataArray.map((data, index) => {
-                      // Check if the current index is not the first one (index 0)
-                      if (index !== 0) {
-                        return (
-                          <Card
-                            className={`card selectable-tab p-2 px-3 text-left mb-3 ${
-                              activeIndex === index ? "selected-tab" : ""
-                            }`}
-                            key={data.report_id}
-                            onClick={() => {
-                              setActiveIndex(index);
-                              sessionStorage.setItem("activeIndex", index);
-                            }}
-                            style={{ cursor: "pointer" }}
-                          >
-                            <p
-                              style={{ fontWeight: "500" }}
-                              className="fw-b text-primary"
-                            >
-                              {data.title}
-                            </p>
-                            <div className="d-flex justify-content-start align-items-center">
-                              <p
-                                className=" border-right px-2"
-                                style={{
-                                  borderRight: "1px solid",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "3px",
-                                }}
-                              >
-                                <CalendarOutlined /> {data.experience} years
-                              </p>
-                              <p
-                                className=" border-right px-2"
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "3px",
-                                }}
-                              >
-                                {" "}
-                                <EnvironmentOutlined /> {data.location}
-                              </p>
-                            </div>
+              <div className="d-flex align-content-center justify-content-between ">
+                <p style={{ fontWeight: "500" }} className="fw-b text-primary">
+                  {filteredDemoData[0]?.Title}
+                </p>
 
-                            <CardActions disableSpacing>
-                              <p style={{ margin: "0" }}>See More</p>
-                              <ExpandMore
-                                expand={expanded[index] || false}
-                                onClick={() => handleExpandClick(index)}
-                                aria-expanded={expanded[index] || false}
-                                aria-label="show more"
-                              >
-                                <ExpandMoreIcon />
-                              </ExpandMore>
-                            </CardActions>
-                            <Collapse
-                              in={expanded[index] || false}
-                              timeout="auto"
-                              unmountOnExit
-                            >
-                              <div>
-                                <SkillsList skills={JSON.parse(data.skills)} />
-                              </div>
-                              <div></div>
-                            </Collapse>
-                          </Card>
-                        );
-                      }
-                      // If it's the first element, don't render anything or render something else.
-                      return null; // or any other component/element you want
-                    })
-                  : "Loading...."}
+                {isEditing ? (
+                  <Popconfirm
+                    title="Are you sure you want to save?"
+                    onConfirm={handleChangeEdit}
+                    okText="Yes"
+                    cancelText="No"
+                    placement="topRight" // Adjust the placement as needed
+                  >
+                    <div
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <SaveOutlined />{" "}
+                    </div>
+                  </Popconfirm>
+                ) : (
+                  <Popconfirm
+                    title="Are you sure you want to edit?"
+                    onConfirm={handleChangeEdit}
+                    okText="Yes"
+                    cancelText="No"
+                    placement="topRight" // Adjust the placement as needed
+                  >
+                    <div
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <EditOutlined />
+                    </div>
+                  </Popconfirm>
+                )}
               </div>
-            )}
+
+              <div className="d-flex justify-content-start align-items-center">
+                <p
+                  className=" border-right px-2"
+                  style={{
+                    borderRight: "1px solid",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "3px",
+                  }}
+                >
+                  <CalendarOutlined /> {editableExperience} years
+                </p>
+                <p
+                  className=" border-right px-2"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "3px",
+                  }}
+                >
+                  {" "}
+                  <EnvironmentOutlined /> {editableLocation}
+                </p>
+              </div>
+
+              <CardActions disableSpacing>
+                <p style={{ margin: "0" }}>See More</p>
+                <ExpandMore
+                  expand={expanded[0] || false}
+                  onClick={() => {
+                    handleExpandClick(0);
+                    setIsExpanded(!isExpanded);
+                  }}
+                  aria-expanded={expanded[0] || false}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </ExpandMore>
+              </CardActions>
+              <Collapse in={expanded[0] || false} timeout="auto" unmountOnExit>
+                <div>
+                  <SkillsList skills={JSON.parse(storedUserInputs?.skills)} />
+                </div>
+                <div></div>
+              </Collapse>
+            </Card>
           </div>
         </div>
         <div
@@ -568,9 +465,10 @@ const PayPulseOutputDemo = ({ userPlan }) => {
             justifyItems: "center",
           }}
         >
-          <PayPulseReportComponent
-            demoData={demoData}
-            demoDataNoExp={demoData}
+          <PayPulseReportComponentDemo
+            demoData={filteredDemoData}
+            demoDataNoLoc={filteredDemoDataNoLoc}
+            demoDataNoExp={filteredDemoDataNoExp}
             skillsBool={true}
           />
         </div>

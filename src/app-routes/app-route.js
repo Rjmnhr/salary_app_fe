@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
 import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
 import ProtectedRoute from "./protected-route.js";
-
 import ExecutiveBenchmark from "../components/exec-rem/input.js";
 import VerifyPlanRoute from "./verifyPlan.js";
 import LoginPage from "../pages/login-page/index.js";
@@ -109,14 +108,6 @@ const AppRoute = () => {
 
         <Route path={pay_pulse_output_path} element={<VerifyPlanRoute />} />
         <Route path={pay_pulse_dashboard_path} element={<VerifyPlanRoute />} />
-        {/* <Route
-          path="/reports"
-          element={
-            <>
-              <ReportsPage />
-            </>
-          }
-        /> */}
 
         <Route
           path={login_path}

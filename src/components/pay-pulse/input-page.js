@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { Drawer } from "antd";
 import AxiosInstance from "../../config/axios";
 import { api_pay_pulse_getActivity } from "../../config/config";
+import PayPulseInputDemo from "./demo-input";
 
 const PayPulseInputPage = () => {
   const [open, setOpen] = useState(false);
@@ -112,7 +113,11 @@ const PayPulseInputPage = () => {
                 payPulsePrevReports?.length > 0 ? "col-lg-12" : "col-lg-12"
               } p-0    `}
             >
-              <PayPulseInput />
+              {userData?.user_type === "demo" ? (
+                <PayPulseInputDemo />
+              ) : (
+                <PayPulseInput />
+              )}
             </div>
           </div>
 

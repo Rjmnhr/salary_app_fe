@@ -46,7 +46,6 @@ const KPIClientComponent = () => {
         );
         // Create a new Set to store unique values
         const uniqueSet = new Set(filteredValues);
-        console.log("🚀 ~ .then ~ uniqueSet:", uniqueSet);
 
         // Convert the Set back to an array
         const uniqueArray = Array.from(uniqueSet);
@@ -122,7 +121,7 @@ const KPIClientComponent = () => {
                     border: "1px solid #ced4da",
                     outline: "none",
                     minHeight: "50px",
-                    padding:"10px"
+                    padding: "10px",
                   }}
                   placeholder="Select"
                   onChange={handleSectorChange}
