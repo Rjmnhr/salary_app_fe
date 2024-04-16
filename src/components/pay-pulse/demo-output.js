@@ -137,7 +137,22 @@ const PayPulseOutputDemo = ({ userPlan }) => {
           item.Industry === editableSector
       );
 
+      const filteredDataNoLoc = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.Experience === editableExperience &&
+          item.location === "Across India" &&
+          item.Industry === editableSector
+      );
+      const filteredDataNoExp = demoData.filter(
+        (item) =>
+          item.Title === storedUserInputs.title &&
+          item.location === editableLocation &&
+          item.Industry === editableSector
+      );
       setFilteredDemoData(filteredData);
+      setFilteredDemoDataNoLoc(filteredDataNoLoc);
+      setFilteredDemoDataNoExp(filteredDataNoExp);
       setEditableExperience(filteredData[0]?.Experience);
       setEditableLocation(filteredData[0]?.location);
     }
@@ -191,6 +206,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
           item.location === "Across India" &&
           item.Industry === storedUserInputs.sector
       );
+
       const filteredDataNoExp = demoData.filter(
         (item) =>
           item.Title === storedUserInputs.title &&
