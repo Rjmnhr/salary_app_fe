@@ -17,6 +17,12 @@ const SalaryTrendChartDemo = ({ data, width, height }) => {
     "Last 30 Days": data?.growth_last_30days,
   };
 
+  const values = Object.values(categorizedData);
+
+  // Finding the minimum and maximum values
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+
   const categories = Object.keys(categorizedData);
   const growthData = Object.values(categorizedData);
   const options = {
@@ -110,8 +116,8 @@ const SalaryTrendChartDemo = ({ data, width, height }) => {
           colors: "#a1acb8",
         },
       },
-      // min: data?.growth_last_30days - 0.2,
-      // max: data?.growth_last_90days + 0.2,
+      min: minValue - 1,
+      max: maxValue + 1,
     },
 
     axisBorder: {
