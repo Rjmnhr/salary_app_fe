@@ -255,6 +255,7 @@ const PayPulseInputDemo = () => {
                   value: d,
                   label: d,
                 }))}
+                disabled={selectedTitle ? false : true}
               />
             </div>
 
@@ -276,6 +277,7 @@ const PayPulseInputDemo = () => {
                 onChange={handleExperience}
                 notFoundContent={null}
                 optionLabelProp="label"
+                disabled={selectedTitle ? false : true}
               >
                 {experienceOptions.map((option) => (
                   <Select.Option
@@ -313,6 +315,7 @@ const PayPulseInputDemo = () => {
                 onChange={handleSkillSelectChange}
                 notFoundContent={null}
                 value={selectedSkills}
+                disabled={selectedTitle ? false : true}
               ></Select>
             </div>
 
@@ -363,7 +366,7 @@ const PayPulseInputDemo = () => {
                     value: d,
                     label: CapitalizeFirstLetter(d),
                   }))}
-                  disabled={validatedSectorInputs.length > 0 ? false : true}
+                  disabled={selectedTitle ? false : true}
                 />
               </div>
             )}

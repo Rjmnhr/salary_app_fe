@@ -655,4 +655,40 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Business Development Salary Benchmark: Insights for HR Professionals in Chennai",
+    subMain:
+      "Attention HR professionals! Are you seeking valuable insights to benchmark salaries for Business Development roles in Chennai? Look no further than our latest findings tailored to assist you in setting competitive compensation packages.",
+    mainImg: (
+      <img
+        style={{ width: "100%", height: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713262859/WhatsApp_Image_2024-04-16_at_15.37.25_wakjfl.jpg"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713262859/WhatsApp_Image_2024-04-16_at_15.37.25_wakjfl.jpg",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content: `
+
+          Our research highlights the pivotal skills that drive salaries for Business Development professionals with 2-5 years of experience in Chennai. Key competencies such as Technical Sales, Sales Management, Retail, Real Estate, Presentation, Oral/Verbal Communication, and Negotiation play a significant role in determining salary ranges.
+          
+          Stay at the forefront of salary trends with our real-time data, meticulously curated to match the Chennai market dynamics. Equip yourself with the knowledge to set benchmarks that attract and retain top talent in the business development sphere.
+          `,
+      },
+    ],
+    footer:
+      "Unlock the power of informed decision-making for salary structuring. Dive into our insights today and ensure your compensation packages align with the evolving market standards. Partner with Equipay Partners to make strategic moves that drive your business forward.",
+    footerButton: (
+      <a href="/pay-pulse">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
