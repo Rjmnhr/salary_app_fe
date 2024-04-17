@@ -433,7 +433,7 @@ const PayPulseLandingPage = () => {
               </div>
               <div className="col-lg-6">
                 <DemoRegisterComponent
-                  date={formattedDate}
+                  date={formattedDate ? formattedDate : selectedDates}
                   time={selectedTime}
                   setDate={setSelectedDates}
                   setTime={setSelectedTime}

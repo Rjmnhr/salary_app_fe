@@ -212,7 +212,8 @@ export const DemoRegisterComponent = ({
 
                 <div class="text-center mt-3">
                   <button
-                    className="w-75"
+                    className={`w-75`}
+                    style={{ cursor: `${date ? "pointer" : "not-allowed"}` }}
                     type="submit"
                     disabled={date ? false : true}
                   >

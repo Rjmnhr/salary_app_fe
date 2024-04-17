@@ -11,6 +11,8 @@ import {
 } from "@ant-design/icons";
 import { useApplicationContext } from "../../context/app-context";
 import { demoData } from "./demo-data";
+import { api_pay_pulse_saveActivity } from "../../config/config";
+import AxiosInstance from "../../config/axios";
 export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
 const PayPulseInputDemo = () => {
@@ -27,7 +29,7 @@ const PayPulseInputDemo = () => {
   const [validatedCityInputs, setValidatedCityInputs] = useState([]);
   const [validatedExpInputs, setValidatedExpInputs] = useState([]);
   const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
-
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -191,6 +193,35 @@ const PayPulseInputDemo = () => {
     setValidatedSectorInputs(uniqueIndustry);
   }, [selectedTitle]);
 
+  // const saveReport = async (reportID) => {
+  //   const formData = new FormData();
+
+  //   formData.append("title_id", selectedTitleID);
+  //   formData.append("title", selectedTitle);
+  //   formData.append("experience", experience);
+  //   formData.append("skills", JSON.stringify(selectedSkills));
+  //   formData.append("location ", location);
+  //   formData.append("sector", sector);
+  //   formData.append("report_id", reportID);
+
+  //   AxiosInstance.post(api_pay_pulse_saveActivity, formData, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       token: `Bearer ${accessToken}`,
+  //     },
+  //   })
+  //     .then(async (res) => {
+  //       const response = await res.data;
+  //       if (response.status === 200) {
+  //         navigate("/reports");
+  //       } else {
+  //         alert("Something went wrong");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   return (
     <>
       <div>
