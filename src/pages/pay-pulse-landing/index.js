@@ -15,6 +15,7 @@ import { DatePicker, Modal, Select, Switch, TimePicker } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import Contact from "../../components/contact";
+import DownloadSamplePDF from "../../components/pay-pulse/download-sample-pdf";
 
 const PayPulseLandingPage = () => {
   const navigate = useNavigate();
@@ -205,7 +206,7 @@ const PayPulseLandingPage = () => {
                         Register for Demo
                       </button>
 
-                      {/* <DownloadSamplePDF /> */}
+                      <DownloadSamplePDF />
                     </div>
 
                     {/* <a href="#contact" className="btn-get-started scrollto">
