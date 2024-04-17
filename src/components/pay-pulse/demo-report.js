@@ -345,11 +345,11 @@ const PayPulseReportComponentDemo = ({
                     </h5>
                   </div>
 
-                  <SalaryVsExpLineChartDemo
+                  {/* <SalaryVsExpLineChartDemo
                     width={chartWidth}
                     height={chartHeight}
                     data={experienceChartData}
-                  />
+                  /> */}
                 </div>
               </div>
 
