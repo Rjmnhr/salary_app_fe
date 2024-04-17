@@ -328,7 +328,7 @@ const PayPulseReportComponentDemo = ({
                   />
                 </div>
               </div>
-              <div
+              {/* <div
                 className="text-center mt-5 card custom-shadow d-lg-flex"
                 style={{
                   justifyContent: "center",
@@ -345,13 +345,13 @@ const PayPulseReportComponentDemo = ({
                     </h5>
                   </div>
 
-                  {/* <SalaryVsExpLineChartDemo
+                  <SalaryVsExpLineChartDemo
                     width={chartWidth}
                     height={chartHeight}
                     data={experienceChartData}
-                  /> */}
+                  />
                 </div>
-              </div>
+              </div> */}
 
               <div
                 className="mb-5 card custom-shadow mt-5"
