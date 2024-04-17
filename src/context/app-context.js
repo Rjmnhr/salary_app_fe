@@ -10,6 +10,7 @@ export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isPreviousReports, setIsPreviousReports] = useState(false);
   const [payPulsePrevReports, setPayPulsePrevReports] = useState([]);
+  const [payPulsePrevReportsDemo, setPayPulsePrevReportsDemo] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -64,6 +65,8 @@ export const AppContextProvider = ({ children }) => {
     setIsPreviousReports,
     payPulsePrevReports,
     setPayPulsePrevReports,
+    payPulsePrevReportsDemo,
+    setPayPulsePrevReportsDemo,
     isMobile,
     setIsMobile,
   };

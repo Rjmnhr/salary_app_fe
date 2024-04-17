@@ -3,12 +3,7 @@ import NavBar from "../layout/nav-bar";
 import { Helmet } from "react-helmet";
 import Card from "@mui/material/Card";
 
-import {
-  CalendarOutlined,
-  CloseCircleFilled,
-  EnvironmentOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+import { CloseCircleFilled, RightOutlined } from "@ant-design/icons";
 
 import { useApplicationContext } from "../../context/app-context";
 import {
@@ -18,7 +13,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Drawer } from "antd";
 import AxiosInstance from "../../config/axios";
-import { api_pay_pulse_getActivity } from "../../config/config";
+import {
+  api_pay_pulse_getActivity,
+  api_pay_pulse_getActivity_demo,
+} from "../../config/config";
 import PayPulseInputDemo from "./demo-input";
 
 const PayPulseInputPage = () => {
@@ -30,14 +28,19 @@ const PayPulseInputPage = () => {
   const onClose = () => {
     setOpen(false);
   };
-  const { userData, payPulsePrevReports, setPayPulsePrevReports, isMobile } =
-    useApplicationContext();
+  const {
+    userData,
+    setPayPulsePrevReports,
+    setPayPulsePrevReportsDemo,
+    payPulsePrevReportsDemo,
+    isMobile,
+  } = useApplicationContext();
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    AxiosInstance.post(
+    AxiosInstance.get(
       api_pay_pulse_getActivity,
-      { payload: "payload" },
+
       {
         headers: {
           "Content-Type": "application/json",
@@ -53,6 +56,34 @@ const PayPulseInputPage = () => {
 
         if (data.status === 200) {
           setPayPulsePrevReports(data.data);
+        } else {
+          return navigate(login_app_path);
+        }
+      })
+
+      .catch((err) => console.log(err));
+
+    //eslint-disable-next-line
+  }, [userData, accessToken, navigate]);
+  useEffect(() => {
+    AxiosInstance.get(
+      api_pay_pulse_getActivity_demo,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then(async (response) => {
+        const data = await response.data;
+
+        if (response.status === 403 || response.status === 401)
+          return navigate(login_app_path);
+
+        if (data.status === 200) {
+          setPayPulsePrevReportsDemo(data.data);
         } else {
           return navigate(login_app_path);
         }
@@ -86,7 +117,7 @@ const PayPulseInputPage = () => {
             height: "88vh",
           }}
         >
-          {payPulsePrevReports?.length > 0 && (
+          {payPulsePrevReportsDemo?.length > 0 && (
             <div className="d-flex justify-content-start">
               <button
                 className="btn  p-lg-3 shadow"
@@ -108,10 +139,10 @@ const PayPulseInputPage = () => {
           <div className="container">
             <div
               className={` ${
-                payPulsePrevReports?.length > 0 ? "col-lg-12" : "col-lg-12"
+                payPulsePrevReportsDemo?.length > 0 ? "col-lg-12" : "col-lg-12"
               } p-0    `}
             >
-              <PayPulseInputDemo />
+              <PayPulseInputDemo prevReports={payPulsePrevReportsDemo} />
             </div>
           </div>
 
@@ -134,7 +165,7 @@ const PayPulseInputPage = () => {
               </button>
             )}
 
-            <PreviousReportComponent prevReports={payPulsePrevReports} />
+            <PreviousReportComponent prevReports={payPulsePrevReportsDemo} />
           </Drawer>
         </div>
       </div>
@@ -149,7 +180,16 @@ const PreviousReportComponent = ({ prevReports }) => {
   const [activeIndex, setActiveIndex] = useState(
     parseInt(sessionStorage.getItem("activeIndex")) || 0
   );
-
+  function SkillsList({ skills }) {
+    return (
+      <div>
+        <p>
+          <span>Skills :</span>{" "}
+          <span style={{ fontSize: "14px" }}> {skills.join(", ")}</span>
+        </p>
+      </div>
+    );
+  }
   return (
     <div>
       {prevReports
@@ -165,6 +205,16 @@ const PreviousReportComponent = ({ prevReports }) => {
                 onClick={() => {
                   setActiveIndex(index);
                   sessionStorage.setItem("activeIndex", index);
+                  sessionStorage.setItem(
+                    "user-inputs",
+                    JSON.stringify({
+                      experience: data.experience,
+                      location: data.location,
+                      title: data.title,
+                      skills: data?.skills,
+                      sector: data.sector,
+                    })
+                  );
                   navigate(pay_pulse_dashboard_path);
                 }}
                 style={{ cursor: "pointer" }}
@@ -172,29 +222,11 @@ const PreviousReportComponent = ({ prevReports }) => {
                 <p style={{ fontWeight: "500" }} className="fw-b text-primary">
                   {data.title}
                 </p>
-                <div className="d-flex justify-content-start align-items-center">
-                  <p
-                    className=" border-right px-2"
-                    style={{
-                      borderRight: "1px solid",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                    }}
-                  >
-                    <CalendarOutlined /> {data.experience} years
-                  </p>
-                  <p
-                    className=" border-right px-2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "3px",
-                    }}
-                  >
-                    {" "}
-                    <EnvironmentOutlined /> {data.location}
-                  </p>
+                <div>
+                  <p>Experience : {data.experience} years</p>
+                  <p> Location : {data.location}</p>
+                  <p> Sector : {data.sector}</p>
+                  <SkillsList skills={JSON.parse(data?.skills)} />
                 </div>
               </Card>
             );

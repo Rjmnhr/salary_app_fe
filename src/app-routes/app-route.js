@@ -61,6 +61,7 @@ import PayPulseInputPage from "../components/pay-pulse/input-page.js";
 import { useApplicationContext } from "../context/app-context.js";
 import PrivacyPolicy from "../legal-policies/privacy-policy.js";
 import TermsAndConditions from "../legal-policies/terms-and-conditions.js";
+import NavBar from "../components/layout/nav-bar.js";
 
 const AppRoute = () => {
   const { isMobile } = useApplicationContext();
@@ -236,7 +237,10 @@ const AppRoute = () => {
           path="/contact"
           element={
             <>
-              <Contact />
+              <NavBar />
+              <div style={{ marginTop: "100px" }}>
+                <Contact />
+              </div>
             </>
           }
         />

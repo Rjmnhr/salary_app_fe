@@ -39,10 +39,13 @@ const PayPulseOutputDemo = ({ userPlan }) => {
   const [expOptions, setExpOptions] = useState(
     userInputOptions?.experienceOptions
   );
+
   const [skillsOptions, setSkillsOptions] = useState(
-    JSON.parse(userInputOptions?.skills || "") || []
+    userInputOptions?.skills ? JSON.parse(userInputOptions?.skills) : []
   );
-  const parsedSkills = JSON.parse(userInputOptions?.skills || "") || [];
+  const parsedSkills = userInputOptions?.skills
+    ? JSON.parse(userInputOptions?.skills)
+    : [];
   //eslint-disable-next-line
   const [sectorOptions, setSectorOptions] = useState([]);
   const [filteredDemoData, setFilteredDemoData] = useState([]);
@@ -245,11 +248,6 @@ const PayPulseOutputDemo = ({ userPlan }) => {
             transform: "transition 0.3s all ease",
           }}
         >
-          {userPlan === "Premium" ? (
-            <p>Unlimited Reports</p>
-          ) : (
-            <p>Remaining reports : 0</p>
-          )}
           <Modal closable={false} visible={isModalVisible} footer={modalFooter}>
             <div>
               <div className="mb-3  d-flex align-items-center">
@@ -323,7 +321,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                     value={editableExperience}
                     onChange={handleSelectEditableExperience}
                     notFoundContent={null}
-                    options={expOptions.map((e) => ({
+                    options={(expOptions || []).map((e) => ({
                       value: e,
                       label: e,
                     }))}

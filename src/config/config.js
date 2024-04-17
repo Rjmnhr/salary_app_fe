@@ -2,7 +2,11 @@ export const api_track_data_1 = "/api/track-data/store3";
 export const api_track_data_2 = "/api/track-data/store2";
 
 export const api_pay_pulse_saveActivity = "/api/pay-pulse/save-activity";
+export const api_pay_pulse_saveActivity_demo =
+  "/api/pay-pulse/save-activity-demo";
 export const api_pay_pulse_getActivity = "/api/pay-pulse/get-activity";
+export const api_pay_pulse_getActivity_demo =
+  "/api/pay-pulse/get-activity-demo";
 export const api_pay_pulse_updateActivity = "/api/pay-pulse/update-activity";
 
 export const api_pay_pulse_titles = "/api/pay-pulse/titles";

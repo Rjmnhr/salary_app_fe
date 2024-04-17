@@ -2,20 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import "./custom-style.css";
 import { useNavigate } from "react-router-dom";
-import { Input, Select, Tag, Space, Modal } from "antd";
+import { Input, Select, Tag, Modal } from "antd";
 import { CapitalizeFirstLetter } from "../../utils/price-a-job-helper-functions";
-import {
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
+import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useApplicationContext } from "../../context/app-context";
 import { demoData } from "./demo-data";
-import { api_pay_pulse_saveActivity } from "../../config/config";
+import { api_pay_pulse_saveActivity_demo } from "../../config/config";
 import AxiosInstance from "../../config/axios";
-export const experienceOptions = ["0-2", "2-5", "5-8", "8-11", "11-14", "15+"];
 
-const PayPulseInputDemo = () => {
+const PayPulseInputDemo = ({ prevReports }) => {
   const [availableTitles, setAvailableTitles] = useState([]);
   const [availableTitlesFetched, setAvailableTitlesFetched] = useState([]);
   const [selectedTitle, setSelectedTitle] = useState(null);
@@ -31,14 +26,18 @@ const PayPulseInputDemo = () => {
   const [validatedSectorInputs, setValidatedSectorInputs] = useState([]);
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
-
+  const [isTrailModalVisible, setIsTrailModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   sessionStorage.setItem("report-updated", false);
   sessionStorage.removeItem("activeIndex");
   sessionStorage.removeItem("saveTheReport");
 
   const [modalVisible, setModalVisible] = useState(false);
-  const { isMobile } = useApplicationContext();
+  const { isMobile, userData } = useApplicationContext();
+
+  const closeTrialModal = () => {
+    setIsTrailModalVisible(false);
+  };
 
   const closeModal = () => {
     setModalVisible(false);
@@ -56,8 +55,6 @@ const PayPulseInputDemo = () => {
 
   const handleLocationChange = (value) => {
     setLocation(value);
-
-    setExperience("");
   };
 
   const handleSectorSearch = (newValue) => {
@@ -130,9 +127,13 @@ const PayPulseInputDemo = () => {
   };
 
   const handleSubmit = (e) => {
+    if (prevReports?.length > 0) {
+      setIsTrailModalVisible(true);
+      return;
+    }
     setIsLoading(true);
     e.preventDefault();
-    navigate("/reports");
+    const reportID = Date.now() + Math.floor(Math.random() * 1000);
 
     sessionStorage.setItem(
       "user-inputs",
@@ -154,6 +155,12 @@ const PayPulseInputDemo = () => {
         sector: validatedSectorInputs,
       })
     );
+
+    if (userData?.user_type === "user") {
+      saveReport(reportID);
+    }
+
+    navigate("/reports");
   };
 
   useEffect(() => {
@@ -193,35 +200,34 @@ const PayPulseInputDemo = () => {
     setValidatedSectorInputs(uniqueIndustry);
   }, [selectedTitle]);
 
-  // const saveReport = async (reportID) => {
-  //   const formData = new FormData();
+  const saveReport = async (reportID) => {
+    const formData = new FormData();
 
-  //   formData.append("title_id", selectedTitleID);
-  //   formData.append("title", selectedTitle);
-  //   formData.append("experience", experience);
-  //   formData.append("skills", JSON.stringify(selectedSkills));
-  //   formData.append("location ", location);
-  //   formData.append("sector", sector);
-  //   formData.append("report_id", reportID);
+    formData.append("title", selectedTitle);
+    formData.append("experience", experience);
+    formData.append("skills", JSON.stringify(selectedSkills));
+    formData.append("location ", location);
+    formData.append("sector", sector);
+    formData.append("report_id", reportID);
 
-  //   AxiosInstance.post(api_pay_pulse_saveActivity, formData, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       token: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then(async (res) => {
-  //       const response = await res.data;
-  //       if (response.status === 200) {
-  //         navigate("/reports");
-  //       } else {
-  //         alert("Something went wrong");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+    AxiosInstance.post(api_pay_pulse_saveActivity_demo, formData, {
+      headers: {
+        "Content-Type": "application/json",
+        token: `Bearer ${accessToken}`,
+      },
+    })
+      .then(async (res) => {
+        const response = await res.data;
+        if (response.status === 200) {
+          navigate("/reports");
+        } else {
+          alert("Something went wrong");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <div>
@@ -311,19 +317,8 @@ const PayPulseInputDemo = () => {
                 optionLabelProp="label"
                 disabled={selectedTitle ? false : true}
               >
-                {experienceOptions.map((option) => (
-                  <Select.Option
-                    key={option}
-                    value={option}
-                    label={
-                      <Space>
-                        {validatedExpInputs.includes(option) ? null : (
-                          <CloseCircleOutlined />
-                        )}
-                        {option}
-                      </Space>
-                    }
-                  >
+                {validatedExpInputs.map((option) => (
+                  <Select.Option key={option} value={option}>
                     {option}
                   </Select.Option>
                 ))}
@@ -441,6 +436,10 @@ const PayPulseInputDemo = () => {
           </div>
         </div>
       </div>
+      <TrialEndedModalContainer
+        visible={isTrailModalVisible}
+        onClose={closeTrialModal}
+      />
     </>
   );
 };
@@ -462,6 +461,32 @@ const DataAlertModal = ({ visible, onClose, title }) => {
           working on gathering more information. Please check back soon or
           select a different job role.
         </p>
+      </div>
+    </Modal>
+  );
+};
+
+const TrialEndedModalContainer = ({ visible, onClose }) => {
+  const navigate = useNavigate();
+  return (
+    <Modal visible={visible} centered footer={null} onCancel={onClose}>
+      <div className="text-center">
+        <img
+          width={60}
+          src="https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713340051/warning_hrr1ip.png"
+          alt=""
+          className="mb-3"
+        />
+        <h5>Your free trial has ended</h5>
+        <p>
+          Please contact us to discuss our packages and upgrade your account.
+        </p>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/contact")}
+        >
+          Contact now
+        </button>
       </div>
     </Modal>
   );
