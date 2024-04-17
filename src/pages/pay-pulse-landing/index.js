@@ -205,8 +205,8 @@ const PayPulseLandingPage = () => {
                       >
                         Register for Demo
                       </button>
-
-                      <DownloadSamplePDF />
+                      {/* 
+                      <DownloadSamplePDF /> */}
                     </div>
 
                     {/* <a href="#contact" className="btn-get-started scrollto">
