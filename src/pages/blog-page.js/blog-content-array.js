@@ -7,7 +7,7 @@ export const BlogContentArr = [
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Scientist and what skills demand more money?",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={dataScientistImg}
         alt="job compensation"
@@ -47,7 +47,7 @@ export const BlogContentArr = [
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Analyst and what skills demand more money?",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1705064715/iljlk4kpznrnv3fmmt1j.png"
@@ -90,7 +90,7 @@ export const BlogContentArr = [
       "Forget traditional salary surveys or outdated platforms. Determining the right compensation for a Software Engineer can be challenging. This snapshot illustrates what a Software Engineer with 2 years of experience typically seeks in Bangalore",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1705648419/le5k1ymofpk7zy6pjctj.jpg"
@@ -213,7 +213,7 @@ export const BlogContentArr = [
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a UI/UX Designer and what skills demand more money?",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1706899177/kn82mgllwbsma5b9ceu3.jpg"
@@ -256,7 +256,7 @@ export const BlogContentArr = [
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Customer Care and what skills demand more money?",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707232556/qs1rlyrwymlvlrth9lmb.jpg"
@@ -299,7 +299,7 @@ export const BlogContentArr = [
       "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a SAP Consultant and what skills demand more money?",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707480563/yf3djwhxoep34ey7nrbi.jpg"
@@ -341,7 +341,7 @@ export const BlogContentArr = [
     subMain: "",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707730620/rt1ghfdtwz6yf4o9syrf.jpg"
@@ -373,7 +373,7 @@ export const BlogContentArr = [
       "Explore the latest salary insights for Electrical Engineers in Chennai with six years of experience.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1707887473/hji4fikstzi7m6umvuxy.jpg"
@@ -405,7 +405,7 @@ export const BlogContentArr = [
       "Explore the latest salary dynamics for Production Engineers in Delhi with three years of experience.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708350389/rg7uivfj3eqdj4lbeevs.jpg"
@@ -437,7 +437,7 @@ export const BlogContentArr = [
       "Explore the latest salary dynamics for Android Developer in Delhi with three years of experience.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708524094/n9a0txibt6mcdhltys8g.jpg"
@@ -469,7 +469,7 @@ export const BlogContentArr = [
       "Explore the latest salary insights for Account Manager in Chennai with four years of experience. ",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1708698766/qjia7tllt5stwyrswxmt.jpg"
@@ -501,7 +501,7 @@ export const BlogContentArr = [
       "Dive into our comprehensive compensation benchmarking analysis for Area Sales Manager (B2B) in Bangalore with four years of experience",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1709026874/u8mm7hxqq5e9h84sxp1r.jpg"
@@ -533,7 +533,7 @@ export const BlogContentArr = [
       "Dive into our comprehensive compensation benchmarking analysis for Account Manager in Bangalore with four years of experience.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1709729373/mfpupuptdeneskb5dw5o.jpg"
@@ -565,7 +565,7 @@ export const BlogContentArr = [
       "Dive into our comprehensive compensation benchmarking analysis for Marketing Manager in Bangalore with 2-5 years of experience.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1710243886/g2psq0onofbghqqrd7pl.jpg"
@@ -597,7 +597,7 @@ export const BlogContentArr = [
       "Curious about how your skills as an Automation Tester impact your salary in the IT and Service industry? Dive into our latest salary insights tailored for professionals like you.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712042702/syoyrvxguknsn3orcs2y.jpg"
@@ -629,7 +629,7 @@ export const BlogContentArr = [
       "Curious about how your skills as an Devops Engineer impact your salary in the IT and Service industry? Dive into our latest salary insights tailored for professionals like you.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1712662547/mlxhunwylss0edwqgsro.jpg"
@@ -661,7 +661,7 @@ export const BlogContentArr = [
       "Attention HR professionals! Are you seeking valuable insights to benchmark salaries for Business Development roles in Chennai? Look no further than our latest findings tailored to assist you in setting competitive compensation packages.",
     mainImg: (
       <img
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%" }}
         className="mb-3"
         src={
           "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713262859/WhatsApp_Image_2024-04-16_at_15.37.25_wakjfl.jpg"
