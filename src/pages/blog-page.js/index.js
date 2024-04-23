@@ -80,7 +80,7 @@ const IndividualBlogPage = () => {
               ) : (
                 ""
               )}
-              <p style={{ fontWeight: "bold" }}>{selectedBlog.footer}</p>
+              <p style={{ fontWeight: "" }}>{selectedBlog.footer}</p>
 
               <a href="/pay-pulse">
                 <button className="btn btn-lg btn-primary">Click here</button>

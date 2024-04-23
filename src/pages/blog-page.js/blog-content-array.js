@@ -691,4 +691,38 @@ export const BlogContentArr = [
       </a>
     ),
   },
+  {
+    main: "Salary Benchmarking for Solution Architects in Chennai",
+    subMain:
+      "Attention HR professionals,Are you in search of valuable insights to benchmark salaries for Solution Architect roles in Chennai? Look no further than our latest research, tailored to empower you in crafting competitive compensation packages.",
+    mainImg: (
+      <img
+        style={{ width: "100%" }}
+        className="mb-3"
+        src={
+          "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713873723/23rd_APR_Salary_Benchmarking_for_Solution_Architects_in_Chennai_smmdyr.png"
+        }
+        alt="job compensation"
+      />
+    ),
+    imgPreview:
+      "https://res.cloudinary.com/dsw1ubwyh/image/upload/v1713873723/23rd_APR_Salary_Benchmarking_for_Solution_Architects_in_Chennai_smmdyr.png",
+    subContent: [
+      {
+        no: 1,
+        subHeading: "",
+        content: `
+
+        Our study sheds light on the pivotal skills influencing salaries for Solution Architects with 2-5 years of experience in Chennai. Key proficiencies such as Spring Boot, Security Information and Event Management (SIEM), Salesforce, React.js, SQL, and Python play a crucial role in determining salary bands.Stay ahead of the curve with our up-to-date data, meticulously curated to reflect the dynamics of the Chennai market. Arm yourself with the intelligence needed to establish benchmarks that attract and retain top talent in the solution architecture domain.
+          `,
+      },
+    ],
+    footer:
+      "Unlock the potential of informed decision-making in structuring salaries. Delve into our insights today and ensure your compensation offerings are in line with the shifting market standards. Collaborate with Equipay Partners to execute strategic maneuvers that propel your business towards success.",
+    footerButton: (
+      <a href="/pay-pulse">
+        <button className="btn btn-lg btn-primary">Click here</button>
+      </a>
+    ),
+  },
 ];
