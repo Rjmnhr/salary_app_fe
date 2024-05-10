@@ -228,7 +228,7 @@ const NavBar = ({ bgInput }) => {
           <p className="m-0">{userData?.first_name}</p>
           <Avatar
             style={{
-              backgroundColor: "#007bff",
+              backgroundColor: "#5bbcff",
               verticalAlign: "middle",
               marginLeft: "10px",
             }}
@@ -362,7 +362,7 @@ const NavBar = ({ bgInput }) => {
                         <a>
                           <Avatar
                             style={{
-                              backgroundColor: "#007bff",
+                              backgroundColor: "#5bbcff",
                               verticalAlign: "middle",
                             }}
                             size="medium"

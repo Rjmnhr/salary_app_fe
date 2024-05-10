@@ -333,7 +333,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3"
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}
@@ -344,7 +344,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3 "
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}
@@ -356,7 +356,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3"
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}
@@ -392,7 +392,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3"
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}
@@ -404,7 +404,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3 "
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}
@@ -416,7 +416,7 @@ const HomePage = () => {
                       {" "}
                       <SendOutlined
                         className="mr-3"
-                        style={{ color: "#007bff" }}
+                        style={{ color: "#5bbcff" }}
                       />{" "}
                       <span>
                         {" "}

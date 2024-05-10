@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import AxiosInstance from "../config/axios";
+import { api_pay_pulse_getActivity_demo } from "../config/config";
 
 const MyContext = createContext();
 
@@ -11,7 +12,9 @@ export const AppContextProvider = ({ children }) => {
   const [isPreviousReports, setIsPreviousReports] = useState(false);
   const [payPulsePrevReports, setPayPulsePrevReports] = useState([]);
   const [payPulsePrevReportsDemo, setPayPulsePrevReportsDemo] = useState([]);
+  const [isTrailActive, setIsTrailActive] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -52,6 +55,35 @@ export const AppContextProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (userData) {
+      AxiosInstance.get(
+        api_pay_pulse_getActivity_demo,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      )
+        .then(async (response) => {
+          const data = await response.data;
+
+          if (data.status === 200) {
+            setPayPulsePrevReportsDemo(data.data);
+            if (data?.data?.length > 0) {
+              setIsTrailActive(false);
+            } else {
+              setIsTrailActive(true);
+            }
+          }
+        })
+
+        .catch((err) => console.log(err));
+    }
+  }, [userData, accessToken]);
+
   const value = {
     isSignIn,
     setIsSignIn,
@@ -69,6 +101,7 @@ export const AppContextProvider = ({ children }) => {
     setPayPulsePrevReportsDemo,
     isMobile,
     setIsMobile,
+    isTrailActive,
   };
 
   return <MyContext.Provider value={value}>{children}</MyContext.Provider>;

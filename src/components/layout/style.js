@@ -52,7 +52,7 @@ export const NavBarStyled = styled.div`
     transform: scale(0.9);
   }
   a:hover {
-    color: #007bff !important;
+    color: #5bbcff !important;
     cursor: pointer;
   }
 `;

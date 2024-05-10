@@ -45,7 +45,6 @@ import {
   login_path,
   otp_validation_path,
   pay_pulse_dashboard_path,
-  pay_pulse_input_path,
   pay_pulse_landing_path,
   pay_pulse_output_path,
   privacy_policy_path,
@@ -57,7 +56,6 @@ import {
 import Unauthorized from "../components/misc/unauthorized.js";
 import PriceAJobVideoLatest from "../components/pay-pulse/demo-video-latest.js";
 import AdvisoryPage from "../pages/advisory-page/index.js";
-import PayPulseInputPage from "../components/pay-pulse/input-page.js";
 import { useApplicationContext } from "../context/app-context.js";
 import PrivacyPolicy from "../legal-policies/privacy-policy.js";
 import TermsAndConditions from "../legal-policies/terms-and-conditions.js";
@@ -93,7 +91,7 @@ const AppRoute = () => {
             </>
           }
         />
-        <Route path={pay_pulse_input_path} element={<PayPulseInputPage />} />
+
         <Route
           path={exec_rem_input_path}
           element={

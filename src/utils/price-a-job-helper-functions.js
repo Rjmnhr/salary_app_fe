@@ -133,3 +133,11 @@ const findMinSalary = (salaries, threshold) => {
   }
   return minSalary;
 };
+
+export const goToExternalURL = (url, userType, accessBoolean) => {
+  // Redirect the browser to the external URL
+  const accessToken = localStorage.getItem("accessToken");
+
+  window.location.href = url;
+  window.location.href = `${url}?token=${accessToken}&user=${userType}&access=${accessBoolean}`;
+};

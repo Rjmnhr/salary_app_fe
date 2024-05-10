@@ -1,91 +1,80 @@
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    position: relative;
-    background-color: #ffffff;
-    border: none;
-    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-    padding:0;
+  position: relative;
+  background-color: #ffffff;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  padding: 0;
 }
 
-.selected-tab-container{
-    border: 2px solid blue;
+.selected-tab-container {
+  border: 2px solid blue;
 }
-
 
 [class*=" ant-input"] {
- 
-    font-size: 16px; 
+  font-size: 16px;
 
-    border-radius: 0px;
+  border-radius: 0px;
 }
-
 
 .ant-input-affix-wrapper {
-    border-radius: 0px;
-    font-size: 16px; 
+  border-radius: 0px;
+  font-size: 16px;
 }
-
 
 /* .skill-btn{
     border-radius: 18px;
 } */
 
-.skill-btn:hover{
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
+.skill-btn:hover {
+  background-color: #5bbcff;
+  color: white;
+  cursor: pointer;
 }
 
-
-.ant-tabs >.ant-tabs-nav .ant-tabs-nav-list {
-    position: relative;
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
+  position: relative;
   display: block;
-    transition: opacity 0.3s ;
+  transition: opacity 0.3s;
 }
 
-
-.ant-tabs >.ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs >div>.ant-tabs-nav .ant-tabs-nav-wrap {
-    position: relative;
-display: block;
-    flex: auto;
-    align-self: stretch;
-    overflow: hidden;
-    white-space: nowrap;
-    transform: translate(0);
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+  position: relative;
+  display: block;
+  flex: auto;
+  align-self: stretch;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translate(0);
 }
 
-
-.scrollable-container::-webkit-scrollbar{
-    display: none;
+.scrollable-container::-webkit-scrollbar {
+  display: none;
 }
 
-.selected-tab{
-    border: 2px solid blue;
+.selected-tab {
+  border: 2px solid blue;
 }
 
-
-.selectable-tab:hover{
-    transform: scale3d(2);
+.selectable-tab:hover {
+  transform: scale3d(2);
 }
 
-.custom-shadow{
-
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+.custom-shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
-
 
 .chart-container {
-    position: "relative";
+  position: "relative";
+}
 
-  }
-  
-  .y-axis-title {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%) rotate(-90deg);
-    transform-origin: center;
-    white-space: nowrap; /* Prevent text from wrapping */
-    font-size: 14px; /* Adjust font size as needed */
-    color: #a1acb8; /* Adjust color as needed */
-  }
-  
+.y-axis-title {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  white-space: nowrap; /* Prevent text from wrapping */
+  font-size: 14px; /* Adjust font size as needed */
+  color: #a1acb8; /* Adjust color as needed */
+}

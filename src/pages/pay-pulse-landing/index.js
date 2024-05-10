@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import AxiosInstance from "../../config/axios";
 import NavBar from "../../components/layout/nav-bar";
 import FooterComponent from "../../components/layout/footer";
-import { pay_pulse_input_path } from "../../config/constant";
+import { login_app_path, pay_pulse_input_path } from "../../config/constant";
 import { PayPulsePageStyled } from "./style";
 import { useApplicationContext } from "../../context/app-context";
 import { ArrowRightOutlined } from "@ant-design/icons";
@@ -15,11 +15,11 @@ import { DatePicker, Modal, Select, Switch, TimePicker } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import Contact from "../../components/contact";
-import DownloadSamplePDF from "../../components/pay-pulse/download-sample-pdf";
+import { goToExternalURL } from "../../utils/price-a-job-helper-functions";
 
 const PayPulseLandingPage = () => {
   const navigate = useNavigate();
-  const { userData } = useApplicationContext();
+  const { userData, isTrailActive } = useApplicationContext();
   const location = window.location.href;
   const userID = localStorage.getItem("user_id");
   sessionStorage.removeItem("activeIndex");
@@ -127,12 +127,6 @@ const PayPulseLandingPage = () => {
   }, [location, userID]);
 
   useEffect(() => {
-    if (userData) {
-      navigate(pay_pulse_input_path);
-    }
-  }, [userData, navigate]);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setModalVisible(true);
     }, 15000); // Open modal after 15 seconds
@@ -192,7 +186,17 @@ const PayPulseLandingPage = () => {
                     </h1>
                     <div className="w-100 text-left">
                       <button
-                        onClick={() => navigate(pay_pulse_input_path)}
+                        onClick={() => {
+                          if (userData) {
+                            goToExternalURL(
+                              pay_pulse_input_path,
+                              userData?.user_type,
+                              isTrailActive
+                            );
+                          } else {
+                            navigate(login_app_path);
+                          }
+                        }}
                         className="custom-demo-btn mt-3 mb-3 shadow p-3"
                       >
                         <span className="mr-3">One time trial</span>{" "}

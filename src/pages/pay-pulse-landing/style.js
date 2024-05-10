@@ -6,8 +6,8 @@ export const PayPulsePageStyled = styled.div`
 
   .custom-button:hover {
     background: white;
-    color: #007bff;
-    border: 2px solid #007bff;
+    color: #5bbcff;
+    border: 2px solid #5bbcff;
   }
 
   .custom-demo-btn {
@@ -19,7 +19,7 @@ export const PayPulsePageStyled = styled.div`
     letter-spacing: 1px;
     text-decoration: none;
     color: white;
-    background: #007bff;
+    background: #5bbcff;
     cursor: pointer;
     transition: ease-out 0.5s;
     border: 2px solid white;
@@ -30,7 +30,7 @@ export const PayPulsePageStyled = styled.div`
   .custom-demo-btn:hover {
     color: #1a6cb6;
     /* box-shadow: inset 0 -100px 0 0 white; */
-    border: 2px solid #007bff;
+    border: 2px solid #5bbcff;
 
     background: white;
   }
@@ -47,19 +47,19 @@ export const PayPulsePageStyled = styled.div`
     font-size: 18px;
     letter-spacing: 1px;
     text-decoration: none;
-    color: #007bff;
+    color: #5bbcff;
     background: white;
     cursor: pointer;
     transition: ease-out 0.5s;
     border: 2px solid white;
     border-radius: 1rem;
-    box-shadow: inset 0 0 0 0 #007bff;
+    box-shadow: inset 0 0 0 0 #5bbcff;
   }
 
   .custom-download-btn:hover {
     color: #1a6cb6;
     /* box-shadow: inset 0 -100px 0 0 white; */
-    border: 2px solid #007bff;
+    border: 2px solid #5bbcff;
 
     background: white;
   }
