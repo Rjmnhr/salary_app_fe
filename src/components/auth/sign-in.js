@@ -25,8 +25,7 @@ const SignIn = () => {
   const path = searchParams.has("p")
     ? searchParams.get("p")
     : pay_pulse_input_path;
-  const { setIsSignIn, setUserData, userData, isTrailActive } =
-    useApplicationContext();
+  const { setIsSignIn, setUserData, isTrailActive } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSwitch = () => {
@@ -71,11 +70,7 @@ const SignIn = () => {
       setEmail("");
       setPassword("");
       if (path === pay_pulse_input_path) {
-        goToExternalURL(
-          pay_pulse_input_path,
-          userData?.user_type,
-          isTrailActive
-        );
+        goToExternalURL(pay_pulse_input_path, data?.user_type, isTrailActive);
       } else {
         navigate(path);
       }
