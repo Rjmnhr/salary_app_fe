@@ -45,6 +45,7 @@ const PayPulseLandingPage = () => {
       setDatePicker(date);
     }
     setSelectedDates(date);
+    setSelectedTime("4:00 PM");
   };
   const handleTimeSelect = (time, timeString) => {
     // Check if timeString is not null or undefined
@@ -398,7 +399,7 @@ const PayPulseLandingPage = () => {
                     placeholder="Select dates"
                     onChange={(value) => handleDatesSelect(value, false)}
                     value={selectedDates}
-                    className="form-control "
+                    className="form-control primary-input "
                     disabled={isCustomizationEnabled}
                   >
                     {generateDateOptions().map((date) => (
@@ -408,32 +409,37 @@ const PayPulseLandingPage = () => {
                     ))}
                   </Select>
                 </div>
-                <p>You can also choose a customized time if you prefer.</p>{" "}
-                <Switch
-                  // checkedChildren="Customize"
-                  // unCheckedChildren="Customize"
-                  onChange={handleCustomizationSwitch}
-                />
-                <div class=" form-group">
-                  <DatePicker
-                    value={datePicker}
-                    style={{ width: "100%", marginTop: "10px" }}
-                    placeholder="Select custom date"
-                    onChange={(value) => handleDatesSelect(value, true)}
-                    disabled={!isCustomizationEnabled}
-                    className="mb-3 form-control "
-                    showTime={false}
+                <p className="">
+                  You can also choose a customized time if you prefer{" "}
+                  <Switch
+                    className="ml-2"
+                    // checkedChildren="Customize"
+                    // unCheckedChildren="Customize"
+                    onChange={handleCustomizationSwitch}
                   />
-                </div>
-                <div class=" form-group">
-                  <TimePicker
-                    style={{ width: "100%", marginTop: "10px" }}
-                    placeholder="Select custom time"
-                    disabled={!isCustomizationEnabled}
-                    className="mb-3 form-control "
-                    onChange={handleTimeSelect}
-                    format="HH:mm"
-                  />
+                </p>{" "}
+                <div className="row">
+                  <div class=" form-group col-lg-6">
+                    <DatePicker
+                      value={datePicker}
+                      style={{ width: "100%", marginTop: "10px" }}
+                      placeholder="Select custom date"
+                      onChange={(value) => handleDatesSelect(value, true)}
+                      disabled={!isCustomizationEnabled}
+                      className=" form-control primary-input"
+                      showTime={false}
+                    />
+                  </div>
+                  <div class=" form-group col-lg-6 ">
+                    <TimePicker
+                      style={{ width: "100%", marginTop: "10px" }}
+                      placeholder="Select custom time"
+                      disabled={!isCustomizationEnabled}
+                      className="mb-2 form-control primary-input "
+                      onChange={handleTimeSelect}
+                      format="HH:mm"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="col-lg-6">

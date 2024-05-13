@@ -157,9 +157,9 @@ const Contact = () => {
                       required
                       type="text"
                       name="name"
-                      className="form-control"
+                      className="form-control "
                       id="name"
-                      placeholder="Your Name"
+                      placeholder="Name"
                       data-rule="minlen:4"
                       data-msg="Please enter at least 4 chars"
                       onChange={(e) => setName(e.target.value)}
@@ -173,7 +173,7 @@ const Contact = () => {
                       className="form-control"
                       name="email"
                       id="email"
-                      placeholder="Your Email"
+                      placeholder="Email"
                       data-rule="email"
                       data-msg="Please enter a valid email"
                       onChange={(e) => setEmail(e.target.value)}

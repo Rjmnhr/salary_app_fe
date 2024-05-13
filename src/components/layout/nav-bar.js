@@ -9,6 +9,7 @@ import {
   advisory_page_path,
   blog_page_path,
   home_path,
+  login_path,
   pay_pulse_landing_path,
   salary_survey,
   sales_incentive_page_path,
@@ -374,7 +375,10 @@ const NavBar = ({ bgInput }) => {
                     </Dropdown>
                   </>
                 ) : (
-                  ""
+                  <li onClick={() => navigate(login_path)}>
+                    {/*eslint-disable-next-line*/}
+                    <a style={{ fontSize: "16px" }}>Login</a>
+                  </li>
                 )}
               </ul>
             </nav>
