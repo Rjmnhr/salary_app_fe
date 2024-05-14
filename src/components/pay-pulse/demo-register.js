@@ -104,7 +104,7 @@ export const DemoRegisterComponent = ({ date, time, setDate, setTime }) => {
                     rules={[
                       {
                         required: true,
-                        message: "Please input your phone number!",
+                        message: "Please input a valid phone number!",
                       },
                     ]}
                   >
@@ -112,6 +112,10 @@ export const DemoRegisterComponent = ({ date, time, setDate, setTime }) => {
                       placeholder="Phone"
                       className="primary-input"
                       style={{ width: "100%" }}
+                      minLength={10}
+                      maxLength={10}
+                      formatter={(value) => `${value}`.replace(/[^0-9]/g, "")} // Removes any non-numeric characters
+                      parser={(value) => value.replace(/[^0-9]/g, "")} // Removes any non-numeric characters
                     />
                   </Form.Item>
                   <Form.Item
@@ -147,17 +151,7 @@ export const DemoRegisterComponent = ({ date, time, setDate, setTime }) => {
                 >
                   <Input placeholder="Organization" className="primary-input" />
                 </Form.Item>
-                <Form.Item
-                  name="industry"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input your industry!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Industry" className="primary-input" />
-                </Form.Item>
+
                 {showMessage && (
                   <p className="text-danger">
                     Please select a date to register!
