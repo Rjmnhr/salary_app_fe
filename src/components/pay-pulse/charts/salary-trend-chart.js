@@ -198,13 +198,15 @@ const SalaryTrendChart = ({ data, width, height }) => {
   };
 
   return (
-    <Chart
-      options={options}
-      series={[{ name: "Median Salary (LPA)", data: chartData }]}
-      type="line"
-      width={width}
-      height={height}
-    />
+    <div>
+      <Chart
+        options={options}
+        series={[{ name: "Median Salary (LPA)", data: chartData }]}
+        type="line"
+        width={width}
+        height={height}
+      />
+    </div>
   );
 };
 

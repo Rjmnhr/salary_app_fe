@@ -319,7 +319,9 @@ const PayPulseReportComponentDemo = ({
               >
                 <div className="card-body">
                   <div className="d-flex justify-content-center">
-                    <h5 className="mb-5 mt-3 w-75 ">Median Salary Trend </h5>
+                    <h5 className="mb-5 mt-3 w-75 ">
+                      Median salary trend over time{" "}
+                    </h5>
                   </div>
                   <SalaryTrendChartDemo
                     data={demoData[0]}
@@ -341,7 +343,7 @@ const PayPulseReportComponentDemo = ({
                   <div className="d-flex justify-content-center">
                     <h5 className="mb-5 mt-3 w-100 ">
                       Average salary for different experience levels in{" "}
-                      {demoData[0]?.location}
+                      <span>{(demoData[0]?.location).toLowerCase()}</span>
                     </h5>
                   </div>
 
@@ -359,6 +361,7 @@ const PayPulseReportComponentDemo = ({
               >
                 <div className="card-body">
                   <SimplePieChart
+                    title={demoData[0]?.Title}
                     width={pieChartWidth}
                     dataWithPercent={chartDataWithPercentages}
                     data={chartData}

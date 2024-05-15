@@ -61,7 +61,7 @@ export const SimplePieChart = ({
     >
       <div className="d-flex justify-content-center">
         <h5 className={`mb-5 mt-3  ${isMobile ? "w-75" : "w-100"} `}>
-          Most five common skills for {title}{" "}
+          Most five common skills for {title?.toLowerCase()}{" "}
         </h5>
       </div>
 

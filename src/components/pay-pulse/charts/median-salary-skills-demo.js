@@ -175,8 +175,7 @@ const MedianSalaryChartForSkillsDemo = ({
               <div className="d-flex justify-content-center">
                 <h5 className={`mb-5 mt-3  ${isMobile ? "w-75" : "w-100"} `}>
                   {" "}
-                  Average salary for skill(s) you have selected across{" "}
-                  <span className="tex-primary">India</span>
+                  Average salary for the skill(s) you have selected
                 </h5>
               </div>
 
@@ -187,6 +186,7 @@ const MedianSalaryChartForSkillsDemo = ({
                 width={width}
                 height={height}
               />
+              <p>Skill</p>
             </div>
           </div>
         </div>
