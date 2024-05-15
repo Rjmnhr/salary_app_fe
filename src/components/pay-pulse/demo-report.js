@@ -22,13 +22,13 @@ const PayPulseReportComponentDemo = ({
   demoData,
   skillsBool,
   demoDataNoLoc,
+  skillsArray,
   demoDataNoExp,
 }) => {
   const { isMobile } = useApplicationContext();
   const [chartWidth, setChartWidth] = useState(500);
   const [pieChartWidth, setPieChartWidth] = useState(400);
   const [chartHeight, setChartHeight] = useState(300);
-  const storedUserInputs = JSON.parse(sessionStorage.getItem("user-inputs"));
   const [isLoading, setIsLoading] = useState(false);
   const printAreaRef = useRef(null);
   const DownloadButtonComponent = () => {
@@ -368,7 +368,7 @@ const PayPulseReportComponentDemo = ({
 
               <MedianSalaryChartForSkillsDemo
                 data={demoData}
-                skillNames={JSON.parse(storedUserInputs?.skills)}
+                skillNames={skillsArray}
                 width={chartWidth}
                 height={chartHeight}
               />

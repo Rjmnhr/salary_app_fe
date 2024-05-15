@@ -45,6 +45,7 @@ import {
   login_path,
   otp_validation_path,
   pay_pulse_dashboard_path,
+  pay_pulse_input_path,
   pay_pulse_landing_path,
   pay_pulse_output_path,
   privacy_policy_path,
@@ -60,6 +61,7 @@ import { useApplicationContext } from "../context/app-context.js";
 import PrivacyPolicy from "../legal-policies/privacy-policy.js";
 import TermsAndConditions from "../legal-policies/terms-and-conditions.js";
 import NavBar from "../components/layout/nav-bar.js";
+import PayPulseInputPage from "../components/pay-pulse/input-page.js";
 
 const AppRoute = () => {
   const { isMobile } = useApplicationContext();
@@ -91,6 +93,7 @@ const AppRoute = () => {
             </>
           }
         />
+        <Route path={pay_pulse_input_path} element={<PayPulseInputPage />} />
 
         <Route
           path={exec_rem_input_path}

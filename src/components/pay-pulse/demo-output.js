@@ -453,7 +453,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                 <p> Sector : {editableSector}</p>
               </div>
               <div>
-                <SkillsList skills={JSON.parse(storedUserInputs?.skills)} />
+                <SkillsList skills={editableSkills} />
               </div>
             </Card>
           </div>
@@ -470,6 +470,7 @@ const PayPulseOutputDemo = ({ userPlan }) => {
             demoData={filteredDemoData}
             demoDataNoLoc={filteredDemoDataNoLoc}
             demoDataNoExp={filteredDemoDataNoExp}
+            skillsArray={editableSkills}
             skillsBool={true}
           />
         </div>

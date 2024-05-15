@@ -13,7 +13,6 @@ import {
   privacy_policy_path,
   terms_condition_path,
 } from "../../config/constant";
-import { goToExternalURL } from "../../utils/price-a-job-helper-functions";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +24,7 @@ const SignIn = () => {
   const path = searchParams.has("p")
     ? searchParams.get("p")
     : pay_pulse_input_path;
-  const { setIsSignIn, setUserData, isTrailActive } = useApplicationContext();
+  const { setIsSignIn, setUserData } = useApplicationContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSwitch = () => {
@@ -70,7 +69,7 @@ const SignIn = () => {
       setEmail("");
       setPassword("");
       if (path === pay_pulse_input_path) {
-        goToExternalURL(pay_pulse_input_path, data?.user_type, isTrailActive);
+        navigate(pay_pulse_input_path);
       } else {
         navigate(path);
       }
