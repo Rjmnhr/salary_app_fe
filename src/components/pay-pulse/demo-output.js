@@ -453,7 +453,9 @@ const PayPulseOutputDemo = ({ userPlan }) => {
                 <p> Sector : {editableSector}</p>
               </div>
               <div>
-                <SkillsList skills={editableSkills} />
+                {editableSkills?.length > 0 && (
+                  <SkillsList skills={editableSkills} />
+                )}
               </div>
             </Card>
           </div>

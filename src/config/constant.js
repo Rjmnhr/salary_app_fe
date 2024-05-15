@@ -35,7 +35,7 @@ export const privacy_policy_path = "/privacy-policy";
 
 export const colorConfig = {
   colors: {
-    primary: "#696cff",
+    primary: "#5bbcff",
     secondary: "#8592a3",
     success: "#71dd37",
     info: "#03c3ec",

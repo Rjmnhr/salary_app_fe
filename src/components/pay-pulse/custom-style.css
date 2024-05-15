@@ -7,7 +7,7 @@
 }
 
 .selected-tab-container {
-  border: 2px solid blue;
+  border: 2px solid #5bbcff;
 }
 
 [class*=" ant-input"] {
@@ -53,7 +53,7 @@
 }
 
 .selected-tab {
-  border: 2px solid blue;
+  border: 2px solid #5bbcff;
 }
 
 .selectable-tab:hover {
