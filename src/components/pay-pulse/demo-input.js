@@ -106,7 +106,6 @@ const PayPulseInputDemo = ({ prevReports }) => {
 
   const handleSelectTitle = (title) => {
     setSelectedTitle(title);
-
     setSector(null);
     setSelectedSkills([]);
     setTopSkills([]);

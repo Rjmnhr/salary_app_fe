@@ -156,6 +156,15 @@ const PayPulseOutputDemo = ({ userPlan }) => {
 
   const handleSelectEditableTitle = (value) => {
     setEditableTitle(value);
+    setEditableSkills([]);
+    const filteredArray = demoData.filter((item) => item.Title.includes(value));
+    const uniqueSkills = [
+      ...new Set(
+        filteredArray.flatMap((item) => item.skills.map((skill) => skill.skill))
+      ),
+    ];
+
+    setSkillsOptions(uniqueSkills);
   };
   const handleSelectEditableExperience = (value) => {
     setEditableExperience(value);
