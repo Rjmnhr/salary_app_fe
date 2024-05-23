@@ -19,14 +19,7 @@ const FooterComponent = ({ setTrigger, trigger }) => {
               {/* <a href="/#" class="twitter">
               <i class="bx bxl-twitter"></i>
             </a> */}
-              <a
-                href="https://www.facebook.com/profile.php?id=61554618998649"
-                class="facebook"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <i class="bx bxl-facebook"></i>
-              </a>
+
               {/* <a href="/#" class="instagram">
               <i class="bx bxl-instagram"></i>
             </a>

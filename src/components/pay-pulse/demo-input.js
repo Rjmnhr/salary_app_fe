@@ -231,15 +231,10 @@ const PayPulseInputDemo = ({ prevReports }) => {
     <>
       <div>
         <div className="container-fluid">
-          <h2 className="fs-2 mt-3">PayPulse</h2>
           <h5 className="mt-3">
-            Let's start building a profile with compensable factors to benchmark
-            jobs.
+            Fill in details for a position to find salary analytics
           </h5>
 
-          <p className="text-primary">
-            Options will be populated based on the availability of the data
-          </p>
           <div
             className="w-100 mt-5"
             style={{ display: "grid", placeItems: "center" }}
