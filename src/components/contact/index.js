@@ -123,33 +123,7 @@ const Contact = () => {
           </div>
 
           <div className="row " data-aos="fade-up" data-aos-delay="100">
-            <div className="col-lg-6 ">
-              <div className="row">
-                <div className="col-md-12 ">
-                  <div className="info-box bg-white">
-                    <i className="bx bx-map"></i>
-                    <h3>Our Address</h3>
-                    <p>Bangalore India</p>
-                  </div>
-                </div>
-                <div className="col-md-12">
-                  <div className="info-box mt-4 bg-white">
-                    <i className="bx bx-envelope"></i>
-                    <h3>Email Us</h3>
-                    <p>partner@equipaypartners.com</p>
-                  </div>
-                </div>
-                {/* <div className="col-md-6">
-                  <div className="info-box mt-4">
-                    <i className="bx bx-phone-call"></i>
-                    <h3>Call Us</h3>
-                    <p>+61 424 853 384</p>
-                  </div>
-                </div> */}
-              </div>
-            </div>
-
-            <div className="col-lg-6">
+            <div className="col-lg-12">
               <form className="php-email-form bg-white" onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col form-group">
