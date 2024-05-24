@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PayPulseLandingPage from "../pages/pay-pulse-landing/index.js";
+
 import ProtectedRoute from "./protected-route.js";
+
 import VerifyPlanRoute from "./verifyPlan.js";
 import LoginPage from "../pages/login-page/index.js";
 import OtpVerification from "../components/auth/otp-verification.js";
@@ -13,6 +15,7 @@ import ChangeEmail from "../components/auth/change-email.js";
 import ChangePassword from "../components/auth/change-password.js";
 import ChangePlan from "../components/auth/change-plan.js";
 import ForgotPasswordPage from "../components/auth/forgot-password.js";
+import BenchmarkOutput from "../components/exec-rem/output.js";
 import BlogsMainPage from "../pages/blog-page.js/main.js";
 import IndividualBlogPage from "../pages/blog-page.js/index.js";
 import PayPulseVideo from "../components/pay-pulse/demo-video.js";
@@ -20,6 +23,8 @@ import Success from "../components/payment/Success.js";
 import Canceled from "../components/payment/Canceled.js";
 import {
   advisory_page_path,
+  exec_rem_input_path,
+  exec_rem_landing_path,
   home_path,
   login_app_path,
   login_path,
@@ -36,12 +41,21 @@ import {
 } from "../config/constant.js";
 import Unauthorized from "../components/misc/unauthorized.js";
 import AdvisoryPage from "../pages/advisory-page/index.js";
+
 import PrivacyPolicy from "../legal-policies/privacy-policy.js";
 import TermsAndConditions from "../legal-policies/terms-and-conditions.js";
 import NavBar from "../components/layout/nav-bar.js";
 import PayPulseInputPage from "../components/pay-pulse/input-page.js";
+import LandingExecutivePage from "../pages/exec-rem-landing/index.js";
+import ExecutiveBenchmark from "../components/exec-rem/input.js";
+import RoleInformation from "../components/exec-rem/role-info.js";
+import TableComponent, {
+  TableComponentMobile,
+} from "../components/exec-rem/companies-filtered.js";
+import { useApplicationContext } from "../context/app-context.js";
 
 const AppRoute = () => {
+  const { isMobile } = useApplicationContext();
   return (
     <BrowserRouter>
       <Routes>
@@ -61,25 +75,99 @@ const AppRoute = () => {
             </>
           }
         />
+
         <Route path={pay_pulse_input_path} element={<PayPulseInputPage />} />
+
         <Route path={pay_pulse_output_path} element={<VerifyPlanRoute />} />
         <Route path={pay_pulse_dashboard_path} element={<VerifyPlanRoute />} />
-        <Route path={login_path} element={<LoginPage />} />
-        <Route path={unauthorized_path} element={<Unauthorized />} />
-        <Route path={login_app_path} element={<LoginPage />} />
-        <Route path={otp_validation_path} element={<OtpVerification />} />
-        <Route path={training_page_path} element={<TrainingPage />} />
-        <Route path={sales_incentive_page_path} element={<SalesIncentive />} />
-        <Route path={privacy_policy_path} element={<PrivacyPolicy />} />
-        <Route path={terms_condition_path} element={<TermsAndConditions />} />
+
+        <Route
+          path={login_path}
+          element={
+            <>
+              <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path={unauthorized_path}
+          element={
+            <>
+              <Unauthorized />
+            </>
+          }
+        />
+        <Route
+          path={login_app_path}
+          element={
+            <>
+              <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path={otp_validation_path}
+          element={
+            <>
+              <OtpVerification />
+            </>
+          }
+        />
+
+        <Route
+          path={training_page_path}
+          element={
+            <>
+              <TrainingPage />
+            </>
+          }
+        />
+        <Route
+          path={sales_incentive_page_path}
+          element={
+            <>
+              <SalesIncentive />
+            </>
+          }
+        />
+
+        <Route
+          path={privacy_policy_path}
+          element={
+            <>
+              <PrivacyPolicy />
+            </>
+          }
+        />
+        <Route
+          path={terms_condition_path}
+          element={
+            <>
+              <TermsAndConditions />
+            </>
+          }
+        />
 
         <Route
           path="/success-registration-basic"
-          element={<SuccessRegistrationBasic />}
+          element={
+            <>
+              <SuccessRegistrationBasic />
+            </>
+          }
         />
+
         <Route
           path="/account"
-          element={<ProtectedRoute element={<UserAccount />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <UserAccount />
+                </>
+              }
+            />
+          }
         />
         <Route
           path="/contact"
@@ -94,27 +182,144 @@ const AppRoute = () => {
         />
         <Route
           path="/change-email"
-          element={<ProtectedRoute element={<ChangeEmail />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangeEmail />
+                </>
+              }
+            />
+          }
         />
         <Route
           path="/change-password"
-          element={<ProtectedRoute element={<ChangePassword />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangePassword />
+                </>
+              }
+            />
+          }
         />
         <Route
           path="/change-plan"
-          element={<ProtectedRoute element={<ChangePlan />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ChangePlan />
+                </>
+              }
+            />
+          }
         />
-        <Route path={advisory_page_path} element={<AdvisoryPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route
+          path={advisory_page_path}
+          element={
+            <>
+              <AdvisoryPage />
+            </>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <>
+              <ForgotPasswordPage />
+            </>
+          }
+        />
 
-        <Route path="/blog" element={<BlogsMainPage />} />
+        <Route
+          path="/output"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <BenchmarkOutput />
+                </>
+              }
+            />
+          }
+        />
 
-        <Route path="/post" element={<IndividualBlogPage />} />
+        <Route
+          path="/blog"
+          element={
+            <>
+              <BlogsMainPage />
+            </>
+          }
+        />
 
-        <Route path="/pay-pulse-video" element={<PayPulseVideo />} />
+        <Route
+          path="/post"
+          element={
+            <>
+              <IndividualBlogPage />
+            </>
+          }
+        />
+
+        <Route
+          path="/pay-pulse-video"
+          element={
+            <>
+              <PayPulseVideo />
+            </>
+          }
+        />
 
         <Route path="/success.html" element={<Success />} />
         <Route path="/canceled.html" element={<Canceled />} />
+
+        <Route
+          path={exec_rem_landing_path}
+          element={
+            <>
+              <LandingExecutivePage />
+            </>
+          }
+        />
+
+        <Route
+          path={exec_rem_input_path}
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <ExecutiveBenchmark />
+                </>
+              }
+            />
+          }
+        />
+
+        <Route
+          path="/role-information"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <RoleInformation />
+                </>
+              }
+            />
+          }
+        />
+        <Route
+          path="/companies-filtered"
+          element={
+            <ProtectedRoute
+              element={
+                <>{isMobile ? <TableComponentMobile /> : <TableComponent />}</>
+              }
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
