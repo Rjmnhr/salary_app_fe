@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.3576b4dd.css",
-    "main.js": "/static/js/main.418336c7.js",
+    "main.js": "/static/js/main.a96f417b.js",
     "static/js/787.4f88162d.chunk.js": "/static/js/787.4f88162d.chunk.js",
     "static/media/demo.mp4": "/static/media/demo.c7baad60f2076eac0ded.mp4",
     "static/media/two-content-business-partners-discussing-issue.webp": "/static/media/two-content-business-partners-discussing-issue.3761bf83ee2f1268f7b8.webp",
@@ -20,11 +20,11 @@
     "index.html": "/index.html",
     "static/media/check-soft-bg.svg": "/static/media/check-soft-bg.c08cab036b8a757bccc21c60aa9c85aa.svg",
     "main.3576b4dd.css.map": "/static/css/main.3576b4dd.css.map",
-    "main.418336c7.js.map": "/static/js/main.418336c7.js.map",
+    "main.a96f417b.js.map": "/static/js/main.a96f417b.js.map",
     "787.4f88162d.chunk.js.map": "/static/js/787.4f88162d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3576b4dd.css",
-    "static/js/main.418336c7.js"
+    "static/js/main.a96f417b.js"
   ]
 }

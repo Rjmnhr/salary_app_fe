@@ -123,71 +123,78 @@ const Contact = () => {
           </div>
 
           <div className="row " data-aos="fade-up" data-aos-delay="100">
-            <div className="col-lg-12">
-              <form className="php-email-form bg-white" onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col form-group">
+            <div
+              style={{ display: "grid", placeItems: "center", width: "100%" }}
+            >
+              <div className="col-lg-10">
+                <form
+                  className="php-email-form bg-white"
+                  onSubmit={handleSubmit}
+                >
+                  <div className="row">
+                    <div className="col form-group">
+                      <input
+                        required
+                        type="text"
+                        name="name"
+                        className="form-control "
+                        id="name"
+                        placeholder="Name"
+                        data-rule="minlen:4"
+                        data-msg="Please enter at least 4 chars"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <div className="validate"></div>
+                    </div>
+                    <div className="col form-group">
+                      <input
+                        required
+                        type="email"
+                        className="form-control"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        data-rule="email"
+                        data-msg="Please enter a valid email"
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <div className="validate"></div>
+                    </div>
+                  </div>
+                  <div className="form-group">
                     <input
                       required
                       type="text"
-                      name="name"
-                      className="form-control "
-                      id="name"
-                      placeholder="Name"
-                      data-rule="minlen:4"
-                      data-msg="Please enter at least 4 chars"
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    <div className="validate"></div>
-                  </div>
-                  <div className="col form-group">
-                    <input
-                      required
-                      type="email"
                       className="form-control"
-                      name="email"
-                      id="email"
-                      placeholder="Email"
-                      data-rule="email"
-                      data-msg="Please enter a valid email"
-                      onChange={(e) => setEmail(e.target.value)}
+                      name="subject"
+                      id="subject"
+                      placeholder="Subject"
+                      data-rule="minlen:4"
+                      data-msg="Please enter at least 8 chars of subject"
+                      onChange={(e) => setSubject(e.target.value)}
                     />
                     <div className="validate"></div>
                   </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    required
-                    type="text"
-                    className="form-control"
-                    name="subject"
-                    id="subject"
-                    placeholder="Subject"
-                    data-rule="minlen:4"
-                    data-msg="Please enter at least 8 chars of subject"
-                    onChange={(e) => setSubject(e.target.value)}
-                  />
-                  <div className="validate"></div>
-                </div>
-                <div className="form-group">
-                  <textarea
-                    className="form-control"
-                    name="message"
-                    rows="5"
-                    data-msg="Please write something for us"
-                    placeholder="Message"
-                    onChange={(e) => setQuery(e.target.value)}
-                  ></textarea>
-                  <div className="validate"></div>
-                </div>
+                  <div className="form-group">
+                    <textarea
+                      className="form-control"
+                      name="message"
+                      rows="5"
+                      data-msg="Please write something for us"
+                      placeholder="Message"
+                      onChange={(e) => setQuery(e.target.value)}
+                    ></textarea>
+                    <div className="validate"></div>
+                  </div>
 
-                <div className="text-center">
-                  <button className="w-75" type="submit">
-                    {" "}
-                    {isLoading ? <LoadingOutlined /> : " Send Message"}
-                  </button>
-                </div>
-              </form>
+                  <div className="text-center">
+                    <button className="w-75" type="submit">
+                      {" "}
+                      {isLoading ? <LoadingOutlined /> : " Send Message"}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
