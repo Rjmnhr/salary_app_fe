@@ -4,7 +4,7 @@ export const BlogContentArr = [
   {
     main: "How much is a Data Scientist worth",
     subMain:
-      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Scientist and what skills demand more money?",
+      "Gone are the days of salary surveys. How do you know how much to pay a Data Scientist and what skills demand more money?",
     mainImg: (
       <img
         style={{ width: "100%" }}
@@ -44,7 +44,7 @@ export const BlogContentArr = [
   {
     main: "How much is a Data Analyst worth",
     subMain:
-      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Data Analyst and what skills demand more money?",
+      "Gone are the days of salary surveys. How do you know how much to pay a Data Analyst and what skills demand more money?",
     mainImg: (
       <img
         style={{ width: "100%" }}
@@ -210,7 +210,7 @@ export const BlogContentArr = [
   {
     main: "How much is a UI/UX Designer worth",
     subMain:
-      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a UI/UX Designer and what skills demand more money?",
+      "Gone are the days of salary surveys. How do you know how much to pay a UI/UX Designer and what skills demand more money?",
     mainImg: (
       <img
         style={{ width: "100%" }}
@@ -253,7 +253,7 @@ export const BlogContentArr = [
   {
     main: "How much is a Customer Care worth",
     subMain:
-      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a Customer Care and what skills demand more money?",
+      "Gone are the days of salary surveys. How do you know how much to pay a Customer Care and what skills demand more money?",
     mainImg: (
       <img
         style={{ width: "100%" }}
@@ -296,7 +296,7 @@ export const BlogContentArr = [
   {
     main: "How much is a SAP Consultant worth",
     subMain:
-      "Gone are the days of salary surveys or Glassdoor. How do you know how much to pay a SAP Consultant and what skills demand more money?",
+      "Gone are the days of salary surveys. How do you know how much to pay a SAP Consultant and what skills demand more money?",
     mainImg: (
       <img
         style={{ width: "100%" }}
